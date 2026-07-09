@@ -143,7 +143,7 @@ function Slider() {
       const scroller = scrollerRef.current;
       if (!scroller) return;
       const firstCard = scroller.querySelector<HTMLElement>("article");
-      const cardWidth = firstCard ? firstCard.offsetWidth + 24 : 340;
+      const cardWidth = firstCard ? firstCard.offsetWidth + 28 : 348;
       scroller.scrollBy({ left: dir * cardWidth, behavior: "smooth" });
       pauseFor(2500);
       // Ensure wrap after smooth scroll completes
