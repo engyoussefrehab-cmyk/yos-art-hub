@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
 
 export const Route = createFileRoute("/contact")({
@@ -58,10 +58,23 @@ function ContactPage() {
 function ContactForm() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [sent, setSent] = useState(false);
+  const [spamNotice, setSpamNotice] = useState(false);
+  const mountedAt = useRef(Date.now());
+  const lastSubmitAt = useRef(0);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
+    const honeypot = (form.elements.namedItem("website") as HTMLInputElement)?.value;
+    const now = Date.now();
+    // Bots fill hidden fields, submit instantly, or spam-click
+    if (honeypot || now - mountedAt.current < 2500 || now - lastSubmitAt.current < 8000) {
+      setSpamNotice(true);
+      lastSubmitAt.current = now;
+      return;
+    }
+    lastSubmitAt.current = now;
+    setSpamNotice(false);
     const data = {
       name: (form.elements.namedItem("name") as HTMLInputElement).value,
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
@@ -92,6 +105,11 @@ function ContactForm() {
         <h2 className="font-display text-2xl font-bold text-white">أرسل تفاصيل مشروعك</h2>
         <p className="mt-1 text-sm text-white/60">سنعود إليك خلال ٢٤ ساعة.</p>
       </div>
+      {/* Honeypot — hidden from users, bots often fill it */}
+      <input
+        type="text" name="website" tabIndex={-1} autoComplete="off"
+        className="hidden" aria-hidden="true"
+      />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Field label="الاسم الكامل" name="name" error={errors.name} />
         <Field label="البريد الإلكتروني" name="email" type="email" dir="ltr" error={errors.email} />
@@ -118,6 +136,7 @@ function ContactForm() {
           إرسال الرسالة
         </button>
         {sent && <span className="text-xs text-accent">تم فتح بريدك لإكمال الإرسال ✓</span>}
+        {spamNotice && <span className="text-xs text-red-400">فضلًا انتظر قليلًا قبل إعادة الإرسال.</span>}
       </div>
     </form>
   );

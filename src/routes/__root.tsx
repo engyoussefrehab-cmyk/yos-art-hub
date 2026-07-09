@@ -12,7 +12,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import logoFull from "@/assets/logo-full.png.asset.json";
-import logoMark from "@/assets/logo-mark.png.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -119,7 +118,7 @@ function SiteNav() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)} aria-label="يوسف رحاب">
-          <img src={logoFull.url} alt="يوسف رحاب" className="h-8 w-auto md:h-9" />
+          <img src={logoFull.url} alt="يوسف رحاب" className="h-8 w-auto md:h-9 [filter:brightness(0)_saturate(100%)_invert(12%)_sepia(8%)_saturate(600%)_hue-rotate(15deg)]" />
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
@@ -158,19 +157,14 @@ function SiteFooter() {
   return (
     <footer className="mt-auto bg-ink text-white/70 border-t border-white/10">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 md:grid-cols-12">
-        <div className="md:col-span-5 space-y-4">
-          <div className="flex items-center gap-3">
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/5 p-2">
-              <img src={logoMark.url} alt="شعار يوسف رحاب" className="h-8 w-auto invert" />
-            </span>
-            <div>
-              <div className="font-display text-lg font-bold text-white">يوسف رحاب<span className="text-accent">®</span></div>
-              <div className="text-xs uppercase tracking-widest text-white/50">Strategic Brand Identity</div>
-            </div>
-          </div>
+        <div className="md:col-span-5 space-y-5">
+          <Link to="/" className="inline-flex items-center" aria-label="يوسف رحاب">
+            <img src={logoFull.url} alt="يوسف رحاب" className="h-10 w-auto invert" />
+          </Link>
           <p className="max-w-sm text-sm leading-relaxed text-white/60">
             مصمم هوية بصرية استراتيجي، أُحوّل أفكار العلامات إلى أنظمة بصرية جريئة وخالدة تتحدث بوضوح في أسواق تنافسية.
           </p>
+          <NewsletterForm />
         </div>
         <div className="md:col-span-3">
           <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">استكشف</div>
@@ -195,5 +189,47 @@ function SiteFooter() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+  const [hp, setHp] = useState("");
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (hp) return; // honeypot filled → bot
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    if (!ok) { setStatus("error"); return; }
+    try {
+      const list = JSON.parse(localStorage.getItem("nl_subs") || "[]");
+      if (!list.includes(email.trim())) list.push(email.trim());
+      localStorage.setItem("nl_subs", JSON.stringify(list));
+    } catch {}
+    setStatus("ok");
+    setEmail("");
+  };
+  return (
+    <div>
+      <div className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/50">النشرة البريدية</div>
+      <p className="mb-3 text-sm text-white/60">اشترك لتصلك آخر المشاريع والدروس الإبداعية.</p>
+      <form onSubmit={onSubmit} className="flex flex-col gap-2 sm:flex-row" noValidate>
+        <input
+          type="text" tabIndex={-1} autoComplete="off" value={hp}
+          onChange={(e) => setHp(e.target.value)}
+          className="hidden" aria-hidden="true"
+        />
+        <input
+          type="email" required value={email} onChange={(e) => { setEmail(e.target.value); setStatus("idle"); }}
+          placeholder="بريدك الإلكتروني" dir="ltr"
+          className="flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-accent focus:outline-none"
+        />
+        <button type="submit" className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5">
+          اشترك
+        </button>
+      </form>
+      {status === "ok" && <p className="mt-2 text-xs text-accent">تم الاشتراك بنجاح ✓</p>}
+      {status === "error" && <p className="mt-2 text-xs text-red-400">بريد إلكتروني غير صحيح</p>}
+    </div>
   );
 }
