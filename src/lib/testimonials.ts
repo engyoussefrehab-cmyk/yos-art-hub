@@ -124,8 +124,9 @@ export const testimonials: Testimonial[] = [
     name: "خالد العتيبي",
     project: "شعار — شركة رحلات سياحية",
     quote: "تعامل جيّد وشخص محترف.",
-    rating: 5,
+    rating: 4,
   },
+
 ];
 
 export const testimonialStats = {
