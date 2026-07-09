@@ -16,7 +16,7 @@ export function ContactView() {
             </h1>
             <p className="mt-6 max-w-xl text-white/70 text-lg leading-relaxed">{t("contact_lede")}</p>
             <div className="mt-8 space-y-3">
-              <ContactCard label={t("contact_wa_label")} value="+20 103 036 5405" href="https://wa.me/201030365405" arrow={lang === "ar" ? "←" : "→"} />
+              <ContactCard label={t("contact_wa_label")} value="+20 103 036 5405" href="/go/wa" arrow={lang === "ar" ? "←" : "→"} />
               <ContactCard label={t("contact_email_label")} value="info@yrstudio.art" href="mailto:info@yrstudio.art" arrow={lang === "ar" ? "←" : "→"} />
             </div>
             <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/10 pt-8">

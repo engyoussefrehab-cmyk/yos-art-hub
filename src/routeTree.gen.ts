@@ -13,6 +13,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as EnIndexRouteImport } from './routes/en.index'
+import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
 import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
@@ -39,6 +40,11 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
 const EnIndexRoute = EnIndexRouteImport.update({
   id: '/en/',
   path: '/en/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoSplatRoute = GoSplatRouteImport.update({
+  id: '/go/$',
+  path: '/go/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnContactRoute = EnContactRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/en/contact': typeof EnContactRoute
+  '/go/$': typeof GoSplatRoute
   '/en/': typeof EnIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/en/contact': typeof EnContactRoute
+  '/go/$': typeof GoSplatRoute
   '/en': typeof EnIndexRoute
   '/projects': typeof ProjectsIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/en/contact': typeof EnContactRoute
+  '/go/$': typeof GoSplatRoute
   '/en/': typeof EnIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/api/public/contact': typeof ApiPublicContactRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/en/contact'
+    | '/go/$'
     | '/en/'
     | '/projects/'
     | '/api/public/contact'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/en/contact'
+    | '/go/$'
     | '/en'
     | '/projects'
     | '/api/public/contact'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/en/contact'
+    | '/go/$'
     | '/en/'
     | '/projects/'
     | '/api/public/contact'
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
   EnContactRoute: typeof EnContactRoute
+  GoSplatRoute: typeof GoSplatRoute
   EnIndexRoute: typeof EnIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
@@ -201,6 +214,13 @@ declare module '@tanstack/react-router' {
       path: '/en'
       fullPath: '/en/'
       preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/go/$': {
+      id: '/go/$'
+      path: '/go/$'
+      fullPath: '/go/$'
+      preLoaderRoute: typeof GoSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/contact': {
@@ -259,6 +279,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   EnContactRoute: EnContactRoute,
+  GoSplatRoute: GoSplatRoute,
   EnIndexRoute: EnIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
