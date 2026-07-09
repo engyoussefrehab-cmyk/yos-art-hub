@@ -37,15 +37,15 @@ function Hero() {
           <p className="mt-6 max-w-xl text-base leading-[1.9] text-muted-foreground md:text-lg">
             {t("hero_intro")}
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link to={projectsHref} className="rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5">{t("hero_cta_projects")}</Link>
-            <Link to={contactHref} className="rounded-full border border-primary/20 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-cream">{t("cta_start_project")}</Link>
+          <div className="mt-8 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
+            <Link to={projectsHref} className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 sm:w-auto">{t("hero_cta_projects")}</Link>
+            <Link to={contactHref} className="inline-flex w-full items-center justify-center rounded-full border border-primary/20 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-cream sm:w-auto">{t("cta_start_project")}</Link>
             <a
               href={portfolioPdf.url}
               download="Youssef-Rehab-Portfolio.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-primary"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-accent/50 bg-accent/15 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-primary sm:w-auto"
             >
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
