@@ -130,7 +130,7 @@ export const testimonials: Testimonial[] = [
 ];
 
 export const testimonialStats = {
-  count: testimonials.length,
+  count: 210,
   averageRating: 4.9,
   platform: "مستقل",
 };
