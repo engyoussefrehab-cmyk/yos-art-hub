@@ -91,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           alternateName: "يوسف رحاب",
           jobTitle: "Visual Identity Designer",
           description: "Strategic visual identity and logo designer serving Saudi Arabia, UAE and the Gulf.",
-          email: "mailto:youssefrehab@yrstudio.art",
+          email: "mailto:info@yrstudio.art",
           telephone: "+201030365405",
           sameAs: ["https://www.linkedin.com/in/youssef-rehab/"],
           areaServed: [
@@ -300,7 +300,7 @@ function SiteFooter() {
           <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">{t("contact")}</div>
           <ul className="space-y-2 text-sm">
             <li><a href="tel:+201030365405" className="hover:text-accent transition-colors" dir="ltr">+20 103 036 5405</a></li>
-            <li><a href="mailto:youssefrehab@yrstudio.art" className="hover:text-accent transition-colors">youssefrehab@yrstudio.art</a></li>
+            <li><a href="mailto:info@yrstudio.art" className="hover:text-accent transition-colors">info@yrstudio.art</a></li>
           </ul>
           <div className="mt-5 flex items-center gap-3">
             <a href="https://www.linkedin.com/in/youssef-rehab/" target="_blank" rel="noopener noreferrer" aria-label={t("linkedin")}
