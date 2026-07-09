@@ -154,11 +154,45 @@ function SiteNav() {
 }
 
 function SiteFooter() {
+  const year = new Date().getFullYear();
   return (
-    <footer className="bg-ink text-white/60 border-t border-white/10">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
-        <div className="font-display text-sm">© {new Date().getFullYear()} يوسف رحاب<span className="text-accent">®</span> — جميع الحقوق محفوظة</div>
-        <div className="text-xs uppercase tracking-widest">Strategic Brand Identity Designer</div>
+    <footer className="mt-auto bg-ink text-white/70 border-t border-white/10">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 md:grid-cols-12">
+        <div className="md:col-span-5 space-y-4">
+          <div className="flex items-center gap-3">
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/5 p-2">
+              <img src={logoMark.url} alt="شعار يوسف رحاب" className="h-8 w-auto invert" />
+            </span>
+            <div>
+              <div className="font-display text-lg font-bold text-white">يوسف رحاب<span className="text-accent">®</span></div>
+              <div className="text-xs uppercase tracking-widest text-white/50">Strategic Brand Identity</div>
+            </div>
+          </div>
+          <p className="max-w-sm text-sm leading-relaxed text-white/60">
+            مصمم هوية بصرية استراتيجي، أُحوّل أفكار العلامات إلى أنظمة بصرية جريئة وخالدة تتحدث بوضوح في أسواق تنافسية.
+          </p>
+        </div>
+        <div className="md:col-span-3">
+          <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">استكشف</div>
+          <ul className="space-y-2 text-sm">
+            <li><Link to="/" className="hover:text-accent transition-colors">الرئيسية</Link></li>
+            <li><Link to="/projects" className="hover:text-accent transition-colors">المشاريع</Link></li>
+            <li><Link to="/contact" className="hover:text-accent transition-colors">تواصل</Link></li>
+          </ul>
+        </div>
+        <div className="md:col-span-4">
+          <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">تواصل</div>
+          <ul className="space-y-2 text-sm">
+            <li><a href="https://wa.me/201030365405" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors" dir="ltr">+20 103 036 5405</a></li>
+            <li><a href="mailto:youssefrehab@outlook.com" className="hover:text-accent transition-colors">youssefrehab@outlook.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 md:flex-row">
+          <div className="text-xs text-white/50">© {year} يوسف رحاب® — جميع الحقوق محفوظة</div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Designed & Built with care</div>
+        </div>
       </div>
     </footer>
   );
