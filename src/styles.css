@@ -181,9 +181,10 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track,
   main,
   .site-loader,
   .site-loader-ring { animation: none !important; }
+}
+
 }
 
