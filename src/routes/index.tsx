@@ -31,11 +31,13 @@ function Hero() {
           <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-cream px-4 py-1.5 text-xs font-medium text-muted-foreground">
             <span className="h-2 w-2 rounded-full bg-accent" /> متاح لمشاريع جديدة
           </span>
-          <h1 className="font-display text-5xl font-bold leading-[1.1] tracking-tight text-balance md:text-7xl">
-            هويات بصرية <span className="text-accent">تُبنى لتبقى.</span>
-            <br /> نظيفة، ذكية، خالدة.
+          <h1 className="font-display text-[2rem] font-semibold leading-[1.45] text-balance sm:text-4xl md:text-5xl lg:text-6xl md:leading-[1.3]">
+            هويات بصرية <span className="text-accent">تُبنى لتبقى</span>
+            <span className="block mt-2 text-muted-foreground/90 font-normal text-[0.72em]">
+              نظيفة · ذكية · خالدة
+            </span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-loose text-muted-foreground">
+          <p className="mt-6 max-w-xl text-base leading-[1.9] text-muted-foreground md:text-lg">
             أنا يوسف رحاب — مصمم هوية بصرية استراتيجي. أساعد العلامات على قول ما تريد قوله بوضوح، عبر أنظمة بصرية مصمَّمة بإحكام تصنع فرقاً حقيقياً في السوق.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
