@@ -58,7 +58,7 @@ function ContactForm() {
     message: z.string().trim().min(10, t("err_msg_short")).max(2000, t("err_msg_long")),
   });
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const honeypot = (form.elements.namedItem("website") as HTMLInputElement)?.value;
@@ -70,6 +70,7 @@ function ContactForm() {
     }
     lastSubmitAt.current = now;
     setSpamNotice(false);
+    setSendError(null);
     const data = {
       name: (form.elements.namedItem("name") as HTMLInputElement).value,
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
@@ -87,13 +88,21 @@ function ContactForm() {
       return;
     }
     setErrors({});
-    const nameLabel = t("mail_name_label");
-    const emailLabel = t("mail_email_label");
-    const body = `${nameLabel}: ${result.data.name}\n${emailLabel}: ${result.data.email}\n\n${result.data.message}`;
-    const mailto = `mailto:info@yrstudio.art?subject=${encodeURIComponent(result.data.subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-    setSent(true);
-    form.reset();
+    setSending(true);
+    try {
+      const res = await fetch("/api/public/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result.data),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      setSent(true);
+      form.reset();
+    } catch {
+      setSendError(t("form_error") ?? (lang === "ar" ? "تعذّر الإرسال، حاول لاحقًا." : "Failed to send. Please try again."));
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
