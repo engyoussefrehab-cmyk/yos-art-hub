@@ -17,7 +17,7 @@ export function ContactView() {
             <p className="mt-6 max-w-xl text-white/70 text-lg leading-relaxed">{t("contact_lede")}</p>
             <div className="mt-8 space-y-3">
               <ContactCard label={t("contact_wa_label")} value="+20 103 036 5405" href="https://wa.me/201030365405" arrow={lang === "ar" ? "←" : "→"} />
-              <ContactCard label={t("contact_email_label")} value="youssefrehab@yrstudio.art" href="mailto:youssefrehab@yrstudio.art" arrow={lang === "ar" ? "←" : "→"} />
+              <ContactCard label={t("contact_email_label")} value="info@yrstudio.art" href="mailto:info@yrstudio.art" arrow={lang === "ar" ? "←" : "→"} />
             </div>
             <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <Mini n={lang === "ar" ? "+٨" : "8+"} labelKey="stat_years_short" />
@@ -88,7 +88,7 @@ function ContactForm() {
     const nameLabel = t("mail_name_label");
     const emailLabel = t("mail_email_label");
     const body = `${nameLabel}: ${result.data.name}\n${emailLabel}: ${result.data.email}\n\n${result.data.message}`;
-    const mailto = `mailto:youssefrehab@yrstudio.art?subject=${encodeURIComponent(result.data.subject)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:info@yrstudio.art?subject=${encodeURIComponent(result.data.subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     setSent(true);
     form.reset();
