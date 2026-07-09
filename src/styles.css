@@ -147,10 +147,12 @@ main {
 .testimonials-track {
   display: flex;
   width: max-content;
-  gap: 1.5rem;
-  padding: 0.25rem;
+  gap: 1.75rem;
+  /* generous padding so hover translate + drop shadow never clip */
+  padding: 1.25rem 0.5rem 2rem;
   will-change: scroll-position;
 }
+
 
 
 /* ============ Initial site loader ============ */
