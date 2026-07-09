@@ -65,7 +65,7 @@ function Hero() {
 function Stat({ n, label }: { n: string; label: string }) {
   return (
     <div>
-      <div className="font-display text-3xl md:text-4xl font-black">{n}</div>
+      <div className="font-display text-3xl md:text-4xl font-bold">{n}</div>
       <div className="mt-1 text-xs text-muted-foreground">{label}</div>
     </div>
   );
@@ -79,7 +79,7 @@ function About() {
         <div className="md:col-span-5">
           <div className="sticky top-24">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">من أنا</span>
-            <h2 className="mt-3 font-display text-4xl md:text-5xl font-black leading-tight">أصمّم هويات<br /> تعيش طويلاً.</h2>
+            <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">أصمّم هويات<br /> تعيش طويلاً.</h2>
           </div>
         </div>
         <div className="md:col-span-7">
@@ -115,14 +115,14 @@ function Services() {
       <div className="flex items-end justify-between gap-6 border-b border-border pb-8">
         <div>
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">الخدمات</span>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-black">ماذا أقدّم</h2>
+          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold">ماذا أقدّم</h2>
         </div>
         <p className="hidden md:block max-w-md text-muted-foreground">خدمات تصميم شاملة تحوّل رؤيتك إلى نظام بصري متكامل.</p>
       </div>
       <div className="mt-12 grid grid-cols-1 gap-px bg-border md:grid-cols-2 lg:grid-cols-3">
         {items.map((s, i) => (
           <div key={s.title} className="group bg-background p-8 transition-colors hover:bg-cream">
-            <div className="font-display text-6xl font-black text-accent/20 group-hover:text-accent/40 transition-colors">{String(i + 1).padStart(2, "0")}</div>
+            <div className="font-display text-6xl font-bold text-accent/20 group-hover:text-accent/40 transition-colors">{String(i + 1).padStart(2, "0")}</div>
             <h3 className="mt-4 font-display text-2xl font-bold">{s.title}</h3>
             <p className="mt-2 text-muted-foreground">{s.desc}</p>
           </div>
@@ -137,7 +137,7 @@ function CTA() {
     <section className="bg-ink text-primary-foreground">
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-20 md:flex-row md:items-center">
         <div>
-          <h2 className="font-display text-3xl md:text-5xl font-black leading-tight">
+          <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
             عندك فكرة؟ <span className="text-accent">خلّينا نحوّلها لهوية.</span>
           </h2>
           <p className="mt-4 max-w-xl text-white/70">متاح لمشاريع الهوية البصرية والتعاونات الإبداعية.</p>
