@@ -99,7 +99,7 @@ function ContactForm() {
       setSent(true);
       form.reset();
     } catch {
-      setSendError(t("form_error") ?? (lang === "ar" ? "تعذّر الإرسال، حاول لاحقًا." : "Failed to send. Please try again."));
+      setSendError(lang === "ar" ? "تعذّر الإرسال، حاول لاحقًا." : "Failed to send. Please try again.");
     } finally {
       setSending(false);
     }
