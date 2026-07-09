@@ -185,7 +185,7 @@ export function Testimonials() {
               ثقة تُبنى بمشروع تلو الآخر
             </h2>
             <p className="mt-4 max-w-xl text-muted-foreground">
-              مختارات من آراء عملاء تعاملت معهم عبر منصّة {testimonialStats.platform}.
+              مختارات من آراء عملاء تعاملت معهم.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-6">
