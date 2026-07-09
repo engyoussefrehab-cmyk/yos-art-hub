@@ -36,7 +36,7 @@ function ProjectDetail() {
           <nav className="mb-10 flex items-center gap-2 text-sm text-muted-foreground">
             <Link to="/projects" className="hover:text-foreground">المشاريع</Link>
             <span>/</span>
-            <Link to="/projects/$category" params={{ category: "branding" }} className="hover:text-foreground">الهوية البصرية</Link>
+            <Link to="/projects/$category" params={{ category: "branding" }} className="hover:text-foreground">الهويّة البصريّة</Link>
             <span>/</span>
             <span className="text-foreground">{project.name}</span>
           </nav>
