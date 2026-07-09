@@ -129,9 +129,16 @@ function ContactForm() {
         {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
       </div>
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-        <button type="submit" className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5">{t("f_send")}</button>
+        <button
+          type="submit"
+          disabled={sending}
+          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
+        >
+          {sending ? (lang === "ar" ? "جارٍ الإرسال..." : "Sending...") : t("f_send")}
+        </button>
         {sent && <span className="text-xs text-accent">{t("f_sent")}</span>}
         {spamNotice && <span className="text-xs text-red-400">{t("f_spam")}</span>}
+        {sendError && <span className="text-xs text-red-400">{sendError}</span>}
       </div>
     </form>
   );
