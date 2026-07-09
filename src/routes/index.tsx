@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import youssefPortrait from "@/assets/youssef-portrait.jpg.asset.json";
+import { Testimonials } from "@/components/Testimonials";
 
 
 export const Route = createFileRoute("/")({
@@ -18,6 +19,7 @@ function Home() {
       <Hero />
       <About />
       <Services />
+      <Testimonials />
       <CTA />
     </>
   );
