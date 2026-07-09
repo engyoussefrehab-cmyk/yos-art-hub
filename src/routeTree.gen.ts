@@ -12,8 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
+import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
 import { Route as ProjectsCategorySlugRouteImport } from './routes/projects.$category.$slug'
+import { Route as EnProjectsCategoryIndexRouteImport } from './routes/en.projects.$category.index'
+import { Route as EnProjectsCategorySlugRouteImport } from './routes/en.projects.$category.$slug'
 
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
@@ -30,9 +34,19 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/en/',
+  path: '/en/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsCategoryIndexRoute = ProjectsCategoryIndexRouteImport.update({
   id: '/projects/$category/',
   path: '/projects/$category/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnProjectsIndexRoute = EnProjectsIndexRouteImport.update({
+  id: '/en/projects/',
+  path: '/en/projects/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsCategorySlugRoute = ProjectsCategorySlugRouteImport.update({
@@ -40,59 +54,97 @@ const ProjectsCategorySlugRoute = ProjectsCategorySlugRouteImport.update({
   path: '/projects/$category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnProjectsCategoryIndexRoute = EnProjectsCategoryIndexRouteImport.update({
+  id: '/en/projects/$category/',
+  path: '/en/projects/$category/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnProjectsCategorySlugRoute = EnProjectsCategorySlugRouteImport.update({
+  id: '/en/projects/$category/$slug',
+  path: '/en/projects/$category/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/en/': typeof EnIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
+  '/en/projects/': typeof EnProjectsIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
+  '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
+  '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/en': typeof EnIndexRoute
   '/projects': typeof ProjectsIndexRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
+  '/en/projects': typeof EnProjectsIndexRoute
   '/projects/$category': typeof ProjectsCategoryIndexRoute
+  '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
+  '/en/projects/$category': typeof EnProjectsCategoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/en/': typeof EnIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
+  '/en/projects/': typeof EnProjectsIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
+  '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
+  '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/contact'
+    | '/en/'
     | '/projects/'
     | '/projects/$category/$slug'
+    | '/en/projects/'
     | '/projects/$category/'
+    | '/en/projects/$category/$slug'
+    | '/en/projects/$category/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/contact'
+    | '/en'
     | '/projects'
     | '/projects/$category/$slug'
+    | '/en/projects'
     | '/projects/$category'
+    | '/en/projects/$category/$slug'
+    | '/en/projects/$category'
   id:
     | '__root__'
     | '/'
     | '/contact'
+    | '/en/'
     | '/projects/'
     | '/projects/$category/$slug'
+    | '/en/projects/'
     | '/projects/$category/'
+    | '/en/projects/$category/$slug'
+    | '/en/projects/$category/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
+  EnIndexRoute: typeof EnIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ProjectsCategorySlugRoute: typeof ProjectsCategorySlugRoute
+  EnProjectsIndexRoute: typeof EnProjectsIndexRoute
   ProjectsCategoryIndexRoute: typeof ProjectsCategoryIndexRoute
+  EnProjectsCategorySlugRoute: typeof EnProjectsCategorySlugRoute
+  EnProjectsCategoryIndexRoute: typeof EnProjectsCategoryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -118,11 +170,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/': {
+      id: '/en/'
+      path: '/en'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/$category/': {
       id: '/projects/$category/'
       path: '/projects/$category'
       fullPath: '/projects/$category/'
       preLoaderRoute: typeof ProjectsCategoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/projects/': {
+      id: '/en/projects/'
+      path: '/en/projects'
+      fullPath: '/en/projects/'
+      preLoaderRoute: typeof EnProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/$category/$slug': {
@@ -132,15 +198,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/projects/$category/': {
+      id: '/en/projects/$category/'
+      path: '/en/projects/$category'
+      fullPath: '/en/projects/$category/'
+      preLoaderRoute: typeof EnProjectsCategoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/projects/$category/$slug': {
+      id: '/en/projects/$category/$slug'
+      path: '/en/projects/$category/$slug'
+      fullPath: '/en/projects/$category/$slug'
+      preLoaderRoute: typeof EnProjectsCategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
+  EnIndexRoute: EnIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
   ProjectsCategorySlugRoute: ProjectsCategorySlugRoute,
+  EnProjectsIndexRoute: EnProjectsIndexRoute,
   ProjectsCategoryIndexRoute: ProjectsCategoryIndexRoute,
+  EnProjectsCategorySlugRoute: EnProjectsCategorySlugRoute,
+  EnProjectsCategoryIndexRoute: EnProjectsCategoryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
