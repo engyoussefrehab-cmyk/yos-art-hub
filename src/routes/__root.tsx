@@ -158,19 +158,14 @@ function SiteFooter() {
   return (
     <footer className="mt-auto bg-ink text-white/70 border-t border-white/10">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 md:grid-cols-12">
-        <div className="md:col-span-5 space-y-4">
-          <div className="flex items-center gap-3">
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-white/5 p-2">
-              <img src={logoMark.url} alt="شعار يوسف رحاب" className="h-8 w-auto invert" />
-            </span>
-            <div>
-              <div className="font-display text-lg font-bold text-white">يوسف رحاب<span className="text-accent">®</span></div>
-              <div className="text-xs uppercase tracking-widest text-white/50">Strategic Brand Identity</div>
-            </div>
-          </div>
+        <div className="md:col-span-5 space-y-5">
+          <Link to="/" className="inline-flex items-center" aria-label="يوسف رحاب">
+            <img src={logoFull.url} alt="يوسف رحاب" className="h-10 w-auto invert" />
+          </Link>
           <p className="max-w-sm text-sm leading-relaxed text-white/60">
             مصمم هوية بصرية استراتيجي، أُحوّل أفكار العلامات إلى أنظمة بصرية جريئة وخالدة تتحدث بوضوح في أسواق تنافسية.
           </p>
+          <NewsletterForm />
         </div>
         <div className="md:col-span-3">
           <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">استكشف</div>
