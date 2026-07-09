@@ -41,7 +41,7 @@ function QuoteMark() {
 function Card({ t }: { t: (typeof testimonials)[number] }) {
   return (
     <article
-      className="group relative flex h-full w-[320px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-background p-7 shadow-[0_1px_0_rgb(0_0_0/0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_24px_50px_-24px_rgb(0_0_0/0.18)] sm:w-[380px]"
+      className="group relative flex h-full min-h-[340px] w-[320px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-background p-8 shadow-[0_1px_0_rgb(0_0_0/0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_24px_50px_-24px_rgb(0_0_0/0.18)] sm:min-h-[360px] sm:w-[380px] sm:p-9"
       dir="rtl"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-l from-accent/0 via-accent/60 to-accent/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -53,12 +53,12 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
         </div>
       </header>
 
-      <p className="mt-5 line-clamp-6 text-[15px] leading-[2] text-foreground/90">
+      <p className="mt-6 line-clamp-6 text-[15px] leading-[2] text-foreground/90">
         {t.quote}
       </p>
 
-      <div className="mt-auto pt-6">
-        <div className="flex items-center gap-3 border-t border-border/70 pt-4">
+      <div className="mt-auto pt-8">
+        <div className="flex items-center gap-3 border-t border-border/70 pt-5">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink font-display text-base font-semibold text-primary-foreground ring-1 ring-accent/20">
             {t.name.trim().charAt(0)}
           </div>
@@ -71,7 +71,7 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
             </div>
           </div>
         </div>
-        <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-1 text-[10.5px] text-muted-foreground">
+        <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-1 text-[10.5px] text-muted-foreground">
           <svg viewBox="0 0 24 24" className="h-3 w-3 text-accent" fill="currentColor" aria-hidden>
             <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
           </svg>
