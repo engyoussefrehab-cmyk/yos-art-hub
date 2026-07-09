@@ -129,22 +129,29 @@ main {
   animation: page-in 420ms ease-out both;
 }
 
-/* ============ Marquee (testimonials slider) ============ */
-@keyframes marquee-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+/* ============ Testimonials slider (auto + drag) ============ */
+.testimonials-slider { position: relative; }
+.testimonials-scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  touch-action: pan-y;
+  overscroll-behavior-x: contain;
+  scroll-behavior: auto;
 }
-.marquee {
-  position: relative;
-  overflow: hidden;
-}
-.marquee-track {
+.testimonials-scroller::-webkit-scrollbar { display: none; }
+.testimonials-scroller.is-grabbing { cursor: grabbing; }
+.testimonials-scroller.is-grabbing * { user-select: none; pointer-events: none; }
+.testimonials-track {
   display: flex;
   width: max-content;
-  animation: marquee-scroll 60s linear infinite;
-  will-change: transform;
+  gap: 1.5rem;
+  padding: 0.25rem;
+  will-change: scroll-position;
 }
-.marquee:hover .marquee-track { animation-play-state: paused; }
+
 
 /* ============ Initial site loader ============ */
 @keyframes loader-fade {
