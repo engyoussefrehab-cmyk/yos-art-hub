@@ -119,7 +119,7 @@ function SiteNav() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center gap-2" onClick={() => setOpen(false)} aria-label="يوسف رحاب">
-          <img src={logoFull.url} alt="يوسف رحاب" className="h-8 w-auto md:h-9" />
+          <img src={logoFull.url} alt="يوسف رحاب" className="h-8 w-auto md:h-9 [filter:brightness(0)_saturate(100%)_invert(12%)_sepia(8%)_saturate(600%)_hue-rotate(15deg)]" />
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
