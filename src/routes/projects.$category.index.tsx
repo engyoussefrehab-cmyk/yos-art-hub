@@ -33,7 +33,7 @@ function CategoryPage() {
         <span className="text-foreground">{category.label}</span>
       </nav>
       <header className="max-w-3xl">
-        <span className="text-xs font-semibold uppercase tracking-widest text-accent">تخصص</span>
+        <span className="text-xs font-semibold uppercase tracking-widest text-accent">تخصّص</span>
         <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-tight">{category.label}</h1>
         <p className="mt-5 text-lg text-muted-foreground">{category.desc}</p>
       </header>
