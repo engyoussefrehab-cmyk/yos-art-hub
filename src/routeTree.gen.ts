@@ -17,6 +17,7 @@ import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
 import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
 import { Route as ProjectsCategorySlugRouteImport } from './routes/projects.$category.$slug'
+import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as EnProjectsCategoryIndexRouteImport } from './routes/en.projects.$category.index'
 import { Route as EnProjectsCategorySlugRouteImport } from './routes/en.projects.$category.$slug'
 
@@ -60,6 +61,11 @@ const ProjectsCategorySlugRoute = ProjectsCategorySlugRouteImport.update({
   path: '/projects/$category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
+  id: '/api/public/contact',
+  path: '/api/public/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnProjectsCategoryIndexRoute = EnProjectsCategoryIndexRouteImport.update({
   id: '/en/projects/$category/',
   path: '/en/projects/$category/',
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/en/contact': typeof EnContactRoute
   '/en/': typeof EnIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/en/projects/': typeof EnProjectsIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/en/contact': typeof EnContactRoute
   '/en': typeof EnIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/en/projects': typeof EnProjectsIndexRoute
   '/projects/$category': typeof ProjectsCategoryIndexRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/en/contact': typeof EnContactRoute
   '/en/': typeof EnIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/api/public/contact': typeof ApiPublicContactRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/en/projects/': typeof EnProjectsIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/en/contact'
     | '/en/'
     | '/projects/'
+    | '/api/public/contact'
     | '/projects/$category/$slug'
     | '/en/projects/'
     | '/projects/$category/'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/en/contact'
     | '/en'
     | '/projects'
+    | '/api/public/contact'
     | '/projects/$category/$slug'
     | '/en/projects'
     | '/projects/$category'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/en/contact'
     | '/en/'
     | '/projects/'
+    | '/api/public/contact'
     | '/projects/$category/$slug'
     | '/en/projects/'
     | '/projects/$category/'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   EnContactRoute: typeof EnContactRoute
   EnIndexRoute: typeof EnIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  ApiPublicContactRoute: typeof ApiPublicContactRoute
   ProjectsCategorySlugRoute: typeof ProjectsCategorySlugRoute
   EnProjectsIndexRoute: typeof EnProjectsIndexRoute
   ProjectsCategoryIndexRoute: typeof ProjectsCategoryIndexRoute
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/contact': {
+      id: '/api/public/contact'
+      path: '/api/public/contact'
+      fullPath: '/api/public/contact'
+      preLoaderRoute: typeof ApiPublicContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/projects/$category/': {
       id: '/en/projects/$category/'
       path: '/en/projects/$category'
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnContactRoute: EnContactRoute,
   EnIndexRoute: EnIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  ApiPublicContactRoute: ApiPublicContactRoute,
   ProjectsCategorySlugRoute: ProjectsCategorySlugRoute,
   EnProjectsIndexRoute: EnProjectsIndexRoute,
   ProjectsCategoryIndexRoute: ProjectsCategoryIndexRoute,
@@ -250,3 +271,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
