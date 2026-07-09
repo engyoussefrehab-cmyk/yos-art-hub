@@ -1,4 +1,4 @@
-import portrait from "@/assets/portfolio/portrait.jpg";
+import portrait from "@/assets/portfolio/portrait.webp";
 import p5 from "@/assets/portfolio/page_5.webp";
 import p6 from "@/assets/portfolio/page_6.webp";
 import p7 from "@/assets/portfolio/page_7.webp";
