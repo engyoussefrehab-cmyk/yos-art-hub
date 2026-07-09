@@ -11,14 +11,19 @@ export const Route = createFileRoute("/en/projects/$category/$slug")({
     const tagline = en?.tagline ?? p?.tagline ?? "";
     const desc = en?.short ?? p?.short ?? "Project details.";
     const title = tagline ? `${name} — ${tagline}` : `${name} — Youssef Rehab`;
+    const path = `/en/projects/${params.category}/${params.slug}`;
     return {
       meta: [
         { title },
         { name: "description", content: desc },
+        { name: "keywords", content: `${name}, brand identity, logo design, Youssef Rehab` },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
+        { property: "og:url", content: path },
+        { property: "og:type", content: "article" },
         ...(p ? [{ property: "og:image", content: p.cover }] : []),
       ],
+      links: [{ rel: "canonical", href: path }],
     };
   },
   loader: ({ params }) => {

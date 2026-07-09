@@ -238,7 +238,7 @@ function WhatsAppFab() {
   const { t } = useLang();
   return (
     <a
-      href="https://wa.me/201030365405"
+      href="/go/wa"
       target="_blank"
       rel="noopener noreferrer"
       aria-label={t("whatsapp")}
@@ -350,7 +350,7 @@ function SiteFooter() {
             <li><a href="mailto:info@yrstudio.art" className="hover:text-accent transition-colors">info@yrstudio.art</a></li>
           </ul>
           <div className="mt-5 flex items-center gap-3">
-            <a href="https://www.linkedin.com/in/youssef-rehab/" target="_blank" rel="noopener noreferrer" aria-label={t("linkedin")}
+            <a href="/go/li" target="_blank" rel="noopener noreferrer" aria-label={t("linkedin")}
               className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
               <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
             </a>
