@@ -46,6 +46,10 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
           <div className="truncate text-xs text-muted-foreground">{t.project}</div>
         </div>
       </div>
+      <div className="mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        <span aria-hidden>⭐</span>
+        <span>تقييمات موثقة من منصة مستقل</span>
+      </div>
     </article>
   );
 }
@@ -181,7 +185,7 @@ export function Testimonials() {
               ثقة تُبنى بمشروع تلو الآخر
             </h2>
             <p className="mt-4 max-w-xl text-muted-foreground">
-              مختارات من آراء عملاء تعاملت معهم عبر منصّة {testimonialStats.platform}.
+              مختارات من آراء عملاء تعاملت معهم.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-6">
