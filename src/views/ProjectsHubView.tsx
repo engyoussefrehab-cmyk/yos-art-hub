@@ -25,7 +25,7 @@ export function ProjectsHubView() {
           const meta = catI18n[c.slug];
           const label = meta ? t(meta.label) : c.label;
           const desc = meta ? t(meta.desc) : c.desc;
-          const idx = lang === "ar" ? `٠${i + 1}` : String(i + 1).padStart(2, "0");
+          const idx = String(i + 1).padStart(2, "0");
           const href = lang === "ar" ? `/projects/${c.slug}` : `/en/projects/${c.slug}`;
           return (
             <Link

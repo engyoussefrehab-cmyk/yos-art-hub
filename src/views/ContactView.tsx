@@ -6,7 +6,7 @@ import type { DictKey } from "@/i18n/dictionary";
 export function ContactView() {
   const { t, lang } = useLang();
   return (
-    <section className="bg-ink text-primary-foreground">
+    <section className="flex-1 bg-ink text-primary-foreground">
       <div className="mx-auto max-w-7xl px-6 py-24 md:py-28">
         <div className="grid grid-cols-1 gap-14 md:grid-cols-12">
           <div className="md:col-span-5">

@@ -79,7 +79,7 @@ export function ProjectDetailView({ slug }: { slug: string }) {
             <ul className="space-y-4">
               {loc.approach.map((a: string, i: number) => (
                 <li key={a} className="flex items-start gap-4 border-b border-white/10 pb-4">
-                  <span className="font-display text-2xl font-bold text-accent">{lang === "ar" ? `٠${i + 1}` : String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-display text-2xl font-bold text-accent">{String(i + 1).padStart(2, "0")}</span>
                   <span className="text-lg text-white/85 leading-relaxed">{a}</span>
                 </li>
               ))}

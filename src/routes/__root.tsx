@@ -192,7 +192,7 @@ function RootComponent() {
       <SiteLoader />
       <div className="min-h-screen flex flex-col bg-background text-foreground">
         <SiteNav />
-        <main className="flex-1"><Outlet /></main>
+        <main className="flex-1 flex flex-col"><Outlet /></main>
         <SiteFooter />
         <WhatsAppFab />
         <BackToTop />

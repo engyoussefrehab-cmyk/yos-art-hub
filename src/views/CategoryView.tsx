@@ -49,7 +49,7 @@ function BrandingList() {
     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
       {brandingProjects.map((p, i) => {
         const loc = projectI18n(p.slug, lang, p);
-        const idx = lang === "ar" ? `٠${i + 1}` : String(i + 1).padStart(2, "0");
+        const idx = String(i + 1).padStart(2, "0");
         const href = lang === "ar" ? `/projects/branding/${p.slug}` : `/en/projects/branding/${p.slug}`;
         return (
           <Link
