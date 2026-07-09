@@ -136,6 +136,7 @@ function ContactForm() {
           إرسال الرسالة
         </button>
         {sent && <span className="text-xs text-accent">تم فتح بريدك لإكمال الإرسال ✓</span>}
+        {spamNotice && <span className="text-xs text-red-400">فضلًا انتظر قليلًا قبل إعادة الإرسال.</span>}
       </div>
     </form>
   );
