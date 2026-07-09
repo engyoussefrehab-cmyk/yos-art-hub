@@ -111,9 +111,9 @@ function RootComponent() {
 function WhatsAppFab() {
   return (
     <a
-      href="https://wa.me/1030365405"
+      href="https://wa.me/201030365405"
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       aria-label="واتساب"
       className="fixed bottom-5 left-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-[0_10px_30px_-8px_rgba(37,211,102,0.6)] ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus:outline-none"
     >
