@@ -58,10 +58,23 @@ function ContactPage() {
 function ContactForm() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [sent, setSent] = useState(false);
+  const [spamNotice, setSpamNotice] = useState(false);
+  const mountedAt = useRef(Date.now());
+  const lastSubmitAt = useRef(0);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
+    const honeypot = (form.elements.namedItem("website") as HTMLInputElement)?.value;
+    const now = Date.now();
+    // Bots fill hidden fields, submit instantly, or spam-click
+    if (honeypot || now - mountedAt.current < 2500 || now - lastSubmitAt.current < 8000) {
+      setSpamNotice(true);
+      lastSubmitAt.current = now;
+      return;
+    }
+    lastSubmitAt.current = now;
+    setSpamNotice(false);
     const data = {
       name: (form.elements.namedItem("name") as HTMLInputElement).value,
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
