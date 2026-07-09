@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { testimonials, testimonialStats } from "@/lib/testimonials";
 
 function Stars({ n }: { n: number }) {
@@ -28,7 +29,7 @@ function QuoteMark() {
 
 function Card({ t }: { t: (typeof testimonials)[number] }) {
   return (
-    <article className="group relative flex w-[340px] shrink-0 flex-col rounded-2xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_20px_40px_-20px_rgb(0_0_0/0.15)] sm:w-[400px]">
+    <article className="group relative flex w-[320px] shrink-0 flex-col rounded-2xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_20px_40px_-20px_rgb(0_0_0/0.15)] sm:w-[400px]">
       <div className="flex items-start justify-between">
         <QuoteMark />
         <Stars n={t.rating} />
@@ -49,9 +50,125 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
   );
 }
 
-export function Testimonials() {
-  // Duplicate list for seamless marquee loop
+function Slider() {
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  // Duplicate items to enable seamless infinite loop
   const items = [...testimonials, ...testimonials];
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    const track = trackRef.current;
+    if (!scroller || !track) return;
+
+    const SPEED = 0.5; // px per frame (~30px/sec at 60fps)
+    let raf = 0;
+    let paused = false;
+    let resumeTimer: ReturnType<typeof setTimeout> | null = null;
+    let isDragging = false;
+    let startX = 0;
+    let startScroll = 0;
+
+    const halfWidth = () => track.scrollWidth / 2;
+
+    // Start in the middle so user can scroll both directions
+    scroller.scrollLeft = 0;
+
+    const wrap = () => {
+      const half = halfWidth();
+      if (half <= 0) return;
+      if (scroller.scrollLeft >= half) scroller.scrollLeft -= half;
+      else if (scroller.scrollLeft < 0) scroller.scrollLeft += half;
+    };
+
+    const tick = () => {
+      if (!paused && !isDragging) {
+        scroller.scrollLeft += SPEED;
+        wrap();
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+
+    const pauseFor = (ms = 2000) => {
+      paused = true;
+      if (resumeTimer) clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { paused = false; }, ms);
+    };
+
+    const onEnter = () => { paused = true; };
+    const onLeave = () => { if (!isDragging) paused = false; };
+    const onWheel = () => pauseFor(1500);
+    const onScroll = () => wrap();
+
+    const onPointerDown = (e: PointerEvent) => {
+      isDragging = true;
+      startX = e.clientX;
+      startScroll = scroller.scrollLeft;
+      scroller.setPointerCapture(e.pointerId);
+      scroller.classList.add("is-grabbing");
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDragging) return;
+      scroller.scrollLeft = startScroll - (e.clientX - startX);
+      wrap();
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      try { scroller.releasePointerCapture(e.pointerId); } catch {}
+      scroller.classList.remove("is-grabbing");
+      pauseFor(1500);
+    };
+
+    scroller.addEventListener("mouseenter", onEnter);
+    scroller.addEventListener("mouseleave", onLeave);
+    scroller.addEventListener("wheel", onWheel, { passive: true });
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    scroller.addEventListener("pointerdown", onPointerDown);
+    scroller.addEventListener("pointermove", onPointerMove);
+    scroller.addEventListener("pointerup", onPointerUp);
+    scroller.addEventListener("pointercancel", onPointerUp);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      if (resumeTimer) clearTimeout(resumeTimer);
+      scroller.removeEventListener("mouseenter", onEnter);
+      scroller.removeEventListener("mouseleave", onLeave);
+      scroller.removeEventListener("wheel", onWheel);
+      scroller.removeEventListener("scroll", onScroll);
+      scroller.removeEventListener("pointerdown", onPointerDown);
+      scroller.removeEventListener("pointermove", onPointerMove);
+      scroller.removeEventListener("pointerup", onPointerUp);
+      scroller.removeEventListener("pointercancel", onPointerUp);
+    };
+  }, []);
+
+  return (
+    <div
+      className="testimonials-slider mt-12"
+      style={{
+        maskImage: "linear-gradient(to left, transparent, black 8%, black 92%, transparent)",
+        WebkitMaskImage: "linear-gradient(to left, transparent, black 8%, black 92%, transparent)",
+      }}
+    >
+      <div
+        ref={scrollerRef}
+        className="testimonials-scroller"
+        dir="ltr"
+        aria-label="آراء العملاء"
+      >
+        <div ref={trackRef} className="testimonials-track">
+          {items.map((t, i) => (
+            <Card key={i} t={t} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function Testimonials() {
   return (
     <section className="border-y border-border bg-cream" id="testimonials">
       <div className="mx-auto max-w-7xl px-6 py-24">
@@ -87,17 +204,11 @@ export function Testimonials() {
           </div>
         </div>
 
-        {/* Auto-scrolling marquee slider */}
-        <div
-          className="marquee mt-12"
-          style={{ maskImage: "linear-gradient(to left, transparent, black 8%, black 92%, transparent)", WebkitMaskImage: "linear-gradient(to left, transparent, black 8%, black 92%, transparent)" }}
-        >
-          <div className="marquee-track gap-6" dir="ltr">
-            {items.map((t, i) => (
-              <Card key={i} t={t} />
-            ))}
-          </div>
-        </div>
+        <Slider />
+
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          اسحب البطاقات يمينًا أو يسارًا لتصفّح المزيد
+        </p>
       </div>
     </section>
   );
