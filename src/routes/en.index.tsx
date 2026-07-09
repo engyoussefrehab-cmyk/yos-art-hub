@@ -6,6 +6,7 @@ export const Route = createFileRoute("/en/")({
     meta: [
       { title: "Youssef Rehab — Visual Identity Designer in Saudi Arabia & UAE" },
       { name: "description", content: "Strategic visual identity and logo designer serving brands across Saudi Arabia, UAE and the Gulf — 8+ years and 250+ brand collaborations." },
+      { name: "keywords", content: "visual identity designer, logo designer Saudi Arabia, brand identity UAE, graphic designer Gulf, company profile design, Youssef Rehab" },
       { property: "og:title", content: "Youssef Rehab — Visual Identity Designer" },
       { property: "og:description", content: "Brand identities and logos for Saudi Arabia & UAE businesses." },
       { property: "og:url", content: "/en" },
