@@ -118,7 +118,7 @@ function ProjectDetail() {
             <div className="mt-1 text-accent">{next.tagline}</div>
           </div>
           <div className="flex gap-3">
-            <Link to="/projects/$category" params={{ category: "branding" }} className="rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold hover:bg-cream">كل المشاريع</Link>
+            <Link to="/projects/$category" params={{ category: "branding" }} className="rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold hover:bg-cream">جميع المشاريع</Link>
             <Link to="/projects/$category/$slug" params={{ category: "branding", slug: next.slug }} className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground">التالي ←</Link>
           </div>
         </div>
