@@ -102,8 +102,27 @@ function RootComponent() {
         <SiteNav />
         <main className="flex-1"><Outlet /></main>
         <SiteFooter />
+        <WhatsAppFab />
       </div>
     </QueryClientProvider>
+  );
+}
+
+function WhatsAppFab() {
+  return (
+    <a
+      href="https://wa.me/201030365405"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="تواصل عبر واتساب"
+      className="fixed bottom-5 right-5 z-50 group flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-white shadow-lg shadow-black/20 ring-1 ring-white/10 transition-transform hover:-translate-y-0.5 focus:outline-none"
+    >
+      <span className="absolute inset-0 -z-10 rounded-full bg-[#25D366] opacity-70 animate-ping" aria-hidden="true" />
+      <svg viewBox="0 0 32 32" className="h-6 w-6 fill-current" aria-hidden="true">
+        <path d="M19.11 17.36c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.19 5.06 4.47.71.31 1.26.49 1.69.63.71.23 1.35.2 1.86.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35zM16.01 4C9.39 4 4 9.39 4 16c0 2.12.55 4.17 1.61 5.99L4 28l6.19-1.62A11.94 11.94 0 0 0 16.01 28c6.62 0 12-5.39 12-12s-5.39-12-12-12zm0 21.83c-1.86 0-3.68-.5-5.27-1.44l-.38-.22-3.67.96.98-3.58-.25-.37A9.83 9.83 0 0 1 6.18 16c0-5.42 4.41-9.83 9.83-9.83 5.42 0 9.83 4.41 9.83 9.83 0 5.42-4.41 9.83-9.83 9.83z" />
+      </svg>
+      <span className="hidden sm:inline text-sm font-semibold">واتساب</span>
+    </a>
   );
 }
 
@@ -178,8 +197,25 @@ function SiteFooter() {
           <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">تواصل</div>
           <ul className="space-y-2 text-sm">
             <li><a href="https://wa.me/201030365405" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors" dir="ltr">+20 103 036 5405</a></li>
-            <li><a href="mailto:youssefrehab@outlook.com" className="hover:text-accent transition-colors">youssefrehab@outlook.com</a></li>
+            <li><a href="tel:+201030365405" className="hover:text-accent transition-colors" dir="ltr">01030365405</a></li>
+            <li><a href="mailto:youssefrehab@yrstudio.art" className="hover:text-accent transition-colors">youssefrehab@yrstudio.art</a></li>
           </ul>
+          <div className="mt-5 flex items-center gap-3">
+            <a
+              href="https://www.linkedin.com/in/youssef-rehab/"
+              target="_blank" rel="noreferrer" aria-label="لينكدإن"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            </a>
+            <a
+              href="https://www.behance.net/youssefrehab"
+              target="_blank" rel="noreferrer" aria-label="بيهانس"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M9.5 6.5c1.4 0 2.6.3 3.4.9.8.6 1.2 1.5 1.2 2.7 0 .7-.2 1.3-.5 1.8-.3.5-.8.9-1.5 1.2 1 .3 1.7.7 2.2 1.4.5.6.7 1.4.7 2.4 0 .8-.1 1.5-.4 2.1-.3.6-.7 1.1-1.3 1.5-.5.4-1.2.7-1.9.9-.7.2-1.5.3-2.4.3H0V6.5h9.5zM9 11.4c.7 0 1.2-.2 1.6-.5.4-.3.6-.8.6-1.5 0-.4-.1-.7-.2-1-.1-.2-.3-.4-.6-.6-.2-.1-.5-.2-.8-.3-.3-.1-.6-.1-1-.1H3.6v4h5.4zm.3 7.5c.4 0 .8 0 1.1-.1.3-.1.6-.2.9-.4.3-.2.5-.4.6-.7.2-.3.2-.7.2-1.1 0-.9-.2-1.5-.7-1.9-.5-.4-1.2-.6-2-.6H3.6v4.8h5.7zm10.8-1.1c.5.5 1.2.7 2.1.7.7 0 1.2-.2 1.7-.5.5-.3.8-.7.9-1h2.9c-.5 1.4-1.2 2.5-2.1 3.1-1 .6-2.1.9-3.5.9-.9 0-1.8-.1-2.5-.4-.7-.3-1.4-.7-1.9-1.2s-.9-1.1-1.2-1.9c-.3-.7-.4-1.5-.4-2.4 0-.8.1-1.6.4-2.4.3-.7.7-1.4 1.2-1.9.5-.6 1.2-1 1.9-1.3.7-.3 1.6-.5 2.5-.5 1 0 1.9.2 2.7.6.7.4 1.4.9 1.8 1.6.5.7.8 1.4 1.1 2.3.1.9.2 1.8.1 2.7h-8.4c.1 1 .4 1.8.9 2.2zM22.2 12c-.4-.5-1.1-.7-1.9-.7-.5 0-1 .1-1.3.3-.4.2-.7.4-.9.7-.2.3-.4.5-.5.9-.1.3-.1.6-.2.9h5c0-.9-.3-1.6-.7-2.1H22.2zm-6.4-3.9h6.3V6.6h-6.3v1.5z"/></svg>
+            </a>
+          </div>
         </div>
       </div>
       <div className="border-t border-white/10">
