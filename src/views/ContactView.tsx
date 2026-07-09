@@ -45,6 +45,8 @@ function ContactForm() {
   const { t, lang } = useLang();
   const [errors, setErrors] = useState<FieldErrors>({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
   const [spamNotice, setSpamNotice] = useState(false);
   const mountedAt = useRef(Date.now());
   const lastSubmitAt = useRef(0);
