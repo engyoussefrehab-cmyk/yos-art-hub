@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import youssefPortrait from "@/assets/youssef-portrait.jpg.asset.json";
+import portfolioPdf from "@/assets/portfolio.pdf.asset.json";
 import { Testimonials } from "@/components/Testimonials";
 
 
@@ -45,6 +46,18 @@ function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link to="/projects" className="rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5">استعرض المشاريع</Link>
             <Link to="/contact" className="rounded-full border border-primary/20 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-cream">ابدأ مشروعك</Link>
+            <a
+              href={portfolioPdf.url}
+              download="Youssef-Rehab-Portfolio.pdf"
+              className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent hover:text-primary"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              تحميل ملف الأعمال
+            </a>
           </div>
           <div className="mt-12 grid grid-cols-3 gap-6 border-t border-border pt-8">
             <Stat n="+٨" label="سنوات خبرة" />
