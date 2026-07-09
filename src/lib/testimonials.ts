@@ -105,8 +105,9 @@ export const testimonials: Testimonial[] = [
     name: "المنصور أبو الجدايل",
     project: "هوية تجارية — شركة تموين",
     quote: "شكرًا لكم جميعًا، الشغل احترافي جدًا.",
-    rating: 5,
+    rating: 4,
   },
+
   {
     name: "سارة ص.",
     project: "تصميم هوية",
