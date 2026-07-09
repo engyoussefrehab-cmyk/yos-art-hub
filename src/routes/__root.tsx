@@ -17,15 +17,62 @@ import { useLang, detectLang } from "@/i18n/use-lang";
 
 function NotFoundComponent() {
   const { t, lang } = useLang();
+  const isAr = lang === "ar";
+  const home = isAr ? "/" : "/en";
+  const projects = isAr ? "/projects" : "/en/projects";
+  const contact = isAr ? "/contact" : "/en/contact";
+  const arrow = isAr ? "←" : "→";
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4" dir={lang === "ar" ? "rtl" : "ltr"}>
-      <div className="max-w-md text-center">
-        <h1 className="font-display text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">{t("nf_title")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">{t("nf_desc")}</p>
-        <div className="mt-6">
-          <Link to={lang === "ar" ? "/" : "/en"} className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+    <div className="relative flex min-h-screen items-center justify-center bg-background px-6 py-24 overflow-hidden" dir={isAr ? "rtl" : "ltr"}>
+      {/* Ambient decorative background */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.35]">
+        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute bottom-0 right-0 h-[380px] w-[380px] rounded-full bg-primary/10 blur-3xl" />
+      </div>
+
+      <div className="relative z-10 mx-auto w-full max-w-2xl text-center">
+        <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          {t("nf_eyebrow")}
+        </span>
+
+        <h1
+          className="mt-8 font-display text-[7rem] leading-none font-light tracking-tight text-foreground sm:text-[9rem]"
+          aria-label="404"
+        >
+          <span className="bg-gradient-to-b from-foreground to-foreground/40 bg-clip-text text-transparent">4</span>
+          <span className="mx-1 inline-block text-accent">0</span>
+          <span className="bg-gradient-to-b from-foreground to-foreground/40 bg-clip-text text-transparent">4</span>
+        </h1>
+
+        <div aria-hidden className="mx-auto mt-6 h-px w-16 bg-gradient-to-r from-transparent via-accent to-transparent" />
+
+        <h2 className="mt-6 font-display text-2xl font-semibold text-foreground sm:text-3xl">
+          {t("nf_title")}
+        </h2>
+        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
+          {t("nf_desc")}
+        </p>
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            to={home}
+            className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
+          >
             {t("nf_back")}
+            <span className="transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">{arrow}</span>
+          </Link>
+          <Link
+            to={projects}
+            className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-background/60 px-6 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent/50 hover:text-accent"
+          >
+            {t("nf_explore_projects")}
+          </Link>
+          <Link
+            to={contact}
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {t("nf_contact")}
           </Link>
         </div>
       </div>
