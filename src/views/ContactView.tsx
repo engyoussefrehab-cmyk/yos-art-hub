@@ -139,7 +139,7 @@ function Field({ label, name, type = "text", dir, error }: { label: string; name
 
 function ContactCard({ label, value, href, arrow }: { label: string; value: string; href: string; arrow: string }) {
   return (
-    <a href={href} target="_blank" rel="noreferrer" className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-accent hover:text-primary">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-accent hover:text-primary">
       <div>
         <div className="text-xs uppercase tracking-widest opacity-60">{label}</div>
         <div className="mt-1 font-display text-lg font-bold" dir="ltr">{value}</div>
