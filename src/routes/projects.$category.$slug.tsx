@@ -89,7 +89,7 @@ function ProjectDetail() {
           </div>
           <div className="md:col-span-7">
             <ul className="space-y-4">
-              {project.approach.map((a, i) => (
+              {project.approach.map((a: string, i: number) => (
                 <li key={a} className="flex items-start gap-4 border-b border-white/10 pb-4">
                   <span className="font-display text-2xl font-black text-accent">٠{i + 1}</span>
                   <span className="text-lg text-white/85 leading-relaxed">{a}</span>
