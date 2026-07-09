@@ -35,12 +35,12 @@ function ProjectsIndex() {
             <div className="p-8">
               <div className="flex items-center justify-between">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">٠{i + 1}</div>
-                <div className="rounded-full bg-background px-3 py-1 text-xs text-muted-foreground">{c.count}+ عمل</div>
+                <div className="rounded-full bg-background px-3 py-1 text-xs text-muted-foreground">{c.count}+ عملًا</div>
               </div>
               <h2 className="mt-3 font-display text-3xl font-bold">{c.label}</h2>
               <p className="mt-2 text-muted-foreground">{c.desc}</p>
               <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent">
-                استعرض القسم <span aria-hidden>←</span>
+                استعراض القسم <span aria-hidden>←</span>
               </div>
             </div>
           </Link>
