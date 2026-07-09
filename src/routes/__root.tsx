@@ -197,8 +197,25 @@ function SiteFooter() {
           <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">تواصل</div>
           <ul className="space-y-2 text-sm">
             <li><a href="https://wa.me/201030365405" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors" dir="ltr">+20 103 036 5405</a></li>
+            <li><a href="tel:+201030365405" className="hover:text-accent transition-colors" dir="ltr">01030365405</a></li>
             <li><a href="mailto:youssefrehab@yrstudio.art" className="hover:text-accent transition-colors">youssefrehab@yrstudio.art</a></li>
           </ul>
+          <div className="mt-5 flex items-center gap-3">
+            <a
+              href="https://www.linkedin.com/in/youssef-rehab/"
+              target="_blank" rel="noreferrer" aria-label="لينكدإن"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            </a>
+            <a
+              href="https://www.behance.net/youssefrehab"
+              target="_blank" rel="noreferrer" aria-label="بيهانس"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M9.5 6.5c1.4 0 2.6.3 3.4.9.8.6 1.2 1.5 1.2 2.7 0 .7-.2 1.3-.5 1.8-.3.5-.8.9-1.5 1.2 1 .3 1.7.7 2.2 1.4.5.6.7 1.4.7 2.4 0 .8-.1 1.5-.4 2.1-.3.6-.7 1.1-1.3 1.5-.5.4-1.2.7-1.9.9-.7.2-1.5.3-2.4.3H0V6.5h9.5zM9 11.4c.7 0 1.2-.2 1.6-.5.4-.3.6-.8.6-1.5 0-.4-.1-.7-.2-1-.1-.2-.3-.4-.6-.6-.2-.1-.5-.2-.8-.3-.3-.1-.6-.1-1-.1H3.6v4h5.4zm.3 7.5c.4 0 .8 0 1.1-.1.3-.1.6-.2.9-.4.3-.2.5-.4.6-.7.2-.3.2-.7.2-1.1 0-.9-.2-1.5-.7-1.9-.5-.4-1.2-.6-2-.6H3.6v4.8h5.7zm10.8-1.1c.5.5 1.2.7 2.1.7.7 0 1.2-.2 1.7-.5.5-.3.8-.7.9-1h2.9c-.5 1.4-1.2 2.5-2.1 3.1-1 .6-2.1.9-3.5.9-.9 0-1.8-.1-2.5-.4-.7-.3-1.4-.7-1.9-1.2s-.9-1.1-1.2-1.9c-.3-.7-.4-1.5-.4-2.4 0-.8.1-1.6.4-2.4.3-.7.7-1.4 1.2-1.9.5-.6 1.2-1 1.9-1.3.7-.3 1.6-.5 2.5-.5 1 0 1.9.2 2.7.6.7.4 1.4.9 1.8 1.6.5.7.8 1.4 1.1 2.3.1.9.2 1.8.1 2.7h-8.4c.1 1 .4 1.8.9 2.2zM22.2 12c-.4-.5-1.1-.7-1.9-.7-.5 0-1 .1-1.3.3-.4.2-.7.4-.9.7-.2.3-.4.5-.5.9-.1.3-.1.6-.2.9h5c0-.9-.3-1.6-.7-2.1H22.2zm-6.4-3.9h6.3V6.6h-6.3v1.5z"/></svg>
+            </a>
+          </div>
         </div>
       </div>
       <div className="border-t border-white/10">
