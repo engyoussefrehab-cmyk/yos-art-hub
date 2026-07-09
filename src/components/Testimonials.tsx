@@ -52,7 +52,7 @@ function Card({ t: item }: { t: (typeof testimonials)[number] }) {
 
       <div className="mt-auto pt-8">
         <div className="flex items-center gap-3 border-t border-border/70 pt-5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink font-display text-base font-semibold text-primary-foreground ring-1 ring-accent/20">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink font-display text-base font-semibold text-white ring-1 ring-accent/20">
             {item.name.trim().charAt(0)}
           </div>
           <div className="min-w-0 flex-1">

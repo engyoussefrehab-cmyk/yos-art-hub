@@ -69,7 +69,7 @@ export function ProjectDetailView({ slug }: { slug: string }) {
         </div>
       </section>
 
-      <section className="border-y border-border bg-ink text-primary-foreground">
+      <section className="border-y border-border bg-ink text-white">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12">
           <div className="md:col-span-5">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("proj_approach_kicker")}</span>
