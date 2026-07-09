@@ -180,12 +180,16 @@ export const dict = {
   built_with_care: { ar: "صُمّم وبُني بعناية", en: "Designed & Built with care" },
 
   // Errors / Not found
+  nf_eyebrow: { ar: "خطأ 404", en: "Error 404" },
   nf_title: { ar: "الصفحة غير موجودة", en: "Page not found" },
   nf_desc: {
-    ar: "الصفحة التي تبحث عنها غير موجودة أو نُقلت إلى مكانٍ آخر.",
-    en: "The page you're looking for doesn't exist or has been moved.",
+    ar: "يبدو أنّ الصفحة التي تبحث عنها لم تعد متاحة أو نُقلت إلى مسارٍ آخر. يمكنك العودة إلى الصفحة الرئيسيّة أو استكشاف الأقسام أدناه.",
+    en: "The page you're looking for is no longer available or has moved. You can return to the home page or explore the sections below.",
   },
   nf_back: { ar: "العودة إلى الرئيسيّة", en: "Back to home" },
+  nf_explore_projects: { ar: "استعراض المشاريع", en: "View projects" },
+  nf_contact: { ar: "تواصل معي", en: "Get in touch" },
+  nf_suggested: { ar: "روابط مقترحة", en: "Suggested links" },
   err_title: { ar: "حدث خطأٌ ما", en: "Something went wrong" },
   err_desc: { ar: "يمكنك إعادة المحاولة أو العودة إلى الصفحة الرئيسيّة.", en: "You can retry or head back to the home page." },
   err_retry: { ar: "إعادة المحاولة", en: "Retry" },
