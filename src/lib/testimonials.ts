@@ -105,8 +105,9 @@ export const testimonials: Testimonial[] = [
     name: "المنصور أبو الجدايل",
     project: "هوية تجارية — شركة تموين",
     quote: "شكرًا لكم جميعًا، الشغل احترافي جدًا.",
-    rating: 5,
+    rating: 4,
   },
+
   {
     name: "سارة ص.",
     project: "تصميم هوية",
@@ -123,12 +124,14 @@ export const testimonials: Testimonial[] = [
     name: "خالد العتيبي",
     project: "شعار — شركة رحلات سياحية",
     quote: "تعامل جيّد وشخص محترف.",
-    rating: 5,
+    rating: 4,
   },
+
 ];
 
 export const testimonialStats = {
   count: testimonials.length,
-  averageRating: 5.0,
+  averageRating: 4.9,
   platform: "مستقل",
 };
+

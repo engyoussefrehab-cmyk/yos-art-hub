@@ -80,6 +80,8 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-feature-settings: "kern";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4 {
@@ -87,8 +89,94 @@
     letter-spacing: -0.015em;
     font-feature-settings: "ss01", "kern";
   }
+
+  a, button, [role="button"] {
+    cursor: pointer;
+  }
+
+  /* Smooth default transitions on interactive elements */
+  a, button {
+    transition: color 200ms ease, background-color 200ms ease,
+      border-color 200ms ease, transform 200ms ease, opacity 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  img { -webkit-user-drag: none; user-select: none; }
+
+  /* Focus-visible ring */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    color: var(--color-foreground);
+  }
 }
 
 @utility text-balance {
   text-wrap: balance;
 }
+
+/* ============ Page load fade-in ============ */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+main {
+  animation: page-in 420ms ease-out both;
+}
+
+/* ============ Marquee (testimonials slider) ============ */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee {
+  position: relative;
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 60s linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+/* ============ Initial site loader ============ */
+@keyframes loader-fade {
+  to { opacity: 0; visibility: hidden; }
+}
+@keyframes loader-spin {
+  to { transform: rotate(360deg); }
+}
+.site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background);
+  animation: loader-fade 500ms ease 700ms forwards;
+  pointer-events: none;
+}
+.site-loader-ring {
+  width: 38px;
+  height: 38px;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in oklab, var(--color-foreground) 12%, transparent);
+  border-top-color: var(--color-accent);
+  animation: loader-spin 900ms linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  main,
+  .site-loader,
+  .site-loader-ring { animation: none !important; }
+}
+
