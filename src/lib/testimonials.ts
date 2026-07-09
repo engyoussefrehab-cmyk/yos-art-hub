@@ -129,6 +129,7 @@ export const testimonials: Testimonial[] = [
 
 export const testimonialStats = {
   count: testimonials.length,
-  averageRating: 5.0,
+  averageRating: 4.9,
   platform: "مستقل",
 };
+
