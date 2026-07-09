@@ -43,7 +43,7 @@ function ProjectDetail() {
           <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
             <div className="md:col-span-7">
               <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
-                <span>هوية بصرية</span>
+                <span>هويّةٌ بصريّة</span>
                 <span className="h-px w-8 bg-border" />
                 <span>{project.country} · {project.year}</span>
               </div>
@@ -54,8 +54,8 @@ function ProjectDetail() {
             <div className="md:col-span-5">
               <dl className="grid grid-cols-2 gap-6 rounded-2xl border border-border bg-background p-6">
                 <div>
-                  <dt className="text-xs uppercase tracking-widest text-muted-foreground">التخصص</dt>
-                  <dd className="mt-1 font-semibold">هوية بصرية</dd>
+                  <dt className="text-xs uppercase tracking-widest text-muted-foreground">التخصّص</dt>
+                  <dd className="mt-1 font-semibold">هويّةٌ بصريّة</dd>
                 </div>
                 <div>
                   <dt className="text-xs uppercase tracking-widest text-muted-foreground">السنة</dt>
