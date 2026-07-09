@@ -289,7 +289,7 @@ function SiteNav() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to={base || "/"} className="flex items-center gap-2" onClick={() => setOpen(false)} aria-label={t("brand_alt")}>
-          <img src={logoFull.url} alt={t("brand_alt")} className="h-8 w-auto md:h-9" style={{ filter: "brightness(0)" }} />
+          <img src={logoFull.url} alt={t("brand_alt")} className="h-8 w-auto md:h-9 [filter:brightness(0)] dark:[filter:brightness(0)_invert(1)]" />
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
