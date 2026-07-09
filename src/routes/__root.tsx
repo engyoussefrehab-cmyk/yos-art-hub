@@ -12,7 +12,6 @@ import { useEffect, useState, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import logoFull from "@/assets/logo-full.png.asset.json";
-import logoMark from "@/assets/logo-mark.png.asset.json";
 
 function NotFoundComponent() {
   return (
