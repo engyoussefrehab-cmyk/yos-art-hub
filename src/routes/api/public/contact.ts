@@ -71,7 +71,7 @@ export const Route = createFileRoute("/api/public/contact")({
             "X-Connection-Api-Key": RESEND_API_KEY,
           },
           body: JSON.stringify({
-            from: "YR Studio <onboarding@resend.dev>",
+            from: "YR Studio <noreply@yrstudio.art>",
             to: ["info@yrstudio.art"],
             reply_to: email,
             subject: `[نموذج التواصل] ${subject}`,
