@@ -102,8 +102,27 @@ function RootComponent() {
         <SiteNav />
         <main className="flex-1"><Outlet /></main>
         <SiteFooter />
+        <WhatsAppFab />
       </div>
     </QueryClientProvider>
+  );
+}
+
+function WhatsAppFab() {
+  return (
+    <a
+      href="https://wa.me/201030365405"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="تواصل عبر واتساب"
+      className="fixed bottom-5 right-5 z-50 group flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-white shadow-lg shadow-black/20 ring-1 ring-white/10 transition-transform hover:-translate-y-0.5 focus:outline-none"
+    >
+      <span className="absolute inset-0 -z-10 rounded-full bg-[#25D366] opacity-70 animate-ping" aria-hidden="true" />
+      <svg viewBox="0 0 32 32" className="h-6 w-6 fill-current" aria-hidden="true">
+        <path d="M19.11 17.36c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.19 5.06 4.47.71.31 1.26.49 1.69.63.71.23 1.35.2 1.86.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35zM16.01 4C9.39 4 4 9.39 4 16c0 2.12.55 4.17 1.61 5.99L4 28l6.19-1.62A11.94 11.94 0 0 0 16.01 28c6.62 0 12-5.39 12-12s-5.39-12-12-12zm0 21.83c-1.86 0-3.68-.5-5.27-1.44l-.38-.22-3.67.96.98-3.58-.25-.37A9.83 9.83 0 0 1 6.18 16c0-5.42 4.41-9.83 9.83-9.83 5.42 0 9.83 4.41 9.83 9.83 0 5.42-4.41 9.83-9.83 9.83z" />
+      </svg>
+      <span className="hidden sm:inline text-sm font-semibold">واتساب</span>
+    </a>
   );
 }
 
