@@ -12,11 +12,17 @@ const catLabelsEn: Record<string, string> = {
 export const Route = createFileRoute("/en/projects/$category/")({
   head: ({ params }) => {
     const label = catLabelsEn[params.category] ?? "Projects";
+    const path = `/en/projects/${params.category}`;
     return {
       meta: [
         { title: `${label} — Youssef Rehab` },
-        { name: "description", content: `Selected ${label.toLowerCase()} work.` },
+        { name: "description", content: `Selected ${label.toLowerCase()} work for Saudi Arabia, UAE and Gulf brands.` },
+        { name: "keywords", content: `${label}, Youssef Rehab, Saudi Arabia design, UAE design, brand identity` },
+        { property: "og:title", content: `${label} — Youssef Rehab` },
+        { property: "og:description", content: `Selected ${label.toLowerCase()} work.` },
+        { property: "og:url", content: path },
       ],
+      links: [{ rel: "canonical", href: path }],
     };
   },
   loader: ({ params }) => {
