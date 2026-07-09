@@ -31,10 +31,10 @@ function ContactPage() {
           <div className="md:col-span-5">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">تواصل</span>
             <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-[1.05]">
-              عندك فكرة؟<br /> <span className="text-accent">خلّينا نحوّلها لهوية.</span>
+              هل لديك فكرة؟<br /> <span className="text-accent">دعنا نُحوّلها إلى هويّة.</span>
             </h1>
             <p className="mt-6 max-w-xl text-white/70 text-lg leading-relaxed">
-              متاح لمشاريع الهوية البصرية والتعاونات الإبداعية في الخليج ومصر والعالم العربي. اختر الوسيلة الأنسب أو أرسل تفاصيل مشروعك عبر النموذج.
+              متاحٌ لمشاريع الهويّة البصريّة والتعاونات الإبداعيّة في الخليج ومصر والعالم العربي. اختر الوسيلة الأنسب أو أرسل تفاصيل مشروعك عبر النموذج.
             </p>
             <div className="mt-8 space-y-3">
               <ContactCard label="واتساب / اتصال" value="+20 103 036 5405" href="https://wa.me/201030365405" />
@@ -92,7 +92,7 @@ function ContactForm() {
       return;
     }
     setErrors({});
-    const body = `الاسم: ${result.data.name}\nالبريد: ${result.data.email}\n\n${result.data.message}`;
+    const body = `الاسم: ${result.data.name}\nالبريد الإلكتروني: ${result.data.email}\n\n${result.data.message}`;
     const mailto = `mailto:youssefrehab@yrstudio.art?subject=${encodeURIComponent(result.data.subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     setSent(true);
@@ -103,7 +103,7 @@ function ContactForm() {
     <form onSubmit={onSubmit} noValidate className="rounded-3xl border border-white/10 bg-white/5 p-6 md:p-8 backdrop-blur">
       <div className="mb-6">
         <h2 className="font-display text-2xl font-bold text-white">أرسل تفاصيل مشروعك</h2>
-        <p className="mt-1 text-sm text-white/60">سنعود إليك خلال ٢٤ ساعة.</p>
+        <p className="mt-1 text-sm text-white/60">سأعود إليك خلال ٢٤ ساعة.</p>
       </div>
       {/* Honeypot — hidden from users, bots often fill it */}
       <input
@@ -124,7 +124,7 @@ function ContactForm() {
           rows={6}
           maxLength={2000}
           className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
-          placeholder="احكيلي عن علامتك التجارية، القطاع، والجدول الزمني…"
+          placeholder="أخبرني عن علامتك التجاريّة، والقطاع، والجدول الزمني…"
         />
         {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
       </div>
@@ -135,8 +135,8 @@ function ContactForm() {
         >
           إرسال الرسالة
         </button>
-        {sent && <span className="text-xs text-accent">تم فتح بريدك لإكمال الإرسال ✓</span>}
-        {spamNotice && <span className="text-xs text-red-400">فضلًا انتظر قليلًا قبل إعادة الإرسال.</span>}
+        {sent && <span className="text-xs text-accent">تمّ فتح بريدك لإكمال الإرسال ✓</span>}
+        {spamNotice && <span className="text-xs text-red-400">يُرجى الانتظار قليلًا قبل إعادة الإرسال.</span>}
       </div>
     </form>
   );

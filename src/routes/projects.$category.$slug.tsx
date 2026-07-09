@@ -36,14 +36,14 @@ function ProjectDetail() {
           <nav className="mb-10 flex items-center gap-2 text-sm text-muted-foreground">
             <Link to="/projects" className="hover:text-foreground">المشاريع</Link>
             <span>/</span>
-            <Link to="/projects/$category" params={{ category: "branding" }} className="hover:text-foreground">الهوية البصرية</Link>
+            <Link to="/projects/$category" params={{ category: "branding" }} className="hover:text-foreground">الهويّة البصريّة</Link>
             <span>/</span>
             <span className="text-foreground">{project.name}</span>
           </nav>
           <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
             <div className="md:col-span-7">
               <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
-                <span>هوية بصرية</span>
+                <span>هويّةٌ بصريّة</span>
                 <span className="h-px w-8 bg-border" />
                 <span>{project.country} · {project.year}</span>
               </div>
@@ -54,8 +54,8 @@ function ProjectDetail() {
             <div className="md:col-span-5">
               <dl className="grid grid-cols-2 gap-6 rounded-2xl border border-border bg-background p-6">
                 <div>
-                  <dt className="text-xs uppercase tracking-widest text-muted-foreground">التخصص</dt>
-                  <dd className="mt-1 font-semibold">هوية بصرية</dd>
+                  <dt className="text-xs uppercase tracking-widest text-muted-foreground">التخصّص</dt>
+                  <dd className="mt-1 font-semibold">هويّةٌ بصريّة</dd>
                 </div>
                 <div>
                   <dt className="text-xs uppercase tracking-widest text-muted-foreground">السنة</dt>
@@ -85,7 +85,7 @@ function ProjectDetail() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12">
           <div className="md:col-span-5">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">التوجّه والمقاربة</span>
-            <h2 className="mt-3 font-display text-4xl font-bold leading-tight">كيف بنينا الهوية</h2>
+            <h2 className="mt-3 font-display text-4xl font-bold leading-tight">كيف بنينا الهويّة</h2>
           </div>
           <div className="md:col-span-7">
             <ul className="space-y-4">
@@ -118,7 +118,7 @@ function ProjectDetail() {
             <div className="mt-1 text-accent">{next.tagline}</div>
           </div>
           <div className="flex gap-3">
-            <Link to="/projects/$category" params={{ category: "branding" }} className="rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold hover:bg-cream">كل المشاريع</Link>
+            <Link to="/projects/$category" params={{ category: "branding" }} className="rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold hover:bg-cream">جميع المشاريع</Link>
             <Link to="/projects/$category/$slug" params={{ category: "branding", slug: next.slug }} className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground">التالي ←</Link>
           </div>
         </div>
