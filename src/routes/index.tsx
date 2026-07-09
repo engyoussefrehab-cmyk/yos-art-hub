@@ -29,14 +29,14 @@ function Hero() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12 md:py-28">
         <div className="md:col-span-7 flex flex-col justify-center">
           <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-cream px-4 py-1.5 text-xs font-medium text-muted-foreground">
-            <span className="h-2 w-2 rounded-full bg-accent" /> متاح لمشاريع فريلانس وتعاونات
+            <span className="h-2 w-2 rounded-full bg-accent" /> متاح لمشاريع جديدة
           </span>
-          <h1 className="font-display text-5xl font-black leading-[1.05] text-balance md:text-7xl">
-            هويات بصرية <span className="text-accent">جريئة</span>،
-            <br /> واضحة، لا تُنسى.
+          <h1 className="font-display text-5xl font-bold leading-[1.1] tracking-tight text-balance md:text-7xl">
+            هويات بصرية <span className="text-accent">تُبنى لتبقى.</span>
+            <br /> نظيفة، ذكية، خالدة.
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            أنا يوسف رحاب، مصمم هوية بصرية استراتيجي بخبرة تتجاوز ٨ سنوات، أساعد العلامات على تحويل أفكارها إلى أنظمة بصرية قوية، بسيطة، وخالدة تتحدث بوضوح وتتميّز في الأسواق التنافسية.
+          <p className="mt-6 max-w-xl text-lg leading-loose text-muted-foreground">
+            أنا يوسف رحاب — مصمم هوية بصرية استراتيجي. أساعد العلامات على قول ما تريد قوله بوضوح، عبر أنظمة بصرية مصمَّمة بإحكام تصنع فرقاً حقيقياً في السوق.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link to="/projects" className="rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5">استعرض المشاريع</Link>
@@ -50,11 +50,11 @@ function Hero() {
         </div>
         <div className="md:col-span-5 relative">
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-ink">
-            <img src={portrait} alt="يوسف رحاب" className="h-full w-full object-cover" />
+            <img src={youssefPortrait.url} alt="يوسف رحاب" className="h-full w-full object-cover" />
           </div>
           <div className="absolute -bottom-6 -right-6 hidden md:block rounded-2xl bg-accent px-6 py-4 text-primary shadow-xl rotate-[-4deg]">
-            <div className="font-display text-xs font-bold">Strategic Brand</div>
-            <div className="font-display text-lg font-black leading-none">Identity Designer</div>
+            <div className="font-display text-xs font-semibold">Strategic Brand</div>
+            <div className="font-display text-lg font-bold leading-none">Identity Designer</div>
           </div>
         </div>
       </div>
