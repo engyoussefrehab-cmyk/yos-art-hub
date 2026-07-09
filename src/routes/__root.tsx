@@ -191,3 +191,45 @@ function SiteFooter() {
     </footer>
   );
 }
+
+function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+  const [hp, setHp] = useState("");
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (hp) return; // honeypot filled → bot
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    if (!ok) { setStatus("error"); return; }
+    try {
+      const list = JSON.parse(localStorage.getItem("nl_subs") || "[]");
+      if (!list.includes(email.trim())) list.push(email.trim());
+      localStorage.setItem("nl_subs", JSON.stringify(list));
+    } catch {}
+    setStatus("ok");
+    setEmail("");
+  };
+  return (
+    <div>
+      <div className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/50">النشرة البريدية</div>
+      <p className="mb-3 text-sm text-white/60">اشترك لتصلك آخر المشاريع والدروس الإبداعية.</p>
+      <form onSubmit={onSubmit} className="flex flex-col gap-2 sm:flex-row" noValidate>
+        <input
+          type="text" tabIndex={-1} autoComplete="off" value={hp}
+          onChange={(e) => setHp(e.target.value)}
+          className="hidden" aria-hidden="true"
+        />
+        <input
+          type="email" required value={email} onChange={(e) => { setEmail(e.target.value); setStatus("idle"); }}
+          placeholder="بريدك الإلكتروني" dir="ltr"
+          className="flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-accent focus:outline-none"
+        />
+        <button type="submit" className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5">
+          اشترك
+        </button>
+      </form>
+      {status === "ok" && <p className="mt-2 text-xs text-accent">تم الاشتراك بنجاح ✓</p>}
+      {status === "error" && <p className="mt-2 text-xs text-red-400">بريد إلكتروني غير صحيح</p>}
+    </div>
+  );
+}
