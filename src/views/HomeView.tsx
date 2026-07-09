@@ -61,13 +61,17 @@ function Hero() {
             <Stat n={lang === "ar" ? "+٢٠" : "20+"} labelKey="stat_sectors" />
           </div>
         </div>
-        <div className="md:col-span-5 relative">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-ink">
-            <img src={youssefPortrait.url} alt={t("brand_alt")} className="h-full w-full object-cover" />
+        <div className="md:col-span-5 relative flex items-center justify-center">
+          <div className={`absolute inset-0 hidden md:block rounded-3xl border border-accent/30 ${lang === "ar" ? "-translate-x-4 translate-y-4" : "translate-x-4 translate-y-4"}`} aria-hidden />
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-ink shadow-2xl">
+            <img src={youssefPortrait.url} alt={t("brand_alt")} className="h-full w-full object-cover object-center" />
           </div>
-          <div className={`absolute -bottom-6 hidden md:block rounded-2xl bg-accent px-6 py-4 text-primary shadow-xl rotate-[-4deg] ${lang === "ar" ? "-right-6" : "-left-6"}`}>
-            <div className="font-display text-xs font-semibold">{t("strategic_brand")}</div>
-            <div className="font-display text-lg font-bold leading-none">{t("identity_designer")}</div>
+          <div className={`absolute -bottom-5 hidden md:flex items-center gap-3 rounded-full bg-accent px-5 py-3 text-primary shadow-xl ${lang === "ar" ? "right-6" : "left-6"}`}>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 font-display text-sm font-bold">YR</span>
+            <div className="leading-tight">
+              <div className="font-display text-[10px] font-semibold uppercase tracking-widest opacity-70">{t("strategic_brand")}</div>
+              <div className="font-display text-base font-bold">{t("identity_designer")}</div>
+            </div>
           </div>
         </div>
       </div>
