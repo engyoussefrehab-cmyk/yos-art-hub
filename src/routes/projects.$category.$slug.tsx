@@ -47,7 +47,7 @@ function ProjectDetail() {
                 <span className="h-px w-8 bg-border" />
                 <span>{project.country} · {project.year}</span>
               </div>
-              <h1 className="mt-4 font-display text-5xl md:text-7xl font-black leading-[1.05]">{project.name}</h1>
+              <h1 className="mt-4 font-display text-5xl md:text-7xl font-bold leading-[1.05]">{project.name}</h1>
               <div className="mt-3 text-accent font-medium text-lg">{project.tagline}</div>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">{project.description}</p>
             </div>
@@ -85,13 +85,13 @@ function ProjectDetail() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12">
           <div className="md:col-span-5">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">التوجّه والمقاربة</span>
-            <h2 className="mt-3 font-display text-4xl font-black leading-tight">كيف بنينا الهوية</h2>
+            <h2 className="mt-3 font-display text-4xl font-bold leading-tight">كيف بنينا الهوية</h2>
           </div>
           <div className="md:col-span-7">
             <ul className="space-y-4">
               {project.approach.map((a: string, i: number) => (
                 <li key={a} className="flex items-start gap-4 border-b border-white/10 pb-4">
-                  <span className="font-display text-2xl font-black text-accent">٠{i + 1}</span>
+                  <span className="font-display text-2xl font-bold text-accent">٠{i + 1}</span>
                   <span className="text-lg text-white/85 leading-relaxed">{a}</span>
                 </li>
               ))}
@@ -114,7 +114,7 @@ function ProjectDetail() {
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-6 py-16 md:flex-row md:items-center">
           <div>
             <div className="text-xs uppercase tracking-widest text-muted-foreground">المشروع التالي</div>
-            <div className="mt-2 font-display text-3xl md:text-4xl font-black">{next.name}</div>
+            <div className="mt-2 font-display text-3xl md:text-4xl font-bold">{next.name}</div>
             <div className="mt-1 text-accent">{next.tagline}</div>
           </div>
           <div className="flex gap-3">

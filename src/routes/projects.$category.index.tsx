@@ -34,7 +34,7 @@ function CategoryPage() {
       </nav>
       <header className="max-w-3xl">
         <span className="text-xs font-semibold uppercase tracking-widest text-accent">تخصص</span>
-        <h1 className="mt-3 font-display text-5xl md:text-6xl font-black leading-tight">{category.label}</h1>
+        <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-tight">{category.label}</h1>
         <p className="mt-5 text-lg text-muted-foreground">{category.desc}</p>
       </header>
 
@@ -67,7 +67,7 @@ function BrandingList() {
               <span className="h-px w-8 bg-border" />
               <span>{p.country} · {p.year}</span>
             </div>
-            <h3 className="mt-3 font-display text-2xl md:text-3xl font-black">{p.name}</h3>
+            <h3 className="mt-3 font-display text-2xl md:text-3xl font-bold">{p.name}</h3>
             <div className="mt-1 text-accent font-medium text-sm">{p.tagline}</div>
             <p className="mt-3 text-muted-foreground leading-relaxed">{p.short}</p>
             <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground">

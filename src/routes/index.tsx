@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { portrait } from "@/lib/portfolio-data";
+import youssefPortrait from "@/assets/youssef-portrait.jpg.asset.json";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,14 +29,14 @@ function Hero() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12 md:py-28">
         <div className="md:col-span-7 flex flex-col justify-center">
           <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-cream px-4 py-1.5 text-xs font-medium text-muted-foreground">
-            <span className="h-2 w-2 rounded-full bg-accent" /> متاح لمشاريع فريلانس وتعاونات
+            <span className="h-2 w-2 rounded-full bg-accent" /> متاح لمشاريع جديدة
           </span>
-          <h1 className="font-display text-5xl font-black leading-[1.05] text-balance md:text-7xl">
-            هويات بصرية <span className="text-accent">جريئة</span>،
-            <br /> واضحة، لا تُنسى.
+          <h1 className="font-display text-5xl font-bold leading-[1.1] tracking-tight text-balance md:text-7xl">
+            هويات بصرية <span className="text-accent">تُبنى لتبقى.</span>
+            <br /> نظيفة، ذكية، خالدة.
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            أنا يوسف رحاب، مصمم هوية بصرية استراتيجي بخبرة تتجاوز ٨ سنوات، أساعد العلامات على تحويل أفكارها إلى أنظمة بصرية قوية، بسيطة، وخالدة تتحدث بوضوح وتتميّز في الأسواق التنافسية.
+          <p className="mt-6 max-w-xl text-lg leading-loose text-muted-foreground">
+            أنا يوسف رحاب — مصمم هوية بصرية استراتيجي. أساعد العلامات على قول ما تريد قوله بوضوح، عبر أنظمة بصرية مصمَّمة بإحكام تصنع فرقاً حقيقياً في السوق.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link to="/projects" className="rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5">استعرض المشاريع</Link>
@@ -49,11 +50,11 @@ function Hero() {
         </div>
         <div className="md:col-span-5 relative">
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-ink">
-            <img src={portrait} alt="يوسف رحاب" className="h-full w-full object-cover" />
+            <img src={youssefPortrait.url} alt="يوسف رحاب" className="h-full w-full object-cover" />
           </div>
           <div className="absolute -bottom-6 -right-6 hidden md:block rounded-2xl bg-accent px-6 py-4 text-primary shadow-xl rotate-[-4deg]">
-            <div className="font-display text-xs font-bold">Strategic Brand</div>
-            <div className="font-display text-lg font-black leading-none">Identity Designer</div>
+            <div className="font-display text-xs font-semibold">Strategic Brand</div>
+            <div className="font-display text-lg font-bold leading-none">Identity Designer</div>
           </div>
         </div>
       </div>
@@ -64,7 +65,7 @@ function Hero() {
 function Stat({ n, label }: { n: string; label: string }) {
   return (
     <div>
-      <div className="font-display text-3xl md:text-4xl font-black">{n}</div>
+      <div className="font-display text-3xl md:text-4xl font-bold">{n}</div>
       <div className="mt-1 text-xs text-muted-foreground">{label}</div>
     </div>
   );
@@ -78,7 +79,7 @@ function About() {
         <div className="md:col-span-5">
           <div className="sticky top-24">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">من أنا</span>
-            <h2 className="mt-3 font-display text-4xl md:text-5xl font-black leading-tight">أصمّم هويات<br /> تعيش طويلاً.</h2>
+            <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">أصمّم هويات<br /> تعيش طويلاً.</h2>
           </div>
         </div>
         <div className="md:col-span-7">
@@ -114,14 +115,14 @@ function Services() {
       <div className="flex items-end justify-between gap-6 border-b border-border pb-8">
         <div>
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">الخدمات</span>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-black">ماذا أقدّم</h2>
+          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold">ماذا أقدّم</h2>
         </div>
         <p className="hidden md:block max-w-md text-muted-foreground">خدمات تصميم شاملة تحوّل رؤيتك إلى نظام بصري متكامل.</p>
       </div>
       <div className="mt-12 grid grid-cols-1 gap-px bg-border md:grid-cols-2 lg:grid-cols-3">
         {items.map((s, i) => (
           <div key={s.title} className="group bg-background p-8 transition-colors hover:bg-cream">
-            <div className="font-display text-6xl font-black text-accent/20 group-hover:text-accent/40 transition-colors">{String(i + 1).padStart(2, "0")}</div>
+            <div className="font-display text-6xl font-bold text-accent/20 group-hover:text-accent/40 transition-colors">{String(i + 1).padStart(2, "0")}</div>
             <h3 className="mt-4 font-display text-2xl font-bold">{s.title}</h3>
             <p className="mt-2 text-muted-foreground">{s.desc}</p>
           </div>
@@ -136,7 +137,7 @@ function CTA() {
     <section className="bg-ink text-primary-foreground">
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-20 md:flex-row md:items-center">
         <div>
-          <h2 className="font-display text-3xl md:text-5xl font-black leading-tight">
+          <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
             عندك فكرة؟ <span className="text-accent">خلّينا نحوّلها لهوية.</span>
           </h2>
           <p className="mt-4 max-w-xl text-white/70">متاح لمشاريع الهوية البصرية والتعاونات الإبداعية.</p>

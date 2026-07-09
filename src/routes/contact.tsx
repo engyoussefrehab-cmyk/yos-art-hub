@@ -30,7 +30,7 @@ function ContactPage() {
         <div className="grid grid-cols-1 gap-14 md:grid-cols-12">
           <div className="md:col-span-5">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">تواصل</span>
-            <h1 className="mt-3 font-display text-5xl md:text-6xl font-black leading-[1.05]">
+            <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-[1.05]">
               عندك فكرة؟<br /> <span className="text-accent">خلّينا نحوّلها لهوية.</span>
             </h1>
             <p className="mt-6 max-w-xl text-white/70 text-lg leading-relaxed">
@@ -41,9 +41,9 @@ function ContactPage() {
               <ContactCard label="البريد الإلكتروني" value="youssefrehab@yrstudio.art" href="mailto:youssefrehab@yrstudio.art" />
             </div>
             <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/10 pt-8">
-              <div><div className="font-display text-3xl font-black">+٨</div><div className="mt-1 text-xs text-white/60">سنوات</div></div>
-              <div><div className="font-display text-3xl font-black">+٢٥٠</div><div className="mt-1 text-xs text-white/60">علامة</div></div>
-              <div><div className="font-display text-3xl font-black">+٢٠</div><div className="mt-1 text-xs text-white/60">قطاع</div></div>
+              <div><div className="font-display text-3xl font-bold">+٨</div><div className="mt-1 text-xs text-white/60">سنوات</div></div>
+              <div><div className="font-display text-3xl font-bold">+٢٥٠</div><div className="mt-1 text-xs text-white/60">علامة</div></div>
+              <div><div className="font-display text-3xl font-bold">+٢٠</div><div className="mt-1 text-xs text-white/60">قطاع</div></div>
             </div>
           </div>
           <div className="md:col-span-7">
