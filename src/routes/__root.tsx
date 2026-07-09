@@ -254,7 +254,7 @@ function SiteFooter() {
       </div>
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 md:flex-row">
-          <div className="text-xs text-white/50">© {year} يوسف رحاب® — جميع الحقوق محفوظة</div>
+          <div className="text-xs text-white/50">© {year} يوسف رحاب® — جميع الحقوق محفوظة.</div>
           <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Designed & Built with care</div>
         </div>
       </div>
