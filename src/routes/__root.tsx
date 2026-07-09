@@ -341,10 +341,12 @@ function SiteNav() {
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
           <LangSwitcher />
           <Link to={`${base}/contact`} className="inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5">{t("cta_start_project")}</Link>
         </div>
         <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
           <LangSwitcher />
           <button className="rounded-md border border-border p-2" onClick={() => setOpen(v => !v)} aria-label={t("menu_label")}>
             <span className="block h-0.5 w-5 bg-foreground mb-1" />
