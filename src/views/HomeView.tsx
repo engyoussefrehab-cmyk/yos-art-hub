@@ -163,7 +163,7 @@ function CTA() {
   const { t, lang } = useLang();
   const contactHref = lang === "ar" ? "/contact" : "/en/contact";
   return (
-    <section className="bg-ink text-primary-foreground">
+    <section className="bg-ink text-white">
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-20 md:flex-row md:items-center">
         <div>
           <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
