@@ -45,6 +45,8 @@ function ContactForm() {
   const { t, lang } = useLang();
   const [errors, setErrors] = useState<FieldErrors>({});
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
   const [spamNotice, setSpamNotice] = useState(false);
   const mountedAt = useRef(Date.now());
   const lastSubmitAt = useRef(0);
@@ -56,7 +58,7 @@ function ContactForm() {
     message: z.string().trim().min(10, t("err_msg_short")).max(2000, t("err_msg_long")),
   });
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const honeypot = (form.elements.namedItem("website") as HTMLInputElement)?.value;
@@ -68,6 +70,7 @@ function ContactForm() {
     }
     lastSubmitAt.current = now;
     setSpamNotice(false);
+    setSendError(null);
     const data = {
       name: (form.elements.namedItem("name") as HTMLInputElement).value,
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
@@ -85,13 +88,21 @@ function ContactForm() {
       return;
     }
     setErrors({});
-    const nameLabel = t("mail_name_label");
-    const emailLabel = t("mail_email_label");
-    const body = `${nameLabel}: ${result.data.name}\n${emailLabel}: ${result.data.email}\n\n${result.data.message}`;
-    const mailto = `mailto:info@yrstudio.art?subject=${encodeURIComponent(result.data.subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-    setSent(true);
-    form.reset();
+    setSending(true);
+    try {
+      const res = await fetch("/api/public/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result.data),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      setSent(true);
+      form.reset();
+    } catch {
+      setSendError(lang === "ar" ? "تعذّر الإرسال، حاول لاحقًا." : "Failed to send. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -118,9 +129,16 @@ function ContactForm() {
         {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
       </div>
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
-        <button type="submit" className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5">{t("f_send")}</button>
+        <button
+          type="submit"
+          disabled={sending}
+          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
+        >
+          {sending ? (lang === "ar" ? "جارٍ الإرسال..." : "Sending...") : t("f_send")}
+        </button>
         {sent && <span className="text-xs text-accent">{t("f_sent")}</span>}
         {spamNotice && <span className="text-xs text-red-400">{t("f_spam")}</span>}
+        {sendError && <span className="text-xs text-red-400">{sendError}</span>}
       </div>
     </form>
   );
