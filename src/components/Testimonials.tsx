@@ -1,29 +1,23 @@
 import { useCallback, useEffect, useRef } from "react";
 import { testimonials, testimonialStats } from "@/lib/testimonials";
+import { useLang } from "@/i18n/use-lang";
+
 
 function Stars({ n }: { n: number }) {
+  const { t } = useLang();
   return (
-    <div
-      className="inline-flex items-center gap-0.5 leading-none"
-      aria-label={`تقييم ${n} من 5`}
-      dir="ltr"
-    >
+    <div className="inline-flex items-center gap-0.5 leading-none" aria-label={`${t("t_kicker")}: ${n}/5`} dir="ltr">
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg
-          key={i}
-          viewBox="0 0 20 20"
-          width={16}
-          height={16}
+        <svg key={i} viewBox="0 0 20 20" width={16} height={16}
           className={`block shrink-0 ${i < n ? "text-accent" : "text-muted-foreground/25"}`}
-          fill="currentColor"
-          aria-hidden
-        >
+          fill="currentColor" aria-hidden>
           <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.78L10 14.77l-5.2 2.73.99-5.78L1.58 7.62l5.82-.85L10 1.5z" />
         </svg>
       ))}
     </div>
   );
 }
+
 
 function QuoteMark() {
   return (
@@ -38,7 +32,8 @@ function QuoteMark() {
   );
 }
 
-function Card({ t }: { t: (typeof testimonials)[number] }) {
+function Card({ t: item }: { t: (typeof testimonials)[number] }) {
+  const { t, lang } = useLang();
   return (
     <article
       className="group relative flex h-full min-h-[340px] w-[320px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-background p-8 shadow-[0_1px_0_rgb(0_0_0/0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_24px_50px_-24px_rgb(0_0_0/0.18)] sm:min-h-[360px] sm:w-[380px] sm:p-9"
@@ -49,69 +44,49 @@ function Card({ t }: { t: (typeof testimonials)[number] }) {
       <header className="flex items-start justify-between gap-4">
         <QuoteMark />
         <div className="flex h-6 items-center">
-          <Stars n={t.rating} />
+          <Stars n={item.rating} />
         </div>
       </header>
 
-      <p className="mt-6 line-clamp-6 text-[15px] leading-[2] text-foreground/90">
-        {t.quote}
-      </p>
+      <p className="mt-6 line-clamp-6 text-[15px] leading-[2] text-foreground/90">{item.quote}</p>
 
       <div className="mt-auto pt-8">
         <div className="flex items-center gap-3 border-t border-border/70 pt-5">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink font-display text-base font-semibold text-primary-foreground ring-1 ring-accent/20">
-            {t.name.trim().charAt(0)}
+            {item.name.trim().charAt(0)}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate font-display text-sm font-semibold">
-              {t.name}
-            </div>
-            <div className="truncate text-xs text-muted-foreground">
-              {t.project}
-            </div>
+            <div className="truncate font-display text-sm font-semibold">{item.name}</div>
+            <div className="truncate text-xs text-muted-foreground">{item.project}</div>
           </div>
         </div>
         <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-1 text-[10.5px] text-muted-foreground">
           <svg viewBox="0 0 24 24" className="h-3 w-3 text-accent" fill="currentColor" aria-hidden>
             <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
           </svg>
-          <span>تقييم موثّق من منصّة مستقل</span>
+          <span>{t("t_verified_badge")}</span>
+          {lang === "en" && <span className="opacity-60">· {t("t_original_note")}</span>}
         </div>
       </div>
     </article>
   );
 }
 
-function NavButton({
-  direction,
-  onClick,
-}: {
-  direction: "prev" | "next";
-  onClick: () => void;
-}) {
+
+function NavButton({ direction, onClick }: { direction: "prev" | "next"; onClick: () => void }) {
+  const { t } = useLang();
   const isPrev = direction === "prev";
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={isPrev ? "السابق" : "التالي"}
-      className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        className="h-5 w-5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden
-      >
+    <button type="button" onClick={onClick}
+      aria-label={isPrev ? t("t_prev") : t("t_next")}
+      className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         {isPrev ? <path d="M9 6l6 6-6 6" /> : <path d="M15 6l-9 6 9 6" />}
       </svg>
     </button>
   );
 }
+
 
 function Slider() {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
@@ -237,59 +212,56 @@ function Slider() {
           ref={scrollerRef}
           className="testimonials-scroller pb-2"
           dir="ltr"
-          aria-label="آراء العملاء"
+          aria-label="testimonials"
         >
           <div ref={trackRef} className="testimonials-track items-stretch">
-            {items.map((t, i) => (
-              <Card key={i} t={t} />
+            {items.map((it, i) => (
+              <Card key={i} t={it} />
             ))}
           </div>
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-3" dir="rtl">
-        <NavButton direction="prev" onClick={() => step(-1)} />
-        <span className="text-xs text-muted-foreground">
-          يمكنك السحب أو استخدام الأزرار للتنقّل
-        </span>
-        <NavButton direction="next" onClick={() => step(1)} />
-      </div>
+      <SliderNav step={step} />
     </div>
   );
 }
 
+function SliderNav({ step }: { step: (dir: 1 | -1) => void }) {
+  const { t, lang } = useLang();
+  return (
+    <div className="mt-6 flex items-center justify-center gap-3" dir={lang === "ar" ? "rtl" : "ltr"}>
+      <NavButton direction="prev" onClick={() => step(-1)} />
+      <span className="text-xs text-muted-foreground">{t("t_hint")}</span>
+      <NavButton direction="next" onClick={() => step(1)} />
+    </div>
+  );
+}
+
+
 export function Testimonials() {
+  const { t } = useLang();
   return (
     <section className="border-y border-border bg-cream" id="testimonials">
       <div className="mx-auto max-w-7xl px-6 py-24">
         <div className="flex flex-col items-start justify-between gap-8 border-b border-border pb-10 md:flex-row md:items-end">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-widest text-accent">
-              آراء العملاء
-            </span>
-            <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-              ثقةٌ تُبنى بمشروعٍ تلو الآخر
-            </h2>
-            <p className="mt-4 max-w-xl text-muted-foreground">
-              مختاراتٌ من آراء عملاء تعاملتُ معهم عبر مسيرتي المهنية.
-            </p>
+            <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("t_kicker")}</span>
+            <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">{t("t_title")}</h2>
+            <p className="mt-4 max-w-xl text-muted-foreground">{t("t_lede")}</p>
           </div>
           <div className="flex flex-wrap items-center gap-6">
             <div className="flex flex-col items-start">
               <div className="flex items-baseline gap-1">
-                <span className="font-display text-4xl font-bold">
-                  {testimonialStats.averageRating.toFixed(1)}
-                </span>
+                <span className="font-display text-4xl font-bold">{testimonialStats.averageRating.toFixed(1)}</span>
                 <span className="text-muted-foreground">/ 5.0</span>
               </div>
               <Stars n={5} />
             </div>
             <div className="h-10 w-px bg-border" />
             <div>
-              <div className="font-display text-3xl font-bold">
-                +{testimonialStats.count}
-              </div>
-              <div className="text-xs text-muted-foreground">تقييمٌ موثّق</div>
+              <div className="font-display text-3xl font-bold">+{testimonialStats.count}</div>
+              <div className="text-xs text-muted-foreground">{t("t_verified")}</div>
             </div>
           </div>
         </div>
@@ -299,3 +271,4 @@ export function Testimonials() {
     </section>
   );
 }
+

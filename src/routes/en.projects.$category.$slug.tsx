@@ -1,12 +1,16 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { brandingProjects } from "@/lib/portfolio-data";
+import { brandingEn } from "@/i18n/portfolio-en";
 import { ProjectDetailView } from "@/views/ProjectDetailView";
 
-export const Route = createFileRoute("/projects/$category/$slug")({
+export const Route = createFileRoute("/en/projects/$category/$slug")({
   head: ({ params }) => {
     const p = brandingProjects.find((x) => x.slug === params.slug);
-    const title = p ? `${p.name} — ${p.tagline}` : "مشروع — يوسف رحاب";
-    const desc = p?.short ?? "تفاصيل المشروع.";
+    const en = brandingEn[params.slug];
+    const name = en?.name ?? p?.name ?? "Project";
+    const tagline = en?.tagline ?? p?.tagline ?? "";
+    const desc = en?.short ?? p?.short ?? "Project details.";
+    const title = tagline ? `${name} — ${tagline}` : `${name} — Youssef Rehab`;
     return {
       meta: [
         { title },
