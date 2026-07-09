@@ -85,7 +85,7 @@ function ProjectDetail() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12">
           <div className="md:col-span-5">
             <span className="text-xs font-semibold uppercase tracking-widest text-accent">التوجّه والمقاربة</span>
-            <h2 className="mt-3 font-display text-4xl font-bold leading-tight">كيف بنينا الهوية</h2>
+            <h2 className="mt-3 font-display text-4xl font-bold leading-tight">كيف بنينا الهويّة</h2>
           </div>
           <div className="md:col-span-7">
             <ul className="space-y-4">
