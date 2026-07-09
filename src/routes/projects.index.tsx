@@ -17,9 +17,9 @@ function ProjectsIndex() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20">
       <header className="max-w-3xl">
-        <span className="text-xs font-semibold uppercase tracking-widest text-accent">أعمال مختارة</span>
-        <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-tight">التخصصات</h1>
-        <p className="mt-5 text-lg text-muted-foreground">اختر التخصص الذي تودّ استعراضه — كل قسم يحتوي على أعمال مختارة وتفاصيل كل مشروع.</p>
+        <span className="text-xs font-semibold uppercase tracking-widest text-accent">أعمالٌ مختارة</span>
+        <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-tight">التخصّصات</h1>
+        <p className="mt-5 text-lg text-muted-foreground">اختر التخصّص الذي تودّ استعراضه؛ كلّ قسمٍ يضمّ أعمالًا مختارة وتفاصيل كلّ مشروع.</p>
       </header>
       <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
         {categories.map((c, i) => (
