@@ -20,7 +20,7 @@ function NotFoundComponent() {
         <h1 className="font-display text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">الصفحة غير موجودة</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          الصفحة التي تبحث عنها غير موجودة أو تم نقلها.
+          الصفحة التي تبحث عنها غير موجودة أو نُقلت إلى مكانٍ آخر.
         </p>
         <div className="mt-6">
           <Link
@@ -44,14 +44,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold text-foreground">حدث خطأ ما</h1>
-        <p className="mt-2 text-sm text-muted-foreground">يمكنك إعادة المحاولة أو العودة للرئيسية.</p>
+        <h1 className="text-xl font-semibold text-foreground">حدث خطأٌ ما</h1>
+        <p className="mt-2 text-sm text-muted-foreground">يمكنك إعادة المحاولة أو العودة إلى الصفحة الرئيسيّة.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => { router.invalidate(); reset(); }}
             className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground"
           >إعادة المحاولة</button>
-          <a href="/" className="rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium text-foreground">الرئيسية</a>
+          <a href="/" className="rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium text-foreground">الرئيسيّة</a>
         </div>
       </div>
     </div>
@@ -223,7 +223,7 @@ function SiteFooter() {
             <img src={logoFull.url} alt="يوسف رحاب" className="h-10 w-auto invert" />
           </Link>
           <p className="max-w-sm text-sm leading-relaxed text-white/60">
-            مصمم هوية بصرية استراتيجي، أُحوّل أفكار العلامات إلى أنظمة بصرية جريئة وخالدة تتحدث بوضوح في أسواق تنافسية.
+            مصمّم هويةٍ بصريّةٍ استراتيجي، أُحوّل أفكار العلامات إلى أنظمةٍ بصريّةٍ جريئةٍ وخالدة، تتحدّث بوضوحٍ في أسواقٍ تنافسيّة.
           </p>
           <NewsletterForm />
         </div>
@@ -281,8 +281,8 @@ function NewsletterForm() {
   };
   return (
     <div>
-      <div className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/50">النشرة البريدية</div>
-      <p className="mb-3 text-sm text-white/60">اشترك لتصلك آخر المشاريع والدروس الإبداعية.</p>
+      <div className="mb-2 text-xs font-semibold uppercase tracking-widest text-white/50">النشرة البريديّة</div>
+      <p className="mb-3 text-sm text-white/60">اشترك لتصلك أحدث المشاريع والمقالات الإبداعيّة.</p>
       <form onSubmit={onSubmit} className="flex flex-col gap-2 sm:flex-row" noValidate>
         <input
           type="text" tabIndex={-1} autoComplete="off" value={hp}
@@ -295,11 +295,11 @@ function NewsletterForm() {
           className="flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-accent focus:outline-none"
         />
         <button type="submit" className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5">
-          اشترك
+          اشتراك
         </button>
       </form>
-      {status === "ok" && <p className="mt-2 text-xs text-accent">تم الاشتراك بنجاح ✓</p>}
-      {status === "error" && <p className="mt-2 text-xs text-red-400">بريد إلكتروني غير صحيح</p>}
+      {status === "ok" && <p className="mt-2 text-xs text-accent">تمّ الاشتراك بنجاح ✓</p>}
+      {status === "error" && <p className="mt-2 text-xs text-red-400">بريدٌ إلكترونيٌّ غير صحيح</p>}
     </div>
   );
 }

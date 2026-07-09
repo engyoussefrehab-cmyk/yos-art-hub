@@ -1,14 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { testimonials, testimonialStats } from "@/lib/testimonials";
 
 function Stars({ n }: { n: number }) {
   return (
-    <div className="flex items-center gap-0.5" aria-label={`تقييم ${n} من 5`}>
+    <div
+      className="inline-flex items-center gap-0.5 leading-none"
+      aria-label={`تقييم ${n} من 5`}
+      dir="ltr"
+    >
       {Array.from({ length: 5 }).map((_, i) => (
         <svg
           key={i}
           viewBox="0 0 20 20"
-          className={`h-4 w-4 ${i < n ? "text-accent" : "text-border"}`}
+          width={16}
+          height={16}
+          className={`block shrink-0 ${i < n ? "text-accent" : "text-muted-foreground/25"}`}
           fill="currentColor"
           aria-hidden
         >
@@ -21,7 +27,12 @@ function Stars({ n }: { n: number }) {
 
 function QuoteMark() {
   return (
-    <svg viewBox="0 0 32 32" className="h-8 w-8 text-accent/40" fill="currentColor" aria-hidden>
+    <svg
+      viewBox="0 0 32 32"
+      className="h-9 w-9 text-accent/25"
+      fill="currentColor"
+      aria-hidden
+    >
       <path d="M9.5 8C5.9 8 3 10.9 3 14.5S5.9 21 9.5 21c.5 0 1-.1 1.5-.2-.6 2.5-2.6 4.4-5 5-.4.1-.6.6-.3.9.2.2.5.3.7.2 4.8-1.2 8.6-5.4 8.6-11V14c0-3.3-2.7-6-5.5-6zm14 0C19.9 8 17 10.9 17 14.5S19.9 21 23.5 21c.5 0 1-.1 1.5-.2-.6 2.5-2.6 4.4-5 5-.4.1-.6.6-.3.9.2.2.5.3.7.2 4.8-1.2 8.6-5.4 8.6-11V14c0-3.3-2.7-6-5.5-6z" />
     </svg>
   );
@@ -29,64 +40,133 @@ function QuoteMark() {
 
 function Card({ t }: { t: (typeof testimonials)[number] }) {
   return (
-    <article className="group relative flex w-[320px] shrink-0 flex-col rounded-2xl border border-border bg-background p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_20px_40px_-20px_rgb(0_0_0/0.15)] sm:w-[400px]">
-      <div className="flex items-start justify-between">
+    <article
+      className="group relative flex h-full w-[320px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-background p-7 shadow-[0_1px_0_rgb(0_0_0/0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_24px_50px_-24px_rgb(0_0_0/0.18)] sm:w-[380px]"
+      dir="rtl"
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-l from-accent/0 via-accent/60 to-accent/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+      <header className="flex items-start justify-between gap-4">
         <QuoteMark />
-        <Stars n={t.rating} />
-      </div>
-      <p className="mt-4 line-clamp-6 text-[15px] leading-[1.9] text-foreground/90">
+        <div className="flex h-6 items-center">
+          <Stars n={t.rating} />
+        </div>
+      </header>
+
+      <p className="mt-5 line-clamp-6 text-[15px] leading-[2] text-foreground/90">
         {t.quote}
       </p>
-      <div className="mt-6 flex items-center gap-3 border-t border-border pt-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-sm font-bold text-primary-foreground">
-          {t.name.trim().charAt(0)}
+
+      <div className="mt-auto pt-6">
+        <div className="flex items-center gap-3 border-t border-border/70 pt-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink font-display text-base font-semibold text-primary-foreground ring-1 ring-accent/20">
+            {t.name.trim().charAt(0)}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="truncate font-display text-sm font-semibold">
+              {t.name}
+            </div>
+            <div className="truncate text-xs text-muted-foreground">
+              {t.project}
+            </div>
+          </div>
         </div>
-        <div className="min-w-0">
-          <div className="truncate font-display text-sm font-semibold">{t.name}</div>
-          <div className="truncate text-xs text-muted-foreground">{t.project}</div>
+        <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-1 text-[10.5px] text-muted-foreground">
+          <svg viewBox="0 0 24 24" className="h-3 w-3 text-accent" fill="currentColor" aria-hidden>
+            <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+          </svg>
+          <span>تقييم موثّق من منصّة مستقل</span>
         </div>
-      </div>
-      <div className="mt-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-        <span aria-hidden>⭐</span>
-        <span>تقييمات موثقة من منصة مستقل</span>
       </div>
     </article>
+  );
+}
+
+function NavButton({
+  direction,
+  onClick,
+}: {
+  direction: "prev" | "next";
+  onClick: () => void;
+}) {
+  const isPrev = direction === "prev";
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={isPrev ? "السابق" : "التالي"}
+      className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden
+      >
+        {isPrev ? <path d="M9 6l6 6-6 6" /> : <path d="M15 6l-9 6 9 6" />}
+      </svg>
+    </button>
   );
 }
 
 function Slider() {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const stateRef = useRef({ paused: false, isDragging: false, resumeTimer: null as ReturnType<typeof setTimeout> | null });
   // Duplicate items to enable seamless infinite loop
   const items = [...testimonials, ...testimonials];
+
+  const wrap = useCallback(() => {
+    const scroller = scrollerRef.current;
+    const track = trackRef.current;
+    if (!scroller || !track) return;
+    const half = track.scrollWidth / 2;
+    if (half <= 0) return;
+    if (scroller.scrollLeft >= half) scroller.scrollLeft -= half;
+    else if (scroller.scrollLeft < 0) scroller.scrollLeft += half;
+  }, []);
+
+  const pauseFor = useCallback((ms = 2500) => {
+    stateRef.current.paused = true;
+    if (stateRef.current.resumeTimer) clearTimeout(stateRef.current.resumeTimer);
+    stateRef.current.resumeTimer = setTimeout(() => {
+      stateRef.current.paused = false;
+    }, ms);
+  }, []);
+
+  const step = useCallback(
+    (dir: 1 | -1) => {
+      const scroller = scrollerRef.current;
+      if (!scroller) return;
+      const firstCard = scroller.querySelector<HTMLElement>("article");
+      const cardWidth = firstCard ? firstCard.offsetWidth + 24 : 340;
+      scroller.scrollBy({ left: dir * cardWidth, behavior: "smooth" });
+      pauseFor(2500);
+      // Ensure wrap after smooth scroll completes
+      setTimeout(wrap, 420);
+    },
+    [pauseFor, wrap]
+  );
 
   useEffect(() => {
     const scroller = scrollerRef.current;
     const track = trackRef.current;
     if (!scroller || !track) return;
 
-    const SPEED = 0.5; // px per frame (~30px/sec at 60fps)
+    const SPEED = 0.5; // ~30px/sec at 60fps
     let raf = 0;
-    let paused = false;
-    let resumeTimer: ReturnType<typeof setTimeout> | null = null;
-    let isDragging = false;
     let startX = 0;
     let startScroll = 0;
 
-    const halfWidth = () => track.scrollWidth / 2;
-
-    // Start in the middle so user can scroll both directions
     scroller.scrollLeft = 0;
 
-    const wrap = () => {
-      const half = halfWidth();
-      if (half <= 0) return;
-      if (scroller.scrollLeft >= half) scroller.scrollLeft -= half;
-      else if (scroller.scrollLeft < 0) scroller.scrollLeft += half;
-    };
-
     const tick = () => {
-      if (!paused && !isDragging) {
+      const s = stateRef.current;
+      if (!s.paused && !s.isDragging) {
         scroller.scrollLeft += SPEED;
         wrap();
       }
@@ -94,35 +174,29 @@ function Slider() {
     };
     raf = requestAnimationFrame(tick);
 
-    const pauseFor = (ms = 2000) => {
-      paused = true;
-      if (resumeTimer) clearTimeout(resumeTimer);
-      resumeTimer = setTimeout(() => { paused = false; }, ms);
-    };
-
-    const onEnter = () => { paused = true; };
-    const onLeave = () => { if (!isDragging) paused = false; };
+    const onEnter = () => { stateRef.current.paused = true; };
+    const onLeave = () => { if (!stateRef.current.isDragging) stateRef.current.paused = false; };
     const onWheel = () => pauseFor(1500);
     const onScroll = () => wrap();
 
     const onPointerDown = (e: PointerEvent) => {
-      isDragging = true;
+      stateRef.current.isDragging = true;
       startX = e.clientX;
       startScroll = scroller.scrollLeft;
       scroller.setPointerCapture(e.pointerId);
       scroller.classList.add("is-grabbing");
     };
     const onPointerMove = (e: PointerEvent) => {
-      if (!isDragging) return;
+      if (!stateRef.current.isDragging) return;
       scroller.scrollLeft = startScroll - (e.clientX - startX);
       wrap();
     };
     const onPointerUp = (e: PointerEvent) => {
-      if (!isDragging) return;
-      isDragging = false;
+      if (!stateRef.current.isDragging) return;
+      stateRef.current.isDragging = false;
       try { scroller.releasePointerCapture(e.pointerId); } catch {}
       scroller.classList.remove("is-grabbing");
-      pauseFor(1500);
+      pauseFor(2000);
     };
 
     scroller.addEventListener("mouseenter", onEnter);
@@ -136,7 +210,8 @@ function Slider() {
 
     return () => {
       cancelAnimationFrame(raf);
-      if (resumeTimer) clearTimeout(resumeTimer);
+      const rt = stateRef.current.resumeTimer;
+      if (rt) clearTimeout(rt);
       scroller.removeEventListener("mouseenter", onEnter);
       scroller.removeEventListener("mouseleave", onLeave);
       scroller.removeEventListener("wheel", onWheel);
@@ -146,27 +221,38 @@ function Slider() {
       scroller.removeEventListener("pointerup", onPointerUp);
       scroller.removeEventListener("pointercancel", onPointerUp);
     };
-  }, []);
+  }, [pauseFor, wrap]);
 
   return (
-    <div
-      className="testimonials-slider mt-12"
-      style={{
-        maskImage: "linear-gradient(to left, transparent, black 8%, black 92%, transparent)",
-        WebkitMaskImage: "linear-gradient(to left, transparent, black 8%, black 92%, transparent)",
-      }}
-    >
+    <div className="testimonials-slider mt-10">
       <div
-        ref={scrollerRef}
-        className="testimonials-scroller"
-        dir="ltr"
-        aria-label="آراء العملاء"
+        style={{
+          maskImage:
+            "linear-gradient(to left, transparent, black 6%, black 94%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to left, transparent, black 6%, black 94%, transparent)",
+        }}
       >
-        <div ref={trackRef} className="testimonials-track">
-          {items.map((t, i) => (
-            <Card key={i} t={t} />
-          ))}
+        <div
+          ref={scrollerRef}
+          className="testimonials-scroller pb-2"
+          dir="ltr"
+          aria-label="آراء العملاء"
+        >
+          <div ref={trackRef} className="testimonials-track items-stretch">
+            {items.map((t, i) => (
+              <Card key={i} t={t} />
+            ))}
+          </div>
         </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-center gap-3" dir="rtl">
+        <NavButton direction="prev" onClick={() => step(-1)} />
+        <span className="text-xs text-muted-foreground">
+          يمكنك السحب أو استخدام الأزرار للتنقّل
+        </span>
+        <NavButton direction="next" onClick={() => step(1)} />
       </div>
     </div>
   );
@@ -182,10 +268,10 @@ export function Testimonials() {
               آراء العملاء
             </span>
             <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-              ثقة تُبنى بمشروع تلو الآخر
+              ثقةٌ تُبنى بمشروعٍ تلو الآخر
             </h2>
             <p className="mt-4 max-w-xl text-muted-foreground">
-              مختارات من آراء عملاء تعاملت معهم.
+              مختاراتٌ من آراء عملاء تعاملتُ معهم عبر مسيرتي المهنية.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-6">
@@ -203,16 +289,12 @@ export function Testimonials() {
               <div className="font-display text-3xl font-bold">
                 +{testimonialStats.count}
               </div>
-              <div className="text-xs text-muted-foreground">تقييم موثّق</div>
+              <div className="text-xs text-muted-foreground">تقييمٌ موثّق</div>
             </div>
           </div>
         </div>
 
         <Slider />
-
-        <p className="mt-4 text-center text-xs text-muted-foreground">
-          اسحب البطاقات يمينًا أو يسارًا لتصفّح المزيد
-        </p>
       </div>
     </section>
   );
