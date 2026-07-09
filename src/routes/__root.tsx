@@ -324,9 +324,9 @@ function SiteNav() {
   ] as const;
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link to={base || "/"} className="flex items-center gap-2" onClick={() => setOpen(false)} aria-label={t("brand_alt")}>
-          <img src={logoFull.url} alt={t("brand_alt")} className="h-8 w-auto md:h-9 [filter:brightness(0)] dark:[filter:brightness(0)_invert(1)]" />
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
+        <Link to={base || "/"} className="flex shrink-0 items-center gap-2" onClick={() => setOpen(false)} aria-label={t("brand_alt")}>
+          <img src={logoFull.url} alt={t("brand_alt")} className="h-7 w-auto md:h-9 [filter:brightness(0)] dark:[filter:brightness(0)_invert(1)]" />
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
@@ -345,13 +345,15 @@ function SiteNav() {
           <LangSwitcher />
           <Link to={`${base}/contact`} className="inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5">{t("cta_start_project")}</Link>
         </div>
-        <div className="md:hidden flex items-center gap-2">
+        <div className="md:hidden flex items-center gap-1.5">
           <ThemeToggle />
           <LangSwitcher />
-          <button className="rounded-md border border-border p-2" onClick={() => setOpen(v => !v)} aria-label={t("menu_label")}>
-            <span className="block h-0.5 w-5 bg-foreground mb-1" />
-            <span className="block h-0.5 w-5 bg-foreground mb-1" />
-            <span className="block h-0.5 w-5 bg-foreground" />
+          <button className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent" onClick={() => setOpen(v => !v)} aria-label={t("menu_label")}>
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <line x1="4" y1="7" x2="20" y2="7" />
+              <line x1="4" y1="12" x2="20" y2="12" />
+              <line x1="4" y1="17" x2="20" y2="17" />
+            </svg>
           </button>
         </div>
       </div>
