@@ -105,6 +105,11 @@ function ContactForm() {
         <h2 className="font-display text-2xl font-bold text-white">أرسل تفاصيل مشروعك</h2>
         <p className="mt-1 text-sm text-white/60">سنعود إليك خلال ٢٤ ساعة.</p>
       </div>
+      {/* Honeypot — hidden from users, bots often fill it */}
+      <input
+        type="text" name="website" tabIndex={-1} autoComplete="off"
+        className="hidden" aria-hidden="true"
+      />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Field label="الاسم الكامل" name="name" error={errors.name} />
         <Field label="البريد الإلكتروني" name="email" type="email" dir="ltr" error={errors.email} />
