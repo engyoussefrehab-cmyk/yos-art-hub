@@ -38,7 +38,7 @@ function ContactPage() {
             </p>
             <div className="mt-8 space-y-3">
               <ContactCard label="واتساب / اتصال" value="+20 103 036 5405" href="https://wa.me/201030365405" />
-              <ContactCard label="البريد الإلكتروني" value="youssefrehab@outlook.com" href="mailto:youssefrehab@outlook.com" />
+              <ContactCard label="البريد الإلكتروني" value="youssefrehab@yrstudio.art" href="mailto:youssefrehab@yrstudio.art" />
             </div>
             <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <div><div className="font-display text-3xl font-black">+٨</div><div className="mt-1 text-xs text-white/60">سنوات</div></div>
@@ -93,7 +93,7 @@ function ContactForm() {
     }
     setErrors({});
     const body = `الاسم: ${result.data.name}\nالبريد: ${result.data.email}\n\n${result.data.message}`;
-    const mailto = `mailto:youssefrehab@outlook.com?subject=${encodeURIComponent(result.data.subject)}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:youssefrehab@yrstudio.art?subject=${encodeURIComponent(result.data.subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     setSent(true);
     form.reset();

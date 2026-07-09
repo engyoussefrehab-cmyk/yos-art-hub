@@ -178,7 +178,7 @@ function SiteFooter() {
           <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">تواصل</div>
           <ul className="space-y-2 text-sm">
             <li><a href="https://wa.me/201030365405" target="_blank" rel="noreferrer" className="hover:text-accent transition-colors" dir="ltr">+20 103 036 5405</a></li>
-            <li><a href="mailto:youssefrehab@outlook.com" className="hover:text-accent transition-colors">youssefrehab@outlook.com</a></li>
+            <li><a href="mailto:youssefrehab@yrstudio.art" className="hover:text-accent transition-colors">youssefrehab@yrstudio.art</a></li>
           </ul>
         </div>
       </div>
