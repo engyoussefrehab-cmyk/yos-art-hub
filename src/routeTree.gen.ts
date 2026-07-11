@@ -9,11 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as GoSplatRouteImport } from './routes/go.$'
+import { Route as EnPackagesRouteImport } from './routes/en.packages'
 import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
 import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
@@ -22,6 +24,11 @@ import { Route as ApiPublicContactRouteImport } from './routes/api/public/contac
 import { Route as EnProjectsCategoryIndexRouteImport } from './routes/en.projects.$category.index'
 import { Route as EnProjectsCategorySlugRouteImport } from './routes/en.projects.$category.$slug'
 
+const PackagesRoute = PackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -45,6 +52,11 @@ const EnIndexRoute = EnIndexRouteImport.update({
 const GoSplatRoute = GoSplatRouteImport.update({
   id: '/go/$',
   path: '/go/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnPackagesRoute = EnPackagesRouteImport.update({
+  id: '/en/packages',
+  path: '/en/packages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnContactRoute = EnContactRouteImport.update({
@@ -86,7 +98,9 @@ const EnProjectsCategorySlugRoute = EnProjectsCategorySlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/packages': typeof PackagesRoute
   '/en/contact': typeof EnContactRoute
+  '/en/packages': typeof EnPackagesRoute
   '/go/$': typeof GoSplatRoute
   '/en/': typeof EnIndexRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -100,7 +114,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/packages': typeof PackagesRoute
   '/en/contact': typeof EnContactRoute
+  '/en/packages': typeof EnPackagesRoute
   '/go/$': typeof GoSplatRoute
   '/en': typeof EnIndexRoute
   '/projects': typeof ProjectsIndexRoute
@@ -115,7 +131,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
+  '/packages': typeof PackagesRoute
   '/en/contact': typeof EnContactRoute
+  '/en/packages': typeof EnPackagesRoute
   '/go/$': typeof GoSplatRoute
   '/en/': typeof EnIndexRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -131,7 +149,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/contact'
+    | '/packages'
     | '/en/contact'
+    | '/en/packages'
     | '/go/$'
     | '/en/'
     | '/projects/'
@@ -145,7 +165,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/contact'
+    | '/packages'
     | '/en/contact'
+    | '/en/packages'
     | '/go/$'
     | '/en'
     | '/projects'
@@ -159,7 +181,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/contact'
+    | '/packages'
     | '/en/contact'
+    | '/en/packages'
     | '/go/$'
     | '/en/'
     | '/projects/'
@@ -174,7 +198,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
+  PackagesRoute: typeof PackagesRoute
   EnContactRoute: typeof EnContactRoute
+  EnPackagesRoute: typeof EnPackagesRoute
   GoSplatRoute: typeof GoSplatRoute
   EnIndexRoute: typeof EnIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
@@ -188,6 +214,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/packages': {
+      id: '/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof PackagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -221,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/go/$'
       fullPath: '/go/$'
       preLoaderRoute: typeof GoSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/packages': {
+      id: '/en/packages'
+      path: '/en/packages'
+      fullPath: '/en/packages'
+      preLoaderRoute: typeof EnPackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/contact': {
@@ -278,7 +318,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
+  PackagesRoute: PackagesRoute,
   EnContactRoute: EnContactRoute,
+  EnPackagesRoute: EnPackagesRoute,
   GoSplatRoute: GoSplatRoute,
   EnIndexRoute: EnIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
@@ -292,13 +334,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
