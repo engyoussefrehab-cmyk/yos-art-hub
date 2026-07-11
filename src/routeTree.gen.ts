@@ -26,6 +26,7 @@ import { Route as AdminTagsRouteImport } from './routes/admin.tags'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminSeoRouteImport } from './routes/admin.seo'
+import { Route as AdminProfileRouteImport } from './routes/admin.profile'
 import { Route as AdminPortfolioRouteImport } from './routes/admin.portfolio'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
@@ -131,6 +132,11 @@ const AdminServicesRoute = AdminServicesRouteImport.update({
 const AdminSeoRoute = AdminSeoRouteImport.update({
   id: '/seo',
   path: '/seo',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProfileRoute = AdminProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminPortfolioRoute = AdminPortfolioRouteImport.update({
@@ -252,6 +258,7 @@ export interface FileRoutesByFullPath {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -291,6 +298,7 @@ export interface FileRoutesByTo {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -332,6 +340,7 @@ export interface FileRoutesById {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -374,6 +383,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/pages'
     | '/admin/portfolio'
+    | '/admin/profile'
     | '/admin/seo'
     | '/admin/services'
     | '/admin/settings'
@@ -413,6 +423,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/pages'
     | '/admin/portfolio'
+    | '/admin/profile'
     | '/admin/seo'
     | '/admin/services'
     | '/admin/settings'
@@ -453,6 +464,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/pages'
     | '/admin/portfolio'
+    | '/admin/profile'
     | '/admin/seo'
     | '/admin/services'
     | '/admin/settings'
@@ -630,6 +642,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSeoRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/profile': {
+      id: '/admin/profile'
+      path: '/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof AdminProfileRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/portfolio': {
       id: '/admin/portfolio'
       path: '/portfolio'
@@ -787,6 +806,7 @@ interface AdminRouteChildren {
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminPagesRoute: typeof AdminPagesRoute
   AdminPortfolioRoute: typeof AdminPortfolioRoute
+  AdminProfileRoute: typeof AdminProfileRoute
   AdminSeoRoute: typeof AdminSeoRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -804,6 +824,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMessagesRoute: AdminMessagesRoute,
   AdminPagesRoute: AdminPagesRoute,
   AdminPortfolioRoute: AdminPortfolioRoute,
+  AdminProfileRoute: AdminProfileRoute,
   AdminSeoRoute: AdminSeoRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
