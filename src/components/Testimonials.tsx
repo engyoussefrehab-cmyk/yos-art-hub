@@ -155,6 +155,13 @@ function Slider() {
     const onScroll = () => wrap();
 
     const onPointerDown = (e: PointerEvent) => {
+      // On touch devices, rely on native horizontal scrolling — JS drag hijacks
+      // the gesture and freezes the slider on mobile.
+      if (e.pointerType === "touch") {
+        stateRef.current.paused = true;
+        pauseFor(2500);
+        return;
+      }
       stateRef.current.isDragging = true;
       startX = e.clientX;
       startScroll = scroller.scrollLeft;
