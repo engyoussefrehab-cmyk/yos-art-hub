@@ -4,11 +4,11 @@ import { PackagesView } from "@/views/PackagesView";
 export const Route = createFileRoute("/en/packages")({
   head: () => ({
     meta: [
-      { title: "Packages & Pricing — Youssef Rehab" },
-      { name: "description", content: "Brand identity and logo design packages — from launch essentials to full visual systems. Transparent pricing and a clear process." },
-      { name: "keywords", content: "brand identity pricing, logo design packages, visual identity cost, graphic designer rates" },
-      { property: "og:title", content: "Packages & Pricing — Youssef Rehab" },
-      { property: "og:description", content: "Brand identity and logo design packages with transparent pricing." },
+      { title: "Service Tiers — Youssef Rehab" },
+      { name: "description", content: "Choose the right branding solution — tailored service tiers from Brand Launch to a complete Brand System. Strategic identity design for growing businesses." },
+      { name: "keywords", content: "branding service tiers, brand identity pricing, logo design packages, brand strategy consultancy" },
+      { property: "og:title", content: "Service Tiers — Youssef Rehab" },
+      { property: "og:description", content: "Tailored branding service tiers — from launch to a complete brand system." },
       { property: "og:url", content: "/en/packages" },
     ],
     links: [{ rel: "canonical", href: "/en/packages" }],
