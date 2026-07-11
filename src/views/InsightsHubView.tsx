@@ -1,7 +1,29 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import { formatDate, type InsightArticle, type InsightCategoryRow } from "@/lib/insights-types";
+
+/** Score an article/category against a lowercase query. Higher = better. */
+function scoreMatch(text: string, q: string): number {
+  if (!q) return 0;
+  const t = text.toLowerCase();
+  if (t === q) return 100;
+  if (t.startsWith(q)) return 40;
+  const idx = t.indexOf(q);
+  if (idx === 0) return 30;
+  if (idx > 0) return Math.max(1, 20 - Math.floor(idx / 5));
+  return 0;
+}
+
+function articleScore(a: InsightArticle, q: string): number {
+  if (!q) return 0;
+  const title = scoreMatch(a.title_ar, q) + scoreMatch(a.title_en, q);
+  const kw = (a.keywords ?? []).reduce((s, k) => s + scoreMatch(k, q) * 2, 0);
+  const tags = (a.tags ?? []).reduce((s, k) => s + scoreMatch(k, q) * 1.5, 0);
+  const excerpt = (scoreMatch(a.excerpt_ar, q) + scoreMatch(a.excerpt_en, q)) * 0.4;
+  const cat = scoreMatch(a.category.label_ar, q) + scoreMatch(a.category.label_en, q);
+  return title * 3 + kw + tags + excerpt + cat;
+}
 
 function coverStyle(a: InsightArticle) {
   if (a.cover_url) return { backgroundImage: `url(${a.cover_url})`, backgroundSize: "cover", backgroundPosition: "center" };
