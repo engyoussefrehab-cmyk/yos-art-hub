@@ -22,6 +22,15 @@ import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as EnRssDotxmlRouteImport } from './routes/en.rss[.]xml'
 import { Route as EnPackagesRouteImport } from './routes/en.packages'
 import { Route as EnContactRouteImport } from './routes/en.contact'
+import { Route as AdminTagsRouteImport } from './routes/admin.tags'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminSeoRouteImport } from './routes/admin.seo'
+import { Route as AdminPortfolioRouteImport } from './routes/admin.portfolio'
+import { Route as AdminPagesRouteImport } from './routes/admin.pages'
+import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminMediaRouteImport } from './routes/admin.media'
+import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
 import { Route as InsightsCategoryIndexRouteImport } from './routes/insights.$category.index'
@@ -103,6 +112,51 @@ const EnContactRoute = EnContactRouteImport.update({
   id: '/en/contact',
   path: '/en/contact',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTagsRoute = AdminTagsRouteImport.update({
+  id: '/tags',
+  path: '/tags',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServicesRoute = AdminServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSeoRoute = AdminSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPortfolioRoute = AdminPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPagesRoute = AdminPagesRouteImport.update({
+  id: '/pages',
+  path: '/pages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMediaRoute = AdminMediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminAuditRoute = AdminAuditRouteImport.update({
   id: '/audit',
@@ -193,6 +247,15 @@ export interface FileRoutesByFullPath {
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/pages': typeof AdminPagesRoute
+  '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/seo': typeof AdminSeoRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -223,6 +286,15 @@ export interface FileRoutesByTo {
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/pages': typeof AdminPagesRoute
+  '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/seo': typeof AdminSeoRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -255,6 +327,15 @@ export interface FileRoutesById {
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/media': typeof AdminMediaRoute
+  '/admin/messages': typeof AdminMessagesRoute
+  '/admin/pages': typeof AdminPagesRoute
+  '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/seo': typeof AdminSeoRoute
+  '/admin/services': typeof AdminServicesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/tags': typeof AdminTagsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -288,6 +369,15 @@ export interface FileRouteTypes {
     | '/packages'
     | '/rss.xml'
     | '/admin/audit'
+    | '/admin/categories'
+    | '/admin/media'
+    | '/admin/messages'
+    | '/admin/pages'
+    | '/admin/portfolio'
+    | '/admin/seo'
+    | '/admin/services'
+    | '/admin/settings'
+    | '/admin/tags'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -318,6 +408,15 @@ export interface FileRouteTypes {
     | '/packages'
     | '/rss.xml'
     | '/admin/audit'
+    | '/admin/categories'
+    | '/admin/media'
+    | '/admin/messages'
+    | '/admin/pages'
+    | '/admin/portfolio'
+    | '/admin/seo'
+    | '/admin/services'
+    | '/admin/settings'
+    | '/admin/tags'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -349,6 +448,15 @@ export interface FileRouteTypes {
     | '/packages'
     | '/rss.xml'
     | '/admin/audit'
+    | '/admin/categories'
+    | '/admin/media'
+    | '/admin/messages'
+    | '/admin/pages'
+    | '/admin/portfolio'
+    | '/admin/seo'
+    | '/admin/services'
+    | '/admin/settings'
+    | '/admin/tags'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -494,6 +602,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/tags': {
+      id: '/admin/tags'
+      path: '/tags'
+      fullPath: '/admin/tags'
+      preLoaderRoute: typeof AdminTagsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/services': {
+      id: '/admin/services'
+      path: '/services'
+      fullPath: '/admin/services'
+      preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/seo': {
+      id: '/admin/seo'
+      path: '/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AdminSeoRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/portfolio': {
+      id: '/admin/portfolio'
+      path: '/portfolio'
+      fullPath: '/admin/portfolio'
+      preLoaderRoute: typeof AdminPortfolioRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pages': {
+      id: '/admin/pages'
+      path: '/pages'
+      fullPath: '/admin/pages'
+      preLoaderRoute: typeof AdminPagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/media': {
+      id: '/admin/media'
+      path: '/media'
+      fullPath: '/admin/media'
+      preLoaderRoute: typeof AdminMediaRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/audit': {
       id: '/admin/audit'
       path: '/audit'
@@ -611,6 +782,15 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminMediaRoute: typeof AdminMediaRoute
+  AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminPagesRoute: typeof AdminPagesRoute
+  AdminPortfolioRoute: typeof AdminPortfolioRoute
+  AdminSeoRoute: typeof AdminSeoRoute
+  AdminServicesRoute: typeof AdminServicesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminTagsRoute: typeof AdminTagsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminInsightsIdRoute: typeof AdminInsightsIdRoute
   AdminInsightsNewRoute: typeof AdminInsightsNewRoute
@@ -619,6 +799,15 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
+  AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminMediaRoute: AdminMediaRoute,
+  AdminMessagesRoute: AdminMessagesRoute,
+  AdminPagesRoute: AdminPagesRoute,
+  AdminPortfolioRoute: AdminPortfolioRoute,
+  AdminSeoRoute: AdminSeoRoute,
+  AdminServicesRoute: AdminServicesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminTagsRoute: AdminTagsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminInsightsIdRoute: AdminInsightsIdRoute,
   AdminInsightsNewRoute: AdminInsightsNewRoute,
