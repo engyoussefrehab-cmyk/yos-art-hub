@@ -14,6 +14,68 @@ export type Database = {
   }
   public: {
     Tables: {
+      article_revisions: {
+        Row: {
+          article_id: string
+          created_at: string
+          editor_id: string | null
+          id: string
+          snapshot: Json
+        }
+        Insert: {
+          article_id: string
+          created_at?: string
+          editor_id?: string | null
+          id?: string
+          snapshot: Json
+        }
+        Update: {
+          article_id?: string
+          created_at?: string
+          editor_id?: string | null
+          id?: string
+          snapshot?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_revisions_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "insight_articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      article_tags: {
+        Row: {
+          article_id: string
+          tag_id: string
+        }
+        Insert: {
+          article_id: string
+          tag_id: string
+        }
+        Update: {
+          article_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_tags_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "insight_articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "article_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string
@@ -74,6 +136,48 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          ip: unknown
+          message: string
+          name: string
+          phone: string | null
+          status: string
+          subject: string | null
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          ip?: unknown
+          message: string
+          name: string
+          phone?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          ip?: unknown
+          message?: string
+          name?: string
+          phone?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       insight_articles: {
         Row: {
           author_avatar_url: string | null
@@ -88,11 +192,14 @@ export type Database = {
           faq: Json
           featured: boolean
           featured_image_url: string | null
+          gallery: Json
           id: string
           keywords: string[]
           published_at: string | null
           reading_minutes: number
+          related_article_ids: string[]
           related_slugs: string[]
+          scheduled_at: string | null
           seo_description_ar: string
           seo_description_en: string
           seo_title_ar: string
@@ -117,11 +224,14 @@ export type Database = {
           faq?: Json
           featured?: boolean
           featured_image_url?: string | null
+          gallery?: Json
           id?: string
           keywords?: string[]
           published_at?: string | null
           reading_minutes?: number
+          related_article_ids?: string[]
           related_slugs?: string[]
+          scheduled_at?: string | null
           seo_description_ar?: string
           seo_description_en?: string
           seo_title_ar?: string
@@ -146,11 +256,14 @@ export type Database = {
           faq?: Json
           featured?: boolean
           featured_image_url?: string | null
+          gallery?: Json
           id?: string
           keywords?: string[]
           published_at?: string | null
           reading_minutes?: number
+          related_article_ids?: string[]
           related_slugs?: string[]
+          scheduled_at?: string | null
           seo_description_ar?: string
           seo_description_en?: string
           seo_title_ar?: string
@@ -208,6 +321,476 @@ export type Database = {
         }
         Relationships: []
       }
+      media_assets: {
+        Row: {
+          alt_ar: string | null
+          alt_en: string | null
+          bucket: string
+          created_at: string
+          folder_id: string | null
+          height: number | null
+          id: string
+          mime: string | null
+          path: string
+          size: number | null
+          updated_at: string
+          uploader_id: string | null
+          width: number | null
+        }
+        Insert: {
+          alt_ar?: string | null
+          alt_en?: string | null
+          bucket: string
+          created_at?: string
+          folder_id?: string | null
+          height?: number | null
+          id?: string
+          mime?: string | null
+          path: string
+          size?: number | null
+          updated_at?: string
+          uploader_id?: string | null
+          width?: number | null
+        }
+        Update: {
+          alt_ar?: string | null
+          alt_en?: string | null
+          bucket?: string
+          created_at?: string
+          folder_id?: string | null
+          height?: number | null
+          id?: string
+          mime?: string | null
+          path?: string
+          size?: number | null
+          updated_at?: string
+          uploader_id?: string | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_assets_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "media_folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_folders: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          parent_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          parent_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          parent_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_folders_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "media_folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pages: {
+        Row: {
+          blocks: Json
+          canonical_url: string | null
+          created_at: string
+          hero: Json
+          id: string
+          og_image_url: string | null
+          published_at: string | null
+          robots: string | null
+          seo_description_ar: string | null
+          seo_description_en: string | null
+          seo_keywords: string[] | null
+          seo_title_ar: string | null
+          seo_title_en: string | null
+          slug: string
+          status: string
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          blocks?: Json
+          canonical_url?: string | null
+          created_at?: string
+          hero?: Json
+          id?: string
+          og_image_url?: string | null
+          published_at?: string | null
+          robots?: string | null
+          seo_description_ar?: string | null
+          seo_description_en?: string | null
+          seo_keywords?: string[] | null
+          seo_title_ar?: string | null
+          seo_title_en?: string | null
+          slug: string
+          status?: string
+          title_ar: string
+          title_en: string
+          updated_at?: string
+        }
+        Update: {
+          blocks?: Json
+          canonical_url?: string | null
+          created_at?: string
+          hero?: Json
+          id?: string
+          og_image_url?: string | null
+          published_at?: string | null
+          robots?: string | null
+          seo_description_ar?: string | null
+          seo_description_en?: string | null
+          seo_keywords?: string[] | null
+          seo_title_ar?: string | null
+          seo_title_en?: string | null
+          slug?: string
+          status?: string
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      portfolio_projects: {
+        Row: {
+          category_slug: string | null
+          challenge_ar: string | null
+          challenge_en: string | null
+          client: string | null
+          cover_media_id: string | null
+          created_at: string
+          featured: boolean
+          gallery: Json
+          id: string
+          industry: string | null
+          name_ar: string
+          name_en: string
+          og_image_url: string | null
+          published_at: string | null
+          results_ar: string | null
+          results_en: string | null
+          seo_description_ar: string | null
+          seo_description_en: string | null
+          seo_keywords: string[] | null
+          seo_title_ar: string | null
+          seo_title_en: string | null
+          services_used: string[]
+          short_description_ar: string | null
+          short_description_en: string | null
+          slug: string
+          solution_ar: string | null
+          solution_en: string | null
+          sort_order: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          category_slug?: string | null
+          challenge_ar?: string | null
+          challenge_en?: string | null
+          client?: string | null
+          cover_media_id?: string | null
+          created_at?: string
+          featured?: boolean
+          gallery?: Json
+          id?: string
+          industry?: string | null
+          name_ar: string
+          name_en: string
+          og_image_url?: string | null
+          published_at?: string | null
+          results_ar?: string | null
+          results_en?: string | null
+          seo_description_ar?: string | null
+          seo_description_en?: string | null
+          seo_keywords?: string[] | null
+          seo_title_ar?: string | null
+          seo_title_en?: string | null
+          services_used?: string[]
+          short_description_ar?: string | null
+          short_description_en?: string | null
+          slug: string
+          solution_ar?: string | null
+          solution_en?: string | null
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          category_slug?: string | null
+          challenge_ar?: string | null
+          challenge_en?: string | null
+          client?: string | null
+          cover_media_id?: string | null
+          created_at?: string
+          featured?: boolean
+          gallery?: Json
+          id?: string
+          industry?: string | null
+          name_ar?: string
+          name_en?: string
+          og_image_url?: string | null
+          published_at?: string | null
+          results_ar?: string | null
+          results_en?: string | null
+          seo_description_ar?: string | null
+          seo_description_en?: string | null
+          seo_keywords?: string[] | null
+          seo_title_ar?: string | null
+          seo_title_en?: string | null
+          services_used?: string[]
+          short_description_ar?: string | null
+          short_description_en?: string | null
+          slug?: string
+          solution_ar?: string | null
+          solution_en?: string | null
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_projects_cover_media_id_fkey"
+            columns: ["cover_media_id"]
+            isOneToOne: false
+            referencedRelation: "media_assets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      project_tags: {
+        Row: {
+          project_id: string
+          tag_id: string
+        }
+        Insert: {
+          project_id: string
+          tag_id: string
+        }
+        Update: {
+          project_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_tags_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          cover_media_id: string | null
+          created_at: string
+          cta_href: string | null
+          cta_label_ar: string | null
+          cta_label_en: string | null
+          description_ar: string | null
+          description_en: string | null
+          featured: boolean
+          features: Json
+          icon: string | null
+          id: string
+          og_image_url: string | null
+          published_at: string | null
+          seo_description_ar: string | null
+          seo_description_en: string | null
+          seo_keywords: string[] | null
+          seo_title_ar: string | null
+          seo_title_en: string | null
+          slug: string
+          sort_order: number
+          status: string
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          cover_media_id?: string | null
+          created_at?: string
+          cta_href?: string | null
+          cta_label_ar?: string | null
+          cta_label_en?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          featured?: boolean
+          features?: Json
+          icon?: string | null
+          id?: string
+          og_image_url?: string | null
+          published_at?: string | null
+          seo_description_ar?: string | null
+          seo_description_en?: string | null
+          seo_keywords?: string[] | null
+          seo_title_ar?: string | null
+          seo_title_en?: string | null
+          slug: string
+          sort_order?: number
+          status?: string
+          title_ar: string
+          title_en: string
+          updated_at?: string
+        }
+        Update: {
+          cover_media_id?: string | null
+          created_at?: string
+          cta_href?: string | null
+          cta_label_ar?: string | null
+          cta_label_en?: string | null
+          description_ar?: string | null
+          description_en?: string | null
+          featured?: boolean
+          features?: Json
+          icon?: string | null
+          id?: string
+          og_image_url?: string | null
+          published_at?: string | null
+          seo_description_ar?: string | null
+          seo_description_en?: string | null
+          seo_keywords?: string[] | null
+          seo_title_ar?: string | null
+          seo_title_en?: string | null
+          slug?: string
+          sort_order?: number
+          status?: string
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_cover_media_id_fkey"
+            columns: ["cover_media_id"]
+            isOneToOne: false
+            referencedRelation: "media_assets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_settings: {
+        Row: {
+          address: string | null
+          analytics: Json
+          company_name: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          favicon_url: string | null
+          key: string
+          logo_url: string | null
+          socials: Json
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          analytics?: Json
+          company_name?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          favicon_url?: string | null
+          key: string
+          logo_url?: string | null
+          socials?: Json
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          analytics?: Json
+          company_name?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          favicon_url?: string | null
+          key?: string
+          logo_url?: string | null
+          socials?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          created_at: string
+          id: string
+          label_ar: string
+          label_en: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label_ar: string
+          label_en: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label_ar?: string
+          label_en?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -237,7 +820,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      app_role: "admin"
+      app_role: "admin" | "editor"
       article_status: "draft" | "scheduled" | "published"
     }
     CompositeTypes: {
@@ -366,7 +949,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin"],
+      app_role: ["admin", "editor"],
       article_status: ["draft", "scheduled", "published"],
     },
   },
