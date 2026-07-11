@@ -353,6 +353,19 @@ export function AdminArticleEditorView({ articleId }: Props) {
             <Field label="رابط صورة المؤلف"><input value={form.author_avatar_url} onChange={(e) => update("author_avatar_url", e.target.value)} className={inpCls} dir="ltr" /></Field>
           </Section>
 
+          <Section title="مشاركة اجتماعية (OG / Twitter)">
+            <SocialPreview
+              titleAr={form.seo_title_ar || form.title_ar}
+              titleEn={form.seo_title_en || form.title_en}
+              descAr={form.seo_description_ar || form.excerpt_ar}
+              descEn={form.seo_description_en || form.excerpt_en}
+              cover={form.cover_url}
+              slug={form.slug}
+              categorySlug={categories.find((c) => c.id === form.category_id)?.slug}
+              status={form.status}
+            />
+          </Section>
+
           <Section title="متعلّقات">
             <Field label="مدة القراءة (دقيقة)">
               <input type="number" min={1} value={form.reading_minutes} onChange={(e) => update("reading_minutes", Number(e.target.value))} className={inpCls} />
