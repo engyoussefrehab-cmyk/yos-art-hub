@@ -439,6 +439,7 @@ function SiteNav() {
   const links = [
     { to: base || "/", label: t("nav_home") },
     { to: `${base}/projects`, label: t("nav_projects") },
+    { to: `${base}/insights`, label: t("nav_insights") },
     { to: `${base}/packages`, label: t("nav_packages") },
     { to: `${base}/contact`, label: t("nav_contact") },
   ] as const;
@@ -509,6 +510,7 @@ function SiteFooter() {
           <ul className="space-y-2 text-sm">
             <li><Link to={base || "/"} className="hover:text-accent transition-colors">{t("nav_home")}</Link></li>
             <li><Link to={`${base}/projects`} className="hover:text-accent transition-colors">{t("nav_projects")}</Link></li>
+            <li><Link to={`${base}/insights`} className="hover:text-accent transition-colors">{t("nav_insights")}</Link></li>
             <li><Link to={`${base}/packages`} className="hover:text-accent transition-colors">{t("nav_packages")}</Link></li>
             <li><Link to={`${base}/contact`} className="hover:text-accent transition-colors">{t("nav_contact")}</Link></li>
           </ul>

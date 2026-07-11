@@ -6,6 +6,7 @@ export const dict = {
   nav_projects: { ar: "المشاريع", en: "Projects" },
   nav_contact: { ar: "تواصل", en: "Contact" },
   nav_packages: { ar: "فئات الخدمات", en: "Service Tiers" },
+  nav_insights: { ar: "الرؤى", en: "Insights" },
   cta_start_project: { ar: "ابدأ مشروعك", en: "Start a project" },
   menu_label: { ar: "القائمة", en: "Menu" },
 
