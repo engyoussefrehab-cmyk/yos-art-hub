@@ -90,7 +90,7 @@ export function AdminArticleEditorView({ articleId }: Props) {
         if (error) setErr(error.message);
         else if (!data) setErr("المقال غير موجود.");
         else {
-          const r = data as InsightArticleRow;
+          const r = data as unknown as InsightArticleRow;
           setForm({
             slug: r.slug,
             category_id: r.category_id,
@@ -183,12 +183,12 @@ export function AdminArticleEditorView({ articleId }: Props) {
         payload.published_at = new Date().toISOString();
       }
       if (isNew) {
-        const { data, error } = await supabase.from("insight_articles").insert(payload).select("id").single();
+        const { data, error } = await supabase.from("insight_articles").insert(payload as any).select("id").single();
         if (error) throw error;
         navigate({ to: "/admin/insights/$id", params: { id: data.id } });
         setMsg("تم إنشاء المقال.");
       } else {
-        const { error } = await supabase.from("insight_articles").update(payload).eq("id", articleId!);
+        const { error } = await supabase.from("insight_articles").update(payload as any).eq("id", articleId!);
         if (error) throw error;
         setMsg("تم الحفظ.");
         setForm((f) => ({
