@@ -22,6 +22,7 @@ import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as EnRssDotxmlRouteImport } from './routes/en.rss[.]xml'
 import { Route as EnPackagesRouteImport } from './routes/en.packages'
 import { Route as EnContactRouteImport } from './routes/en.contact'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
 import { Route as InsightsCategoryIndexRouteImport } from './routes/insights.$category.index'
 import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
@@ -102,6 +103,11 @@ const EnContactRoute = EnContactRouteImport.update({
   id: '/en/contact',
   path: '/en/contact',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ProjectsCategoryIndexRoute = ProjectsCategoryIndexRouteImport.update({
   id: '/projects/$category/',
@@ -186,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -215,6 +222,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/packages'
     | '/rss.xml'
+    | '/admin/audit'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -307,6 +317,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/packages'
     | '/rss.xml'
+    | '/admin/audit'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -337,6 +348,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/packages'
     | '/rss.xml'
+    | '/admin/audit'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -482,6 +494,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/projects/$category/': {
       id: '/projects/$category/'
       path: '/projects/$category'
@@ -591,6 +610,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAuditRoute: typeof AdminAuditRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminInsightsIdRoute: typeof AdminInsightsIdRoute
   AdminInsightsNewRoute: typeof AdminInsightsNewRoute
@@ -598,6 +618,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAuditRoute: AdminAuditRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminInsightsIdRoute: AdminInsightsIdRoute,
   AdminInsightsNewRoute: AdminInsightsNewRoute,

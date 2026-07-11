@@ -14,7 +14,18 @@ export function AdminSignInCard() {
     setBusy(true); setErr(null); setOk(null);
     try {
       if (mode === "in") {
+        // Rate-limit pre-check
+        const { preLoginCheckFn, recordLoginAttemptFn } = await import("@/lib/auth-security.functions");
+        const rl = await preLoginCheckFn({ data: { email } });
+        if (!rl.allowed) {
+          setErr("تم تجاوز الحد المسموح لمحاولات الدخول. حاول بعد 15 دقيقة.");
+          return;
+        }
         const { error } = await supabase.auth.signInWithPassword({ email, password });
+        // Fire-and-forget: record the attempt for auditing/rate limit
+        void recordLoginAttemptFn({
+          data: { email, success: !error, reason: error?.message?.slice(0, 120) ?? null },
+        }).catch(() => {});
         if (error) throw error;
       } else {
         const { error } = await supabase.auth.signUp({

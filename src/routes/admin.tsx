@@ -39,6 +39,12 @@ function AdminShell() {
                 المقالات
               </Link>
               <Link
+                to="/admin/audit"
+                className={`rounded-full px-3 py-1.5 transition-colors ${location.pathname.startsWith("/admin/audit") ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-accent"}`}
+              >
+                سجلات التدقيق
+              </Link>
+              <Link
                 to="/"
                 className="rounded-full px-3 py-1.5 text-muted-foreground transition-colors hover:text-accent"
               >
