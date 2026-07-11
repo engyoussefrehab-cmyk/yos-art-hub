@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -18,6 +19,7 @@ import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as GoSplatRouteImport } from './routes/go.$'
+import { Route as EnRssDotxmlRouteImport } from './routes/en.rss[.]xml'
 import { Route as EnPackagesRouteImport } from './routes/en.packages'
 import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
@@ -36,6 +38,11 @@ import { Route as EnProjectsCategorySlugRouteImport } from './routes/en.projects
 import { Route as EnInsightsCategorySlugRouteImport } from './routes/en.insights.$category.$slug'
 import { Route as ApiPublicInsightsCoverSplatRouteImport } from './routes/api/public/insights.cover.$'
 
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PackagesRoute = PackagesRouteImport.update({
   id: '/packages',
   path: '/packages',
@@ -79,6 +86,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const GoSplatRoute = GoSplatRouteImport.update({
   id: '/go/$',
   path: '/go/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnRssDotxmlRoute = EnRssDotxmlRouteImport.update({
+  id: '/en/rss.xml',
+  path: '/en/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnPackagesRoute = EnPackagesRouteImport.update({
@@ -173,8 +185,10 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
+  '/en/rss.xml': typeof EnRssDotxmlRoute
   '/go/$': typeof GoSplatRoute
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
@@ -200,8 +214,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
+  '/en/rss.xml': typeof EnRssDotxmlRoute
   '/go/$': typeof GoSplatRoute
   '/admin': typeof AdminIndexRoute
   '/en': typeof EnIndexRoute
@@ -229,8 +245,10 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
+  '/en/rss.xml': typeof EnRssDotxmlRoute
   '/go/$': typeof GoSplatRoute
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
@@ -259,8 +277,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/contact'
     | '/packages'
+    | '/rss.xml'
     | '/en/contact'
     | '/en/packages'
+    | '/en/rss.xml'
     | '/go/$'
     | '/admin/'
     | '/en/'
@@ -286,8 +306,10 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/packages'
+    | '/rss.xml'
     | '/en/contact'
     | '/en/packages'
+    | '/en/rss.xml'
     | '/go/$'
     | '/admin'
     | '/en'
@@ -314,8 +336,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/contact'
     | '/packages'
+    | '/rss.xml'
     | '/en/contact'
     | '/en/packages'
+    | '/en/rss.xml'
     | '/go/$'
     | '/admin/'
     | '/en/'
@@ -343,8 +367,10 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   ContactRoute: typeof ContactRoute
   PackagesRoute: typeof PackagesRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
   EnContactRoute: typeof EnContactRoute
   EnPackagesRoute: typeof EnPackagesRoute
+  EnRssDotxmlRoute: typeof EnRssDotxmlRoute
   GoSplatRoute: typeof GoSplatRoute
   EnIndexRoute: typeof EnIndexRoute
   InsightsIndexRoute: typeof InsightsIndexRoute
@@ -365,6 +391,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/packages': {
       id: '/packages'
       path: '/packages'
@@ -426,6 +459,13 @@ declare module '@tanstack/react-router' {
       path: '/go/$'
       fullPath: '/go/$'
       preLoaderRoute: typeof GoSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/rss.xml': {
+      id: '/en/rss.xml'
+      path: '/en/rss.xml'
+      fullPath: '/en/rss.xml'
+      preLoaderRoute: typeof EnRssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/packages': {
@@ -571,8 +611,10 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   ContactRoute: ContactRoute,
   PackagesRoute: PackagesRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
   EnContactRoute: EnContactRoute,
   EnPackagesRoute: EnPackagesRoute,
+  EnRssDotxmlRoute: EnRssDotxmlRoute,
   GoSplatRoute: GoSplatRoute,
   EnIndexRoute: EnIndexRoute,
   InsightsIndexRoute: InsightsIndexRoute,

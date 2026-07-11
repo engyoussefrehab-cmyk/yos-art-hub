@@ -14,7 +14,13 @@ export const Route = createFileRoute("/insights/")({
       { property: "og:url", content: "/insights" },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "canonical", href: "/insights" }],
+    links: [
+      { rel: "canonical", href: "/insights" },
+      { rel: "alternate", type: "application/rss+xml", title: "Insights RSS", href: "/rss.xml" },
+      { rel: "alternate", hreflang: "en", href: "/en/insights" },
+      { rel: "alternate", hreflang: "ar", href: "/insights" },
+      { rel: "alternate", hreflang: "x-default", href: "/insights" },
+    ],
     scripts: [
       {
         type: "application/ld+json",

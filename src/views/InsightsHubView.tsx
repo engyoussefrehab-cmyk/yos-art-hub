@@ -1,7 +1,29 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import { formatDate, type InsightArticle, type InsightCategoryRow } from "@/lib/insights-types";
+
+/** Score an article/category against a lowercase query. Higher = better. */
+function scoreMatch(text: string, q: string): number {
+  if (!q) return 0;
+  const t = text.toLowerCase();
+  if (t === q) return 100;
+  if (t.startsWith(q)) return 40;
+  const idx = t.indexOf(q);
+  if (idx === 0) return 30;
+  if (idx > 0) return Math.max(1, 20 - Math.floor(idx / 5));
+  return 0;
+}
+
+function articleScore(a: InsightArticle, q: string): number {
+  if (!q) return 0;
+  const title = scoreMatch(a.title_ar, q) + scoreMatch(a.title_en, q);
+  const kw = (a.keywords ?? []).reduce((s, k) => s + scoreMatch(k, q) * 2, 0);
+  const tags = (a.tags ?? []).reduce((s, k) => s + scoreMatch(k, q) * 1.5, 0);
+  const excerpt = (scoreMatch(a.excerpt_ar, q) + scoreMatch(a.excerpt_en, q)) * 0.4;
+  const cat = scoreMatch(a.category.label_ar, q) + scoreMatch(a.category.label_en, q);
+  return title * 3 + kw + tags + excerpt + cat;
+}
 
 function coverStyle(a: InsightArticle) {
   if (a.cover_url) return { backgroundImage: `url(${a.cover_url})`, backgroundSize: "cover", backgroundPosition: "center" };
@@ -76,25 +98,67 @@ export function InsightsHubView({ categories, articles }: HubProps) {
   const base = lang === "ar" ? "/insights" : "/en/insights";
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<string>("all");
+  const [suggestOpen, setSuggestOpen] = useState(false);
+  const searchWrapRef = useRef<HTMLDivElement | null>(null);
 
   const featured = useMemo(
     () => articles.find((a) => a.featured) ?? articles[0] ?? null,
     [articles],
   );
 
+  // Ranked matches — used by both the results grid and the suggestions dropdown
+  const ranked = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return null;
+    const scored = articles
+      .map((a) => ({ a, s: articleScore(a, q) }))
+      .filter((x) => x.s > 0)
+      .sort((x, y) => y.s - x.s);
+    return scored;
+  }, [articles, query]);
+
+  const matchedCategories = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [] as InsightCategoryRow[];
+    return categories
+      .map((c) => ({
+        c,
+        s: Math.max(scoreMatch(c.label_ar, q), scoreMatch(c.label_en, q), scoreMatch(c.slug, q)),
+      }))
+      .filter((x) => x.s > 0)
+      .sort((x, y) => y.s - x.s)
+      .slice(0, 4)
+      .map((x) => x.c);
+  }, [categories, query]);
+
   const filtered = useMemo(() => {
-    let list = articles;
-    if (active !== "all") list = list.filter((a) => a.category.slug === active);
-    if (query.trim()) {
-      const q = query.trim().toLowerCase();
-      list = list.filter((a) =>
-        [a.title_ar, a.title_en, a.excerpt_ar, a.excerpt_en, ...(a.tags ?? []), ...(a.keywords ?? [])]
-          .join(" ").toLowerCase().includes(q),
-      );
+    let list: InsightArticle[];
+    if (ranked) {
+      list = ranked.map((r) => r.a);
+    } else {
+      list = articles;
     }
+    if (active !== "all") list = list.filter((a) => a.category.slug === active);
     if (!query && active === "all" && featured) list = list.filter((a) => a.slug !== featured.slug);
     return list;
-  }, [articles, query, active, featured]);
+  }, [articles, ranked, query, active, featured]);
+
+  const suggestions = useMemo(() => (ranked ?? []).slice(0, 5), [ranked]);
+
+  // Close suggestion popover on outside click
+  useEffect(() => {
+    if (!suggestOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (searchWrapRef.current && !searchWrapRef.current.contains(e.target as Node)) {
+        setSuggestOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [suggestOpen]);
+
+  const showSuggestions = suggestOpen && query.trim().length > 0 &&
+    (suggestions.length > 0 || matchedCategories.length > 0);
 
   return (
     <div className="bg-background">
@@ -115,18 +179,98 @@ export function InsightsHubView({ categories, articles }: HubProps) {
               : "Practical brand strategies, visual identity systems, logo design, presentation design, business insights, AI workflows, and real-world case studies."}
           </p>
 
-          <div className="mt-8 flex max-w-xl items-center gap-2 rounded-full border border-border/80 bg-card px-4 py-2 shadow-sm transition-colors focus-within:border-accent">
-            <svg viewBox="0 0 24 24" className="h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
-            </svg>
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={lang === "ar" ? "ابحث في المقالات، الكلمات المفتاحية، التصنيفات…" : "Search articles, keywords, categories…"}
-              className="w-full bg-transparent py-1.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
-              aria-label={lang === "ar" ? "بحث" : "Search"}
-            />
+          <div ref={searchWrapRef} className="relative mt-8 max-w-xl">
+            <div className="flex items-center gap-2 rounded-full border border-border/80 bg-card px-4 py-2 shadow-sm transition-colors focus-within:border-accent">
+              <svg viewBox="0 0 24 24" className="h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+              </svg>
+              <input
+                type="search"
+                value={query}
+                onChange={(e) => { setQuery(e.target.value); setSuggestOpen(true); }}
+                onFocus={() => setSuggestOpen(true)}
+                placeholder={lang === "ar" ? "ابحث في المقالات، الكلمات المفتاحية، التصنيفات…" : "Search articles, keywords, categories…"}
+                className="w-full bg-transparent py-1.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+                aria-label={lang === "ar" ? "بحث" : "Search"}
+                aria-expanded={showSuggestions}
+                aria-controls="insights-suggestions"
+                autoComplete="off"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => { setQuery(""); setSuggestOpen(false); }}
+                  aria-label={lang === "ar" ? "مسح" : "Clear"}
+                  className="text-muted-foreground hover:text-accent"
+                >
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {showSuggestions && (
+              <div
+                id="insights-suggestions"
+                role="listbox"
+                className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-2xl border border-border/80 bg-card shadow-2xl"
+              >
+                {matchedCategories.length > 0 && (
+                  <div className="border-b border-border/60 p-2">
+                    <div className="px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      {lang === "ar" ? "التصنيفات" : "Categories"}
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 p-2">
+                      {matchedCategories.map((c) => (
+                        <Link
+                          key={c.slug}
+                          to={`${base}/${c.slug}`}
+                          onClick={() => setSuggestOpen(false)}
+                          className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent hover:bg-accent hover:text-accent-foreground transition-colors"
+                        >
+                          #{lang === "ar" ? c.label_ar : c.label_en}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {suggestions.length > 0 ? (
+                  <ul className="max-h-96 overflow-y-auto p-2">
+                    {suggestions.map(({ a }) => (
+                      <li key={a.id}>
+                        <Link
+                          to={`${base}/${a.category.slug}/${a.slug}`}
+                          onClick={() => setSuggestOpen(false)}
+                          className="flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-accent/10"
+                          role="option"
+                        >
+                          <div
+                            aria-hidden
+                            className="mt-0.5 h-10 w-10 flex-shrink-0 rounded-md bg-cover bg-center bg-muted"
+                            style={a.cover_url ? { backgroundImage: `url(${a.cover_url})` } : undefined}
+                          />
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate text-sm font-medium text-foreground">
+                              {lang === "ar" ? a.title_ar : a.title_en || a.title_ar}
+                            </div>
+                            <div className="mt-0.5 truncate text-[11px] text-muted-foreground">
+                              {lang === "ar" ? a.category.label_ar : a.category.label_en}
+                              {" · "}
+                              {a.reading_minutes} {lang === "ar" ? "دقائق" : "min"}
+                            </div>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="p-4 text-center text-xs text-muted-foreground">
+                    {lang === "ar" ? "لا توجد اقتراحات مطابقة." : "No matching suggestions."}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
