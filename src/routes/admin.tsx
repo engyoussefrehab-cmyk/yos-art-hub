@@ -1,12 +1,12 @@
-import { Link, Outlet, useLocation } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { AdminSignInCard, BootstrapAdminCard } from "@/views/admin/AdminAuthCards";
-import { createFileRoute } from "@tanstack/react-router";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 function AdminShell() {
   const auth = useAdminAuth();
-  const location = useLocation();
 
   if (auth.status === "loading") {
     return (
@@ -19,50 +19,29 @@ function AdminShell() {
   if (auth.status === "signed-in-not-admin")
     return <BootstrapAdminCard onDone={() => window.location.reload()} />;
 
-  // admin
-  const signOut = () => supabase.auth.signOut();
-  const isInsights = location.pathname.startsWith("/admin/insights");
-
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-card/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-4">
-            <Link to="/admin" className="font-display text-lg font-semibold text-foreground">
-              لوحة التحكم
-            </Link>
-            <nav className="flex items-center gap-2 text-sm">
-              <Link
-                to="/admin/insights"
-                className={`rounded-full px-3 py-1.5 transition-colors ${isInsights ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-accent"}`}
-              >
-                المقالات
-              </Link>
-              <Link
-                to="/admin/audit"
-                className={`rounded-full px-3 py-1.5 transition-colors ${location.pathname.startsWith("/admin/audit") ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-accent"}`}
-              >
-                سجلات التدقيق
-              </Link>
-              <Link
-                to="/"
-                className="rounded-full px-3 py-1.5 text-muted-foreground transition-colors hover:text-accent"
-              >
-                عرض الموقع
-              </Link>
-            </nav>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="hidden sm:inline">{auth.session.user.email}</span>
-            <button onClick={signOut} className="rounded-full border border-border px-3 py-1.5 hover:border-accent hover:text-accent">
-              خروج
-            </button>
-          </div>
+    <div dir="rtl" className="min-h-screen bg-background">
+      <SidebarProvider defaultOpen>
+        <div className="flex min-h-screen w-full">
+          <AdminSidebar email={auth.session.user.email} />
+          <SidebarInset className="flex flex-col">
+            <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border/70 bg-background/85 px-4 backdrop-blur">
+              <div className="flex items-center gap-2">
+                <SidebarTrigger />
+                <Link to="/admin" className="text-sm font-semibold">
+                  لوحة التحكم
+                </Link>
+              </div>
+              <div className="text-xs text-muted-foreground truncate max-w-[45%]">
+                {auth.session.user.email}
+              </div>
+            </header>
+            <main className="flex-1 px-4 md:px-8 py-6">
+              <Outlet />
+            </main>
+          </SidebarInset>
         </div>
-      </header>
-      <main className="mx-auto max-w-6xl px-6 py-8">
-        <Outlet />
-      </main>
+      </SidebarProvider>
     </div>
   );
 }
