@@ -423,7 +423,7 @@ function LangSwitcher({ onNavigate }: { onNavigate?: () => void }) {
       to={altHref}
       onClick={onNavigate}
       aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
-      className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-foreground transition-colors hover:border-accent hover:text-accent"
+      className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <span className={lang === "ar" ? "text-accent" : "text-muted-foreground"}>AR</span>
       <span className="text-muted-foreground/60">|</span>
