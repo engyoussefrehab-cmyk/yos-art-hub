@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import { formatDate, type InsightArticle, type InsightCategoryRow } from "@/lib/insights-types";
