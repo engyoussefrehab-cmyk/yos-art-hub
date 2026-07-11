@@ -37,7 +37,7 @@ export async function recordAudit(opts: {
     actor_email: opts.actorEmail ?? null,
     target: opts.target ?? null,
     ip: getClientIp(),
-    meta: opts.meta ?? {},
+    meta: (opts.meta ?? {}) as never,
   });
 }
 
