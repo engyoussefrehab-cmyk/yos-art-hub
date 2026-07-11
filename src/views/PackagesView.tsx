@@ -211,7 +211,11 @@ export function PackagesView() {
             </h2>
           </div>
 
-          <div className="mt-14 overflow-hidden rounded-3xl border border-border/70 bg-card">
+          <p className="mt-6 text-center text-[11px] text-muted-foreground/70 md:hidden">
+            {isAr ? "← اسحب لعرض جميع الفئات →" : "← Swipe to see all tiers →"}
+          </p>
+
+          <div className="mt-4 overflow-hidden rounded-3xl border border-border/70 bg-card md:mt-14">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[640px] text-sm">
                 <thead>
