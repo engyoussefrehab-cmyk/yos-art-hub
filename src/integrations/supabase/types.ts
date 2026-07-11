@@ -14,16 +14,178 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      insight_articles: {
+        Row: {
+          author_avatar_url: string | null
+          author_name: string
+          category_id: string
+          content_ar: string
+          content_en: string
+          cover_url: string | null
+          created_at: string
+          excerpt_ar: string
+          excerpt_en: string
+          faq: Json
+          featured: boolean
+          featured_image_url: string | null
+          id: string
+          keywords: string[]
+          published_at: string | null
+          reading_minutes: number
+          related_slugs: string[]
+          seo_description_ar: string
+          seo_description_en: string
+          seo_title_ar: string
+          seo_title_en: string
+          slug: string
+          status: Database["public"]["Enums"]["article_status"]
+          tags: string[]
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          author_avatar_url?: string | null
+          author_name?: string
+          category_id: string
+          content_ar?: string
+          content_en?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt_ar?: string
+          excerpt_en?: string
+          faq?: Json
+          featured?: boolean
+          featured_image_url?: string | null
+          id?: string
+          keywords?: string[]
+          published_at?: string | null
+          reading_minutes?: number
+          related_slugs?: string[]
+          seo_description_ar?: string
+          seo_description_en?: string
+          seo_title_ar?: string
+          seo_title_en?: string
+          slug: string
+          status?: Database["public"]["Enums"]["article_status"]
+          tags?: string[]
+          title_ar: string
+          title_en?: string
+          updated_at?: string
+        }
+        Update: {
+          author_avatar_url?: string | null
+          author_name?: string
+          category_id?: string
+          content_ar?: string
+          content_en?: string
+          cover_url?: string | null
+          created_at?: string
+          excerpt_ar?: string
+          excerpt_en?: string
+          faq?: Json
+          featured?: boolean
+          featured_image_url?: string | null
+          id?: string
+          keywords?: string[]
+          published_at?: string | null
+          reading_minutes?: number
+          related_slugs?: string[]
+          seo_description_ar?: string
+          seo_description_en?: string
+          seo_title_ar?: string
+          seo_title_en?: string
+          slug?: string
+          status?: Database["public"]["Enums"]["article_status"]
+          tags?: string[]
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insight_articles_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "insight_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insight_categories: {
+        Row: {
+          created_at: string
+          description_ar: string
+          description_en: string
+          id: string
+          label_ar: string
+          label_en: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description_ar?: string
+          description_en?: string
+          id?: string
+          label_ar: string
+          label_en: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description_ar?: string
+          description_en?: string
+          id?: string
+          label_ar?: string
+          label_en?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      bootstrap_admin: { Args: never; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
+      article_status: "draft" | "scheduled" | "published"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +312,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+      article_status: ["draft", "scheduled", "published"],
+    },
   },
 } as const
