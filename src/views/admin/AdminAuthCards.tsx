@@ -85,12 +85,12 @@ export function BootstrapAdminCard({ onDone }: { onDone: () => void }) {
   const bootstrap = async () => {
     setBusy(true); setErr(null);
     try {
-      const { data, error } = await supabase.rpc("bootstrap_admin");
-      if (error) throw error;
-      if (data === true) onDone();
+      const { bootstrapAdminFn } = await import("@/lib/admin-bootstrap.functions");
+      const data = await bootstrapAdminFn();
+      if (data.granted) onDone();
       else setErr("يوجد مدير بالفعل. اطلب من المدير الحالي منحك الصلاحية.");
     } catch (e: any) {
-      setErr(e.message ?? "تعذّر التنفيذ.");
+      setErr(e?.message ?? "تعذّر التنفيذ.");
     } finally {
       setBusy(false);
     }
