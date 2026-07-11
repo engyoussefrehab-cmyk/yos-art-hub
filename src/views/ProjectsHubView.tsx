@@ -34,7 +34,7 @@ export function ProjectsHubView() {
               className="group relative overflow-hidden rounded-3xl border border-border bg-cream transition-all hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="aspect-[16/10] overflow-hidden">
-                <img src={c.cover} alt={label} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <img src={c.cover} alt={label} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <div className="p-8">
                 <div className="flex items-center justify-between">

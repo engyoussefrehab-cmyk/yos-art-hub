@@ -65,7 +65,7 @@ export function ProjectDetailView({ slug }: { slug: string }) {
 
       <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="overflow-hidden rounded-3xl border border-border bg-cream">
-          <img src={project.cover} alt={loc.name} className="w-full" />
+          <img src={project.cover} alt={loc.name} loading="eager" decoding="async" className="w-full" />
         </div>
       </section>
 
@@ -94,7 +94,7 @@ export function ProjectDetailView({ slug }: { slug: string }) {
 
       <section className="mx-auto max-w-7xl px-6 py-16">
         <div className="overflow-hidden rounded-3xl border border-border bg-cream">
-          <img src={project.mockup} alt={`${loc.name} mockups`} className="w-full" />
+          <img loading="lazy" decoding="async" src={project.mockup} alt={`${loc.name} mockups`} className="w-full" />
         </div>
       </section>
 
