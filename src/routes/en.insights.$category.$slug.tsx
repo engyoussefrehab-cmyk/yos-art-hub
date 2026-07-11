@@ -1,30 +1,36 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { InsightsArticleView } from "@/views/InsightsArticleView";
-import { getArticle, getCategory } from "@/lib/insights-data";
+import { getArticleBySlugFn, getPublishedArticlesFn } from "@/lib/insights.functions";
 
 export const Route = createFileRoute("/en/insights/$category/$slug")({
-  loader: ({ params }) => {
-    const article = getArticle(params.slug);
-    const cat = getCategory(params.category);
-    if (!article || !cat || article.category !== params.category) throw notFound();
-    return { article, cat };
+  loader: async ({ params }) => {
+    const [article, allArticles] = await Promise.all([
+      getArticleBySlugFn({ data: { slug: params.slug, categorySlug: params.category } }),
+      getPublishedArticlesFn(),
+    ]);
+    if (!article) throw notFound();
+    return { article, allArticles };
   },
   head: ({ params, loaderData }) => {
     const a = loaderData?.article;
-    if (!a) {
-      return { meta: [{ title: "Unavailable" }, { name: "robots", content: "noindex" }] };
-    }
+    if (!a) return { meta: [{ title: "Unavailable" }, { name: "robots", content: "noindex" }] };
     const url = `/en/insights/${params.category}/${params.slug}`;
+    const seoTitle = a.seo_title_en || a.title_en || a.title_ar;
+    const seoDesc = a.seo_description_en || a.excerpt_en || a.excerpt_ar;
+    const catLabel = a.category.label_en;
+    const title = a.title_en || a.title_ar;
     const schema = {
       "@context": "https://schema.org",
       "@type": "Article",
-      headline: a.title.en,
-      description: a.excerpt.en,
-      author: { "@type": "Person", name: a.author.en },
-      datePublished: a.publishedAt,
+      headline: title,
+      description: seoDesc,
+      image: a.cover_url ? [a.cover_url] : undefined,
+      author: { "@type": "Person", name: a.author_name },
+      datePublished: a.published_at,
+      dateModified: a.updated_at,
       inLanguage: "en",
       keywords: a.keywords.join(", "),
-      articleSection: loaderData?.cat.label.en,
+      articleSection: catLabel,
       mainEntityOfPage: url,
     };
     const faqSchema = a.faq && a.faq.length > 0 ? {
@@ -32,8 +38,8 @@ export const Route = createFileRoute("/en/insights/$category/$slug")({
       "@type": "FAQPage",
       mainEntity: a.faq.map((f) => ({
         "@type": "Question",
-        name: f.q.en,
-        acceptedAnswer: { "@type": "Answer", text: f.a.en },
+        name: f.q_en || f.q_ar,
+        acceptedAnswer: { "@type": "Answer", text: f.a_en || f.a_ar },
       })),
     } : null;
     const breadcrumb = {
@@ -41,27 +47,32 @@ export const Route = createFileRoute("/en/insights/$category/$slug")({
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Insights", item: "/en/insights" },
-        { "@type": "ListItem", position: 2, name: loaderData?.cat.label.en, item: `/en/insights/${params.category}` },
-        { "@type": "ListItem", position: 3, name: a.title.en, item: url },
+        { "@type": "ListItem", position: 2, name: catLabel, item: `/en/insights/${params.category}` },
+        { "@type": "ListItem", position: 3, name: title, item: url },
       ],
     };
+    const meta: Array<Record<string, string>> = [
+      { title: `${seoTitle} | Youssef Rehab` },
+      { name: "description", content: seoDesc },
+      { name: "keywords", content: a.keywords.join(", ") },
+      { name: "author", content: a.author_name },
+      { property: "og:title", content: seoTitle },
+      { property: "og:description", content: seoDesc },
+      { property: "og:type", content: "article" },
+      { property: "og:url", content: url },
+      { property: "article:published_time", content: a.published_at ?? "" },
+      { property: "article:author", content: a.author_name },
+      { property: "article:section", content: catLabel },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: seoTitle },
+      { name: "twitter:description", content: seoDesc },
+    ];
+    if (a.cover_url) {
+      meta.push({ property: "og:image", content: a.cover_url });
+      meta.push({ name: "twitter:image", content: a.cover_url });
+    }
     return {
-      meta: [
-        { title: `${a.title.en} | Youssef Rehab` },
-        { name: "description", content: a.excerpt.en },
-        { name: "keywords", content: a.keywords.join(", ") },
-        { name: "author", content: a.author.en },
-        { property: "og:title", content: a.title.en },
-        { property: "og:description", content: a.excerpt.en },
-        { property: "og:type", content: "article" },
-        { property: "og:url", content: url },
-        { property: "article:published_time", content: a.publishedAt },
-        { property: "article:author", content: a.author.en },
-        { property: "article:section", content: loaderData?.cat.label.en ?? "" },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: a.title.en },
-        { name: "twitter:description", content: a.excerpt.en },
-      ],
+      meta,
       links: [{ rel: "canonical", href: url }],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(schema) },
@@ -71,7 +82,7 @@ export const Route = createFileRoute("/en/insights/$category/$slug")({
     };
   },
   component: () => {
-    const { slug } = Route.useParams();
-    return <InsightsArticleView slug={slug} />;
+    const data = Route.useLoaderData();
+    return <InsightsArticleView article={data.article} allArticles={data.allArticles} />;
   },
 });

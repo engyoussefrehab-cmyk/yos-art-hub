@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { InsightsHubView } from "@/views/InsightsHubView";
+import { getInsightsHubDataFn } from "@/lib/insights.functions";
 
 export const Route = createFileRoute("/insights/")({
+  loader: () => getInsightsHubDataFn(),
   head: () => ({
     meta: [
       { title: "رؤى ومقالات — يوسف رحاب | استراتيجية العلامة والهوية البصرية" },
@@ -27,5 +29,8 @@ export const Route = createFileRoute("/insights/")({
       },
     ],
   }),
-  component: InsightsHubView,
+  component: () => {
+    const data = Route.useLoaderData();
+    return <InsightsHubView categories={data.categories} articles={data.articles} />;
+  },
 });
