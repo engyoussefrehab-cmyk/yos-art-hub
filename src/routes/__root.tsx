@@ -230,6 +230,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <LangSync />
       <SiteLoader />
+      <LanguageWelcome />
       <div className="min-h-screen flex flex-col bg-background text-foreground">
         <SiteNav />
         <main className="flex-1 flex flex-col"><Outlet /></main>
@@ -240,6 +241,120 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+
+function LanguageWelcome() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem("yr_lang_chosen")) {
+        // small delay so it appears after the loader fades
+        const id = window.setTimeout(() => setOpen(true), 900);
+        return () => window.clearTimeout(id);
+      }
+    } catch {
+      setOpen(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  if (!open) return null;
+
+  const choose = (lang: "ar" | "en") => {
+    try {
+      localStorage.setItem("yr_lang_chosen", lang);
+    } catch {
+      /* ignore */
+    }
+    const path = window.location.pathname;
+    const isOnEn = path === "/en" || path.startsWith("/en/");
+    let target = path;
+    if (lang === "en" && !isOnEn) {
+      target = `/en${path === "/" ? "" : path}`;
+    } else if (lang === "ar" && isOnEn) {
+      target = path.replace(/^\/en/, "") || "/";
+    }
+    setOpen(false);
+    if (target !== path) {
+      window.location.assign(target + window.location.search + window.location.hash);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center px-6 animate-in fade-in duration-300"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="lang-welcome-title"
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-ink/80 backdrop-blur-md" />
+
+      {/* Card */}
+      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/70 bg-card shadow-[0_40px_120px_-30px_rgb(0_0_0/0.5)] animate-in zoom-in-95 slide-in-from-bottom-4 duration-500">
+        {/* Ambient glow */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70">
+          <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
+        </div>
+
+        <div className="relative px-8 pb-8 pt-10 text-center sm:px-10 sm:pt-12">
+          {/* Monogram */}
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10">
+            <span className="font-display text-lg font-bold tracking-tight text-accent">YR</span>
+          </div>
+
+          <div className="mt-6 space-y-1">
+            <p className="font-display text-2xl font-semibold tracking-tight text-foreground" id="lang-welcome-title">
+              أهلًا بك <span className="text-muted-foreground/70">·</span> Welcome
+            </p>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              اختر لغتك المفضّلة للمتابعة
+              <br />
+              <span className="text-foreground/60">Please choose your preferred language</span>
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => choose("ar")}
+              className="group flex flex-col items-center gap-1.5 rounded-2xl border border-border/70 bg-background/60 px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground hover:shadow-lg"
+              dir="rtl"
+            >
+              <span className="font-display text-lg font-semibold">العربيّة</span>
+              <span className="text-xs text-muted-foreground group-hover:text-accent-foreground/80">تصفّح باللغة العربية</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => choose("en")}
+              className="group flex flex-col items-center gap-1.5 rounded-2xl border border-border/70 bg-background/60 px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground hover:shadow-lg"
+              dir="ltr"
+            >
+              <span className="font-display text-lg font-semibold">English</span>
+              <span className="text-xs text-muted-foreground group-hover:text-accent-foreground/80">Browse in English</span>
+            </button>
+          </div>
+
+          <p className="mt-6 text-[11px] text-muted-foreground/70">
+            <span dir="rtl">يمكنك تغيير اللغة لاحقًا من أعلى الصفحة</span>
+            <span className="mx-2 opacity-40">·</span>
+            <span>You can switch languages anytime from the header</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function SiteLoader() {
   const [gone, setGone] = useState(false);
