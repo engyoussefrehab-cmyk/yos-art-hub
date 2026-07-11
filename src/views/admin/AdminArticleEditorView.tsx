@@ -400,3 +400,121 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </label>
   );
 }
+
+interface SocialPreviewProps {
+  titleAr: string;
+  titleEn: string;
+  descAr: string;
+  descEn: string;
+  cover: string;
+  slug: string;
+  categorySlug?: string;
+  status: ArticleStatus;
+}
+
+const SITE_ORIGIN = "https://yrstudio.art";
+
+function SocialPreview({ titleAr, titleEn, descAr, descEn, cover, slug, categorySlug, status }: SocialPreviewProps) {
+  const [locale, setLocale] = useState<"ar" | "en">("ar");
+  const title = locale === "ar" ? (titleAr || titleEn) : (titleEn || titleAr);
+  const desc = locale === "ar" ? (descAr || descEn) : (descEn || descAr);
+  const path = categorySlug && slug
+    ? `${locale === "ar" ? "" : "/en"}/insights/${categorySlug}/${slug}`
+    : `${locale === "ar" ? "" : "/en"}/insights`;
+  const fullUrl = `${SITE_ORIGIN}${path}`;
+  const host = "yrstudio.art";
+  const canValidate = status === "published" && categorySlug && slug;
+  const enc = encodeURIComponent(fullUrl);
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-1 rounded-lg bg-muted p-1 text-[11px]">
+        <button
+          type="button"
+          onClick={() => setLocale("ar")}
+          className={`flex-1 rounded-md px-2 py-1 transition-colors ${locale === "ar" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
+        >عربي</button>
+        <button
+          type="button"
+          onClick={() => setLocale("en")}
+          className={`flex-1 rounded-md px-2 py-1 transition-colors ${locale === "en" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
+        >English</button>
+      </div>
+
+      {/* Facebook / OG-style card */}
+      <div className="overflow-hidden rounded-xl border border-border bg-background">
+        {cover ? (
+          <img src={cover} alt="" className="h-32 w-full object-cover" />
+        ) : (
+          <div className="flex h-32 w-full items-center justify-center bg-muted text-[10px] text-muted-foreground">
+            بدون صورة غلاف
+          </div>
+        )}
+        <div className="p-3" dir={locale === "ar" ? "rtl" : "ltr"}>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{host}</div>
+          <div className="mt-1 line-clamp-2 text-sm font-semibold text-foreground">
+            {title || (locale === "ar" ? "بدون عنوان" : "Untitled")}
+          </div>
+          <div className="mt-1 line-clamp-2 text-[11px] text-muted-foreground">
+            {desc || (locale === "ar" ? "بدون وصف" : "No description")}
+          </div>
+        </div>
+      </div>
+
+      {/* Twitter-style card */}
+      <div className="flex gap-3 overflow-hidden rounded-xl border border-border bg-background p-2">
+        {cover ? (
+          <img src={cover} alt="" className="h-16 w-16 flex-shrink-0 rounded-md object-cover" />
+        ) : (
+          <div className="h-16 w-16 flex-shrink-0 rounded-md bg-muted" />
+        )}
+        <div className="min-w-0 flex-1" dir={locale === "ar" ? "rtl" : "ltr"}>
+          <div className="line-clamp-1 text-[11px] font-medium text-foreground">
+            {title || (locale === "ar" ? "بدون عنوان" : "Untitled")}
+          </div>
+          <div className="mt-0.5 line-clamp-2 text-[10px] text-muted-foreground">{desc}</div>
+          <div className="mt-1 text-[10px] text-muted-foreground">🔗 {host}</div>
+        </div>
+      </div>
+
+      <p className="text-[10px] leading-relaxed text-muted-foreground">
+        اختبر البطاقة بعد النشر عبر الأدوات الرسمية (تفتح في تبويب جديد):
+      </p>
+      <div className="grid grid-cols-2 gap-2 text-[11px]">
+        <a
+          href={canValidate ? `https://developers.facebook.com/tools/debug/?q=${enc}` : undefined}
+          target="_blank" rel="noopener noreferrer"
+          aria-disabled={!canValidate}
+          className={`rounded-lg border border-border px-2 py-1.5 text-center transition-colors ${canValidate ? "hover:border-accent hover:text-accent" : "pointer-events-none opacity-50"}`}
+        >Facebook Debugger</a>
+        <a
+          href={canValidate ? `https://www.linkedin.com/post-inspector/inspect/${enc}` : undefined}
+          target="_blank" rel="noopener noreferrer"
+          aria-disabled={!canValidate}
+          className={`rounded-lg border border-border px-2 py-1.5 text-center transition-colors ${canValidate ? "hover:border-accent hover:text-accent" : "pointer-events-none opacity-50"}`}
+        >LinkedIn Inspector</a>
+        <a
+          href={canValidate ? `https://search.google.com/test/rich-results?url=${enc}` : undefined}
+          target="_blank" rel="noopener noreferrer"
+          aria-disabled={!canValidate}
+          className={`rounded-lg border border-border px-2 py-1.5 text-center transition-colors ${canValidate ? "hover:border-accent hover:text-accent" : "pointer-events-none opacity-50"}`}
+        >Rich Results Test</a>
+        <a
+          href={canValidate ? `https://validator.schema.org/#url=${enc}` : undefined}
+          target="_blank" rel="noopener noreferrer"
+          aria-disabled={!canValidate}
+          className={`rounded-lg border border-border px-2 py-1.5 text-center transition-colors ${canValidate ? "hover:border-accent hover:text-accent" : "pointer-events-none opacity-50"}`}
+        >Schema Validator</a>
+      </div>
+      {!canValidate && (
+        <p className="text-[10px] text-amber-600 dark:text-amber-400">
+          انشر المقال أولًا لتفعيل روابط أدوات الاختبار.
+        </p>
+      )}
+      {canValidate && (
+        <p className="text-[10px] text-muted-foreground" dir="ltr">
+          {fullUrl}
+        </p>
+      )}
+    </div>
+  );
+}
