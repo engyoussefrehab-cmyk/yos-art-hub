@@ -306,9 +306,13 @@ function LanguageWelcome() {
         </div>
 
         <div className="relative px-8 pb-8 pt-10 text-center sm:px-10 sm:pt-12">
-          {/* Monogram */}
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10">
-            <span className="font-display text-lg font-bold tracking-tight text-accent">YR</span>
+          {/* Logo */}
+          <div className="mx-auto flex items-center justify-center">
+            <img
+              src={logoFull.url}
+              alt="YR Studio"
+              className="h-10 w-auto [filter:brightness(0)] dark:[filter:brightness(0)_invert(1)]"
+            />
           </div>
 
           <div className="mt-6 space-y-1">
