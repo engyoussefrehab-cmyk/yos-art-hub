@@ -74,14 +74,16 @@ function Card({ t: item }: { t: (typeof testimonials)[number] }) {
 
 
 function NavButton({ direction, onClick }: { direction: "prev" | "next"; onClick: () => void }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const isPrev = direction === "prev";
+  // In RTL, "previous" points right; in LTR, "previous" points left.
+  const pointsRight = (isPrev && lang === "ar") || (!isPrev && lang !== "ar");
   return (
     <button type="button" onClick={onClick}
       aria-label={isPrev ? t("t_prev") : t("t_next")}
-      className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
+      className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background">
       <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-        {isPrev ? <path d="M9 6l6 6-6 6" /> : <path d="M15 6l-9 6 9 6" />}
+        {pointsRight ? <path d="M9 6l6 6-6 6" /> : <path d="M15 6l-6 6 6 6" />}
       </svg>
     </button>
   );
