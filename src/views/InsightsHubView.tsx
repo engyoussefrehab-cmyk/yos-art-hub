@@ -220,6 +220,3 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
     </button>
   );
 }
-
-// silence "unused import" for useEffect if not needed later
-void useEffect;
