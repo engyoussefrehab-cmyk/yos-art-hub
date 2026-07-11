@@ -1,48 +1,74 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
-import {
-  getArticle,
-  getCategory,
-  getRelatedArticles,
-  getAdjacentArticles,
-  formatDate,
-  type Article,
-  type Block,
-} from "@/lib/insights-data";
+import { formatDate, sanitizeHtml, type InsightArticle } from "@/lib/insights-types";
 
-export function InsightsArticleView({ slug }: { slug: string }) {
+interface Props {
+  article: InsightArticle;
+  allArticles: InsightArticle[];
+}
+
+function slugify(str: string) {
+  return str.trim().toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60) || "section";
+}
+
+// Extract H2 headings from HTML for TOC and inject id attributes.
+function processContent(html: string): { html: string; toc: { id: string; text: string }[] } {
+  const toc: { id: string; text: string }[] = [];
+  const seen = new Set<string>();
+  const processed = html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (_m, attrs, inner) => {
+    const text = inner.replace(/<[^>]+>/g, "").trim();
+    let id = slugify(text);
+    let n = 1;
+    while (seen.has(id)) id = `${slugify(text)}-${++n}`;
+    seen.add(id);
+    toc.push({ id, text });
+    if (/id\s*=/.test(attrs)) return `<h2${attrs}>${inner}</h2>`;
+    return `<h2 id="${id}"${attrs}>${inner}</h2>`;
+  });
+  return { html: processed, toc };
+}
+
+export function InsightsArticleView({ article, allArticles }: Props) {
   const { lang } = useLang();
-  const article = getArticle(slug);
   const base = lang === "ar" ? "/insights" : "/en/insights";
+  const category = article.category;
 
-  if (!article) {
-    return (
-      <div className="mx-auto max-w-4xl px-6 py-24 text-center">
-        <h1 className="font-display text-3xl font-semibold">
-          {lang === "ar" ? "المقال غير موجود" : "Article not found"}
-        </h1>
-        <Link to={base} className="mt-6 inline-block text-accent underline">
-          {lang === "ar" ? "العودة إلى المقالات" : "Back to insights"}
-        </Link>
-      </div>
-    );
-  }
+  const rawContent = (lang === "ar" ? article.content_ar : article.content_en) || article.content_ar;
+  const { html, toc } = useMemo(() => processContent(sanitizeHtml(rawContent || "")), [rawContent]);
 
-  const category = getCategory(article.category)!;
-  const related = getRelatedArticles(article.slug, 3);
-  const { prev, next } = getAdjacentArticles(article.slug);
+  // Related: same category, exclude current
+  const related = useMemo(() => {
+    const explicit = article.related_slugs
+      .map((s) => allArticles.find((a) => a.slug === s))
+      .filter((a): a is InsightArticle => !!a);
+    if (explicit.length >= 3) return explicit.slice(0, 3);
+    const same = allArticles.filter((a) => a.category.slug === category.slug && a.slug !== article.slug);
+    const merged = [...explicit];
+    for (const a of same) {
+      if (merged.length >= 3) break;
+      if (!merged.find((m) => m.slug === a.slug)) merged.push(a);
+    }
+    return merged.slice(0, 3);
+  }, [article, allArticles, category.slug]);
 
-  // Table of contents
-  const toc = useMemo(
-    () =>
-      article.content
-        .filter((b): b is Extract<Block, { type: "h2" }> => b.type === "h2")
-        .map((b) => ({ id: b.id, label: b.text[lang] })),
-    [article, lang],
-  );
+  // Prev/next by published_at order
+  const { prev, next } = useMemo(() => {
+    const sorted = [...allArticles].sort((a, b) => {
+      const at = a.published_at ? new Date(a.published_at).getTime() : 0;
+      const bt = b.published_at ? new Date(b.published_at).getTime() : 0;
+      return bt - at;
+    });
+    const idx = sorted.findIndex((a) => a.slug === article.slug);
+    return {
+      prev: idx > 0 ? sorted[idx - 1] : null,
+      next: idx >= 0 && idx < sorted.length - 1 ? sorted[idx + 1] : null,
+    };
+  }, [allArticles, article.slug]);
 
-  // Reading progress
   const [progress, setProgress] = useState(0);
   useEffect(() => {
     const onScroll = () => {
@@ -58,7 +84,7 @@ export function InsightsArticleView({ slug }: { slug: string }) {
   const share = (network: "twitter" | "linkedin" | "copy") => {
     if (typeof window === "undefined") return;
     const url = window.location.href;
-    const title = article.title[lang];
+    const title = lang === "ar" ? article.title_ar : article.title_en;
     if (network === "twitter") {
       window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, "_blank", "noopener,noreferrer");
     } else if (network === "linkedin") {
@@ -68,56 +94,48 @@ export function InsightsArticleView({ slug }: { slug: string }) {
     }
   };
 
+  const title = lang === "ar" ? article.title_ar : article.title_en || article.title_ar;
+  const excerpt = lang === "ar" ? article.excerpt_ar : article.excerpt_en || article.excerpt_ar;
+  const catLabel = lang === "ar" ? category.label_ar : category.label_en;
+
+  const coverStyle = article.cover_url
+    ? { backgroundImage: `url(${article.cover_url})`, backgroundSize: "cover", backgroundPosition: "center" }
+    : { background: "linear-gradient(135deg, #0f0f2b 0%, #1a2540 60%, #d4a574 100%)" };
+
   return (
     <div className="bg-background">
-      {/* Reading progress */}
       <div className="fixed left-0 right-0 top-0 z-50 h-0.5 bg-transparent">
         <div className="h-full bg-accent transition-[width] duration-100" style={{ width: `${progress}%` }} />
       </div>
 
-      {/* Hero */}
       <header className="relative overflow-hidden border-b border-border/60">
-        <div
-          className="absolute inset-0 opacity-90"
-          style={{ background: `linear-gradient(135deg, ${article.cover.from} 0%, ${article.cover.to} 100%)` }}
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 opacity-50"
-          style={{ background: `radial-gradient(50% 40% at 20% 30%, ${article.cover.accent}55, transparent 60%)` }}
-          aria-hidden
-        />
+        <div className="absolute inset-0" style={coverStyle} aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" aria-hidden />
         <div className="relative mx-auto max-w-4xl px-6 pb-16 pt-20 text-white sm:pt-28">
           <nav className="flex items-center gap-2 text-xs text-white/70" aria-label="Breadcrumb">
-            <Link to={base} className="hover:text-white">
-              {lang === "ar" ? "الرؤى" : "Insights"}
-            </Link>
+            <Link to={base} className="hover:text-white">{lang === "ar" ? "الرؤى" : "Insights"}</Link>
             <span aria-hidden>/</span>
-            <Link to={`${base}/${category.slug}`} className="hover:text-white">
-              {category.label[lang]}
-            </Link>
+            <Link to={`${base}/${category.slug}`} className="hover:text-white">{catLabel}</Link>
           </nav>
           <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-white/90 backdrop-blur">
-            {category.label[lang]}
+            {catLabel}
           </span>
           <h1 className="mt-5 font-display text-3xl font-semibold leading-tight tracking-tight text-white sm:text-5xl">
-            {article.title[lang]}
+            {title}
           </h1>
-          <p className="mt-5 max-w-3xl text-lg leading-relaxed text-white/80">{article.excerpt[lang]}</p>
+          {excerpt && <p className="mt-5 max-w-3xl text-lg leading-relaxed text-white/85">{excerpt}</p>}
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/70">
-            <span>{article.author[lang]}</span>
+            <span>{article.author_name}</span>
             <span aria-hidden>·</span>
-            <time dateTime={article.publishedAt}>{formatDate(article.publishedAt, lang)}</time>
+            {article.published_at && <time dateTime={article.published_at}>{formatDate(article.published_at, lang)}</time>}
             <span aria-hidden>·</span>
-            <span>{article.readingMinutes} {lang === "ar" ? "دقائق قراءة" : "min read"}</span>
+            <span>{article.reading_minutes} {lang === "ar" ? "دقائق قراءة" : "min read"}</span>
           </div>
         </div>
       </header>
 
-      {/* Body + TOC */}
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 py-16 lg:grid-cols-[1fr_240px]">
         <article className="min-w-0">
-          {/* Share */}
           <div className="mb-8 flex items-center gap-2 border-b border-border/60 pb-6">
             <span className="text-xs text-muted-foreground">{lang === "ar" ? "مشاركة:" : "Share:"}</span>
             <ShareBtn onClick={() => share("twitter")} label="X / Twitter">
@@ -128,17 +146,26 @@ export function InsightsArticleView({ slug }: { slug: string }) {
             </ShareBtn>
             <ShareBtn onClick={() => share("copy")} label={lang === "ar" ? "نسخ الرابط" : "Copy link"}>
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <rect x="9" y="9" width="13" height="13" rx="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                <rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
               </svg>
             </ShareBtn>
           </div>
 
-          <div className="prose-article">
-            {article.content.map((b, i) => <RenderBlock key={i} block={b} />)}
-          </div>
+          <div
+            className="prose-article insights-content"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
 
-          {/* FAQ */}
+          {article.tags?.length > 0 && (
+            <div className="mt-10 flex flex-wrap gap-2">
+              {article.tags.map((t) => (
+                <span key={t} className="rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
+                  #{t}
+                </span>
+              ))}
+            </div>
+          )}
+
           {article.faq && article.faq.length > 0 && (
             <section className="mt-16 border-t border-border/60 pt-12">
               <h2 className="font-display text-2xl font-semibold text-foreground">
@@ -148,17 +175,18 @@ export function InsightsArticleView({ slug }: { slug: string }) {
                 {article.faq.map((f, i) => (
                   <details key={i} className="group bg-card">
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-sm font-semibold text-foreground transition-colors hover:text-accent">
-                      <span>{f.q[lang]}</span>
+                      <span>{lang === "ar" ? f.q_ar : f.q_en || f.q_ar}</span>
                       <span className="text-accent transition-transform group-open:rotate-45" aria-hidden>+</span>
                     </summary>
-                    <div className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground">{f.a[lang]}</div>
+                    <div className="px-6 pb-5 text-sm leading-relaxed text-muted-foreground">
+                      {lang === "ar" ? f.a_ar : f.a_en || f.a_ar}
+                    </div>
                   </details>
                 ))}
               </div>
             </section>
           )}
 
-          {/* CTA */}
           <section className="mt-16 rounded-3xl border border-border/70 bg-ink p-8 text-white sm:p-12">
             <h2 className="font-display text-2xl font-semibold sm:text-3xl">
               {lang === "ar" ? "جاهزٌ لبناء علامةٍ أقوى؟" : "Ready to build a stronger brand?"}
@@ -177,57 +205,46 @@ export function InsightsArticleView({ slug }: { slug: string }) {
             </Link>
           </section>
 
-          {/* Prev / Next */}
           <nav className="mt-12 grid gap-4 sm:grid-cols-2">
             {prev ? (
-              <Link
-                to={`${base}/${prev.category}/${prev.slug}`}
-                className="group rounded-2xl border border-border/70 bg-card p-5 transition-all hover:border-accent/50"
-              >
-                <span className="text-xs uppercase tracking-widest text-muted-foreground">
-                  {lang === "ar" ? "المقال السابق" : "Previous"}
-                </span>
+              <Link to={`${base}/${prev.category.slug}/${prev.slug}`} className="group rounded-2xl border border-border/70 bg-card p-5 transition-all hover:border-accent/50">
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">{lang === "ar" ? "المقال السابق" : "Previous"}</span>
                 <p className="mt-2 font-display text-base font-semibold text-foreground group-hover:text-accent">
-                  {prev.title[lang]}
+                  {lang === "ar" ? prev.title_ar : prev.title_en || prev.title_ar}
                 </p>
               </Link>
             ) : <span />}
             {next ? (
-              <Link
-                to={`${base}/${next.category}/${next.slug}`}
-                className={`group rounded-2xl border border-border/70 bg-card p-5 transition-all hover:border-accent/50 ${lang === "ar" ? "text-right" : "text-right"}`}
-              >
-                <span className="text-xs uppercase tracking-widest text-muted-foreground">
-                  {lang === "ar" ? "المقال التالي" : "Next"}
-                </span>
+              <Link to={`${base}/${next.category.slug}/${next.slug}`} className="group rounded-2xl border border-border/70 bg-card p-5 transition-all hover:border-accent/50">
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">{lang === "ar" ? "المقال التالي" : "Next"}</span>
                 <p className="mt-2 font-display text-base font-semibold text-foreground group-hover:text-accent">
-                  {next.title[lang]}
+                  {lang === "ar" ? next.title_ar : next.title_en || next.title_ar}
                 </p>
               </Link>
             ) : <span />}
           </nav>
         </article>
 
-        {/* TOC */}
-        <aside className="hidden lg:block">
-          <div className="sticky top-24">
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-              {lang === "ar" ? "في هذا المقال" : "On this page"}
-            </span>
-            <ul className="mt-4 space-y-3 border-l border-border/70 ps-4 rtl:border-l-0 rtl:border-r rtl:ps-0 rtl:pe-4">
-              {toc.map((h) => (
-                <li key={h.id}>
-                  <a href={`#${h.id}`} className="text-sm text-muted-foreground transition-colors hover:text-accent">
-                    {h.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
+        {toc.length > 0 && (
+          <aside className="hidden lg:block">
+            <div className="sticky top-24">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                {lang === "ar" ? "في هذا المقال" : "On this page"}
+              </span>
+              <ul className="mt-4 space-y-3 border-l border-border/70 ps-4 rtl:border-l-0 rtl:border-r rtl:ps-0 rtl:pe-4">
+                {toc.map((h) => (
+                  <li key={h.id}>
+                    <a href={`#${h.id}`} className="text-sm text-muted-foreground transition-colors hover:text-accent">
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+        )}
       </div>
 
-      {/* Related */}
       {related.length > 0 && (
         <section className="border-t border-border/60 bg-card/40">
           <div className="mx-auto max-w-6xl px-6 py-16">
@@ -235,7 +252,7 @@ export function InsightsArticleView({ slug }: { slug: string }) {
               {lang === "ar" ? "مقالات ذات صلة" : "Related reading"}
             </h2>
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((r) => <RelatedCard key={r.slug} article={r} />)}
+              {related.map((r) => <RelatedCard key={r.id} article={r} />)}
             </div>
           </div>
         </section>
@@ -247,76 +264,30 @@ export function InsightsArticleView({ slug }: { slug: string }) {
 function ShareBtn({ onClick, label, children }: { onClick: () => void; label: string; children: React.ReactNode }) {
   return (
     <button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
+      type="button" onClick={onClick} aria-label={label}
       className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-    >
-      {children}
-    </button>
+    >{children}</button>
   );
 }
 
-function RenderBlock({ block }: { block: Block }) {
-  const { lang } = useLang();
-  switch (block.type) {
-    case "p":
-      return <p className="my-5 text-[17px] leading-[1.85] text-foreground/85">{block.text[lang]}</p>;
-    case "h2":
-      return (
-        <h2 id={block.id} className="mt-14 mb-4 scroll-mt-24 font-display text-2xl font-semibold text-foreground sm:text-3xl">
-          {block.text[lang]}
-        </h2>
-      );
-    case "h3":
-      return (
-        <h3 id={block.id} className="mt-10 mb-3 scroll-mt-24 font-display text-xl font-semibold text-foreground">
-          {block.text[lang]}
-        </h3>
-      );
-    case "quote":
-      return (
-        <blockquote className="my-8 rounded-2xl border-s-4 border-accent bg-card p-6 font-display text-xl italic leading-relaxed text-foreground">
-          "{block.text[lang]}"
-          {block.cite && <cite className="mt-3 block text-sm not-italic text-muted-foreground">— {block.cite}</cite>}
-        </blockquote>
-      );
-    case "list":
-      return (
-        <ul className="my-6 space-y-2.5 ps-6 marker:text-accent">
-          {block.items.map((it, i) => (
-            <li key={i} className="list-disc text-[17px] leading-[1.85] text-foreground/85">{it[lang]}</li>
-          ))}
-        </ul>
-      );
-    case "callout":
-      return (
-        <aside className="my-10 rounded-2xl border border-accent/30 bg-accent/5 p-6">
-          <div className="text-xs font-semibold uppercase tracking-widest text-accent">{block.title[lang]}</div>
-          <p className="mt-2 text-[17px] leading-[1.8] text-foreground/90">{block.text[lang]}</p>
-        </aside>
-      );
-  }
-}
-
-function RelatedCard({ article }: { article: Article }) {
+function RelatedCard({ article }: { article: InsightArticle }) {
   const { lang } = useLang();
   const base = lang === "ar" ? "/insights" : "/en/insights";
-  const cat = getCategory(article.category)!;
+  const style = article.cover_url
+    ? { backgroundImage: `url(${article.cover_url})`, backgroundSize: "cover", backgroundPosition: "center" }
+    : { background: "linear-gradient(135deg,#1a1a2e,#0f3460)" };
   return (
     <Link
-      to={`${base}/${article.category}/${article.slug}`}
+      to={`${base}/${article.category.slug}/${article.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-card transition-all hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
     >
-      <div
-        className="aspect-[16/9]"
-        style={{ background: `linear-gradient(135deg, ${article.cover.from}, ${article.cover.to})` }}
-        aria-hidden
-      />
+      <div className="aspect-[16/9]" style={style} aria-hidden />
       <div className="p-5">
-        <div className="text-[11px] font-medium uppercase tracking-wider text-accent">{cat.label[lang]}</div>
+        <div className="text-[11px] font-medium uppercase tracking-wider text-accent">
+          {lang === "ar" ? article.category.label_ar : article.category.label_en}
+        </div>
         <h3 className="mt-2 font-display text-base font-semibold text-foreground group-hover:text-accent">
-          {article.title[lang]}
+          {lang === "ar" ? article.title_ar : article.title_en || article.title_ar}
         </h3>
       </div>
     </Link>

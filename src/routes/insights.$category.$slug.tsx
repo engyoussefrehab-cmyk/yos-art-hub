@@ -1,30 +1,35 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { InsightsArticleView } from "@/views/InsightsArticleView";
-import { getArticle, getCategory } from "@/lib/insights-data";
+import { getArticleBySlugFn, getPublishedArticlesFn } from "@/lib/insights.functions";
 
 export const Route = createFileRoute("/insights/$category/$slug")({
-  loader: ({ params }) => {
-    const article = getArticle(params.slug);
-    const cat = getCategory(params.category);
-    if (!article || !cat || article.category !== params.category) throw notFound();
-    return { article, cat };
+  loader: async ({ params }) => {
+    const [article, allArticles] = await Promise.all([
+      getArticleBySlugFn({ data: { slug: params.slug, categorySlug: params.category } }),
+      getPublishedArticlesFn(),
+    ]);
+    if (!article) throw notFound();
+    return { article, allArticles };
   },
   head: ({ params, loaderData }) => {
     const a = loaderData?.article;
-    if (!a) {
-      return { meta: [{ title: "غير متاح" }, { name: "robots", content: "noindex" }] };
-    }
+    if (!a) return { meta: [{ title: "غير متاح" }, { name: "robots", content: "noindex" }] };
     const url = `/insights/${params.category}/${params.slug}`;
+    const seoTitle = a.seo_title_ar || a.title_ar;
+    const seoDesc = a.seo_description_ar || a.excerpt_ar;
+    const catLabel = a.category.label_ar;
     const schema = {
       "@context": "https://schema.org",
       "@type": "Article",
-      headline: a.title.ar,
-      description: a.excerpt.ar,
-      author: { "@type": "Person", name: a.author.ar },
-      datePublished: a.publishedAt,
+      headline: a.title_ar,
+      description: a.excerpt_ar,
+      image: a.cover_url ? [a.cover_url] : undefined,
+      author: { "@type": "Person", name: a.author_name },
+      datePublished: a.published_at,
+      dateModified: a.updated_at,
       inLanguage: "ar",
       keywords: a.keywords.join(", "),
-      articleSection: loaderData?.cat.label.ar,
+      articleSection: catLabel,
       mainEntityOfPage: url,
     };
     const faqSchema = a.faq && a.faq.length > 0 ? {
@@ -32,8 +37,8 @@ export const Route = createFileRoute("/insights/$category/$slug")({
       "@type": "FAQPage",
       mainEntity: a.faq.map((f) => ({
         "@type": "Question",
-        name: f.q.ar,
-        acceptedAnswer: { "@type": "Answer", text: f.a.ar },
+        name: f.q_ar,
+        acceptedAnswer: { "@type": "Answer", text: f.a_ar },
       })),
     } : null;
     const breadcrumb = {
@@ -41,27 +46,32 @@ export const Route = createFileRoute("/insights/$category/$slug")({
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "الرؤى", item: "/insights" },
-        { "@type": "ListItem", position: 2, name: loaderData?.cat.label.ar, item: `/insights/${params.category}` },
-        { "@type": "ListItem", position: 3, name: a.title.ar, item: url },
+        { "@type": "ListItem", position: 2, name: catLabel, item: `/insights/${params.category}` },
+        { "@type": "ListItem", position: 3, name: a.title_ar, item: url },
       ],
     };
+    const meta: Array<Record<string, string>> = [
+      { title: `${seoTitle} | يوسف رحاب` },
+      { name: "description", content: seoDesc },
+      { name: "keywords", content: a.keywords.join(", ") },
+      { name: "author", content: a.author_name },
+      { property: "og:title", content: seoTitle },
+      { property: "og:description", content: seoDesc },
+      { property: "og:type", content: "article" },
+      { property: "og:url", content: url },
+      { property: "article:published_time", content: a.published_at ?? "" },
+      { property: "article:author", content: a.author_name },
+      { property: "article:section", content: catLabel },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: seoTitle },
+      { name: "twitter:description", content: seoDesc },
+    ];
+    if (a.cover_url) {
+      meta.push({ property: "og:image", content: a.cover_url });
+      meta.push({ name: "twitter:image", content: a.cover_url });
+    }
     return {
-      meta: [
-        { title: `${a.title.ar} | يوسف رحاب` },
-        { name: "description", content: a.excerpt.ar },
-        { name: "keywords", content: a.keywords.join(", ") },
-        { name: "author", content: a.author.ar },
-        { property: "og:title", content: a.title.ar },
-        { property: "og:description", content: a.excerpt.ar },
-        { property: "og:type", content: "article" },
-        { property: "og:url", content: url },
-        { property: "article:published_time", content: a.publishedAt },
-        { property: "article:author", content: a.author.ar },
-        { property: "article:section", content: loaderData?.cat.label.ar ?? "" },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: a.title.ar },
-        { name: "twitter:description", content: a.excerpt.ar },
-      ],
+      meta,
       links: [{ rel: "canonical", href: url }],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(schema) },
@@ -71,7 +81,7 @@ export const Route = createFileRoute("/insights/$category/$slug")({
     };
   },
   component: () => {
-    const { slug } = Route.useParams();
-    return <InsightsArticleView slug={slug} />;
+    const data = Route.useLoaderData();
+    return <InsightsArticleView article={data.article} allArticles={data.allArticles} />;
   },
 });
