@@ -1,7 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { categories } from "@/lib/portfolio-data";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
+import p5 from "@/assets/portfolio/page_5.webp";
+import p22 from "@/assets/portfolio/page_22.webp";
+import p27 from "@/assets/portfolio/page_27.webp";
+import p34 from "@/assets/portfolio/page_34.webp";
+
+const categories = [
+  { slug: "branding", cover: p5, count: 8 },
+  { slug: "logos", cover: p22, count: 40 },
+  { slug: "profiles", cover: p27, count: 6 },
+  { slug: "social", cover: p34, count: 7 },
+];
 
 const catI18n: Record<string, { label: DictKey; desc: DictKey }> = {
   branding: { label: "cat_branding_label", desc: "cat_branding_desc" },
