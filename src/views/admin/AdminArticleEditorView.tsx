@@ -148,6 +148,16 @@ export function AdminArticleEditorView({ articleId }: Props) {
     }
   };
 
+  const uploadInline = async (file: File): Promise<string> => {
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `inline/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("insights-covers").upload(path, file, {
+      cacheControl: "31536000", upsert: false, contentType: file.type,
+    });
+    if (error) { setErr(error.message); return ""; }
+    return `/api/public/insights/cover/${path}`;
+  };
+
   const save = async (opts?: { publishNow?: boolean }) => {
     setSaving(true); setErr(null); setMsg(null);
     try {
