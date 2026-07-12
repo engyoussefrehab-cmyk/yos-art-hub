@@ -1,12 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ComingSoonPanel } from "@/components/admin/ComingSoonPanel";
+import { AdminServicesListView } from "@/views/admin/AdminServicesListView";
 
 export const Route = createFileRoute("/admin/services")({
-  component: () => (
-    <ComingSoonPanel
-      title="الخدمات"
-      description="إدارة الخدمات المعروضة على الموقع: العنوان، الوصف، المزايا، الأيقونة، صورة الغلاف، وزر الإجراء."
-      phase="المرحلة 2 · Services CMS"
-    />
-  ),
+  component: AdminServicesListView,
 });

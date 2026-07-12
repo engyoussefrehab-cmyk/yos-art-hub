@@ -41,6 +41,10 @@ import { Route as AdminInsightsIndexRouteImport } from './routes/admin.insights.
 import { Route as ProjectsCategorySlugRouteImport } from './routes/projects.$category.$slug'
 import { Route as InsightsCategorySlugRouteImport } from './routes/insights.$category.$slug'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
+import { Route as AdminServicesNewRouteImport } from './routes/admin.services.new'
+import { Route as AdminServicesIdRouteImport } from './routes/admin.services.$id'
+import { Route as AdminPortfolioNewRouteImport } from './routes/admin.portfolio.new'
+import { Route as AdminPortfolioIdRouteImport } from './routes/admin.portfolio.$id'
 import { Route as AdminInsightsNewRouteImport } from './routes/admin.insights.new'
 import { Route as AdminInsightsIdRouteImport } from './routes/admin.insights.$id'
 import { Route as EnProjectsCategoryIndexRouteImport } from './routes/en.projects.$category.index'
@@ -209,6 +213,26 @@ const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
   path: '/api/public/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminServicesNewRoute = AdminServicesNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminServicesRoute,
+} as any)
+const AdminServicesIdRoute = AdminServicesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminServicesRoute,
+} as any)
+const AdminPortfolioNewRoute = AdminPortfolioNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminPortfolioRoute,
+} as any)
+const AdminPortfolioIdRoute = AdminPortfolioIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminPortfolioRoute,
+} as any)
 const AdminInsightsNewRoute = AdminInsightsNewRouteImport.update({
   id: '/insights/new',
   path: '/insights/new',
@@ -257,10 +281,10 @@ export interface FileRoutesByFullPath {
   '/admin/media': typeof AdminMediaRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
-  '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/portfolio': typeof AdminPortfolioRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
-  '/admin/services': typeof AdminServicesRoute
+  '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
   '/en/contact': typeof EnContactRoute
@@ -273,6 +297,10 @@ export interface FileRoutesByFullPath {
   '/projects/': typeof ProjectsIndexRoute
   '/admin/insights/$id': typeof AdminInsightsIdRoute
   '/admin/insights/new': typeof AdminInsightsNewRoute
+  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
+  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
+  '/admin/services/$id': typeof AdminServicesIdRoute
+  '/admin/services/new': typeof AdminServicesNewRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
@@ -297,10 +325,10 @@ export interface FileRoutesByTo {
   '/admin/media': typeof AdminMediaRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
-  '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/portfolio': typeof AdminPortfolioRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
-  '/admin/services': typeof AdminServicesRoute
+  '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
   '/en/contact': typeof EnContactRoute
@@ -313,6 +341,10 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsIndexRoute
   '/admin/insights/$id': typeof AdminInsightsIdRoute
   '/admin/insights/new': typeof AdminInsightsNewRoute
+  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
+  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
+  '/admin/services/$id': typeof AdminServicesIdRoute
+  '/admin/services/new': typeof AdminServicesNewRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
@@ -339,10 +371,10 @@ export interface FileRoutesById {
   '/admin/media': typeof AdminMediaRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
-  '/admin/portfolio': typeof AdminPortfolioRoute
+  '/admin/portfolio': typeof AdminPortfolioRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
-  '/admin/services': typeof AdminServicesRoute
+  '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
   '/en/contact': typeof EnContactRoute
@@ -355,6 +387,10 @@ export interface FileRoutesById {
   '/projects/': typeof ProjectsIndexRoute
   '/admin/insights/$id': typeof AdminInsightsIdRoute
   '/admin/insights/new': typeof AdminInsightsNewRoute
+  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
+  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
+  '/admin/services/$id': typeof AdminServicesIdRoute
+  '/admin/services/new': typeof AdminServicesNewRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
@@ -398,6 +434,10 @@ export interface FileRouteTypes {
     | '/projects/'
     | '/admin/insights/$id'
     | '/admin/insights/new'
+    | '/admin/portfolio/$id'
+    | '/admin/portfolio/new'
+    | '/admin/services/$id'
+    | '/admin/services/new'
     | '/api/public/contact'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
@@ -438,6 +478,10 @@ export interface FileRouteTypes {
     | '/projects'
     | '/admin/insights/$id'
     | '/admin/insights/new'
+    | '/admin/portfolio/$id'
+    | '/admin/portfolio/new'
+    | '/admin/services/$id'
+    | '/admin/services/new'
     | '/api/public/contact'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
@@ -479,6 +523,10 @@ export interface FileRouteTypes {
     | '/projects/'
     | '/admin/insights/$id'
     | '/admin/insights/new'
+    | '/admin/portfolio/$id'
+    | '/admin/portfolio/new'
+    | '/admin/services/$id'
+    | '/admin/services/new'
     | '/api/public/contact'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
@@ -747,6 +795,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/services/new': {
+      id: '/admin/services/new'
+      path: '/new'
+      fullPath: '/admin/services/new'
+      preLoaderRoute: typeof AdminServicesNewRouteImport
+      parentRoute: typeof AdminServicesRoute
+    }
+    '/admin/services/$id': {
+      id: '/admin/services/$id'
+      path: '/$id'
+      fullPath: '/admin/services/$id'
+      preLoaderRoute: typeof AdminServicesIdRouteImport
+      parentRoute: typeof AdminServicesRoute
+    }
+    '/admin/portfolio/new': {
+      id: '/admin/portfolio/new'
+      path: '/new'
+      fullPath: '/admin/portfolio/new'
+      preLoaderRoute: typeof AdminPortfolioNewRouteImport
+      parentRoute: typeof AdminPortfolioRoute
+    }
+    '/admin/portfolio/$id': {
+      id: '/admin/portfolio/$id'
+      path: '/$id'
+      fullPath: '/admin/portfolio/$id'
+      preLoaderRoute: typeof AdminPortfolioIdRouteImport
+      parentRoute: typeof AdminPortfolioRoute
+    }
     '/admin/insights/new': {
       id: '/admin/insights/new'
       path: '/insights/new'
@@ -799,16 +875,44 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminPortfolioRouteChildren {
+  AdminPortfolioIdRoute: typeof AdminPortfolioIdRoute
+  AdminPortfolioNewRoute: typeof AdminPortfolioNewRoute
+}
+
+const AdminPortfolioRouteChildren: AdminPortfolioRouteChildren = {
+  AdminPortfolioIdRoute: AdminPortfolioIdRoute,
+  AdminPortfolioNewRoute: AdminPortfolioNewRoute,
+}
+
+const AdminPortfolioRouteWithChildren = AdminPortfolioRoute._addFileChildren(
+  AdminPortfolioRouteChildren,
+)
+
+interface AdminServicesRouteChildren {
+  AdminServicesIdRoute: typeof AdminServicesIdRoute
+  AdminServicesNewRoute: typeof AdminServicesNewRoute
+}
+
+const AdminServicesRouteChildren: AdminServicesRouteChildren = {
+  AdminServicesIdRoute: AdminServicesIdRoute,
+  AdminServicesNewRoute: AdminServicesNewRoute,
+}
+
+const AdminServicesRouteWithChildren = AdminServicesRoute._addFileChildren(
+  AdminServicesRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminMediaRoute: typeof AdminMediaRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminPagesRoute: typeof AdminPagesRoute
-  AdminPortfolioRoute: typeof AdminPortfolioRoute
+  AdminPortfolioRoute: typeof AdminPortfolioRouteWithChildren
   AdminProfileRoute: typeof AdminProfileRoute
   AdminSeoRoute: typeof AdminSeoRoute
-  AdminServicesRoute: typeof AdminServicesRoute
+  AdminServicesRoute: typeof AdminServicesRouteWithChildren
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTagsRoute: typeof AdminTagsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -823,10 +927,10 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMediaRoute: AdminMediaRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminPagesRoute: AdminPagesRoute,
-  AdminPortfolioRoute: AdminPortfolioRoute,
+  AdminPortfolioRoute: AdminPortfolioRouteWithChildren,
   AdminProfileRoute: AdminProfileRoute,
   AdminSeoRoute: AdminSeoRoute,
-  AdminServicesRoute: AdminServicesRoute,
+  AdminServicesRoute: AdminServicesRouteWithChildren,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTagsRoute: AdminTagsRoute,
   AdminIndexRoute: AdminIndexRoute,
