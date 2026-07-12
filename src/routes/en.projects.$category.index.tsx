@@ -1,39 +1,31 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { categories } from "@/lib/portfolio-data";
+import { listPortfolio } from "@/lib/portfolio.functions";
 import { CategoryView } from "@/views/CategoryView";
 
-const catLabelsEn: Record<string, string> = {
-  branding: "Visual Identity",
-  logos: "Logos",
-  profiles: "Company Profiles",
-  social: "Social Media",
-};
+const CATS = ["branding", "logos", "profiles", "social"] as const;
 
 export const Route = createFileRoute("/en/projects/$category/")({
   head: ({ params }) => {
-    const label = catLabelsEn[params.category] ?? "Projects";
     const path = `/en/projects/${params.category}`;
     return {
       meta: [
-        { title: `${label} — Youssef Rehab` },
-        { name: "description", content: `Selected ${label.toLowerCase()} work for Saudi Arabia, UAE and Gulf brands.` },
-        { name: "keywords", content: `${label}, Youssef Rehab, Saudi Arabia design, UAE design, brand identity` },
-        { property: "og:title", content: `${label} — Youssef Rehab` },
-        { property: "og:description", content: `Selected ${label.toLowerCase()} work.` },
+        { title: "Selected work — Youssef Rehab" },
         { property: "og:url", content: path },
       ],
       links: [{ rel: "canonical", href: path }],
     };
   },
-  loader: ({ params }) => {
-    const cat = categories.find((c) => c.slug === params.category);
-    if (!cat) throw notFound();
-    return { slug: cat.slug };
+  loader: async ({ params }) => {
+    if (!CATS.includes(params.category as any)) throw notFound();
+    const projects = params.category === "branding"
+      ? await listPortfolio({ data: { category: "branding" } })
+      : [];
+    return { categorySlug: params.category, projects };
   },
   component: CategoryPage,
 });
 
 function CategoryPage() {
-  const { slug } = Route.useLoaderData();
-  return <CategoryView categorySlug={slug} />;
+  const { categorySlug, projects } = Route.useLoaderData();
+  return <CategoryView categorySlug={categorySlug} projects={projects} />;
 }
