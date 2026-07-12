@@ -27,7 +27,6 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminSeoRouteImport } from './routes/admin.seo'
 import { Route as AdminProfileRouteImport } from './routes/admin.profile'
-import { Route as AdminPortfolioRouteImport } from './routes/admin.portfolio'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
@@ -37,6 +36,7 @@ import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$ca
 import { Route as InsightsCategoryIndexRouteImport } from './routes/insights.$category.index'
 import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
 import { Route as EnInsightsIndexRouteImport } from './routes/en.insights.index'
+import { Route as AdminPortfolioIndexRouteImport } from './routes/admin.portfolio.index'
 import { Route as AdminInsightsIndexRouteImport } from './routes/admin.insights.index'
 import { Route as ProjectsCategorySlugRouteImport } from './routes/projects.$category.$slug'
 import { Route as InsightsCategorySlugRouteImport } from './routes/insights.$category.$slug'
@@ -144,11 +144,6 @@ const AdminProfileRoute = AdminProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminPortfolioRoute = AdminPortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminPagesRoute = AdminPagesRouteImport.update({
   id: '/pages',
   path: '/pages',
@@ -194,6 +189,11 @@ const EnInsightsIndexRoute = EnInsightsIndexRouteImport.update({
   path: '/en/insights/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPortfolioIndexRoute = AdminPortfolioIndexRouteImport.update({
+  id: '/portfolio/',
+  path: '/portfolio/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminInsightsIndexRoute = AdminInsightsIndexRouteImport.update({
   id: '/insights/',
   path: '/insights/',
@@ -225,14 +225,14 @@ const AdminServicesIdRoute = AdminServicesIdRouteImport.update({
   getParentRoute: () => AdminServicesRoute,
 } as any)
 const AdminPortfolioNewRoute = AdminPortfolioNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminPortfolioRoute,
+  id: '/portfolio/new',
+  path: '/portfolio/new',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminPortfolioIdRoute = AdminPortfolioIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AdminPortfolioRoute,
+  id: '/portfolio/$id',
+  path: '/portfolio/$id',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminInsightsNewRoute = AdminInsightsNewRouteImport.update({
   id: '/insights/new',
@@ -288,7 +288,6 @@ export interface FileRoutesByFullPath {
   '/admin/media': typeof AdminMediaRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
-  '/admin/portfolio': typeof AdminPortfolioRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRouteWithChildren
@@ -312,6 +311,7 @@ export interface FileRoutesByFullPath {
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights/': typeof AdminInsightsIndexRoute
+  '/admin/portfolio/': typeof AdminPortfolioIndexRoute
   '/en/insights/': typeof EnInsightsIndexRoute
   '/en/projects/': typeof EnProjectsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
@@ -333,7 +333,6 @@ export interface FileRoutesByTo {
   '/admin/media': typeof AdminMediaRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
-  '/admin/portfolio': typeof AdminPortfolioRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRouteWithChildren
@@ -357,6 +356,7 @@ export interface FileRoutesByTo {
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights': typeof AdminInsightsIndexRoute
+  '/admin/portfolio': typeof AdminPortfolioIndexRoute
   '/en/insights': typeof EnInsightsIndexRoute
   '/en/projects': typeof EnProjectsIndexRoute
   '/insights/$category': typeof InsightsCategoryIndexRoute
@@ -380,7 +380,6 @@ export interface FileRoutesById {
   '/admin/media': typeof AdminMediaRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/pages': typeof AdminPagesRoute
-  '/admin/portfolio': typeof AdminPortfolioRouteWithChildren
   '/admin/profile': typeof AdminProfileRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRouteWithChildren
@@ -404,6 +403,7 @@ export interface FileRoutesById {
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights/': typeof AdminInsightsIndexRoute
+  '/admin/portfolio/': typeof AdminPortfolioIndexRoute
   '/en/insights/': typeof EnInsightsIndexRoute
   '/en/projects/': typeof EnProjectsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
@@ -428,7 +428,6 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/messages'
     | '/admin/pages'
-    | '/admin/portfolio'
     | '/admin/profile'
     | '/admin/seo'
     | '/admin/services'
@@ -452,6 +451,7 @@ export interface FileRouteTypes {
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
     | '/admin/insights/'
+    | '/admin/portfolio/'
     | '/en/insights/'
     | '/en/projects/'
     | '/insights/$category/'
@@ -473,7 +473,6 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/messages'
     | '/admin/pages'
-    | '/admin/portfolio'
     | '/admin/profile'
     | '/admin/seo'
     | '/admin/services'
@@ -497,6 +496,7 @@ export interface FileRouteTypes {
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
     | '/admin/insights'
+    | '/admin/portfolio'
     | '/en/insights'
     | '/en/projects'
     | '/insights/$category'
@@ -519,7 +519,6 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/messages'
     | '/admin/pages'
-    | '/admin/portfolio'
     | '/admin/profile'
     | '/admin/seo'
     | '/admin/services'
@@ -543,6 +542,7 @@ export interface FileRouteTypes {
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
     | '/admin/insights/'
+    | '/admin/portfolio/'
     | '/en/insights/'
     | '/en/projects/'
     | '/insights/$category/'
@@ -711,13 +711,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProfileRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/portfolio': {
-      id: '/admin/portfolio'
-      path: '/portfolio'
-      fullPath: '/admin/portfolio'
-      preLoaderRoute: typeof AdminPortfolioRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/pages': {
       id: '/admin/pages'
       path: '/pages'
@@ -781,6 +774,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnInsightsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/portfolio/': {
+      id: '/admin/portfolio/'
+      path: '/portfolio'
+      fullPath: '/admin/portfolio/'
+      preLoaderRoute: typeof AdminPortfolioIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/insights/': {
       id: '/admin/insights/'
       path: '/insights'
@@ -825,17 +825,17 @@ declare module '@tanstack/react-router' {
     }
     '/admin/portfolio/new': {
       id: '/admin/portfolio/new'
-      path: '/new'
+      path: '/portfolio/new'
       fullPath: '/admin/portfolio/new'
       preLoaderRoute: typeof AdminPortfolioNewRouteImport
-      parentRoute: typeof AdminPortfolioRoute
+      parentRoute: typeof AdminRoute
     }
     '/admin/portfolio/$id': {
       id: '/admin/portfolio/$id'
-      path: '/$id'
+      path: '/portfolio/$id'
       fullPath: '/admin/portfolio/$id'
       preLoaderRoute: typeof AdminPortfolioIdRouteImport
-      parentRoute: typeof AdminPortfolioRoute
+      parentRoute: typeof AdminRoute
     }
     '/admin/insights/new': {
       id: '/admin/insights/new'
@@ -896,20 +896,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AdminPortfolioRouteChildren {
-  AdminPortfolioIdRoute: typeof AdminPortfolioIdRoute
-  AdminPortfolioNewRoute: typeof AdminPortfolioNewRoute
-}
-
-const AdminPortfolioRouteChildren: AdminPortfolioRouteChildren = {
-  AdminPortfolioIdRoute: AdminPortfolioIdRoute,
-  AdminPortfolioNewRoute: AdminPortfolioNewRoute,
-}
-
-const AdminPortfolioRouteWithChildren = AdminPortfolioRoute._addFileChildren(
-  AdminPortfolioRouteChildren,
-)
-
 interface AdminServicesRouteChildren {
   AdminServicesIdRoute: typeof AdminServicesIdRoute
   AdminServicesNewRoute: typeof AdminServicesNewRoute
@@ -930,7 +916,6 @@ interface AdminRouteChildren {
   AdminMediaRoute: typeof AdminMediaRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminPagesRoute: typeof AdminPagesRoute
-  AdminPortfolioRoute: typeof AdminPortfolioRouteWithChildren
   AdminProfileRoute: typeof AdminProfileRoute
   AdminSeoRoute: typeof AdminSeoRoute
   AdminServicesRoute: typeof AdminServicesRouteWithChildren
@@ -939,7 +924,10 @@ interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminInsightsIdRoute: typeof AdminInsightsIdRoute
   AdminInsightsNewRoute: typeof AdminInsightsNewRoute
+  AdminPortfolioIdRoute: typeof AdminPortfolioIdRoute
+  AdminPortfolioNewRoute: typeof AdminPortfolioNewRoute
   AdminInsightsIndexRoute: typeof AdminInsightsIndexRoute
+  AdminPortfolioIndexRoute: typeof AdminPortfolioIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -948,7 +936,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMediaRoute: AdminMediaRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminPagesRoute: AdminPagesRoute,
-  AdminPortfolioRoute: AdminPortfolioRouteWithChildren,
   AdminProfileRoute: AdminProfileRoute,
   AdminSeoRoute: AdminSeoRoute,
   AdminServicesRoute: AdminServicesRouteWithChildren,
@@ -957,7 +944,10 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminInsightsIdRoute: AdminInsightsIdRoute,
   AdminInsightsNewRoute: AdminInsightsNewRoute,
+  AdminPortfolioIdRoute: AdminPortfolioIdRoute,
+  AdminPortfolioNewRoute: AdminPortfolioNewRoute,
   AdminInsightsIndexRoute: AdminInsightsIndexRoute,
+  AdminPortfolioIndexRoute: AdminPortfolioIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
