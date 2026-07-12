@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import type {
   ArticleStatus,
   FaqItemRow,
@@ -147,6 +148,16 @@ export function AdminArticleEditorView({ articleId }: Props) {
     }
   };
 
+  const uploadInline = async (file: File): Promise<string> => {
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `inline/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("insights-covers").upload(path, file, {
+      cacheControl: "31536000", upsert: false, contentType: file.type,
+    });
+    if (error) { setErr(error.message); return ""; }
+    return `/api/public/insights/cover/${path}`;
+  };
+
   const save = async (opts?: { publishNow?: boolean }) => {
     setSaving(true); setErr(null); setMsg(null);
     try {
@@ -255,11 +266,23 @@ export function AdminArticleEditorView({ articleId }: Props) {
             <Field label="المُلخّص (إنجليزي)">
               <textarea rows={3} value={form.excerpt_en} onChange={(e) => update("excerpt_en", e.target.value)} className={inpCls} dir="ltr" />
             </Field>
-            <Field label="المحتوى (عربي) — HTML (h2, h3, p, ul, blockquote, img…)">
-              <textarea rows={16} value={form.content_ar} onChange={(e) => update("content_ar", e.target.value)} className={`${inpCls} font-mono text-xs`} />
+            <Field label="المحتوى (عربي)">
+              <RichTextEditor
+                value={form.content_ar}
+                onChange={(html) => update("content_ar", html)}
+                dir="rtl"
+                placeholder="ابدأ الكتابة… استخدم شريط الأدوات للعناوين والقوائم والصور."
+                onImageUpload={uploadInline}
+              />
             </Field>
             <Field label="المحتوى (إنجليزي)">
-              <textarea rows={12} value={form.content_en} onChange={(e) => update("content_en", e.target.value)} className={`${inpCls} font-mono text-xs`} dir="ltr" />
+              <RichTextEditor
+                value={form.content_en}
+                onChange={(html) => update("content_en", html)}
+                dir="ltr"
+                placeholder="Start writing… use the toolbar for headings, lists, and images."
+                onImageUpload={uploadInline}
+              />
             </Field>
           </Section>
 

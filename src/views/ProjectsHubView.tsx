@@ -1,7 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { categories } from "@/lib/portfolio-data";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
+import p5 from "@/assets/portfolio/page_5.webp";
+import p22 from "@/assets/portfolio/page_22.webp";
+import p27 from "@/assets/portfolio/page_27.webp";
+import p34 from "@/assets/portfolio/page_34.webp";
+
+const categories = [
+  { slug: "branding", cover: p5, count: 8 },
+  { slug: "logos", cover: p22, count: 40 },
+  { slug: "profiles", cover: p27, count: 6 },
+  { slug: "social", cover: p34, count: 7 },
+];
 
 const catI18n: Record<string, { label: DictKey; desc: DictKey }> = {
   branding: { label: "cat_branding_label", desc: "cat_branding_desc" },
@@ -23,8 +33,8 @@ export function ProjectsHubView() {
       <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
         {categories.map((c, i) => {
           const meta = catI18n[c.slug];
-          const label = meta ? t(meta.label) : c.label;
-          const desc = meta ? t(meta.desc) : c.desc;
+          const label = meta ? t(meta.label) : c.slug;
+          const desc = meta ? t(meta.desc) : "";
           const idx = String(i + 1).padStart(2, "0");
           const href = lang === "ar" ? `/projects/${c.slug}` : `/en/projects/${c.slug}`;
           return (
