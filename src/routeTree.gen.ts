@@ -51,6 +51,7 @@ import { Route as EnProjectsCategoryIndexRouteImport } from './routes/en.project
 import { Route as EnInsightsCategoryIndexRouteImport } from './routes/en.insights.$category.index'
 import { Route as EnProjectsCategorySlugRouteImport } from './routes/en.projects.$category.$slug'
 import { Route as EnInsightsCategorySlugRouteImport } from './routes/en.insights.$category.$slug'
+import { Route as ApiPublicPortfolioCoverSplatRouteImport } from './routes/api/public/portfolio.cover.$'
 import { Route as ApiPublicInsightsCoverSplatRouteImport } from './routes/api/public/insights.cover.$'
 
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
@@ -263,6 +264,12 @@ const EnInsightsCategorySlugRoute = EnInsightsCategorySlugRouteImport.update({
   path: '/en/insights/$category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPortfolioCoverSplatRoute =
+  ApiPublicPortfolioCoverSplatRouteImport.update({
+    id: '/api/public/portfolio/cover/$',
+    path: '/api/public/portfolio/cover/$',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicInsightsCoverSplatRoute =
   ApiPublicInsightsCoverSplatRouteImport.update({
     id: '/api/public/insights/cover/$',
@@ -314,6 +321,7 @@ export interface FileRoutesByFullPath {
   '/en/insights/$category/': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
   '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
+  '/api/public/portfolio/cover/$': typeof ApiPublicPortfolioCoverSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -358,6 +366,7 @@ export interface FileRoutesByTo {
   '/en/insights/$category': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category': typeof EnProjectsCategoryIndexRoute
   '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
+  '/api/public/portfolio/cover/$': typeof ApiPublicPortfolioCoverSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -404,6 +413,7 @@ export interface FileRoutesById {
   '/en/insights/$category/': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
   '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
+  '/api/public/portfolio/cover/$': typeof ApiPublicPortfolioCoverSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -451,6 +461,7 @@ export interface FileRouteTypes {
     | '/en/insights/$category/'
     | '/en/projects/$category/'
     | '/api/public/insights/cover/$'
+    | '/api/public/portfolio/cover/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -495,6 +506,7 @@ export interface FileRouteTypes {
     | '/en/insights/$category'
     | '/en/projects/$category'
     | '/api/public/insights/cover/$'
+    | '/api/public/portfolio/cover/$'
   id:
     | '__root__'
     | '/'
@@ -540,6 +552,7 @@ export interface FileRouteTypes {
     | '/en/insights/$category/'
     | '/en/projects/$category/'
     | '/api/public/insights/cover/$'
+    | '/api/public/portfolio/cover/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -567,6 +580,7 @@ export interface RootRouteChildren {
   EnInsightsCategoryIndexRoute: typeof EnInsightsCategoryIndexRoute
   EnProjectsCategoryIndexRoute: typeof EnProjectsCategoryIndexRoute
   ApiPublicInsightsCoverSplatRoute: typeof ApiPublicInsightsCoverSplatRoute
+  ApiPublicPortfolioCoverSplatRoute: typeof ApiPublicPortfolioCoverSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -865,6 +879,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnInsightsCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/portfolio/cover/$': {
+      id: '/api/public/portfolio/cover/$'
+      path: '/api/public/portfolio/cover/$'
+      fullPath: '/api/public/portfolio/cover/$'
+      preLoaderRoute: typeof ApiPublicPortfolioCoverSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/insights/cover/$': {
       id: '/api/public/insights/cover/$'
       path: '/api/public/insights/cover/$'
@@ -966,6 +987,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnInsightsCategoryIndexRoute: EnInsightsCategoryIndexRoute,
   EnProjectsCategoryIndexRoute: EnProjectsCategoryIndexRoute,
   ApiPublicInsightsCoverSplatRoute: ApiPublicInsightsCoverSplatRoute,
+  ApiPublicPortfolioCoverSplatRoute: ApiPublicPortfolioCoverSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
