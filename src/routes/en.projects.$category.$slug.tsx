@@ -3,6 +3,15 @@ import { listPortfolio, getPortfolioBySlug } from "@/lib/portfolio.functions";
 import { ProjectDetailView } from "@/views/ProjectDetailView";
 
 export const Route = createFileRoute("/en/projects/$category/$slug")({
+  loader: async ({ params }) => {
+    if (params.category !== "branding") throw notFound();
+    const project = await getPortfolioBySlug({ data: { slug: params.slug } });
+    if (!project) throw notFound();
+    const all = await listPortfolio({ data: { category: "branding" } });
+    const idx = all.findIndex((p) => p.slug === project.slug);
+    const next = idx >= 0 ? all[(idx + 1) % all.length] : null;
+    return { project, next };
+  },
   head: ({ loaderData }) => {
     const p = loaderData?.project;
     const name = p?.name_en ?? "Project";
@@ -22,15 +31,6 @@ export const Route = createFileRoute("/en/projects/$category/$slug")({
       ],
       links: [{ rel: "canonical", href: path }],
     };
-  },
-  loader: async ({ params }) => {
-    if (params.category !== "branding") throw notFound();
-    const project = await getPortfolioBySlug({ data: { slug: params.slug } });
-    if (!project) throw notFound();
-    const all = await listPortfolio({ data: { category: "branding" } });
-    const idx = all.findIndex((p) => p.slug === project.slug);
-    const next = idx >= 0 ? all[(idx + 1) % all.length] : null;
-    return { project, next };
   },
   component: ProjectDetail,
 });
