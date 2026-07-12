@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import type {
   ArticleStatus,
   FaqItemRow,
