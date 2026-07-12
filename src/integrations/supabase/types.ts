@@ -487,6 +487,7 @@ export type Database = {
           name_ar: string
           name_en: string
           og_image_url: string | null
+          project_url: string | null
           published_at: string | null
           results_ar: string | null
           results_en: string | null
@@ -519,6 +520,7 @@ export type Database = {
           name_ar: string
           name_en: string
           og_image_url?: string | null
+          project_url?: string | null
           published_at?: string | null
           results_ar?: string | null
           results_en?: string | null
@@ -551,6 +553,7 @@ export type Database = {
           name_ar?: string
           name_en?: string
           og_image_url?: string | null
+          project_url?: string | null
           published_at?: string | null
           results_ar?: string | null
           results_en?: string | null

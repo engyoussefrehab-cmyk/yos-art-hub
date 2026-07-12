@@ -4,6 +4,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Pencil, Trash2, Star } from "lucide-react";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Row = {
   id: string;
@@ -22,6 +33,8 @@ export function AdminPortfolioListView() {
   const [q, setQ] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "draft" | "published">("all");
   const [err, setErr] = useState<string | null>(null);
+  const [toDelete, setToDelete] = useState<Row | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = async () => {
     setErr(null);
@@ -34,10 +47,18 @@ export function AdminPortfolioListView() {
   };
   useEffect(() => { load(); }, []);
 
-  const del = async (id: string, name: string) => {
-    if (!confirm(`حذف المشروع "${name}"؟`)) return;
-    const { error } = await supabase.from("portfolio_projects").delete().eq("id", id);
-    if (error) alert(error.message); else load();
+  const confirmDelete = async () => {
+    if (!toDelete) return;
+    setDeleting(true);
+    const { error } = await supabase.from("portfolio_projects").delete().eq("id", toDelete.id);
+    setDeleting(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("تم حذف المشروع");
+    setToDelete(null);
+    load();
   };
 
   const filtered = (rows ?? []).filter((r) => {
@@ -108,7 +129,7 @@ export function AdminPortfolioListView() {
                   <td className="p-3">
                     <div className="flex justify-end gap-1">
                       <Button asChild size="icon" variant="ghost"><Link to="/admin/portfolio/$id" params={{ id: r.id }}><Pencil className="h-4 w-4" /></Link></Button>
-                      <Button size="icon" variant="ghost" onClick={() => del(r.id, r.name_ar || r.slug)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                      <Button size="icon" variant="ghost" onClick={() => setToDelete(r)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
                     </div>
                   </td>
                 </tr>
@@ -117,6 +138,27 @@ export function AdminPortfolioListView() {
           </table>
         </div>
       )}
+
+      <AlertDialog open={!!toDelete} onOpenChange={(open) => !open && !deleting && setToDelete(null)}>
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>تأكيد حذف المشروع</AlertDialogTitle>
+            <AlertDialogDescription>
+              سيتم حذف المشروع "{toDelete?.name_ar || toDelete?.name_en || toDelete?.slug}" بشكل نهائي. لا يمكن التراجع عن هذا الإجراء.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>إلغاء</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => { e.preventDefault(); confirmDelete(); }}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? "جاري الحذف…" : "حذف نهائي"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
