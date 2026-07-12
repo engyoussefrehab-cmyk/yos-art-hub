@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HomeView } from "@/views/HomeView";
+import { listServices } from "@/lib/services.functions";
 
 export const Route = createFileRoute("/en/")({
+  loader: () => listServices().catch(() => []),
   head: () => ({
     meta: [
       { title: "Youssef Rehab — Visual Identity Designer in Saudi Arabia & UAE" },
@@ -29,5 +31,10 @@ export const Route = createFileRoute("/en/")({
       { rel: "alternate", hrefLang: "x-default", href: "/" },
     ],
   }),
-  component: HomeView,
+  component: HomeRoute,
 });
+
+function HomeRoute() {
+  const services = Route.useLoaderData();
+  return <HomeView services={services} />;
+}

@@ -4,13 +4,14 @@ import portfolioPdf from "@/assets/portfolio.pdf.asset.json";
 import { Testimonials } from "@/components/Testimonials";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
+import type { ServiceDTO } from "@/lib/services.functions";
 
-export function HomeView() {
+export function HomeView({ services = [] }: { services?: ServiceDTO[] }) {
   return (
     <>
       <Hero />
       <About />
-      <Services />
+      <Services items={services} />
       <Testimonials />
       <CTA />
     </>
@@ -127,16 +128,24 @@ function About() {
   );
 }
 
-function Services() {
-  const { t } = useLang();
-  const items: [DictKey, DictKey][] = [
+function Services({ items }: { items: ServiceDTO[] }) {
+  const { t, lang } = useLang();
+  const fallback: Array<{ title: string; desc: string }> = ([
     ["svc_1_t", "svc_1_d"],
     ["svc_2_t", "svc_2_d"],
     ["svc_3_t", "svc_3_d"],
     ["svc_4_t", "svc_4_d"],
     ["svc_5_t", "svc_5_d"],
     ["svc_6_t", "svc_6_d"],
-  ];
+  ] as [DictKey, DictKey][]).map(([tk, dk]) => ({ title: t(tk), desc: t(dk) }));
+
+  const list = items.length
+    ? items.map((s) => ({
+        title: lang === "ar" ? s.title_ar : s.title_en,
+        desc: lang === "ar" ? s.description_ar : s.description_en,
+      }))
+    : fallback;
+
   return (
     <section className="mx-auto max-w-7xl px-6 py-24">
       <div className="flex items-end justify-between gap-6 border-b border-border pb-8">
@@ -147,11 +156,11 @@ function Services() {
         <p className="hidden md:block max-w-md text-muted-foreground">{t("services_lede")}</p>
       </div>
       <div className="mt-12 grid grid-cols-1 gap-px bg-border md:grid-cols-2 lg:grid-cols-3">
-        {items.map(([tk, dk], i) => (
-          <div key={tk} className="group bg-background p-8 transition-colors hover:bg-cream">
+        {list.map((item, i) => (
+          <div key={i} className="group bg-background p-8 transition-colors hover:bg-cream">
             <div className="font-display text-6xl font-bold text-accent/20 group-hover:text-accent/40 transition-colors">{String(i + 1).padStart(2, "0")}</div>
-            <h3 className="mt-4 font-display text-2xl font-bold">{t(tk)}</h3>
-            <p className="mt-2 text-muted-foreground">{t(dk)}</p>
+            <h3 className="mt-4 font-display text-2xl font-bold">{item.title}</h3>
+            <p className="mt-2 text-muted-foreground">{item.desc}</p>
           </div>
         ))}
       </div>

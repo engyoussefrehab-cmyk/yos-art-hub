@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HomeView } from "@/views/HomeView";
+import { listServices } from "@/lib/services.functions";
 
 export const Route = createFileRoute("/")({
+  loader: () => listServices().catch(() => []),
   head: () => ({
     meta: [
       { title: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
@@ -28,5 +30,10 @@ export const Route = createFileRoute("/")({
       { rel: "alternate", hrefLang: "x-default", href: "/" },
     ],
   }),
-  component: HomeView,
+  component: HomeRoute,
 });
+
+function HomeRoute() {
+  const services = Route.useLoaderData();
+  return <HomeView services={services} />;
+}
