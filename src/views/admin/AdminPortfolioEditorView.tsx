@@ -224,7 +224,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success(opts?.publishNow ? "تم النشر" : "تم الحفظ");
-    if (isNew && data?.id) navigate({ to: "/admin/portfolio/$id", params: { id: data.id } });
+    navigate({ to: "/admin/portfolio" });
   };
 
   if (loading) return <div className="text-sm text-muted-foreground">جاري التحميل…</div>;
