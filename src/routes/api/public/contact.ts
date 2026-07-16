@@ -51,6 +51,22 @@ export const Route = createFileRoute("/api/public/contact")({
 
         const { name, email, subject, message } = parsed.data;
 
+        try {
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const { error: insertError } = await supabaseAdmin.from("contact_messages").insert({
+            name,
+            email,
+            subject,
+            message,
+            status: "unread",
+          });
+          if (insertError) {
+            console.error("contact_messages insert failed:", insertError);
+          }
+        } catch (e) {
+          console.error("contact_messages insert threw:", e);
+        }
+
         const html = `
           <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#ffffff;color:#111">
             <h2 style="margin:0 0 16px;color:#0b1a2b">رسالة جديدة من موقع YR Studio</h2>
