@@ -6,6 +6,9 @@ const schema = z.object({
   email: z.string().trim().email().max(255),
   subject: z.string().trim().min(2).max(150),
   message: z.string().trim().min(10).max(2000),
+  call_date: z.string().trim().max(20).optional().default(""),
+  call_time: z.string().trim().max(10).optional().default(""),
+  call_tz: z.string().trim().max(120).optional().default(""),
   website: z.string().optional(), // honeypot
 });
 
