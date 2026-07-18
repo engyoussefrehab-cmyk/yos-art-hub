@@ -54,11 +54,15 @@ export function LatestProjectsSlider({
     };
   }, [items.length]);
 
-  // Auto-play continuous scroll
+  // Auto-play continuous scroll (respects prefers-reduced-motion)
   useEffect(() => {
     if (!autoPlay || items.length < 2) return;
     const el = scrollerRef.current;
     if (!el) return;
+    const mq = typeof window !== "undefined" && window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
+    if (mq?.matches) return; // user prefers reduced motion — no autoplay
     let raf = 0;
     const step = () => {
       if (!pausedRef.current && el) {
@@ -74,7 +78,12 @@ export function LatestProjectsSlider({
     // Start from a neutral position for RTL
     if (isAr) el.scrollLeft = el.scrollWidth / 2;
     raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    const onChange = () => { if (mq?.matches) cancelAnimationFrame(raf); };
+    mq?.addEventListener?.("change", onChange);
+    return () => {
+      cancelAnimationFrame(raf);
+      mq?.removeEventListener?.("change", onChange);
+    };
   }, [autoPlay, items.length, isAr, speed]);
 
   const pause = () => { pausedRef.current = true; };
