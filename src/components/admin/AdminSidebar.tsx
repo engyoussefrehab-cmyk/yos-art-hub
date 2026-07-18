@@ -123,6 +123,7 @@ export function AdminSidebar({ email }: { email?: string | null }) {
 
       <SidebarContent>
         <NavGroup label={t(A.content_group)} items={contentItems} current={currentPath} />
+        <NavGroup label={t(A.design_group)} items={designItems} current={currentPath} />
         <NavGroup label={t(A.taxonomy_group)} items={taxonomyItems} current={currentPath} />
         <NavGroup label={t(A.ops_group)} items={opsItems} current={currentPath} />
         <NavGroup label={t(A.settings_group)} items={settingsItems} current={currentPath} />
