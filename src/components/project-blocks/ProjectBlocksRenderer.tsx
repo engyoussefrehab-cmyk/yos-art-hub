@@ -59,7 +59,8 @@ function BlockRender({ block: b, lang }: { block: ProjectBlock; lang: Lang }) {
       return (
         <section className={`mx-auto ${width} px-6 py-8`}>
           <figure className="overflow-hidden rounded-3xl border border-border bg-cream">
-            <img src={b.url} alt={caption || ""} loading="lazy" decoding="async" className="w-full" />
+            <ZoomableImage src={b.url} alt={caption || ""} />
+
             {caption && (
               <figcaption className="border-t border-border bg-background/70 px-6 py-3 text-sm text-muted-foreground">
                 {caption}
