@@ -186,8 +186,13 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    background: rgba(212, 162, 74, 0.35);
     color: var(--color-foreground);
+  }
+  @supports (background: color-mix(in oklab, red, blue)) {
+    ::selection {
+      background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    }
   }
 }
 
