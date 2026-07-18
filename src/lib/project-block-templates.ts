@@ -10,7 +10,13 @@ export type TemplateId =
   | "stats-impact"
   | "brand-guidelines"
   | "before-after"
-  | "process-3-steps";
+  | "process-3-steps"
+  | "full-brand-identity"
+  | "packaging-project"
+  | "digital-marketing"
+  | "logo-showcase"
+  | "company-profile"
+  | "social-media-campaign";
 
 export type TemplateMeta = {
   id: TemplateId;
@@ -27,6 +33,12 @@ export const BLOCK_TEMPLATES: TemplateMeta[] = [
   { id: "brand-guidelines", label_ar: "دليل الهوية", label_en: "Brand Guidelines", desc_ar: "لوحة ألوان + طباعة (صورتان)." },
   { id: "before-after", label_ar: "قبل / بعد", label_en: "Before / After", desc_ar: "صورتان جنبًا إلى جنب مع عنوان." },
   { id: "process-3-steps", label_ar: "منهجية العمل (3 خطوات)", label_en: "3-Step Process", desc_ar: "عناوين فرعية مع فقرات." },
+  { id: "full-brand-identity", label_ar: "هوية بصرية موسّعة", label_en: "Full Brand Identity", desc_ar: "بطل + منهجية + ألوان + طباعة + مخرجات + معرض + شهادة + التالي." },
+  { id: "packaging-project", label_ar: "مشروع تغليف منتج", label_en: "Product Packaging", desc_ar: "بطل + تحدي + قبل/بعد + معرض تغليف + إحصائيات." },
+  { id: "digital-marketing", label_ar: "حملة تسويق رقمي", label_en: "Digital Marketing Campaign", desc_ar: "بطل + استراتيجية + قنوات + إحصائيات نمو + فيديو + شهادة." },
+  { id: "logo-showcase", label_ar: "عرض شعار", label_en: "Logo Showcase", desc_ar: "بطل + شعار كبير + نسخ الشعار + ألوان + تطبيقات." },
+  { id: "company-profile", label_ar: "ملف تعريفي لشركة", label_en: "Company Profile", desc_ar: "بطل + بيانات المشروع + مخرجات + معرض صفحات + رابط تحميل." },
+  { id: "social-media-campaign", label_ar: "حملة سوشيال ميديا", label_en: "Social Media Campaign", desc_ar: "بطل + أهداف + معرض بوستات + إحصائيات تفاعل + شهادة." },
 ];
 
 function withPatch<T extends ProjectBlock>(type: T["type"], patch: Partial<T>): T {
