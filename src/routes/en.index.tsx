@@ -1,9 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HomeView } from "@/views/HomeView";
 import { listServices } from "@/lib/services.functions";
+import { listPortfolio } from "@/lib/portfolio.functions";
 
 export const Route = createFileRoute("/en/")({
-  loader: () => listServices().catch(() => []),
+  loader: async () => {
+    const [services, projects] = await Promise.all([
+      listServices().catch(() => []),
+      listPortfolio({ data: {} }).catch(() => []),
+    ]);
+    return { services, projects };
+  },
   head: () => ({
     meta: [
       { title: "Youssef Rehab — Visual Identity Designer in Saudi Arabia & UAE" },
