@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import {
   Upload, X, ArrowUp, ArrowDown, Star, ExternalLink, Trash2, AlertCircle,
-  Plus, Palette, Tag as TagIcon,
+  Plus, Palette, Tag as TagIcon, Check, Loader2,
 } from "lucide-react";
 import { ProjectBlocksEditor } from "@/components/admin/ProjectBlocksEditor";
 import { normalizeBlocks, type ProjectBlock } from "@/lib/project-blocks";
