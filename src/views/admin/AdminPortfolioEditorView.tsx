@@ -459,7 +459,10 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       solution_en: f.solution_en || null,
       results_ar: f.results_ar || null,
       results_en: f.results_en || null,
-      services_used: f.services_used.split(",").map((s) => s.trim()).filter(Boolean),
+      // services_used is uuid[] in DB; the free-text UI field stores its raw value
+      // in `industry`/tags elsewhere. Never send arbitrary strings into a uuid column.
+      services_used: [],
+
       deliverables: {
         ar: f.deliverables_ar.split("\n").map((s) => s.trim()).filter(Boolean),
         en: f.deliverables_en.split("\n").map((s) => s.trim()).filter(Boolean),
