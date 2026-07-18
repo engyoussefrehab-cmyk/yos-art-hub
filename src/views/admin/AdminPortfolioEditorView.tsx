@@ -160,6 +160,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
   const [autoState, setAutoState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
   const [dirty, setDirty] = useState(false);
+  const [actionMessage, setActionMessage] = useState<{ type: "success" | "error" | "info"; text: string } | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -401,29 +402,26 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
     if (f.behance_url && !isValidUrl(f.behance_url)) e.behance_url = "رابط Behance غير صحيح";
     if (f.figma_url && !isValidUrl(f.figma_url)) e.figma_url = "رابط Figma غير صحيح";
     if (f.year && !/^\d{4}$/.test(f.year)) e.year = "أدخل سنة من 4 أرقام";
-    const publishing = opts?.publishing || f.status === "published" || f.status === "scheduled";
+    const publishing = !!opts?.publishing;
     if (publishing) {
-      if (!f.og_image_url && !f.hero_image_url) e.og_image_url = "أضف صورة غلاف أو صورة رئيسية قبل النشر";
       if (!f.category_id) e.category_id = "اختر تصنيف المشروع قبل النشر";
-      const seoTitle = f.seo_title_ar || f.seo_title_en;
-      if (!seoTitle.trim()) e.seo_title_ar = "عنوان SEO مطلوب قبل النشر";
-      const seoDesc = f.seo_description_ar || f.seo_description_en;
-      if (!seoDesc.trim()) e.seo_description_ar = "وصف SEO مطلوب قبل النشر";
-      else if (seoDesc.trim().length < 50) e.seo_description_ar = "وصف SEO قصير جدًا (50 حرفًا فأكثر)";
       if (f.status === "scheduled" && !f.published_at) e.published_at = "حدّد تاريخ النشر";
     }
     return e;
   };
 
-  const save = async (opts?: { publishNow?: boolean; draft?: boolean }) => {
+  const save = async (opts?: { publishNow?: boolean; draft?: boolean; stay?: boolean; preview?: boolean }): Promise<string | null> => {
     const publishing = !!opts?.publishNow;
     const draft = !!opts?.draft;
     const eObj = validate({ publishing });
     setErrors(eObj);
+    setActionMessage(null);
     if (Object.keys(eObj).length > 0) {
       const msgs = Object.values(eObj).filter(Boolean) as string[];
+      const message = `لا يمكن ${publishing ? "النشر" : "الحفظ"} — ${msgs.length} حقل ناقص:\n• ${msgs.join("\n• ")}`;
+      setActionMessage({ type: "error", text: message });
       toast.error(
-        `لا يمكن ${publishing ? "النشر" : "الحفظ"} — ${msgs.length} حقل ناقص:\n• ${msgs.join("\n• ")}`,
+        message,
         { duration: 8000 },
       );
       // Scroll to the error summary so the user sees exactly what's missing
@@ -432,7 +430,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
         else window.scrollTo({ top: 0, behavior: "smooth" });
       });
-      return;
+      return null;
     }
     const slug = f.slug || autoSlug;
 
@@ -501,9 +499,13 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       setSaving(false);
       if (error.code === "23505" || /duplicate/i.test(error.message)) {
         setErrors({ slug: "الرابط مستخدم بالفعل — اختر رابطًا مختلفًا" });
+        setActionMessage({ type: "error", text: "الرابط مستخدم بالفعل — اختر رابطًا مختلفًا" });
         toast.error("الرابط مستخدم بالفعل");
-      } else toast.error(error.message);
-      return;
+      } else {
+        setActionMessage({ type: "error", text: error.message });
+        toast.error(error.message);
+      }
+      return null;
     }
     const projectId = (saved as any)?.id ?? id;
     // Sync tags junction
@@ -516,14 +518,58 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       }
     }
     setSaving(false);
-    toast.success(publishing ? "تم النشر" : draft ? "تم حفظ المسودة" : "تم الحفظ");
-    navigate({ to: "/admin/portfolio" });
+    const successText = opts?.preview
+      ? "تم حفظ أحدث التعديلات وتجهيز المعاينة"
+      : publishing
+        ? "تم النشر — المشروع أصبح ظاهرًا في الموقع"
+        : draft
+          ? "تم حفظ المشروع كمسودة"
+          : "تم حفظ التعديلات";
+    setF((s) => ({
+      ...s,
+      status: nextStatus,
+      published_at: payload.published_at ? toLocalInput(payload.published_at) : nextStatus === "draft" ? "" : s.published_at,
+    }));
+    setDirty(false);
+    setAutoState("saved");
+    setLastSavedAt(new Date());
+    setActionMessage({ type: "success", text: successText });
+    toast.success(successText);
+    if (!id && projectId) navigate({ to: "/admin/portfolio/$id", params: { id: projectId } });
+    return projectId ?? null;
+  };
+
+  const previewProject = async () => {
+    const popup = window.open("about:blank", "_blank");
+    const projectId = await save({ stay: true, preview: true });
+    if (!projectId) {
+      if (popup) popup.close();
+      return;
+    }
+    const previewPath = `/preview/projects/${projectId}`;
+    if (popup) popup.location.href = previewPath;
+    else window.location.assign(previewPath);
   };
 
   if (loading) return <div className="text-sm text-muted-foreground">جاري التحميل…</div>;
 
-  const previewUrl = f.slug && f.category_slug ? `/projects/${f.category_slug}/${f.slug}` : null;
   const errorSummary = Object.values(errors).filter(Boolean) as string[];
+  const actionButtons = (
+    <>
+      <Button variant="ghost" size="sm" onClick={previewProject} disabled={saving}>
+        <ExternalLink className="ms-1 h-4 w-4" /> معاينة
+      </Button>
+      <Button variant="outline" onClick={() => save({ draft: true })} disabled={saving}>
+        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null} حفظ كمسودة
+      </Button>
+      <Button variant="outline" onClick={() => save()} disabled={saving}>
+        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null} {id ? "تحديث" : "حفظ"}
+      </Button>
+      <Button onClick={() => save({ publishNow: true })} disabled={saving}>
+        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null} {f.status === "published" ? "تحديث النشر" : "نشر الآن"}
+      </Button>
+    </>
+  );
   const fieldErr = (k: keyof ProjectForm) =>
     errors[k] ? (
       <p className="flex items-center gap-1 text-xs text-destructive">
@@ -551,20 +597,24 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
               {autoState === "idle" && dirty && <span>تغييرات غير محفوظة</span>}
             </span>
           )}
-          {previewUrl && f.status === "published" && (
-            <Button asChild variant="ghost" size="sm">
-              <a href={previewUrl} target="_blank" rel="noreferrer">
-                <ExternalLink className="ms-1 h-4 w-4" /> معاينة
-              </a>
-            </Button>
-          )}
-          <Button variant="outline" onClick={() => save({ draft: true })} disabled={saving}>حفظ كمسودة</Button>
-          <Button variant="outline" onClick={() => save()} disabled={saving}>{id ? "تحديث" : "حفظ"}</Button>
-          <Button onClick={() => save({ publishNow: true })} disabled={saving}>
-            {f.status === "published" ? "تحديث النشر" : "نشر الآن"}
-          </Button>
+          {actionButtons}
         </div>
       </div>
+
+      {actionMessage && (
+        <div
+          role="status"
+          className={`rounded-xl border px-4 py-3 text-sm ${
+            actionMessage.type === "success"
+              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+              : actionMessage.type === "error"
+                ? "border-destructive/40 bg-destructive/10 text-destructive"
+                : "border-accent/40 bg-accent/10 text-foreground"
+          }`}
+        >
+          {actionMessage.text}
+        </div>
+      )}
 
       {errorSummary.length > 0 && (
         <div
@@ -966,6 +1016,15 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
           </label>
         </div>
       </section>
+
+      <div className="sticky bottom-0 z-20 -mx-4 border-t border-border/70 bg-background/90 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
+          <div className="text-xs text-muted-foreground">
+            {dirty ? "توجد تغييرات غير محفوظة" : lastSavedAt ? `آخر حفظ ${lastSavedAt.toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}` : "جاهز للحفظ"}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">{actionButtons}</div>
+        </div>
+      </div>
     </div>
   );
 }
