@@ -107,16 +107,16 @@ export function LatestProjectsSlider({
 
   return (
     <section className={compact ? "" : "mt-16"}>
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-widest text-accent">
+      <div className="flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <div className={`font-semibold uppercase tracking-widest text-accent ${compact ? "text-[10px]" : "text-xs"}`}>
             {t("مختارات جديدة", "Fresh work")}
           </div>
-          <h2 className={`mt-2 font-display font-bold ${compact ? "text-2xl md:text-3xl" : "text-3xl md:text-4xl"}`}>
+          <h2 className={`mt-1 font-display font-bold ${compact ? "text-xl md:text-2xl" : "text-3xl md:text-4xl"}`}>
             {t("أحدث المشاريع", "Latest projects")}
           </h2>
         </div>
-        <div className="flex gap-2">
+        <div className="flex shrink-0 gap-2">
           <button
             type="button"
             aria-label={t("السابق", "Previous")}
@@ -124,9 +124,9 @@ export function LatestProjectsSlider({
             onMouseLeave={resume}
             onClick={() => scrollBy(-1)}
             disabled={!autoPlay && !canPrev}
-            className="rounded-full border border-border bg-background p-2 text-foreground transition-opacity disabled:opacity-30 hover:bg-muted"
+            className={`rounded-full border border-border bg-background text-foreground transition-opacity disabled:opacity-30 hover:bg-muted ${compact ? "p-1.5" : "p-2"}`}
           >
-            {isAr ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            {isAr ? <ChevronRight className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} /> : <ChevronLeft className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />}
           </button>
           <button
             type="button"
@@ -135,12 +135,13 @@ export function LatestProjectsSlider({
             onMouseLeave={resume}
             onClick={() => scrollBy(1)}
             disabled={!autoPlay && !canNext}
-            className="rounded-full border border-border bg-background p-2 text-foreground transition-opacity disabled:opacity-30 hover:bg-muted"
+            className={`rounded-full border border-border bg-background text-foreground transition-opacity disabled:opacity-30 hover:bg-muted ${compact ? "p-1.5" : "p-2"}`}
           >
-            {isAr ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            {isAr ? <ChevronLeft className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} /> : <ChevronRight className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />}
           </button>
         </div>
       </div>
+
 
       <div
         ref={scrollerRef}
