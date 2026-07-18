@@ -60,8 +60,9 @@ export function ProjectDetailView({ project, next }: { project: PortfolioDTO; ne
       {project.cover && (
         <section className="mx-auto max-w-7xl px-6 py-16">
           <div className="overflow-hidden rounded-3xl border border-border bg-cream">
-            <img src={project.cover} alt={name} loading="eager" decoding="async" className="w-full" />
+            <ZoomableImage src={project.cover} alt={name} eager />
           </div>
+
         </section>
       )}
 
