@@ -14,6 +14,8 @@ import {
   type BlockType,
   type ProjectBlock,
 } from "@/lib/project-blocks";
+import { BLOCK_TEMPLATES, buildTemplate, type TemplateId } from "@/lib/project-block-templates";
+
 
 const ICONS: Record<BlockType, React.ComponentType<{ className?: string }>> = {
   heading: HeadingIcon,
