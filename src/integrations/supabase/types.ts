@@ -474,23 +474,40 @@ export type Database = {
       }
       portfolio_projects: {
         Row: {
+          behance_url: string | null
+          brand_colors: Json
+          category_id: string | null
           category_slug: string | null
           challenge_ar: string | null
           challenge_en: string | null
           client: string | null
+          client_country: string | null
+          completed_at: string | null
           cover_media_id: string | null
           created_at: string
+          deliverables: Json
+          duration: string | null
+          embeds: Json
           featured: boolean
+          figma_url: string | null
           gallery: Json
+          hero_image_url: string | null
           id: string
           industry: string | null
+          is_archived: boolean
+          is_confidential: boolean
+          is_pinned: boolean
+          layout_blocks: Json
           name_ar: string
           name_en: string
           og_image_url: string | null
+          pdf_url: string | null
           project_url: string | null
           published_at: string | null
           results_ar: string | null
           results_en: string | null
+          role: string | null
+          scheduled_at: string | null
           seo_description_ar: string | null
           seo_description_en: string | null
           seo_keywords: string[] | null
@@ -503,27 +520,53 @@ export type Database = {
           solution_ar: string | null
           solution_en: string | null
           sort_order: number
+          stats: Json
           status: string
+          tags_list: string[]
+          team: string | null
+          testimonial: Json | null
+          thumbnail_url: string | null
+          typography: Json
           updated_at: string
+          videos: Json
+          views_count: number
+          year: number | null
         }
         Insert: {
+          behance_url?: string | null
+          brand_colors?: Json
+          category_id?: string | null
           category_slug?: string | null
           challenge_ar?: string | null
           challenge_en?: string | null
           client?: string | null
+          client_country?: string | null
+          completed_at?: string | null
           cover_media_id?: string | null
           created_at?: string
+          deliverables?: Json
+          duration?: string | null
+          embeds?: Json
           featured?: boolean
+          figma_url?: string | null
           gallery?: Json
+          hero_image_url?: string | null
           id?: string
           industry?: string | null
+          is_archived?: boolean
+          is_confidential?: boolean
+          is_pinned?: boolean
+          layout_blocks?: Json
           name_ar: string
           name_en: string
           og_image_url?: string | null
+          pdf_url?: string | null
           project_url?: string | null
           published_at?: string | null
           results_ar?: string | null
           results_en?: string | null
+          role?: string | null
+          scheduled_at?: string | null
           seo_description_ar?: string | null
           seo_description_en?: string | null
           seo_keywords?: string[] | null
@@ -536,27 +579,53 @@ export type Database = {
           solution_ar?: string | null
           solution_en?: string | null
           sort_order?: number
+          stats?: Json
           status?: string
+          tags_list?: string[]
+          team?: string | null
+          testimonial?: Json | null
+          thumbnail_url?: string | null
+          typography?: Json
           updated_at?: string
+          videos?: Json
+          views_count?: number
+          year?: number | null
         }
         Update: {
+          behance_url?: string | null
+          brand_colors?: Json
+          category_id?: string | null
           category_slug?: string | null
           challenge_ar?: string | null
           challenge_en?: string | null
           client?: string | null
+          client_country?: string | null
+          completed_at?: string | null
           cover_media_id?: string | null
           created_at?: string
+          deliverables?: Json
+          duration?: string | null
+          embeds?: Json
           featured?: boolean
+          figma_url?: string | null
           gallery?: Json
+          hero_image_url?: string | null
           id?: string
           industry?: string | null
+          is_archived?: boolean
+          is_confidential?: boolean
+          is_pinned?: boolean
+          layout_blocks?: Json
           name_ar?: string
           name_en?: string
           og_image_url?: string | null
+          pdf_url?: string | null
           project_url?: string | null
           published_at?: string | null
           results_ar?: string | null
           results_en?: string | null
+          role?: string | null
+          scheduled_at?: string | null
           seo_description_ar?: string | null
           seo_description_en?: string | null
           seo_keywords?: string[] | null
@@ -569,10 +638,26 @@ export type Database = {
           solution_ar?: string | null
           solution_en?: string | null
           sort_order?: number
+          stats?: Json
           status?: string
+          tags_list?: string[]
+          team?: string | null
+          testimonial?: Json | null
+          thumbnail_url?: string | null
+          typography?: Json
           updated_at?: string
+          videos?: Json
+          views_count?: number
+          year?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "portfolio_projects_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "project_categories"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "portfolio_projects_cover_media_id_fkey"
             columns: ["cover_media_id"]
@@ -606,6 +691,63 @@ export type Database = {
           display_name?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      project_categories: {
+        Row: {
+          cover_image_url: string | null
+          created_at: string
+          description_ar: string | null
+          description_en: string | null
+          icon: string | null
+          id: string
+          is_hidden: boolean
+          name_ar: string
+          name_en: string
+          seo_description_ar: string | null
+          seo_description_en: string | null
+          seo_title_ar: string | null
+          seo_title_en: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          cover_image_url?: string | null
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          icon?: string | null
+          id?: string
+          is_hidden?: boolean
+          name_ar: string
+          name_en: string
+          seo_description_ar?: string | null
+          seo_description_en?: string | null
+          seo_title_ar?: string | null
+          seo_title_en?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          cover_image_url?: string | null
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          icon?: string | null
+          id?: string
+          is_hidden?: boolean
+          name_ar?: string
+          name_en?: string
+          seo_description_ar?: string | null
+          seo_description_en?: string | null
+          seo_title_ar?: string | null
+          seo_title_en?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
