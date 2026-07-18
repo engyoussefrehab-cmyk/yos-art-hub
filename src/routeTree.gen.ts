@@ -35,6 +35,7 @@ import { Route as AdminPageSeoRouteImport } from './routes/admin.page-seo'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminMenusRouteImport } from './routes/admin.menus'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
+import { Route as AdminIndexingRouteImport } from './routes/admin.indexing'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
@@ -190,6 +191,11 @@ const AdminMediaRoute = AdminMediaRouteImport.update({
   path: '/media',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminIndexingRoute = AdminIndexingRouteImport.update({
+  id: '/indexing',
+  path: '/indexing',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -322,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/indexing': typeof AdminIndexingRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -373,6 +380,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/indexing': typeof AdminIndexingRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -426,6 +434,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/indexing': typeof AdminIndexingRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -480,6 +489,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
+    | '/admin/indexing'
     | '/admin/media'
     | '/admin/menus'
     | '/admin/messages'
@@ -531,6 +541,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
+    | '/admin/indexing'
     | '/admin/media'
     | '/admin/menus'
     | '/admin/messages'
@@ -583,6 +594,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
+    | '/admin/indexing'
     | '/admin/media'
     | '/admin/menus'
     | '/admin/messages'
@@ -841,6 +853,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMediaRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/indexing': {
+      id: '/admin/indexing'
+      path: '/indexing'
+      fullPath: '/admin/indexing'
+      preLoaderRoute: typeof AdminIndexingRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
@@ -1029,6 +1048,7 @@ const AdminServicesRouteWithChildren = AdminServicesRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminIndexingRoute: typeof AdminIndexingRoute
   AdminMediaRoute: typeof AdminMediaRoute
   AdminMenusRoute: typeof AdminMenusRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
@@ -1053,6 +1073,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminIndexingRoute: AdminIndexingRoute,
   AdminMediaRoute: AdminMediaRoute,
   AdminMenusRoute: AdminMenusRoute,
   AdminMessagesRoute: AdminMessagesRoute,
