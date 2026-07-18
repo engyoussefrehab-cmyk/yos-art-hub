@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { normalizeBlocks, type ProjectBlock } from "@/lib/project-blocks";
 
 function publicClient() {
   return createClient<Database>(
@@ -29,6 +30,7 @@ export type PortfolioDTO = {
   gallery: string[];
   featured: boolean;
   sort_order: number;
+  blocks: ProjectBlock[];
 };
 
 function parseBullets(s: string | null): string[] {
@@ -61,6 +63,7 @@ function mapRow(r: any): PortfolioDTO {
     gallery,
     featured: r.featured,
     sort_order: r.sort_order ?? 0,
+    blocks: normalizeBlocks(r.layout_blocks),
   };
 }
 

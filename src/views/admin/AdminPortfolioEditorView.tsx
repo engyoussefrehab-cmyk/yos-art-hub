@@ -11,6 +11,8 @@ import {
   Upload, X, ArrowUp, ArrowDown, Star, ExternalLink, Trash2, AlertCircle,
   Plus, Palette, Tag as TagIcon,
 } from "lucide-react";
+import { ProjectBlocksEditor } from "@/components/admin/ProjectBlocksEditor";
+import { normalizeBlocks, type ProjectBlock } from "@/lib/project-blocks";
 
 type CategoryOpt = { id: string; slug: string; name_ar: string; name_en: string };
 type TagOpt = { id: string; slug: string; label_ar: string; label_en: string };
@@ -67,6 +69,7 @@ type ProjectForm = {
   status: "draft" | "published" | "scheduled" | "archived";
   published_at: string;
   sort_order: number;
+  blocks: ProjectBlock[];
 };
 
 const empty: ProjectForm = {
@@ -92,6 +95,7 @@ const empty: ProjectForm = {
   featured: false, is_pinned: false, is_confidential: false, is_archived: false,
   status: "draft", published_at: "",
   sort_order: 0,
+  blocks: [],
 };
 
 const MAX_FILE_MB = 10;
@@ -221,6 +225,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
           status: (r.status ?? "draft") as any,
           published_at: toLocalInput(r.published_at),
           sort_order: r.sort_order ?? 0,
+          blocks: normalizeBlocks(r.layout_blocks),
         });
       }
       setLoading(false);
@@ -393,6 +398,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       is_archived: f.is_archived,
       sort_order: Number(f.sort_order) || 0,
       status: nextStatus,
+      layout_blocks: f.blocks,
     };
     if (publishing) payload.published_at = new Date().toISOString();
     else if (nextStatus === "scheduled" && f.published_at) payload.published_at = new Date(f.published_at).toISOString();
@@ -659,6 +665,21 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
             ))}
           </div>
         )}
+      </section>
+
+      {/* Modular page builder */}
+      <section className="grid gap-4 rounded-2xl border border-border/70 bg-card p-6">
+        <div>
+          <h2 className="text-sm font-semibold text-muted-foreground">صفحة المشروع — بناء البلوكات</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            رتّب محتوى صفحة المشروع بلوكًا بلوك: عناوين، نصوص، صور، معارض، اقتباسات، ألوان، فيديو، إحصائيات، وأكثر.
+          </p>
+        </div>
+        <ProjectBlocksEditor
+          blocks={f.blocks}
+          onChange={(next) => set("blocks", next)}
+          uploadImage={uploadToPortfolio}
+        />
       </section>
 
       {/* Story */}
