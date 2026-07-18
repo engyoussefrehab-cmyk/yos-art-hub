@@ -437,13 +437,22 @@ function SiteNav() {
   const { t, lang } = useLang();
   const [open, setOpen] = useState(false);
   const base = lang === "ar" ? "" : "/en";
-  const links = [
-    { to: base || "/", label: t("nav_home") },
-    { to: `${base}/projects`, label: t("nav_projects") },
-    { to: `${base}/insights`, label: t("nav_insights") },
-    { to: `${base}/packages`, label: t("nav_packages") },
-    { to: `${base}/contact`, label: t("nav_contact") },
-  ] as const;
+  const cmsMenu = useCmsMenu("header");
+  const defaults = [
+    { to: base || "/", label: t("nav_home"), external: false, newTab: false },
+    { to: `${base}/projects`, label: t("nav_projects"), external: false, newTab: false },
+    { to: `${base}/insights`, label: t("nav_insights"), external: false, newTab: false },
+    { to: `${base}/packages`, label: t("nav_packages"), external: false, newTab: false },
+    { to: `${base}/contact`, label: t("nav_contact"), external: false, newTab: false },
+  ];
+  const links = cmsMenu.length > 0
+    ? cmsMenu.map((m) => ({
+        to: m.url.startsWith("/") && !m.is_external && lang === "en" && !m.url.startsWith("/en") ? `/en${m.url === "/" ? "" : m.url}` : m.url,
+        label: (lang === "en" ? m.label_en : m.label_ar) || m.label_ar,
+        external: m.is_external,
+        newTab: m.open_in_new_tab,
+      }))
+    : defaults;
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
@@ -452,14 +461,19 @@ function SiteNav() {
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              activeOptions={{ exact: l.to === "/" || l.to === "/en" }}
-              activeProps={{ className: "text-foreground font-semibold" }}
-              inactiveProps={{ className: "text-muted-foreground" }}
-              className="text-sm transition-colors hover:text-foreground"
-            >{l.label}</Link>
+            l.external ? (
+              <a key={l.to} href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined}
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground">{l.label}</a>
+            ) : (
+              <Link
+                key={l.to}
+                to={l.to}
+                activeOptions={{ exact: l.to === "/" || l.to === "/en" }}
+                activeProps={{ className: "text-foreground font-semibold" }}
+                inactiveProps={{ className: "text-muted-foreground" }}
+                className="text-sm transition-colors hover:text-foreground"
+              >{l.label}</Link>
+            )
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-3">
@@ -483,7 +497,12 @@ function SiteNav() {
         <div className="md:hidden border-t border-border bg-background">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-4">
             {links.map((l) => (
-              <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="text-sm text-muted-foreground">{l.label}</Link>
+              l.external ? (
+                <a key={l.to} href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined}
+                  onClick={() => setOpen(false)} className="text-sm text-muted-foreground">{l.label}</a>
+              ) : (
+                <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="text-sm text-muted-foreground">{l.label}</Link>
+              )
             ))}
           </div>
         </div>
