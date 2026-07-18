@@ -99,24 +99,24 @@ export function LatestProjectsSlider({
   if (items.length === 0) return null;
 
   const cardWidth = compact
-    ? "w-[75%] flex-none snap-start sm:w-[45%] lg:w-[28%]"
+    ? "w-[70%] flex-none snap-start sm:w-[38%] md:w-[30%] lg:w-[22%]"
     : "w-[85%] flex-none snap-start sm:w-[60%] lg:w-[38%]";
-  const aspect = compact ? "aspect-[5/4]" : "aspect-[4/3]";
-  const titleClass = compact ? "text-lg" : "text-2xl";
-  const pad = compact ? "p-4" : "p-6";
+  const aspect = compact ? "aspect-[4/3]" : "aspect-[4/3]";
+  const titleClass = compact ? "text-sm sm:text-base" : "text-2xl";
+  const pad = compact ? "p-3 sm:p-4" : "p-6";
 
   return (
     <section className={compact ? "" : "mt-16"}>
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-widest text-accent">
+      <div className="flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <div className={`font-semibold uppercase tracking-widest text-accent ${compact ? "text-[10px]" : "text-xs"}`}>
             {t("مختارات جديدة", "Fresh work")}
           </div>
-          <h2 className={`mt-2 font-display font-bold ${compact ? "text-2xl md:text-3xl" : "text-3xl md:text-4xl"}`}>
+          <h2 className={`mt-1 font-display font-bold ${compact ? "text-xl md:text-2xl" : "text-3xl md:text-4xl"}`}>
             {t("أحدث المشاريع", "Latest projects")}
           </h2>
         </div>
-        <div className="flex gap-2">
+        <div className="flex shrink-0 gap-2">
           <button
             type="button"
             aria-label={t("السابق", "Previous")}
@@ -124,9 +124,9 @@ export function LatestProjectsSlider({
             onMouseLeave={resume}
             onClick={() => scrollBy(-1)}
             disabled={!autoPlay && !canPrev}
-            className="rounded-full border border-border bg-background p-2 text-foreground transition-opacity disabled:opacity-30 hover:bg-muted"
+            className={`rounded-full border border-border bg-background text-foreground transition-opacity disabled:opacity-30 hover:bg-muted ${compact ? "p-1.5" : "p-2"}`}
           >
-            {isAr ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            {isAr ? <ChevronRight className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} /> : <ChevronLeft className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />}
           </button>
           <button
             type="button"
@@ -135,12 +135,13 @@ export function LatestProjectsSlider({
             onMouseLeave={resume}
             onClick={() => scrollBy(1)}
             disabled={!autoPlay && !canNext}
-            className="rounded-full border border-border bg-background p-2 text-foreground transition-opacity disabled:opacity-30 hover:bg-muted"
+            className={`rounded-full border border-border bg-background text-foreground transition-opacity disabled:opacity-30 hover:bg-muted ${compact ? "p-1.5" : "p-2"}`}
           >
-            {isAr ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            {isAr ? <ChevronLeft className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} /> : <ChevronRight className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />}
           </button>
         </div>
       </div>
+
 
       <div
         ref={scrollerRef}
@@ -150,7 +151,7 @@ export function LatestProjectsSlider({
         onTouchEnd={resume}
         onPointerDown={pause}
         onPointerUp={resume}
-        className={`mt-6 flex snap-x ${autoPlay ? "" : "snap-mandatory"} gap-5 overflow-x-auto ${autoPlay ? "" : "scroll-smooth"} pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
+        className={`${compact ? "mt-4 gap-3 sm:gap-4" : "mt-6 gap-5"} flex snap-x ${autoPlay ? "" : "snap-mandatory"} overflow-x-auto ${autoPlay ? "" : "scroll-smooth"} pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
       >
         {loop.map((p, i) => {
           const name = isAr ? p.name_ar : p.name_en;
@@ -163,7 +164,7 @@ export function LatestProjectsSlider({
               key={`${p.slug}-${i}`}
               to={href}
               aria-hidden={i >= items.length ? true : undefined}
-              className={`group relative overflow-hidden rounded-3xl border border-border bg-cream transition-all hover:-translate-y-1 hover:shadow-xl ${cardWidth}`}
+              className={`group relative overflow-hidden rounded-2xl border border-border bg-cream transition-all hover:-translate-y-1 hover:shadow-xl ${cardWidth}`}
             >
               <div className={`${aspect} overflow-hidden bg-muted`}>
                 {p.cover && (
@@ -176,14 +177,16 @@ export function LatestProjectsSlider({
                 )}
               </div>
               <div className={pad}>
-                <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
-                  {p.industry && <span>{p.industry}</span>}
-                  {p.year && <span>· {p.year}</span>}
-                </div>
-                <h3 className={`mt-2 font-display font-bold ${titleClass}`}>{name}</h3>
+                {!compact && (
+                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
+                    {p.industry && <span>{p.industry}</span>}
+                    {p.year && <span>· {p.year}</span>}
+                  </div>
+                )}
+                <h3 className={`${compact ? "" : "mt-2"} truncate font-display font-bold ${titleClass}`}>{name}</h3>
                 {!compact && short && <p className="mt-2 line-clamp-2 text-muted-foreground">{short}</p>}
               </div>
-              {p.featured && (
+              {p.featured && !compact && (
                 <span className="absolute end-4 top-4 rounded-full bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-accent-foreground">
                   {t("مميّز", "Featured")}
                 </span>
