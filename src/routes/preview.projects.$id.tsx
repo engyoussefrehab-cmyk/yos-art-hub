@@ -118,7 +118,7 @@ function mapPreviewProject(row: any): PortfolioDTO {
     gallery,
     featured: !!row.featured,
     sort_order: row.sort_order ?? 0,
-    blocks: normalizeBlocks(row.layout_blocks),
+    blocks: synthesizeDefaultBlocks(row),
     seo_title_ar: row.seo_title_ar ?? null,
     seo_title_en: row.seo_title_en ?? null,
     seo_description_ar: row.seo_description_ar ?? null,
