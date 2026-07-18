@@ -74,6 +74,19 @@ export type SpacerBlock = BlockBase & {
   size?: "sm" | "md" | "lg";
 };
 
+export type BeforeAfterBlock = BlockBase & {
+  type: "before-after";
+  before_url: string;
+  after_url: string;
+  label_before_ar?: string;
+  label_before_en?: string;
+  label_after_ar?: string;
+  label_after_en?: string;
+  orientation?: "horizontal" | "vertical";
+  caption_ar?: string;
+  caption_en?: string;
+};
+
 export type ProjectBlock =
   | TextBlock
   | HeadingBlock
@@ -85,7 +98,8 @@ export type ProjectBlock =
   | VideoBlock
   | StatsBlock
   | CalloutBlock
-  | SpacerBlock;
+  | SpacerBlock
+  | BeforeAfterBlock;
 
 export type BlockType = ProjectBlock["type"];
 
@@ -101,6 +115,7 @@ export const BLOCK_LABELS: Record<BlockType, { ar: string; en: string }> = {
   stats: { ar: "إحصائيات", en: "Stats" },
   callout: { ar: "تنبيه بارز", en: "Callout" },
   spacer: { ar: "فاصل", en: "Spacer" },
+  "before-after": { ar: "قبل / بعد", en: "Before / After" },
 };
 
 export function newBlock(type: BlockType): ProjectBlock {
