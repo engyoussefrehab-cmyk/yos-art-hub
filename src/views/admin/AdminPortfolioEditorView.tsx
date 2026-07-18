@@ -529,7 +529,15 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
             محرر موسّع: تصنيف، بلد، سنة، وسائط، ألوان، طباعة، ووسوم.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {id && (
+            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              {autoState === "saving" && (<><Loader2 className="h-3.5 w-3.5 animate-spin" /> حفظ تلقائي…</>)}
+              {autoState === "saved" && lastSavedAt && (<><Check className="h-3.5 w-3.5 text-emerald-600" /> حُفظ {lastSavedAt.toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}</>)}
+              {autoState === "error" && (<><AlertCircle className="h-3.5 w-3.5 text-destructive" /> فشل الحفظ التلقائي</>)}
+              {autoState === "idle" && dirty && <span>تغييرات غير محفوظة</span>}
+            </span>
+          )}
           {previewUrl && f.status === "published" && (
             <Button asChild variant="ghost" size="sm">
               <a href={previewUrl} target="_blank" rel="noreferrer">
