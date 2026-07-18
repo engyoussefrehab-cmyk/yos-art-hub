@@ -1,14 +1,19 @@
 import { Link, Outlet } from "@tanstack/react-router";
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { AdminSignInCard, BootstrapAdminCard } from "@/views/admin/AdminAuthCards";
+import { AdminReauthGate, REAUTH_KEY } from "@/views/admin/AdminReauthGate";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { A, useAdminLang } from "@/i18n/admin-lang";
 
 function AdminShell() {
   const auth = useAdminAuth();
   const { dir, t } = useAdminLang();
+  const [reauthed, setReauthed] = useState<boolean>(() =>
+    typeof window !== "undefined" && sessionStorage.getItem(REAUTH_KEY) === "1",
+  );
 
   if (auth.status === "loading") {
     return (
@@ -20,6 +25,15 @@ function AdminShell() {
   if (auth.status === "signed-out") return <AdminSignInCard />;
   if (auth.status === "signed-in-not-admin")
     return <BootstrapAdminCard onDone={() => window.location.reload()} />;
+
+  if (!reauthed) {
+    return (
+      <AdminReauthGate
+        email={auth.session.user.email ?? ""}
+        onSuccess={() => setReauthed(true)}
+      />
+    );
+  }
 
   return (
     <div dir={dir} className="min-h-screen bg-background">
