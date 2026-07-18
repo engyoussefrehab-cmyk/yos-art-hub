@@ -4,6 +4,15 @@ import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import { ProjectBlocksRenderer } from "@/components/project-blocks/ProjectBlocksRenderer";
 import { ZoomableImage } from "@/components/ZoomableImage";
 
+const CAT_LABELS: Record<string, { ar: string; en: string }> = {
+  branding: { ar: "الهوية البصرية", en: "Visual Identity" },
+  logos: { ar: "الشعارات", en: "Logos" },
+  profiles: { ar: "ملفات الشركات", en: "Company Profiles" },
+  social: { ar: "سوشيال ميديا", en: "Social Media" },
+  presentations: { ar: "العروض التقديمية", en: "Presentations" },
+  packaging: { ar: "التغليف", en: "Packaging" },
+};
+
 export function ProjectDetailView({ project, next }: { project: PortfolioDTO; next: PortfolioDTO | null }) {
   const { t, lang } = useLang();
   const name = lang === "ar" ? project.name_ar : project.name_en;
@@ -12,9 +21,15 @@ export function ProjectDetailView({ project, next }: { project: PortfolioDTO; ne
   const approach = lang === "ar" ? project.approach_ar : project.approach_en;
   const value = lang === "ar" ? project.value_ar : project.value_en;
 
+  const catSlug = project.category_slug ?? "branding";
+  const catLabel = CAT_LABELS[catSlug]?.[lang === "ar" ? "ar" : "en"] ?? catSlug;
+
   const projectsHref = lang === "ar" ? "/projects" : "/en/projects";
-  const brandingHref = lang === "ar" ? "/projects/branding" : "/en/projects/branding";
-  const nextHref = next ? (lang === "ar" ? `/projects/branding/${next.slug}` : `/en/projects/branding/${next.slug}`) : brandingHref;
+  const categoryHref = lang === "ar" ? `/projects/${catSlug}` : `/en/projects/${catSlug}`;
+  const nextCatSlug = next?.category_slug ?? catSlug;
+  const nextHref = next
+    ? (lang === "ar" ? `/projects/${nextCatSlug}/${next.slug}` : `/en/projects/${nextCatSlug}/${next.slug}`)
+    : categoryHref;
   const nextName = next ? (lang === "ar" ? next.name_ar : next.name_en) : "";
   const arrow = lang === "ar" ? "←" : "→";
 
@@ -25,14 +40,14 @@ export function ProjectDetailView({ project, next }: { project: PortfolioDTO; ne
           <nav className="mb-10 flex items-center gap-2 text-sm text-muted-foreground">
             <Link to={projectsHref} className="hover:text-foreground">{t("crumb_projects")}</Link>
             <span>/</span>
-            <Link to={brandingHref} className="hover:text-foreground">{t("cat_branding_label")}</Link>
+            <Link to={categoryHref} className="hover:text-foreground">{catLabel}</Link>
             <span>/</span>
             <span className="text-foreground">{name}</span>
           </nav>
           <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
             <div className="md:col-span-7">
               <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
-                <span>{t("proj_kind")}</span>
+                <span>{catLabel}</span>
                 <span className="h-px w-8 bg-border" />
                 <span>{project.industry ?? ""}</span>
               </div>
@@ -45,11 +60,11 @@ export function ProjectDetailView({ project, next }: { project: PortfolioDTO; ne
               <dl className="grid grid-cols-2 gap-6 rounded-2xl border border-border bg-background p-6">
                 <div>
                   <dt className="text-xs uppercase tracking-widest text-muted-foreground">{t("proj_specialty")}</dt>
-                  <dd className="mt-1 font-semibold">{t("proj_kind")}</dd>
+                  <dd className="mt-1 font-semibold">{catLabel}</dd>
                 </div>
                 <div>
                   <dt className="text-xs uppercase tracking-widest text-muted-foreground">{t("proj_type")}</dt>
-                  <dd className="mt-1 font-semibold">Logo & Identity</dd>
+                  <dd className="mt-1 font-semibold">{project.industry || catLabel}</dd>
                 </div>
               </dl>
             </div>
