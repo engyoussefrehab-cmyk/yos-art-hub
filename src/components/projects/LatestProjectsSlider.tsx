@@ -151,7 +151,7 @@ export function LatestProjectsSlider({
         onTouchEnd={resume}
         onPointerDown={pause}
         onPointerUp={resume}
-        className={`mt-6 flex snap-x ${autoPlay ? "" : "snap-mandatory"} gap-5 overflow-x-auto ${autoPlay ? "" : "scroll-smooth"} pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
+        className={`${compact ? "mt-4 gap-3 sm:gap-4" : "mt-6 gap-5"} flex snap-x ${autoPlay ? "" : "snap-mandatory"} overflow-x-auto ${autoPlay ? "" : "scroll-smooth"} pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
       >
         {loop.map((p, i) => {
           const name = isAr ? p.name_ar : p.name_en;
