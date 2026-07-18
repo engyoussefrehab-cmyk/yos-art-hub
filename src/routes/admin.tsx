@@ -4,14 +4,16 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { useAdminAuth } from "@/lib/admin-auth";
 import { AdminSignInCard, BootstrapAdminCard } from "@/views/admin/AdminAuthCards";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { A, useAdminLang } from "@/i18n/admin-lang";
 
 function AdminShell() {
   const auth = useAdminAuth();
+  const { dir, t } = useAdminLang();
 
   if (auth.status === "loading") {
     return (
-      <div className="flex min-h-[70vh] items-center justify-center text-sm text-muted-foreground" dir="rtl">
-        جاري التحميل…
+      <div className="flex min-h-[70vh] items-center justify-center text-sm text-muted-foreground" dir={dir}>
+        {dir === "rtl" ? "جاري التحميل…" : "Loading…"}
       </div>
     );
   }
@@ -20,7 +22,7 @@ function AdminShell() {
     return <BootstrapAdminCard onDone={() => window.location.reload()} />;
 
   return (
-    <div dir="rtl" className="min-h-screen bg-background">
+    <div dir={dir} className="min-h-screen bg-background">
       <SidebarProvider defaultOpen>
         <div className="flex min-h-screen w-full">
           <AdminSidebar email={auth.session.user.email} />
@@ -29,7 +31,7 @@ function AdminShell() {
               <div className="flex items-center gap-2">
                 <SidebarTrigger />
                 <Link to="/admin" className="text-sm font-semibold">
-                  لوحة التحكم
+                  {t(A.cms_subtitle)}
                 </Link>
               </div>
               <div className="text-xs text-muted-foreground truncate max-w-[45%]">
@@ -45,6 +47,7 @@ function AdminShell() {
     </div>
   );
 }
+
 
 export const Route = createFileRoute("/admin")({
   ssr: false,

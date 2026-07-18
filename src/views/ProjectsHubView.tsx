@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
-import type { PortfolioDTO } from "@/lib/portfolio.functions";
+import type { PortfolioDTO, CategoryDTO } from "@/lib/portfolio.functions";
 import { LatestProjectsSlider } from "@/components/projects/LatestProjectsSlider";
 import { ProjectsBrowser } from "@/components/projects/ProjectsBrowser";
 import p5 from "@/assets/portfolio/page_5.webp";
@@ -9,14 +9,16 @@ import p22 from "@/assets/portfolio/page_22.webp";
 import p27 from "@/assets/portfolio/page_27.webp";
 import p34 from "@/assets/portfolio/page_34.webp";
 
-const categories = [
-  { slug: "branding", cover: p5, count: 8 },
-  { slug: "logos", cover: p22, count: 40 },
-  { slug: "profiles", cover: p27, count: 6 },
-  { slug: "social", cover: p34, count: 7 },
-];
+// Fallback covers/copy for the four core categories (used only if the
+// category row in the CMS has no cover_image_url / description).
+const FALLBACK_COVERS: Record<string, string> = {
+  branding: p5,
+  logos: p22,
+  profiles: p27,
+  social: p34,
+};
 
-const catI18n: Record<string, { label: DictKey; desc: DictKey }> = {
+const FALLBACK_I18N: Record<string, { label: DictKey; desc: DictKey }> = {
   branding: { label: "cat_branding_label", desc: "cat_branding_desc" },
   logos: { label: "cat_logos_label", desc: "cat_logos_desc" },
   profiles: { label: "cat_profiles_label", desc: "cat_profiles_desc" },
@@ -25,12 +27,15 @@ const catI18n: Record<string, { label: DictKey; desc: DictKey }> = {
 
 export function ProjectsHubView({
   projects = [],
+  categories = [],
   routeId,
 }: {
   projects?: PortfolioDTO[];
+  categories?: CategoryDTO[];
   routeId: "/projects/" | "/en/projects/";
 }) {
   const { t, lang } = useLang();
+
   return (
     <section className="mx-auto max-w-7xl px-6 py-20">
       <header className="max-w-3xl">
@@ -43,9 +48,11 @@ export function ProjectsHubView({
 
       <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
         {categories.map((c, i) => {
-          const meta = catI18n[c.slug];
-          const label = meta ? t(meta.label) : c.slug;
-          const desc = meta ? t(meta.desc) : "";
+          const fallbackMeta = FALLBACK_I18N[c.slug];
+          const label = lang === "ar" ? c.name_ar || c.name_en : c.name_en || c.name_ar;
+          const dbDesc = lang === "ar" ? c.description_ar : c.description_en;
+          const desc = dbDesc || (fallbackMeta ? t(fallbackMeta.desc) : "");
+          const cover = c.cover_image_url || FALLBACK_COVERS[c.slug] || FALLBACK_COVERS.branding;
           const idx = String(i + 1).padStart(2, "0");
           const href = lang === "ar" ? `/projects/${c.slug}` : `/en/projects/${c.slug}`;
           return (
@@ -55,15 +62,15 @@ export function ProjectsHubView({
               className="group relative overflow-hidden rounded-3xl border border-border bg-cream transition-all hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="aspect-[16/10] overflow-hidden">
-                <img src={c.cover} alt={label} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <img src={cover} alt={label} loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
               <div className="p-8">
                 <div className="flex items-center justify-between">
                   <div className="text-xs uppercase tracking-widest text-muted-foreground">{idx}</div>
-                  <div className="rounded-full bg-background px-3 py-1 text-xs text-muted-foreground">{c.count}+ {t("projects_items")}</div>
+                  <div className="rounded-full bg-background px-3 py-1 text-xs text-muted-foreground">{c.project_count}+ {t("projects_items")}</div>
                 </div>
                 <h2 className="mt-3 font-display text-3xl font-bold">{label}</h2>
-                <p className="mt-2 text-muted-foreground">{desc}</p>
+                {desc && <p className="mt-2 text-muted-foreground">{desc}</p>}
                 <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent">
                   {t("projects_view_section")} <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
                 </div>
