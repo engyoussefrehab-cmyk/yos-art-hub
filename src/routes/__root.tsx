@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import logoFull from "@/assets/logo-full.png.asset.json";
 import { useLang, detectLang } from "@/i18n/use-lang";
+import { useCmsMenu, useCmsSettings } from "@/hooks/use-cms-data";
 
 function NotFoundComponent() {
   const { t, lang } = useLang();
