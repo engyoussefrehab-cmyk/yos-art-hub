@@ -93,12 +93,12 @@ function NavButton({ direction, onClick }: { direction: "prev" | "next"; onClick
 }
 
 
-function Slider() {
+function Slider({ items: base }: { items: Item[] }) {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const stateRef = useRef({ paused: false, isDragging: false, resumeTimer: null as ReturnType<typeof setTimeout> | null });
   // Duplicate items to enable seamless infinite loop
-  const items = [...testimonials, ...testimonials];
+  const items = [...base, ...base];
 
   const wrap = useCallback(() => {
     const scroller = scrollerRef.current;
