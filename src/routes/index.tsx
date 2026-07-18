@@ -41,6 +41,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeRoute() {
-  const services = Route.useLoaderData();
-  return <HomeView services={services} />;
+  const { services, projects } = Route.useLoaderData();
+  return <HomeView services={services} projects={projects} />;
 }
