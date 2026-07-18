@@ -1,3 +1,4 @@
+import { useRef, useState, useEffect } from "react";
 import type { ProjectBlock } from "@/lib/project-blocks";
 import { ZoomableImage } from "@/components/ZoomableImage";
 
