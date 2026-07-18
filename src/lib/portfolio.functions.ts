@@ -30,6 +30,7 @@ export type PortfolioDTO = {
   gallery: string[];
   featured: boolean;
   sort_order: number;
+  blocks: ProjectBlock[];
 };
 
 function parseBullets(s: string | null): string[] {
