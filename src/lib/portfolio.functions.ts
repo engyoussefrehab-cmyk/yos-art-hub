@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { normalizeBlocks, type ProjectBlock } from "@/lib/project-blocks";
+import { normalizeBlocks, synthesizeDefaultBlocks, type ProjectBlock } from "@/lib/project-blocks";
 
 function publicClient() {
   return createClient<Database>(
@@ -31,6 +31,11 @@ export type PortfolioDTO = {
   featured: boolean;
   sort_order: number;
   blocks: ProjectBlock[];
+  seo_title_ar: string | null;
+  seo_title_en: string | null;
+  seo_description_ar: string | null;
+  seo_description_en: string | null;
+  og_image_url: string | null;
   country: string | null;
   year: number | null;
   tags: string[];
@@ -67,7 +72,12 @@ function mapRow(r: any): PortfolioDTO {
     gallery,
     featured: r.featured,
     sort_order: r.sort_order ?? 0,
-    blocks: normalizeBlocks(r.layout_blocks),
+    blocks: synthesizeDefaultBlocks(r),
+    seo_title_ar: r.seo_title_ar ?? null,
+    seo_title_en: r.seo_title_en ?? null,
+    seo_description_ar: r.seo_description_ar ?? null,
+    seo_description_en: r.seo_description_en ?? null,
+    og_image_url: r.og_image_url ?? null,
     country: r.client_country ?? null,
     year: r.year ?? null,
     tags: Array.isArray(r.tags_list) ? r.tags_list.filter((t: any) => typeof t === "string") : [],

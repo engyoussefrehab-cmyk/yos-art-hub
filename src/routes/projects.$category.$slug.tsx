@@ -16,18 +16,22 @@ export const Route = createFileRoute("/projects/$category/$slug")({
     const p = loaderData?.project;
     const name = p?.name_ar ?? "مشروع";
     const short = p?.short_ar ?? "تفاصيل المشروع.";
-    const title = p?.industry ? `${name} — ${p.industry}` : `${name} — يوسف رحاب`;
+    const title = p?.seo_title_ar || (p?.industry ? `${name} — ${p.industry}` : `${name} — يوسف رحاب`);
+    const description = p?.seo_description_ar || short;
     const path = `/projects/${p?.category_slug ?? "branding"}/${p?.slug ?? ""}`;
+    const ogImage = p?.og_image_url || p?.cover;
     return {
       meta: [
         { title },
-        { name: "description", content: short },
+        { name: "description", content: description },
         { name: "keywords", content: `${name}, هوية بصرية, تصميم شعار, يوسف رحاب` },
         { property: "og:title", content: title },
-        { property: "og:description", content: short },
+        { property: "og:description", content: description },
         { property: "og:url", content: path },
         { property: "og:type", content: "article" },
-        ...(p?.cover ? [{ property: "og:image", content: p.cover }] : []),
+        ...(ogImage ? [{ property: "og:image", content: ogImage }] : []),
+        ...(ogImage ? [{ name: "twitter:image", content: ogImage }] : []),
+        { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [{ rel: "canonical", href: path }],
     };

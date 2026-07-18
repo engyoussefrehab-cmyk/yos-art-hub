@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { ProjectDetailView } from "@/views/ProjectDetailView";
-import { normalizeBlocks } from "@/lib/project-blocks";
+import { synthesizeDefaultBlocks } from "@/lib/project-blocks";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 
 type PreviewState =
@@ -118,7 +118,12 @@ function mapPreviewProject(row: any): PortfolioDTO {
     gallery,
     featured: !!row.featured,
     sort_order: row.sort_order ?? 0,
-    blocks: normalizeBlocks(row.layout_blocks),
+    blocks: synthesizeDefaultBlocks(row),
+    seo_title_ar: row.seo_title_ar ?? null,
+    seo_title_en: row.seo_title_en ?? null,
+    seo_description_ar: row.seo_description_ar ?? null,
+    seo_description_en: row.seo_description_en ?? null,
+    og_image_url: row.og_image_url ?? null,
     country: row.client_country ?? null,
     year: row.year ?? null,
     tags: Array.isArray(row.tags_list) ? row.tags_list.filter((tag: any) => typeof tag === "string") : [],
