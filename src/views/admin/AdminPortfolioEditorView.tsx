@@ -540,6 +540,12 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
   };
 
   const previewProject = async () => {
+    // Validate BEFORE opening a popup so we never leave a blank tab behind.
+    const eObj = validate({ publishing: false });
+    if (Object.keys(eObj).length > 0) {
+      await save({ stay: true, preview: true }); // will surface errors via toast + summary
+      return;
+    }
     const popup = window.open("about:blank", "_blank");
     const projectId = await save({ stay: true, preview: true });
     if (!projectId) {
@@ -550,6 +556,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
     if (popup) popup.location.href = previewPath;
     else window.location.assign(previewPath);
   };
+
 
   if (loading) return <div className="text-sm text-muted-foreground">جاري التحميل…</div>;
 
