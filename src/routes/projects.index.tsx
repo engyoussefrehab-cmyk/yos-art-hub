@@ -32,11 +32,18 @@ export const Route = createFileRoute("/projects/")({
     ],
     links: [{ rel: "canonical", href: "/projects" }],
   }),
-  loader: () => listPortfolio({ data: {} }),
+  loader: async () => {
+    const [projects, categories] = await Promise.all([
+      listPortfolio({ data: {} }),
+      listCategories(),
+    ]);
+    return { projects, categories };
+  },
   component: Page,
 });
 
 function Page() {
-  const projects = Route.useLoaderData();
-  return <ProjectsHubView projects={projects} routeId="/projects/" />;
+  const { projects, categories } = Route.useLoaderData();
+  return <ProjectsHubView projects={projects} categories={categories} routeId="/projects/" />;
 }
+
