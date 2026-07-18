@@ -420,7 +420,20 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
     const draft = !!opts?.draft;
     const eObj = validate({ publishing });
     setErrors(eObj);
-    if (Object.keys(eObj).length > 0) { toast.error("راجع الحقول المطلوبة"); return; }
+    if (Object.keys(eObj).length > 0) {
+      const msgs = Object.values(eObj).filter(Boolean) as string[];
+      toast.error(
+        `لا يمكن ${publishing ? "النشر" : "الحفظ"} — ${msgs.length} حقل ناقص:\n• ${msgs.join("\n• ")}`,
+        { duration: 8000 },
+      );
+      // Scroll to the error summary so the user sees exactly what's missing
+      requestAnimationFrame(() => {
+        const el = document.getElementById("editor-error-summary");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      return;
+    }
     const slug = f.slug || autoSlug;
 
     setSaving(true);
