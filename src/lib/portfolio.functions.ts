@@ -31,6 +31,10 @@ export type PortfolioDTO = {
   featured: boolean;
   sort_order: number;
   blocks: ProjectBlock[];
+  country: string | null;
+  year: number | null;
+  tags: string[];
+  published_at: string | null;
 };
 
 function parseBullets(s: string | null): string[] {
@@ -42,8 +46,8 @@ function mapRow(r: any): PortfolioDTO {
   const gallery: string[] = Array.isArray(r.gallery)
     ? r.gallery.map((g: any) => (typeof g === "string" ? g : g?.url)).filter(Boolean)
     : [];
-  const cover = r.og_image_url || gallery[0] || "";
-  const mockup = gallery[1] || gallery[0] || cover;
+  const cover = r.thumbnail_url || r.og_image_url || gallery[0] || "";
+  const mockup = r.hero_image_url || gallery[1] || gallery[0] || cover;
   return {
     slug: r.slug,
     name_ar: r.name_ar,
@@ -64,8 +68,13 @@ function mapRow(r: any): PortfolioDTO {
     featured: r.featured,
     sort_order: r.sort_order ?? 0,
     blocks: normalizeBlocks(r.layout_blocks),
+    country: r.client_country ?? null,
+    year: r.year ?? null,
+    tags: Array.isArray(r.tags_list) ? r.tags_list.filter((t: any) => typeof t === "string") : [],
+    published_at: r.published_at ?? null,
   };
 }
+
 
 export const listPortfolio = createServerFn({ method: "GET" })
   .inputValidator((d: { category?: string }) => d)
