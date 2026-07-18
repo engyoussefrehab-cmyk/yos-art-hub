@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -59,6 +60,11 @@ import { Route as EnInsightsCategorySlugRouteImport } from './routes/en.insights
 import { Route as ApiPublicPortfolioCoverSplatRouteImport } from './routes/api/public/portfolio.cover.$'
 import { Route as ApiPublicInsightsCoverSplatRouteImport } from './routes/api/public/insights.cover.$'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
   id: '/rss.xml',
   path: '/rss.xml',
@@ -313,6 +319,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/media': typeof AdminMediaRoute
@@ -363,6 +370,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/media': typeof AdminMediaRoute
@@ -415,6 +423,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/media': typeof AdminMediaRoute
@@ -468,6 +477,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/packages'
     | '/rss.xml'
+    | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
     | '/admin/media'
@@ -518,6 +528,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/packages'
     | '/rss.xml'
+    | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
     | '/admin/media'
@@ -569,6 +580,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/packages'
     | '/rss.xml'
+    | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
     | '/admin/media'
@@ -621,6 +633,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   PackagesRoute: typeof PackagesRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   EnContactRoute: typeof EnContactRoute
   EnPackagesRoute: typeof EnPackagesRoute
   EnRssDotxmlRoute: typeof EnRssDotxmlRoute
@@ -646,6 +659,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rss.xml': {
       id: '/rss.xml'
       path: '/rss.xml'
@@ -1062,6 +1082,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   PackagesRoute: PackagesRoute,
   RssDotxmlRoute: RssDotxmlRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   EnContactRoute: EnContactRoute,
   EnPackagesRoute: EnPackagesRoute,
   EnRssDotxmlRoute: EnRssDotxmlRoute,

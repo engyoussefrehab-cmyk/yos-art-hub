@@ -109,6 +109,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+      { name: "googlebot", content: "index, follow" },
       { title: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
       { name: "description", content: "مصمم هوية بصرية استراتيجي لعلامات السعودية والإمارات والخليج — 8+ سنوات خبرة و250+ علامة تجارية." },
       { name: "author", content: "Youssef Rehab" },
