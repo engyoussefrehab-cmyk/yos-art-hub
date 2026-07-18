@@ -27,6 +27,7 @@ export function ProjectBlocksRenderer({
 }
 
 function BlockRender({ block: b, lang }: { block: ProjectBlock; lang: Lang }) {
+  if (b.enabled === false) return null;
   switch (b.type) {
     case "heading": {
       const text = pick(b.text_ar, b.text_en, lang);
