@@ -252,7 +252,20 @@ function SliderNav({ step }: { step: (dir: 1 | -1) => void }) {
 
 
 export function Testimonials() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const rows = useCmsTestimonials();
+  const items = useMemo<Item[]>(() => {
+    if (rows.length > 0) {
+      return rows.map((r) => ({
+        name: (lang === "en" ? r.name_en : r.name_ar) || r.name_ar,
+        project: (lang === "en" ? r.role_en : r.role_ar) || r.role_ar || "",
+        quote: (lang === "en" ? r.text_en : r.text_ar) || r.text_ar,
+        rating: r.rating || 5,
+      }));
+    }
+    return staticTestimonials as unknown as Item[];
+  }, [rows, lang]);
+  const count = rows.length > 0 ? rows.length : testimonialStats.count;
   return (
     <section className="border-y border-border bg-cream" id="testimonials">
       <div className="mx-auto max-w-7xl px-6 py-24">
@@ -272,13 +285,13 @@ export function Testimonials() {
             </div>
             <div className="h-10 w-px bg-border" />
             <div>
-              <div className="font-display text-3xl font-bold">+{testimonialStats.count}</div>
+              <div className="font-display text-3xl font-bold">+{count}</div>
               <div className="text-xs text-muted-foreground">{t("t_verified")}</div>
             </div>
           </div>
         </div>
 
-        <Slider />
+        <Slider items={items} />
       </div>
     </section>
   );
