@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useRef } from "react";
-import { testimonials, testimonialStats } from "@/lib/testimonials";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { testimonials as staticTestimonials, testimonialStats } from "@/lib/testimonials";
 import { useLang } from "@/i18n/use-lang";
+import { useCmsTestimonials } from "@/hooks/use-cms-data";
+
+type Item = { name: string; project: string; quote: string; rating: number };
 
 
 function Stars({ n }: { n: number }) {
@@ -32,7 +35,7 @@ function QuoteMark() {
   );
 }
 
-function Card({ t: item }: { t: (typeof testimonials)[number] }) {
+function Card({ t: item }: { t: Item }) {
   const { t, lang } = useLang();
   return (
     <article
@@ -90,12 +93,12 @@ function NavButton({ direction, onClick }: { direction: "prev" | "next"; onClick
 }
 
 
-function Slider() {
+function Slider({ items: base }: { items: Item[] }) {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const stateRef = useRef({ paused: false, isDragging: false, resumeTimer: null as ReturnType<typeof setTimeout> | null });
   // Duplicate items to enable seamless infinite loop
-  const items = [...testimonials, ...testimonials];
+  const items = [...base, ...base];
 
   const wrap = useCallback(() => {
     const scroller = scrollerRef.current;
@@ -249,7 +252,20 @@ function SliderNav({ step }: { step: (dir: 1 | -1) => void }) {
 
 
 export function Testimonials() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const rows = useCmsTestimonials();
+  const items = useMemo<Item[]>(() => {
+    if (rows.length > 0) {
+      return rows.map((r) => ({
+        name: (lang === "en" ? r.name_en : r.name_ar) || r.name_ar,
+        project: (lang === "en" ? r.role_en : r.role_ar) || r.role_ar || "",
+        quote: (lang === "en" ? r.text_en : r.text_ar) || r.text_ar,
+        rating: r.rating || 5,
+      }));
+    }
+    return staticTestimonials as unknown as Item[];
+  }, [rows, lang]);
+  const count = rows.length > 0 ? rows.length : testimonialStats.count;
   return (
     <section className="border-y border-border bg-cream" id="testimonials">
       <div className="mx-auto max-w-7xl px-6 py-24">
@@ -269,13 +285,13 @@ export function Testimonials() {
             </div>
             <div className="h-10 w-px bg-border" />
             <div>
-              <div className="font-display text-3xl font-bold">+{testimonialStats.count}</div>
+              <div className="font-display text-3xl font-bold">+{count}</div>
               <div className="text-xs text-muted-foreground">{t("t_verified")}</div>
             </div>
           </div>
         </div>
 
-        <Slider />
+        <Slider items={items} />
       </div>
     </section>
   );

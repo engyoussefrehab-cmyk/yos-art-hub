@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import logoFull from "@/assets/logo-full.png.asset.json";
 import { useLang, detectLang } from "@/i18n/use-lang";
+import { useCmsMenu, useCmsSettings } from "@/hooks/use-cms-data";
 
 function NotFoundComponent() {
   const { t, lang } = useLang();
@@ -436,13 +437,22 @@ function SiteNav() {
   const { t, lang } = useLang();
   const [open, setOpen] = useState(false);
   const base = lang === "ar" ? "" : "/en";
-  const links = [
-    { to: base || "/", label: t("nav_home") },
-    { to: `${base}/projects`, label: t("nav_projects") },
-    { to: `${base}/insights`, label: t("nav_insights") },
-    { to: `${base}/packages`, label: t("nav_packages") },
-    { to: `${base}/contact`, label: t("nav_contact") },
-  ] as const;
+  const cmsMenu = useCmsMenu("header");
+  const defaults = [
+    { to: base || "/", label: t("nav_home"), external: false, newTab: false },
+    { to: `${base}/projects`, label: t("nav_projects"), external: false, newTab: false },
+    { to: `${base}/insights`, label: t("nav_insights"), external: false, newTab: false },
+    { to: `${base}/packages`, label: t("nav_packages"), external: false, newTab: false },
+    { to: `${base}/contact`, label: t("nav_contact"), external: false, newTab: false },
+  ];
+  const links = cmsMenu.length > 0
+    ? cmsMenu.map((m) => ({
+        to: m.url.startsWith("/") && !m.is_external && lang === "en" && !m.url.startsWith("/en") ? `/en${m.url === "/" ? "" : m.url}` : m.url,
+        label: (lang === "en" ? m.label_en : m.label_ar) || m.label_ar,
+        external: m.is_external,
+        newTab: m.open_in_new_tab,
+      }))
+    : defaults;
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
@@ -451,14 +461,19 @@ function SiteNav() {
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              activeOptions={{ exact: l.to === "/" || l.to === "/en" }}
-              activeProps={{ className: "text-foreground font-semibold" }}
-              inactiveProps={{ className: "text-muted-foreground" }}
-              className="text-sm transition-colors hover:text-foreground"
-            >{l.label}</Link>
+            l.external ? (
+              <a key={l.to} href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined}
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground">{l.label}</a>
+            ) : (
+              <Link
+                key={l.to}
+                to={l.to}
+                activeOptions={{ exact: l.to === "/" || l.to === "/en" }}
+                activeProps={{ className: "text-foreground font-semibold" }}
+                inactiveProps={{ className: "text-muted-foreground" }}
+                className="text-sm transition-colors hover:text-foreground"
+              >{l.label}</Link>
+            )
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-3">
@@ -482,7 +497,12 @@ function SiteNav() {
         <div className="md:hidden border-t border-border bg-background">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-4">
             {links.map((l) => (
-              <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="text-sm text-muted-foreground">{l.label}</Link>
+              l.external ? (
+                <a key={l.to} href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined}
+                  onClick={() => setOpen(false)} className="text-sm text-muted-foreground">{l.label}</a>
+              ) : (
+                <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="text-sm text-muted-foreground">{l.label}</Link>
+              )
             ))}
           </div>
         </div>
@@ -495,6 +515,28 @@ function SiteFooter() {
   const { t, lang } = useLang();
   const base = lang === "ar" ? "" : "/en";
   const year = new Date().getFullYear();
+  const cmsMenu = useCmsMenu("footer_primary");
+  const settings = useCmsSettings();
+  const phone = settings?.contact_phone || "+20 103 036 5405";
+  const phoneHref = "tel:" + (settings?.contact_phone || "+201030365405").replace(/\s+/g, "");
+  const email = settings?.contact_email || "info@yrstudio.art";
+  const socials = settings?.socials || {};
+  const defaults = [
+    { to: base || "/", label: t("nav_home"), external: false, newTab: false },
+    { to: `${base}/projects`, label: t("nav_projects"), external: false, newTab: false },
+    { to: `${base}/insights`, label: t("nav_insights"), external: false, newTab: false },
+    { to: `${base}/packages`, label: t("nav_packages"), external: false, newTab: false },
+    { to: `${base}/contact`, label: t("nav_contact"), external: false, newTab: false },
+  ];
+  const footerLinks = cmsMenu.length > 0
+    ? cmsMenu.map((m) => ({
+        to: m.url.startsWith("/") && !m.is_external && lang === "en" && !m.url.startsWith("/en") ? `/en${m.url === "/" ? "" : m.url}` : m.url,
+        label: (lang === "en" ? m.label_en : m.label_ar) || m.label_ar,
+        external: m.is_external,
+        newTab: m.open_in_new_tab,
+      }))
+    : defaults;
+
   return (
     <footer className="mt-auto bg-ink text-white/70 border-t border-white/10">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 md:grid-cols-12">
@@ -508,24 +550,53 @@ function SiteFooter() {
         <div className="md:col-span-3">
           <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">{t("explore")}</div>
           <ul className="space-y-2 text-sm">
-            <li><Link to={base || "/"} className="hover:text-accent transition-colors">{t("nav_home")}</Link></li>
-            <li><Link to={`${base}/projects`} className="hover:text-accent transition-colors">{t("nav_projects")}</Link></li>
-            <li><Link to={`${base}/insights`} className="hover:text-accent transition-colors">{t("nav_insights")}</Link></li>
-            <li><Link to={`${base}/packages`} className="hover:text-accent transition-colors">{t("nav_packages")}</Link></li>
-            <li><Link to={`${base}/contact`} className="hover:text-accent transition-colors">{t("nav_contact")}</Link></li>
+            {footerLinks.map((l) => (
+              <li key={l.to}>
+                {l.external ? (
+                  <a href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined} className="hover:text-accent transition-colors">{l.label}</a>
+                ) : (
+                  <Link to={l.to} className="hover:text-accent transition-colors">{l.label}</Link>
+                )}
+              </li>
+            ))}
           </ul>
         </div>
         <div className="md:col-span-4">
           <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">{t("contact")}</div>
           <ul className="space-y-2 text-sm">
-            <li><a href="tel:+201030365405" className="hover:text-accent transition-colors" dir="ltr">+20 103 036 5405</a></li>
-            <li><a href="mailto:info@yrstudio.art" className="hover:text-accent transition-colors">info@yrstudio.art</a></li>
+            <li><a href={phoneHref} className="hover:text-accent transition-colors" dir="ltr">{phone}</a></li>
+            <li><a href={`mailto:${email}`} className="hover:text-accent transition-colors">{email}</a></li>
           </ul>
           <div className="mt-5 flex items-center gap-3">
-            <a href="/go/li" target="_blank" rel="noopener noreferrer" aria-label={t("linkedin")}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
-              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-            </a>
+            {socials.linkedin ? (
+              <a href={socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label={t("linkedin")}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+              </a>
+            ) : (
+              <a href="/go/li" target="_blank" rel="noopener noreferrer" aria-label={t("linkedin")}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+              </a>
+            )}
+            {socials.instagram && (
+              <a href={socials.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+              </a>
+            )}
+            {socials.behance && (
+              <a href={socials.behance} target="_blank" rel="noopener noreferrer" aria-label="Behance"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M7.44 6.5c1.28 0 2.24.24 2.88.72.64.48.96 1.2.96 2.16 0 .58-.13 1.07-.4 1.47-.26.39-.65.7-1.16.94.7.2 1.22.55 1.58 1.04.36.5.53 1.12.53 1.86 0 1.13-.38 1.99-1.14 2.58-.76.59-1.83.88-3.22.88H2V6.5h5.44Zm-.14 3.9c.48 0 .85-.11 1.11-.33.26-.22.39-.55.39-.98 0-.42-.13-.73-.4-.93-.26-.2-.63-.3-1.1-.3H4.55v2.54H7.3Zm.12 4.72c1.15 0 1.72-.5 1.72-1.5 0-.51-.14-.88-.42-1.11-.28-.24-.72-.35-1.31-.35H4.55v2.96h2.87Zm10.35-3.66c1.03 0 1.62-.55 1.75-1.66h-3.5c.15 1.1.73 1.66 1.75 1.66Zm4.19.71h-5.94c.05.72.28 1.24.69 1.55.4.32.94.48 1.62.48.86 0 1.52-.32 2-.96l1.4.94c-.79 1.2-2 1.8-3.62 1.8-1.35 0-2.42-.4-3.22-1.19-.8-.79-1.2-1.87-1.2-3.24 0-1.31.4-2.36 1.2-3.14.8-.79 1.85-1.18 3.14-1.18 1.24 0 2.24.38 3 1.14.76.76 1.14 1.79 1.14 3.09 0 .28-.02.51-.05.71ZM19.94 8.9h-4.13V7.36h4.13V8.9Z"/></svg>
+              </a>
+            )}
+            {socials.twitter && (
+              <a href={socials.twitter} target="_blank" rel="noopener noreferrer" aria-label="X"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M18.244 2H21l-6.564 7.5L22 22h-6.828l-4.75-6.203L4.8 22H2l7.02-8.02L2 2h6.914l4.3 5.68L18.244 2Zm-2.394 18h1.65L8.24 4H6.5l9.35 16Z"/></svg>
+              </a>
+            )}
           </div>
         </div>
       </div>
