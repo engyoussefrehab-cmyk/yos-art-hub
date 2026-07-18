@@ -69,6 +69,7 @@ type ProjectForm = {
   status: "draft" | "published" | "scheduled" | "archived";
   published_at: string;
   sort_order: number;
+  blocks: ProjectBlock[];
 };
 
 const empty: ProjectForm = {
