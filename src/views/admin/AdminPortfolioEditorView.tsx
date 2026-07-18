@@ -667,6 +667,21 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
         )}
       </section>
 
+      {/* Modular page builder */}
+      <section className="grid gap-4 rounded-2xl border border-border/70 bg-card p-6">
+        <div>
+          <h2 className="text-sm font-semibold text-muted-foreground">صفحة المشروع — بناء البلوكات</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            رتّب محتوى صفحة المشروع بلوكًا بلوك: عناوين، نصوص، صور، معارض، اقتباسات، ألوان، فيديو، إحصائيات، وأكثر.
+          </p>
+        </div>
+        <ProjectBlocksEditor
+          blocks={f.blocks}
+          onChange={(next) => set("blocks", next)}
+          uploadImage={uploadToPortfolio}
+        />
+      </section>
+
       {/* Story */}
       <section className="grid gap-4 rounded-2xl border border-border/70 bg-card p-6">
         <h2 className="text-sm font-semibold text-muted-foreground">قصة المشروع</h2>
