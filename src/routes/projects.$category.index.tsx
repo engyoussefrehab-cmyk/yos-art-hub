@@ -4,7 +4,7 @@ import { CategoryView } from "@/views/CategoryView";
 
 export const Route = createFileRoute("/projects/$category/")({
   head: ({ params, loaderData }) => {
-    const c = loaderData?.category;
+    const c = (loaderData as any)?.category;
     const label = c ? (c.name_ar || c.name_en) : params.category;
     const title = `${label} — يوسف رحاب`;
     const desc = c?.description_ar || "أعمال مختارة.";
