@@ -43,6 +43,13 @@ const contentItems: NavItem[] = [
   { to: "/admin/services", label: A.services, icon: Sparkles },
 ];
 
+const designItems: NavItem[] = [
+  { to: "/admin/sections", label: A.sections, icon: FileText },
+  { to: "/admin/menus", label: A.menus, icon: FolderTree },
+  { to: "/admin/testimonials", label: A.testimonials, icon: UserCircle2 },
+  { to: "/admin/page-seo", label: A.page_seo, icon: Search },
+];
+
 const taxonomyItems: NavItem[] = [
   { to: "/admin/categories", label: A.categories, icon: FolderTree },
   { to: "/admin/tags", label: A.tags, icon: Tags },
