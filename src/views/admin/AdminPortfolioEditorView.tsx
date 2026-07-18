@@ -253,6 +253,77 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
     if (cat && cat.slug !== f.category_slug) setF((s) => ({ ...s, category_slug: cat.slug }));
   }, [f.category_id, categories]);
 
+  // Track user edits for auto-save
+  const initRef = useRef(false);
+  useEffect(() => {
+    if (loading) return;
+    if (!initRef.current) { initRef.current = true; return; }
+    setDirty(true);
+  }, [f, loading]);
+
+  // Debounced auto-save (only for existing projects, drafts of any status)
+  useEffect(() => {
+    if (!id || !dirty || saving) return;
+    if (!f.name_ar.trim() && !f.name_en.trim()) return;
+    if (!f.slug.trim()) return;
+    const t = setTimeout(async () => {
+      setAutoState("saving");
+      const payload: any = {
+        slug: f.slug,
+        name_ar: f.name_ar || f.name_en,
+        name_en: f.name_en || f.name_ar,
+        client: f.client || null,
+        client_country: f.client_country || null,
+        year: f.year && /^\d{4}$/.test(f.year) ? Number(f.year) : null,
+        duration: f.duration || null,
+        role: f.role || null,
+        team: f.team || null,
+        industry: f.industry || null,
+        category_id: f.category_id || null,
+        category_slug: f.category_slug || null,
+        short_description_ar: f.short_description_ar || null,
+        short_description_en: f.short_description_en || null,
+        challenge_ar: f.challenge_ar || null,
+        challenge_en: f.challenge_en || null,
+        solution_ar: f.solution_ar || null,
+        solution_en: f.solution_en || null,
+        results_ar: f.results_ar || null,
+        results_en: f.results_en || null,
+        services_used: f.services_used.split(",").map((s) => s.trim()).filter(Boolean),
+        deliverables: {
+          ar: f.deliverables_ar.split("\n").map((s) => s.trim()).filter(Boolean),
+          en: f.deliverables_en.split("\n").map((s) => s.trim()).filter(Boolean),
+        },
+        project_url: f.project_url || null,
+        behance_url: f.behance_url || null,
+        figma_url: f.figma_url || null,
+        og_image_url: f.og_image_url || null,
+        hero_image_url: f.hero_image_url || null,
+        thumbnail_url: f.thumbnail_url || null,
+        gallery: f.gallery,
+        brand_colors: f.brand_colors.filter((c) => c.hex),
+        typography: f.typography,
+        seo_title_ar: f.seo_title_ar || null,
+        seo_title_en: f.seo_title_en || null,
+        seo_description_ar: f.seo_description_ar || null,
+        seo_description_en: f.seo_description_en || null,
+        seo_keywords: f.seo_keywords.split(",").map((s) => s.trim()).filter(Boolean),
+        featured: f.featured,
+        is_pinned: f.is_pinned,
+        is_confidential: f.is_confidential,
+        is_archived: f.is_archived,
+        sort_order: Number(f.sort_order) || 0,
+        layout_blocks: f.blocks,
+      };
+      const { error } = await supabase.from("portfolio_projects").update(payload).eq("id", id);
+      if (error) { setAutoState("error"); return; }
+      setAutoState("saved");
+      setLastSavedAt(new Date());
+      setDirty(false);
+    }, 2500);
+    return () => clearTimeout(t);
+  }, [f, dirty, id, saving]);
+
   const uploadSingle = async (
     file: File,
     field: "og_image_url" | "hero_image_url" | "thumbnail_url",
