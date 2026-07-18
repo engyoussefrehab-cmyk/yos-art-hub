@@ -132,6 +132,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "preload", as: "style", href: "https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" },
     ],
     scripts: [
@@ -221,6 +222,29 @@ function LangSync() {
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
     }
+    // Manage hreflang alternate links
+    try {
+      const isEn = pathname === "/en" || pathname.startsWith("/en/");
+      const arPath = isEn ? (pathname.replace(/^\/en/, "") || "/") : pathname;
+      const enPath = isEn ? pathname : `/en${pathname === "/" ? "" : pathname}`;
+      const origin = "https://yrstudio.art";
+      const entries: Array<[string, string]> = [
+        ["ar", `${origin}${arPath}`],
+        ["ar-SA", `${origin}${arPath}`],
+        ["ar-AE", `${origin}${arPath}`],
+        ["en", `${origin}${enPath}`],
+        ["x-default", `${origin}${arPath}`],
+      ];
+      document.querySelectorAll('link[rel="alternate"][data-hreflang="1"]').forEach((n) => n.remove());
+      for (const [hl, href] of entries) {
+        const l = document.createElement("link");
+        l.rel = "alternate";
+        l.hreflang = hl;
+        l.href = href;
+        l.setAttribute("data-hreflang", "1");
+        document.head.appendChild(l);
+      }
+    } catch {}
   }, [pathname]);
   return null;
 }
@@ -349,7 +373,23 @@ function LanguageWelcome() {
             </button>
           </div>
 
-          <p className="mt-6 text-[11px] text-muted-foreground/70">
+          <div className="mt-6 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                const nav = typeof navigator !== "undefined" ? (navigator.language || "").toLowerCase() : "";
+                const detected: "ar" | "en" = nav.startsWith("ar") ? "ar" : "en";
+                choose(detected);
+              }}
+              className="text-[11px] text-muted-foreground/80 underline-offset-4 hover:text-accent hover:underline"
+            >
+              <span dir="rtl">تخطّي — استخدم لغة المتصفح</span>
+              <span className="mx-2 opacity-40">·</span>
+              <span>Skip — use browser language</span>
+            </button>
+          </div>
+
+          <p className="mt-4 text-[11px] text-muted-foreground/70">
             <span dir="rtl">يمكنك تغيير اللغة لاحقًا من أعلى الصفحة</span>
             <span className="mx-2 opacity-40">·</span>
             <span>You can switch languages anytime from the header</span>
