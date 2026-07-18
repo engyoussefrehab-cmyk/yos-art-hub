@@ -63,6 +63,7 @@ function mapRow(r: any): PortfolioDTO {
     gallery,
     featured: r.featured,
     sort_order: r.sort_order ?? 0,
+    blocks: normalizeBlocks(r.layout_blocks),
   };
 }
 
