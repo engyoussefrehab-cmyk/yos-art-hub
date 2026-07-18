@@ -16,6 +16,7 @@ import {
   ExternalLink,
   LogOut,
   Languages,
+  Globe,
 } from "lucide-react";
 import {
   Sidebar,
@@ -59,6 +60,7 @@ const taxonomyItems: NavItem[] = [
 const opsItems: NavItem[] = [
   { to: "/admin/messages", label: A.messages, icon: Inbox },
   { to: "/admin/seo", label: A.seo, icon: Search },
+  { to: "/admin/indexing", label: { ar: "حالة الفهرسة", en: "Indexing Status" }, icon: Globe },
   { to: "/admin/audit", label: A.audit, icon: ShieldCheck },
 ];
 
