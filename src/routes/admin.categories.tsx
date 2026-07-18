@@ -439,16 +439,14 @@ function CategoryCard({
               placeholder="مثال: Palette"
             />
           </div>
-          <div className="grid gap-1.5">
-            <Label className="text-xs">رابط صورة الغلاف</Label>
-            <Input
-              value={c.cover_image_url ?? ""}
-              onChange={(e) =>
-                setC({ ...c, cover_image_url: e.target.value || null })
-              }
-              placeholder="https://…"
+          <div className="grid gap-1.5 md:col-span-2">
+            <Label className="text-xs">صورة غلاف السكشن</Label>
+            <CategoryCoverField
+              url={c.cover_image_url ?? ""}
+              onChange={(v) => setC({ ...c, cover_image_url: v || null })}
             />
           </div>
+
           <div className="flex items-center gap-2 md:col-span-2">
             <Switch
               checked={!c.is_hidden}
