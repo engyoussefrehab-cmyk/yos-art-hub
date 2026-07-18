@@ -1028,16 +1028,31 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       </section>
 
       <div className="sticky bottom-0 z-20 -mx-4 border-t border-border/70 bg-background/90 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
-          <div className="text-xs text-muted-foreground">
-            {dirty ? "توجد تغييرات غير محفوظة" : lastSavedAt ? `آخر حفظ ${lastSavedAt.toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}` : "جاهز للحفظ"}
+        <div className="mx-auto flex max-w-5xl flex-col gap-2">
+          {actionMessage && (
+            <div
+              role={actionMessage.type === "error" ? "alert" : "status"}
+              className={`rounded-md px-3 py-2 text-xs ${
+                actionMessage.type === "error"
+                  ? "bg-destructive/10 text-destructive"
+                  : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+              }`}
+            >
+              {actionMessage.text.split("\n").map((l, i) => <div key={i}>{l}</div>)}
+            </div>
+          )}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs text-muted-foreground">
+              {dirty ? "توجد تغييرات غير محفوظة" : lastSavedAt ? `آخر حفظ ${lastSavedAt.toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}` : "جاهز للحفظ"}
+            </div>
+            <div className="flex flex-wrap items-center gap-2">{actionButtons}</div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">{actionButtons}</div>
         </div>
       </div>
     </div>
   );
 }
+
 
 function MediaSlot({
   label, url, uploading, err, onUpload, onClear, onUrl,
