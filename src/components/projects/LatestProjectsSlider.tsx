@@ -164,7 +164,7 @@ export function LatestProjectsSlider({
               key={`${p.slug}-${i}`}
               to={href}
               aria-hidden={i >= items.length ? true : undefined}
-              className={`group relative overflow-hidden rounded-3xl border border-border bg-cream transition-all hover:-translate-y-1 hover:shadow-xl ${cardWidth}`}
+              className={`group relative overflow-hidden rounded-2xl border border-border bg-cream transition-all hover:-translate-y-1 hover:shadow-xl ${cardWidth}`}
             >
               <div className={`${aspect} overflow-hidden bg-muted`}>
                 {p.cover && (
@@ -177,14 +177,16 @@ export function LatestProjectsSlider({
                 )}
               </div>
               <div className={pad}>
-                <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
-                  {p.industry && <span>{p.industry}</span>}
-                  {p.year && <span>· {p.year}</span>}
-                </div>
-                <h3 className={`mt-2 font-display font-bold ${titleClass}`}>{name}</h3>
+                {!compact && (
+                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
+                    {p.industry && <span>{p.industry}</span>}
+                    {p.year && <span>· {p.year}</span>}
+                  </div>
+                )}
+                <h3 className={`${compact ? "" : "mt-2"} truncate font-display font-bold ${titleClass}`}>{name}</h3>
                 {!compact && short && <p className="mt-2 line-clamp-2 text-muted-foreground">{short}</p>}
               </div>
-              {p.featured && (
+              {p.featured && !compact && (
                 <span className="absolute end-4 top-4 rounded-full bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-accent-foreground">
                   {t("مميّز", "Featured")}
                 </span>
