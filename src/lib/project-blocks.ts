@@ -1,7 +1,7 @@
 // Modular page-builder blocks for portfolio project detail pages.
 // All block data is stored inside portfolio_projects.layout_blocks (JSONB).
 
-export type BlockBase = { id: string };
+export type BlockBase = { id: string; enabled?: boolean };
 
 export type TextBlock = BlockBase & {
   type: "text";
@@ -74,6 +74,19 @@ export type SpacerBlock = BlockBase & {
   size?: "sm" | "md" | "lg";
 };
 
+export type BeforeAfterBlock = BlockBase & {
+  type: "before-after";
+  before_url: string;
+  after_url: string;
+  label_before_ar?: string;
+  label_before_en?: string;
+  label_after_ar?: string;
+  label_after_en?: string;
+  orientation?: "horizontal" | "vertical";
+  caption_ar?: string;
+  caption_en?: string;
+};
+
 export type ProjectBlock =
   | TextBlock
   | HeadingBlock
@@ -85,7 +98,8 @@ export type ProjectBlock =
   | VideoBlock
   | StatsBlock
   | CalloutBlock
-  | SpacerBlock;
+  | SpacerBlock
+  | BeforeAfterBlock;
 
 export type BlockType = ProjectBlock["type"];
 
@@ -101,6 +115,7 @@ export const BLOCK_LABELS: Record<BlockType, { ar: string; en: string }> = {
   stats: { ar: "إحصائيات", en: "Stats" },
   callout: { ar: "تنبيه بارز", en: "Callout" },
   spacer: { ar: "فاصل", en: "Spacer" },
+  "before-after": { ar: "قبل / بعد", en: "Before / After" },
 };
 
 export function newBlock(type: BlockType): ProjectBlock {
@@ -131,6 +146,18 @@ export function newBlock(type: BlockType): ProjectBlock {
       return { id, type, text_ar: "", text_en: "", tone: "accent" };
     case "spacer":
       return { id, type, size: "md" };
+    case "before-after":
+      return {
+        id,
+        type,
+        before_url: "",
+        after_url: "",
+        label_before_ar: "قبل",
+        label_before_en: "Before",
+        label_after_ar: "بعد",
+        label_after_en: "After",
+        orientation: "horizontal",
+      };
   }
 }
 

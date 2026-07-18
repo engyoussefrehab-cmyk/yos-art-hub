@@ -7,6 +7,7 @@ import {
   ArrowUp, ArrowDown, Trash2, Plus, Upload, X, Copy, ChevronDown, ChevronUp,
   Type, Heading as HeadingIcon, Image as ImageIcon, Images, Quote,
   Palette, PlayCircle, BarChart3, MessageSquare, Minus, Columns2, GripVertical,
+  SplitSquareHorizontal, Eye, EyeOff,
 } from "lucide-react";
 import {
   BLOCK_LABELS,
@@ -29,10 +30,11 @@ const ICONS: Record<BlockType, React.ComponentType<{ className?: string }>> = {
   stats: BarChart3,
   callout: MessageSquare,
   spacer: Minus,
+  "before-after": SplitSquareHorizontal,
 };
 
 const ALL_TYPES: BlockType[] = [
-  "heading", "text", "image", "two-col-image", "gallery",
+  "heading", "text", "image", "two-col-image", "gallery", "before-after",
   "quote", "palette", "video", "stats", "callout", "spacer",
 ];
 
@@ -109,6 +111,7 @@ export function ProjectBlocksEditor({
           {blocks.map((b, i) => {
             const Icon = ICONS[b.type];
             const isOpen = open[b.id] ?? false;
+            const isHidden = b.enabled === false;
             return (
               <li
                 key={b.id}
@@ -117,7 +120,7 @@ export function ProjectBlocksEditor({
                 onDrop={(e) => { e.preventDefault(); onDrop(b.id); }}
                 className={`rounded-xl border bg-background transition-colors ${
                   overId === b.id ? "border-accent ring-2 ring-accent/30" : "border-border/70"
-                } ${dragId === b.id ? "opacity-50" : ""}`}
+                } ${dragId === b.id ? "opacity-50" : ""} ${isHidden ? "opacity-60" : ""}`}
               >
                 <div className="flex items-center gap-2 border-b border-border/60 px-3 py-2">
                   <button
@@ -137,12 +140,23 @@ export function ProjectBlocksEditor({
                   >
                     <Icon className="h-4 w-4 text-muted-foreground" />
                     <span className="text-xs text-muted-foreground">#{i + 1}</span>
-                    <span>{BLOCK_LABELS[b.type].ar}</span>
+                    <span className={isHidden ? "line-through" : ""}>{BLOCK_LABELS[b.type].ar}</span>
+                    {isHidden && (
+                      <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                        مخفي
+                      </span>
+                    )}
                     <span className="ms-auto text-muted-foreground">
                       {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     </span>
                   </button>
                   <div className="flex gap-1">
+                    <IconBtn
+                      title={isHidden ? "إظهار البلوك" : "إخفاء البلوك"}
+                      onClick={() => update(b.id, { enabled: isHidden ? true : false } as any)}
+                    >
+                      {isHidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                    </IconBtn>
                     <IconBtn title="لأعلى" onClick={() => move(i, -1)} disabled={i === 0}>
                       <ArrowUp className="h-3.5 w-3.5" />
                     </IconBtn>
@@ -417,6 +431,44 @@ function BlockEditor({
           onChange={(v) => onChange({ size: v as any } as any)}
           options={[["sm", "صغير"], ["md", "متوسط"], ["lg", "كبير"]]}
         />
+      );
+    case "before-after":
+      return (
+        <div className="grid gap-3">
+          <div className="grid gap-3 md:grid-cols-2">
+            <ImageField
+              label="الصورة (قبل)"
+              url={b.before_url}
+              uploadImage={uploadImage}
+              onChange={(v) => onChange({ before_url: v } as any)}
+            />
+            <ImageField
+              label="الصورة (بعد)"
+              url={b.after_url}
+              uploadImage={uploadImage}
+              onChange={(v) => onChange({ after_url: v } as any)}
+            />
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            <FieldText label="تسمية (قبل) — عربي" value={b.label_before_ar} onChange={(v) => onChange({ label_before_ar: v } as any)} />
+            <FieldText label="Label (Before) — English" value={b.label_before_en} onChange={(v) => onChange({ label_before_en: v } as any)} dir="ltr" />
+            <FieldText label="تسمية (بعد) — عربي" value={b.label_after_ar} onChange={(v) => onChange({ label_after_ar: v } as any)} />
+            <FieldText label="Label (After) — English" value={b.label_after_en} onChange={(v) => onChange({ label_after_en: v } as any)} dir="ltr" />
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            <FieldSelect
+              label="اتجاه المقارنة"
+              value={b.orientation ?? "horizontal"}
+              onChange={(v) => onChange({ orientation: v as any } as any)}
+              options={[["horizontal", "أفقي (يمين ↔ يسار)"], ["vertical", "رأسي (أعلى ↕ أسفل)"]]}
+            />
+            <FieldText label="تعليق (عربي)" value={b.caption_ar} onChange={(v) => onChange({ caption_ar: v } as any)} />
+            <FieldText label="Caption (English)" value={b.caption_en} onChange={(v) => onChange({ caption_en: v } as any)} dir="ltr" />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            نصيحة: استخدم صورتين بنفس الأبعاد للحصول على أفضل مقارنة بصرية.
+          </p>
+        </div>
       );
   }
 }
