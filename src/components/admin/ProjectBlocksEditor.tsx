@@ -7,6 +7,7 @@ import {
   ArrowUp, ArrowDown, Trash2, Plus, Upload, X, Copy, ChevronDown, ChevronUp,
   Type, Heading as HeadingIcon, Image as ImageIcon, Images, Quote,
   Palette, PlayCircle, BarChart3, MessageSquare, Minus, Columns2, GripVertical,
+  SplitSquareHorizontal, Eye, EyeOff,
 } from "lucide-react";
 import {
   BLOCK_LABELS,
@@ -29,10 +30,11 @@ const ICONS: Record<BlockType, React.ComponentType<{ className?: string }>> = {
   stats: BarChart3,
   callout: MessageSquare,
   spacer: Minus,
+  "before-after": SplitSquareHorizontal,
 };
 
 const ALL_TYPES: BlockType[] = [
-  "heading", "text", "image", "two-col-image", "gallery",
+  "heading", "text", "image", "two-col-image", "gallery", "before-after",
   "quote", "palette", "video", "stats", "callout", "spacer",
 ];
 
