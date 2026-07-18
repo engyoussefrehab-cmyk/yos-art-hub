@@ -132,6 +132,25 @@ export function ProjectBlocksEditor({
         </ol>
       )}
       <div className="rounded-xl border border-dashed border-border/70 bg-muted/20 p-4">
+        <div className="mb-2 text-xs font-semibold text-muted-foreground">قوالب جاهزة:</div>
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {BLOCK_TEMPLATES.map((tpl) => (
+            <button
+              key={tpl.id}
+              type="button"
+              onClick={() => insertTemplate(tpl.id)}
+              className="group rounded-lg border border-border/60 bg-background p-3 text-start transition-colors hover:border-accent/60 hover:bg-accent/5"
+            >
+              <div className="flex items-center gap-2 text-sm font-semibold">
+                <Plus className="h-3.5 w-3.5 text-accent" />
+                {tpl.label_ar}
+              </div>
+              <div className="mt-1 text-xs text-muted-foreground">{tpl.desc_ar}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="rounded-xl border border-dashed border-border/70 bg-muted/20 p-4">
         <div className="mb-2 text-xs font-semibold text-muted-foreground">إضافة بلوك:</div>
         <div className="flex flex-wrap gap-2">
           {ALL_TYPES.map((t) => {
@@ -144,6 +163,7 @@ export function ProjectBlocksEditor({
           })}
         </div>
       </div>
+
     </div>
   );
 }
