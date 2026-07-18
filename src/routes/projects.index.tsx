@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { ProjectsHubView } from "@/views/ProjectsHubView";
+import { listPortfolio } from "@/lib/portfolio.functions";
+
+const searchSchema = z.object({
+  cat: fallback(z.string(), "").default(""),
+  country: fallback(z.string(), "").default(""),
+  year: fallback(z.string(), "").default(""),
+  tag: fallback(z.string(), "").default(""),
+  sort: fallback(z.string(), "newest").default("newest"),
+});
 
 export const Route = createFileRoute("/projects/")({
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: "أعمال يوسف رحاب — هويات بصرية وشعارات وملفات شركات" },
@@ -13,5 +25,11 @@ export const Route = createFileRoute("/projects/")({
     ],
     links: [{ rel: "canonical", href: "/projects" }],
   }),
-  component: ProjectsHubView,
+  loader: () => listPortfolio({ data: {} }),
+  component: Page,
 });
+
+function Page() {
+  const projects = Route.useLoaderData();
+  return <ProjectsHubView projects={projects} routeId="/projects/" />;
+}
