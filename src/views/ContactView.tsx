@@ -139,6 +139,47 @@ function ContactForm() {
         />
         {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
       </div>
+      <div className="mt-6 rounded-2xl border border-accent/30 bg-accent/5 p-5">
+        <div className="flex items-start gap-2">
+          <span aria-hidden="true" className="text-lg leading-none">📞</span>
+          <div>
+            <h3 className="font-display text-base font-bold text-white">{t("f_call_title")}</h3>
+            <p className="mt-1 text-xs text-white/60">{t("f_call_sub")}</p>
+          </div>
+        </div>
+        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_date")}</label>
+            <input
+              name="call_date"
+              type="date"
+              min={new Date().toISOString().slice(0, 10)}
+              dir="ltr"
+              className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40 [color-scheme:dark]"
+            />
+            {errors.call_date && <p className="mt-1 text-xs text-red-400">{errors.call_date}</p>}
+          </div>
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_time")}</label>
+            <input
+              name="call_time"
+              type="time"
+              dir="ltr"
+              className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40 [color-scheme:dark]"
+            />
+          </div>
+        </div>
+        <div className="mt-4">
+          <label className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_tz")}</label>
+          <input
+            name="call_tz"
+            type="text"
+            maxLength={120}
+            placeholder={t("f_call_tz_placeholder")}
+            className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
+          />
+        </div>
+      </div>
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
         <button
           type="submit"
