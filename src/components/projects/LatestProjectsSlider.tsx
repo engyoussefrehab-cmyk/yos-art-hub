@@ -99,11 +99,11 @@ export function LatestProjectsSlider({
   if (items.length === 0) return null;
 
   const cardWidth = compact
-    ? "w-[75%] flex-none snap-start sm:w-[45%] lg:w-[28%]"
+    ? "w-[72%] flex-none snap-start xs:w-[60%] sm:w-[38%] md:w-[30%] lg:w-[22%]"
     : "w-[85%] flex-none snap-start sm:w-[60%] lg:w-[38%]";
-  const aspect = compact ? "aspect-[5/4]" : "aspect-[4/3]";
-  const titleClass = compact ? "text-lg" : "text-2xl";
-  const pad = compact ? "p-4" : "p-6";
+  const aspect = compact ? "aspect-[4/3]" : "aspect-[4/3]";
+  const titleClass = compact ? "text-sm sm:text-base" : "text-2xl";
+  const pad = compact ? "p-3 sm:p-4" : "p-6";
 
   return (
     <section className={compact ? "" : "mt-16"}>
