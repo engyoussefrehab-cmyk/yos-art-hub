@@ -101,8 +101,9 @@ export function ProjectDetailView({ project, next }: { project: PortfolioDTO; ne
       {project.blocks.length === 0 && project.gallery.slice(1).map((src, i) => (
         <section key={i} className="mx-auto max-w-7xl px-6 py-8">
           <div className="overflow-hidden rounded-3xl border border-border bg-cream">
-            <img loading="lazy" decoding="async" src={src} alt={`${name} ${i + 2}`} className="w-full" />
+            <ZoomableImage src={src} alt={`${name} ${i + 2}`} />
           </div>
+
         </section>
       ))}
 
