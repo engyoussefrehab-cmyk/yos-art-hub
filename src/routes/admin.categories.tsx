@@ -468,6 +468,68 @@ function CategoryCard({
   );
 }
 
+function CategoryCoverField({ url, onChange }: { url: string; onChange: (v: string) => void }) {
+  const [busy, setBusy] = useState(false);
+  const handle = async (file?: File | null) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) return toast.error("الملف ليس صورة");
+    if (file.size > 8 * 1024 * 1024) return toast.error("الحد الأقصى 8MB");
+    setBusy(true);
+    try {
+      const ext = (file.name.split(".").pop() ?? "jpg").toLowerCase();
+      const path = `categories/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("portfolio-covers")
+        .upload(path, file, { cacheControl: "31536000", upsert: false, contentType: file.type });
+      if (error) throw error;
+      onChange(`/api/public/portfolio/cover/${path}`);
+      toast.success("تم رفع الصورة");
+    } catch (e: any) {
+      toast.error(e.message ?? "فشل الرفع");
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <div className="grid gap-2">
+      {url ? (
+        <div className="relative overflow-hidden rounded-lg border border-border/60">
+          <img src={url} alt="cover" className="max-h-48 w-full object-cover" loading="lazy" />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="absolute end-2 top-2 rounded-full bg-black/60 p-1.5 text-white"
+            title="حذف الصورة"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      ) : (
+        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-border/70 p-6 text-sm text-muted-foreground hover:bg-muted/30">
+          <Upload className="h-4 w-4" />
+          <span>{busy ? "جاري الرفع…" : "اضغط لرفع صورة السكشن"}</span>
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={(e) => {
+              handle(e.target.files?.[0]);
+              e.target.value = "";
+            }}
+          />
+        </label>
+      )}
+      <Input
+        value={url}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="أو الصق رابطًا للصورة"
+        dir="ltr"
+      />
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/admin/categories")({
   component: CategoriesPage,
 });
+
