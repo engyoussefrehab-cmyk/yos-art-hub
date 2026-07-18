@@ -1,7 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProjectsHubView } from "@/views/ProjectsHubView";
+import { listPortfolio } from "@/lib/portfolio.functions";
+
+const SORTS = new Set(["newest", "oldest", "featured", "az"]);
+const asStr = (v: unknown) => (typeof v === "string" ? v : "");
+const asSort = (v: unknown) => {
+  const s = asStr(v);
+  return (SORTS.has(s) ? s : "newest") as "newest" | "oldest" | "featured" | "az";
+};
+
+
 
 export const Route = createFileRoute("/projects/")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    cat: asStr(s.cat),
+    country: asStr(s.country),
+    year: asStr(s.year),
+    tag: asStr(s.tag),
+    sort: asSort(s.sort),
+  }),
+
   head: () => ({
     meta: [
       { title: "أعمال يوسف رحاب — هويات بصرية وشعارات وملفات شركات" },
@@ -13,5 +31,11 @@ export const Route = createFileRoute("/projects/")({
     ],
     links: [{ rel: "canonical", href: "/projects" }],
   }),
-  component: ProjectsHubView,
+  loader: () => listPortfolio({ data: {} }),
+  component: Page,
 });
+
+function Page() {
+  const projects = Route.useLoaderData();
+  return <ProjectsHubView projects={projects} routeId="/projects/" />;
+}
