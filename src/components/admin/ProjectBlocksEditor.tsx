@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowUp, ArrowDown, Trash2, Plus, Upload, X, Copy, ChevronDown, ChevronUp,
   Type, Heading as HeadingIcon, Image as ImageIcon, Images, Quote,
-  Palette, PlayCircle, BarChart3, MessageSquare, Minus, Columns2,
+  Palette, PlayCircle, BarChart3, MessageSquare, Minus, Columns2, GripVertical,
 } from "lucide-react";
 import {
   BLOCK_LABELS,
