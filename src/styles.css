@@ -154,6 +154,9 @@ main {
   animation: page-in 420ms ease-out both;
 }
 
+/* Prevent accidental horizontal scroll on mobile from oversized child scrollers/decorations */
+html, body { overflow-x: clip; }
+
 /* ============ Testimonials slider (auto + drag) ============ */
 .testimonials-slider { position: relative; }
 .testimonials-scroller {

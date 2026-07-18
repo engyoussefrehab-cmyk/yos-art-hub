@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import { ProjectBlocksRenderer } from "@/components/project-blocks/ProjectBlocksRenderer";
+import { ZoomableImage } from "@/components/ZoomableImage";
 
 export function ProjectDetailView({ project, next }: { project: PortfolioDTO; next: PortfolioDTO | null }) {
   const { t, lang } = useLang();
@@ -59,8 +60,9 @@ export function ProjectDetailView({ project, next }: { project: PortfolioDTO; ne
       {project.cover && (
         <section className="mx-auto max-w-7xl px-6 py-16">
           <div className="overflow-hidden rounded-3xl border border-border bg-cream">
-            <img src={project.cover} alt={name} loading="eager" decoding="async" className="w-full" />
+            <ZoomableImage src={project.cover} alt={name} eager />
           </div>
+
         </section>
       )}
 
@@ -99,8 +101,9 @@ export function ProjectDetailView({ project, next }: { project: PortfolioDTO; ne
       {project.blocks.length === 0 && project.gallery.slice(1).map((src, i) => (
         <section key={i} className="mx-auto max-w-7xl px-6 py-8">
           <div className="overflow-hidden rounded-3xl border border-border bg-cream">
-            <img loading="lazy" decoding="async" src={src} alt={`${name} ${i + 2}`} className="w-full" />
+            <ZoomableImage src={src} alt={`${name} ${i + 2}`} />
           </div>
+
         </section>
       ))}
 

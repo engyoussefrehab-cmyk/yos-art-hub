@@ -1,4 +1,5 @@
 import type { ProjectBlock } from "@/lib/project-blocks";
+import { ZoomableImage } from "@/components/ZoomableImage";
 
 type Lang = "ar" | "en";
 
@@ -58,7 +59,8 @@ function BlockRender({ block: b, lang }: { block: ProjectBlock; lang: Lang }) {
       return (
         <section className={`mx-auto ${width} px-6 py-8`}>
           <figure className="overflow-hidden rounded-3xl border border-border bg-cream">
-            <img src={b.url} alt={caption || ""} loading="lazy" decoding="async" className="w-full" />
+            <ZoomableImage src={b.url} alt={caption || ""} />
+
             {caption && (
               <figcaption className="border-t border-border bg-background/70 px-6 py-3 text-sm text-muted-foreground">
                 {caption}
@@ -75,7 +77,7 @@ function BlockRender({ block: b, lang }: { block: ProjectBlock; lang: Lang }) {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {[b.url_left, b.url_right].filter(Boolean).map((u, i) => (
               <div key={i} className="overflow-hidden rounded-3xl border border-border bg-cream">
-                <img src={u} alt="" loading="lazy" decoding="async" className="w-full" />
+                <ZoomableImage src={u as string} alt="" />
               </div>
             ))}
           </div>
@@ -93,7 +95,7 @@ function BlockRender({ block: b, lang }: { block: ProjectBlock; lang: Lang }) {
           <div className={`grid grid-cols-2 gap-4 ${grid}`}>
             {urls.map((u, i) => (
               <div key={i} className="overflow-hidden rounded-2xl border border-border bg-cream">
-                <img src={u} alt="" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
+                <ZoomableImage src={u} alt="" imgClassName="aspect-[4/3] w-full object-cover" />
               </div>
             ))}
           </div>
