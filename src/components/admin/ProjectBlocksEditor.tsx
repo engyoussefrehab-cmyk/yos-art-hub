@@ -432,6 +432,44 @@ function BlockEditor({
           options={[["sm", "صغير"], ["md", "متوسط"], ["lg", "كبير"]]}
         />
       );
+    case "before-after":
+      return (
+        <div className="grid gap-3">
+          <div className="grid gap-3 md:grid-cols-2">
+            <ImageField
+              label="الصورة (قبل)"
+              url={b.before_url}
+              uploadImage={uploadImage}
+              onChange={(v) => onChange({ before_url: v } as any)}
+            />
+            <ImageField
+              label="الصورة (بعد)"
+              url={b.after_url}
+              uploadImage={uploadImage}
+              onChange={(v) => onChange({ after_url: v } as any)}
+            />
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            <FieldText label="تسمية (قبل) — عربي" value={b.label_before_ar} onChange={(v) => onChange({ label_before_ar: v } as any)} />
+            <FieldText label="Label (Before) — English" value={b.label_before_en} onChange={(v) => onChange({ label_before_en: v } as any)} dir="ltr" />
+            <FieldText label="تسمية (بعد) — عربي" value={b.label_after_ar} onChange={(v) => onChange({ label_after_ar: v } as any)} />
+            <FieldText label="Label (After) — English" value={b.label_after_en} onChange={(v) => onChange({ label_after_en: v } as any)} dir="ltr" />
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            <FieldSelect
+              label="اتجاه المقارنة"
+              value={b.orientation ?? "horizontal"}
+              onChange={(v) => onChange({ orientation: v as any } as any)}
+              options={[["horizontal", "أفقي (يمين ↔ يسار)"], ["vertical", "رأسي (أعلى ↕ أسفل)"]]}
+            />
+            <FieldText label="تعليق (عربي)" value={b.caption_ar} onChange={(v) => onChange({ caption_ar: v } as any)} />
+            <FieldText label="Caption (English)" value={b.caption_en} onChange={(v) => onChange({ caption_en: v } as any)} dir="ltr" />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            نصيحة: استخدم صورتين بنفس الأبعاد للحصول على أفضل مقارنة بصرية.
+          </p>
+        </div>
+      );
   }
 }
 
