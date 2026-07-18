@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowUp, ArrowDown, Trash2, Plus, Upload, X, Copy, ChevronDown, ChevronUp,
   Type, Heading as HeadingIcon, Image as ImageIcon, Images, Quote,
-  Palette, PlayCircle, BarChart3, MessageSquare, Minus, Columns2,
+  Palette, PlayCircle, BarChart3, MessageSquare, Minus, Columns2, GripVertical,
 } from "lucide-react";
 import {
   BLOCK_LABELS,
@@ -46,6 +46,24 @@ export function ProjectBlocksEditor({
   uploadImage: (file: File) => Promise<string>;
 }) {
   const [open, setOpen] = useState<Record<string, boolean>>({});
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+
+  const reorder = (from: number, to: number) => {
+    if (from === to || from < 0 || to < 0 || from >= blocks.length || to >= blocks.length) return;
+    const arr = [...blocks];
+    const [item] = arr.splice(from, 1);
+    arr.splice(to, 0, item);
+    onChange(arr);
+  };
+  const onDrop = (targetId: string) => {
+    if (!dragId || dragId === targetId) { setDragId(null); setOverId(null); return; }
+    const from = blocks.findIndex((b) => b.id === dragId);
+    const to = blocks.findIndex((b) => b.id === targetId);
+    reorder(from, to);
+    setDragId(null);
+    setOverId(null);
+  };
 
   const update = (id: string, patch: Partial<ProjectBlock>) =>
     onChange(blocks.map((b) => (b.id === id ? ({ ...b, ...patch } as ProjectBlock) : b)));
@@ -92,8 +110,26 @@ export function ProjectBlocksEditor({
             const Icon = ICONS[b.type];
             const isOpen = open[b.id] ?? false;
             return (
-              <li key={b.id} className="rounded-xl border border-border/70 bg-background">
+              <li
+                key={b.id}
+                onDragOver={(e) => { e.preventDefault(); if (dragId && dragId !== b.id) setOverId(b.id); }}
+                onDragLeave={() => { if (overId === b.id) setOverId(null); }}
+                onDrop={(e) => { e.preventDefault(); onDrop(b.id); }}
+                className={`rounded-xl border bg-background transition-colors ${
+                  overId === b.id ? "border-accent ring-2 ring-accent/30" : "border-border/70"
+                } ${dragId === b.id ? "opacity-50" : ""}`}
+              >
                 <div className="flex items-center gap-2 border-b border-border/60 px-3 py-2">
+                  <button
+                    type="button"
+                    draggable
+                    onDragStart={(e) => { setDragId(b.id); e.dataTransfer.effectAllowed = "move"; }}
+                    onDragEnd={() => { setDragId(null); setOverId(null); }}
+                    title="اسحب لإعادة الترتيب"
+                    className="cursor-grab rounded p-1 text-muted-foreground hover:bg-muted active:cursor-grabbing"
+                  >
+                    <GripVertical className="h-4 w-4" />
+                  </button>
                   <button
                     type="button"
                     onClick={() => setOpen((s) => ({ ...s, [b.id]: !isOpen }))}
