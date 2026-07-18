@@ -420,7 +420,20 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
     const draft = !!opts?.draft;
     const eObj = validate({ publishing });
     setErrors(eObj);
-    if (Object.keys(eObj).length > 0) { toast.error("راجع الحقول المطلوبة"); return; }
+    if (Object.keys(eObj).length > 0) {
+      const msgs = Object.values(eObj).filter(Boolean) as string[];
+      toast.error(
+        `لا يمكن ${publishing ? "النشر" : "الحفظ"} — ${msgs.length} حقل ناقص:\n• ${msgs.join("\n• ")}`,
+        { duration: 8000 },
+      );
+      // Scroll to the error summary so the user sees exactly what's missing
+      requestAnimationFrame(() => {
+        const el = document.getElementById("editor-error-summary");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      return;
+    }
     const slug = f.slug || autoSlug;
 
     setSaving(true);
@@ -554,13 +567,20 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       </div>
 
       {errorSummary.length > 0 && (
-        <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">
+        <div
+          id="editor-error-summary"
+          role="alert"
+          className="scroll-mt-24 rounded-xl border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive"
+        >
           <div className="mb-2 flex items-center gap-2 font-medium">
-            <AlertCircle className="h-4 w-4" /> يوجد {errorSummary.length} خطأ في النموذج:
+            <AlertCircle className="h-4 w-4" /> يوجد {errorSummary.length} خطأ يمنع الحفظ/النشر:
           </div>
           <ul className="list-disc space-y-1 pe-5">
             {errorSummary.map((m, i) => <li key={i}>{m}</li>)}
           </ul>
+          <p className="mt-2 text-xs text-destructive/80">
+            صحّح الحقول المميّزة بالأحمر ثم اضغط الزر من جديد.
+          </p>
         </div>
       )}
 
