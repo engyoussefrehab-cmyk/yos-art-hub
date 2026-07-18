@@ -142,3 +142,19 @@ export const listCategories = createServerFn({ method: "GET" })
     })) as CategoryDTO[];
   });
 
+export const getCategoryBySlug = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string }) => d)
+  .handler(async ({ data }) => {
+    const supabase = publicClient();
+    const { data: row, error } = await supabase
+      .from("project_categories")
+      .select("slug,name_ar,name_en,description_ar,description_en,cover_image_url,sort_order")
+      .eq("slug", data.slug)
+      .eq("is_hidden", false)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!row) return null;
+    return { ...row, project_count: 0 } as CategoryDTO;
+  });
+
+

@@ -1,44 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
-import type { DictKey } from "@/i18n/dictionary";
-import type { PortfolioDTO } from "@/lib/portfolio.functions";
+import type { PortfolioDTO, CategoryDTO } from "@/lib/portfolio.functions";
 
-const catI18n: Record<string, { label: DictKey; desc: DictKey }> = {
-  branding: { label: "cat_branding_label", desc: "cat_branding_desc" },
-  logos: { label: "cat_logos_label", desc: "cat_logos_desc" },
-  profiles: { label: "cat_profiles_label", desc: "cat_profiles_desc" },
-  social: { label: "cat_social_label", desc: "cat_social_desc" },
-};
-
-// Static image boards for non-branding categories (illustrative moodboards).
-import p22 from "@/assets/portfolio/page_22.webp";
-import p23 from "@/assets/portfolio/page_23.webp";
-import p24 from "@/assets/portfolio/page_24.webp";
-import p25 from "@/assets/portfolio/page_25.webp";
-import p27 from "@/assets/portfolio/page_27.webp";
-import p28 from "@/assets/portfolio/page_28.webp";
-import p29 from "@/assets/portfolio/page_29.webp";
-import p30 from "@/assets/portfolio/page_30.webp";
-import p31 from "@/assets/portfolio/page_31.webp";
-import p32 from "@/assets/portfolio/page_32.webp";
-import p34 from "@/assets/portfolio/page_34.webp";
-import p35 from "@/assets/portfolio/page_35.webp";
-import p36 from "@/assets/portfolio/page_36.webp";
-import p37 from "@/assets/portfolio/page_37.webp";
-import p38 from "@/assets/portfolio/page_38.webp";
-import p39 from "@/assets/portfolio/page_39.webp";
-import p40 from "@/assets/portfolio/page_40.webp";
-
-const logoBoards = [p22, p23, p24, p25];
-const profileBoards = [p27, p28, p29, p30, p31, p32];
-const socialBoards = [p34, p35, p36, p37, p38, p39, p40];
-
-export function CategoryView({ categorySlug, projects }: { categorySlug: string; projects: PortfolioDTO[] }) {
+export function CategoryView({
+  category,
+  projects,
+}: {
+  category: CategoryDTO;
+  projects: PortfolioDTO[];
+}) {
   const { t, lang } = useLang();
-  const meta = catI18n[categorySlug];
-  if (!meta) return null;
-  const label = t(meta.label);
-  const desc = t(meta.desc);
+  const label = lang === "ar" ? category.name_ar || category.name_en : category.name_en || category.name_ar;
+  const desc = lang === "ar" ? category.description_ar : category.description_en;
   const projectsHref = lang === "ar" ? "/projects" : "/en/projects";
 
   return (
@@ -51,23 +24,24 @@ export function CategoryView({ categorySlug, projects }: { categorySlug: string;
       <header className="max-w-3xl">
         <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("cat_kicker")}</span>
         <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-tight">{label}</h1>
-        <p className="mt-5 text-lg text-muted-foreground">{desc}</p>
+        {desc && <p className="mt-5 text-lg text-muted-foreground">{desc}</p>}
       </header>
 
       <div className="mt-14">
-        {categorySlug === "branding" && <BrandingList projects={projects} />}
-        {categorySlug === "logos" && <ImageGrid images={logoBoards} labelKey="logo_board" cols={2} />}
-        {categorySlug === "profiles" && <ImageGrid images={profileBoards} labelKey="profile_board" cols={3} />}
-        {categorySlug === "social" && <ImageGrid images={socialBoards} labelKey="post_board" cols={3} />}
+        <ProjectsList categorySlug={category.slug} projects={projects} />
       </div>
     </section>
   );
 }
 
-function BrandingList({ projects }: { projects: PortfolioDTO[] }) {
+function ProjectsList({ categorySlug, projects }: { categorySlug: string; projects: PortfolioDTO[] }) {
   const { t, lang } = useLang();
   if (projects.length === 0) {
-    return <p className="text-muted-foreground">لا توجد مشاريع منشورة بعد.</p>;
+    return (
+      <div className="rounded-3xl border border-dashed border-border bg-cream/50 p-10 text-center text-muted-foreground">
+        {lang === "ar" ? "لا توجد مشاريع منشورة بعد في هذا القسم." : "No published projects yet in this section."}
+      </div>
+    );
   }
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -75,7 +49,9 @@ function BrandingList({ projects }: { projects: PortfolioDTO[] }) {
         const name = lang === "ar" ? p.name_ar : p.name_en;
         const short = lang === "ar" ? p.short_ar : p.short_en;
         const idx = String(i + 1).padStart(2, "0");
-        const href = lang === "ar" ? `/projects/branding/${p.slug}` : `/en/projects/branding/${p.slug}`;
+        const href = lang === "ar"
+          ? `/projects/${categorySlug}/${p.slug}`
+          : `/en/projects/${categorySlug}/${p.slug}`;
         return (
           <Link
             key={p.slug}
@@ -101,21 +77,6 @@ function BrandingList({ projects }: { projects: PortfolioDTO[] }) {
           </Link>
         );
       })}
-    </div>
-  );
-}
-
-function ImageGrid({ images, labelKey, cols }: { images: string[]; labelKey: DictKey; cols: 2 | 3 }) {
-  const { t } = useLang();
-  const gridCls = cols === 2 ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3";
-  const label = t(labelKey);
-  return (
-    <div className={`grid grid-cols-1 gap-6 ${gridCls}`}>
-      {images.map((src, i) => (
-        <div key={i} className="overflow-hidden rounded-2xl border border-border bg-cream">
-          <img src={src} alt={`${label} ${i + 1}`} loading="lazy" className="w-full" />
-        </div>
-      ))}
     </div>
   );
 }
