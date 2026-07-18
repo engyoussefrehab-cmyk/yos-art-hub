@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { A, useAdminLang } from "@/i18n/admin-lang";
 
 type Settings = {
   key: string;
@@ -27,6 +28,7 @@ const empty: Settings = {
 };
 
 function SettingsPage() {
+  const { dir, t } = useAdminLang();
   const [s, setS] = useState<Settings>(empty);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -48,52 +50,52 @@ function SettingsPage() {
     const { error } = await supabase.from("site_settings").upsert({ ...s, key: KEY }, { onConflict: "key" });
     setSaving(false);
     if (error) toast.error(error.message);
-    else toast.success("تم حفظ الإعدادات");
+    else toast.success(t(A.settings_saved));
   };
 
-  if (loading) return <div className="text-sm text-muted-foreground">جاري التحميل…</div>;
+  if (loading) return <div className="text-sm text-muted-foreground">{t(A.loading)}</div>;
 
   return (
-    <div dir="rtl" className="max-w-3xl space-y-6">
+    <div dir={dir} className="max-w-3xl space-y-6">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">إعدادات الموقع</h1>
-          <p className="mt-1 text-sm text-muted-foreground">اللوجو، بيانات الشركة، السوشيال ميديا، وإعدادات التتبع.</p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t(A.settings_title)}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t(A.settings_subtitle)}</p>
         </div>
-        <Button onClick={save} disabled={saving}>{saving ? "جاري الحفظ…" : "حفظ"}</Button>
+        <Button onClick={save} disabled={saving}>{saving ? t(A.saving) : t(A.save)}</Button>
       </div>
 
       <section className="space-y-4 rounded-2xl border border-border/70 bg-card p-6">
-        <h2 className="font-semibold">الهوية</h2>
+        <h2 className="font-semibold">{t(A.identity)}</h2>
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="grid gap-2"><Label>رابط اللوجو</Label><Input value={s.logo_url ?? ""} onChange={(e) => set("logo_url", e.target.value)} /></div>
-          <div className="grid gap-2"><Label>رابط الفافيكون</Label><Input value={s.favicon_url ?? ""} onChange={(e) => set("favicon_url", e.target.value)} /></div>
-          <div className="grid gap-2"><Label>اسم الشركة</Label><Input value={s.company_name ?? ""} onChange={(e) => set("company_name", e.target.value)} /></div>
-          <div className="grid gap-2"><Label>بريد التواصل</Label><Input value={s.contact_email ?? ""} onChange={(e) => set("contact_email", e.target.value)} /></div>
-          <div className="grid gap-2"><Label>رقم الهاتف</Label><Input value={s.contact_phone ?? ""} onChange={(e) => set("contact_phone", e.target.value)} /></div>
-          <div className="grid gap-2 md:col-span-2"><Label>العنوان</Label><Textarea rows={2} value={s.address ?? ""} onChange={(e) => set("address", e.target.value)} /></div>
+          <div className="grid gap-2"><Label>{t(A.logo_url)}</Label><Input value={s.logo_url ?? ""} onChange={(e) => set("logo_url", e.target.value)} dir="ltr" /></div>
+          <div className="grid gap-2"><Label>{t(A.favicon_url)}</Label><Input value={s.favicon_url ?? ""} onChange={(e) => set("favicon_url", e.target.value)} dir="ltr" /></div>
+          <div className="grid gap-2"><Label>{t(A.company_name)}</Label><Input value={s.company_name ?? ""} onChange={(e) => set("company_name", e.target.value)} /></div>
+          <div className="grid gap-2"><Label>{t(A.contact_email)}</Label><Input value={s.contact_email ?? ""} onChange={(e) => set("contact_email", e.target.value)} dir="ltr" /></div>
+          <div className="grid gap-2"><Label>{t(A.contact_phone)}</Label><Input value={s.contact_phone ?? ""} onChange={(e) => set("contact_phone", e.target.value)} dir="ltr" /></div>
+          <div className="grid gap-2 md:col-span-2"><Label>{t(A.address)}</Label><Textarea rows={2} value={s.address ?? ""} onChange={(e) => set("address", e.target.value)} /></div>
         </div>
       </section>
 
       <section className="space-y-4 rounded-2xl border border-border/70 bg-card p-6">
-        <h2 className="font-semibold">السوشيال ميديا</h2>
+        <h2 className="font-semibold">{t(A.socials)}</h2>
         <div className="grid gap-4 md:grid-cols-2">
           {["instagram", "linkedin", "behance", "twitter", "facebook", "youtube", "whatsapp"].map((k) => (
             <div key={k} className="grid gap-2">
               <Label className="capitalize">{k}</Label>
-              <Input value={s.socials[k] ?? ""} onChange={(e) => setSoc(k, e.target.value)} placeholder="https://…" />
+              <Input value={s.socials[k] ?? ""} onChange={(e) => setSoc(k, e.target.value)} placeholder="https://…" dir="ltr" />
             </div>
           ))}
         </div>
       </section>
 
       <section className="space-y-4 rounded-2xl border border-border/70 bg-card p-6">
-        <h2 className="font-semibold">التتبع والتحليلات</h2>
+        <h2 className="font-semibold">{t(A.analytics)}</h2>
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="grid gap-2"><Label>Google Analytics ID</Label><Input value={s.analytics.ga4 ?? ""} onChange={(e) => setAn("ga4", e.target.value)} placeholder="G-XXXXXXX" /></div>
-          <div className="grid gap-2"><Label>Google Tag Manager</Label><Input value={s.analytics.gtm ?? ""} onChange={(e) => setAn("gtm", e.target.value)} placeholder="GTM-XXXXXX" /></div>
-          <div className="grid gap-2"><Label>Facebook Pixel</Label><Input value={s.analytics.fb_pixel ?? ""} onChange={(e) => setAn("fb_pixel", e.target.value)} /></div>
-          <div className="grid gap-2"><Label>Search Console Verification</Label><Input value={s.analytics.gsc ?? ""} onChange={(e) => setAn("gsc", e.target.value)} /></div>
+          <div className="grid gap-2"><Label>Google Analytics ID</Label><Input value={s.analytics.ga4 ?? ""} onChange={(e) => setAn("ga4", e.target.value)} placeholder="G-XXXXXXX" dir="ltr" /></div>
+          <div className="grid gap-2"><Label>Google Tag Manager</Label><Input value={s.analytics.gtm ?? ""} onChange={(e) => setAn("gtm", e.target.value)} placeholder="GTM-XXXXXX" dir="ltr" /></div>
+          <div className="grid gap-2"><Label>Facebook Pixel</Label><Input value={s.analytics.fb_pixel ?? ""} onChange={(e) => setAn("fb_pixel", e.target.value)} dir="ltr" /></div>
+          <div className="grid gap-2"><Label>Search Console Verification</Label><Input value={s.analytics.gsc ?? ""} onChange={(e) => setAn("gsc", e.target.value)} dir="ltr" /></div>
         </div>
       </section>
     </div>
