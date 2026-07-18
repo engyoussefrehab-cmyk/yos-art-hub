@@ -1,9 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HomeView } from "@/views/HomeView";
 import { listServices } from "@/lib/services.functions";
+import { listPortfolio } from "@/lib/portfolio.functions";
 
 export const Route = createFileRoute("/")({
-  loader: () => listServices().catch(() => []),
+  loader: async () => {
+    const [services, projects] = await Promise.all([
+      listServices().catch(() => []),
+      listPortfolio({ data: {} }).catch(() => []),
+    ]);
+    return { services, projects };
+  },
   head: () => ({
     meta: [
       { title: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
@@ -34,6 +41,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeRoute() {
-  const services = Route.useLoaderData();
-  return <HomeView services={services} />;
+  const { services, projects } = Route.useLoaderData();
+  return <HomeView services={services} projects={projects} />;
 }

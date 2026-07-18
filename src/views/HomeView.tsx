@@ -2,15 +2,22 @@ import { Link } from "@tanstack/react-router";
 import youssefPortrait from "@/assets/youssef-portrait.jpg.asset.json";
 import portfolioPdf from "@/assets/portfolio.pdf.asset.json";
 import { Testimonials } from "@/components/Testimonials";
+import { LatestProjectsSlider } from "@/components/projects/LatestProjectsSlider";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
 import type { ServiceDTO } from "@/lib/services.functions";
+import type { PortfolioDTO } from "@/lib/portfolio.functions";
 
-export function HomeView({ services = [] }: { services?: ServiceDTO[] }) {
+export function HomeView({ services = [], projects = [] }: { services?: ServiceDTO[]; projects?: PortfolioDTO[] }) {
   return (
     <>
       <Hero />
       <About />
+      {projects.length > 0 && (
+        <section className="mx-auto max-w-7xl px-6 py-16">
+          <LatestProjectsSlider projects={projects} compact limit={10} />
+        </section>
+      )}
       <Services items={services} />
       <Testimonials />
       <CTA />
