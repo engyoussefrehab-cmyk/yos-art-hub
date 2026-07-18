@@ -1,0 +1,424 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  ArrowUp, ArrowDown, Trash2, Plus, Upload, X, Copy, ChevronDown, ChevronUp,
+  Type, Heading as HeadingIcon, Image as ImageIcon, Images, Quote,
+  Palette, PlayCircle, BarChart3, MessageSquare, Minus, Columns2,
+} from "lucide-react";
+import {
+  BLOCK_LABELS,
+  newBlock,
+  type BlockType,
+  type ProjectBlock,
+} from "@/lib/project-blocks";
+
+const ICONS: Record<BlockType, React.ComponentType<{ className?: string }>> = {
+  heading: HeadingIcon,
+  text: Type,
+  image: ImageIcon,
+  "two-col-image": Columns2,
+  gallery: Images,
+  quote: Quote,
+  palette: Palette,
+  video: PlayCircle,
+  stats: BarChart3,
+  callout: MessageSquare,
+  spacer: Minus,
+};
+
+const ALL_TYPES: BlockType[] = [
+  "heading", "text", "image", "two-col-image", "gallery",
+  "quote", "palette", "video", "stats", "callout", "spacer",
+];
+
+export function ProjectBlocksEditor({
+  blocks,
+  onChange,
+  uploadImage,
+}: {
+  blocks: ProjectBlock[];
+  onChange: (next: ProjectBlock[]) => void;
+  uploadImage: (file: File) => Promise<string>;
+}) {
+  const [open, setOpen] = useState<Record<string, boolean>>({});
+
+  const update = (id: string, patch: Partial<ProjectBlock>) =>
+    onChange(blocks.map((b) => (b.id === id ? ({ ...b, ...patch } as ProjectBlock) : b)));
+  const remove = (id: string) => onChange(blocks.filter((b) => b.id !== id));
+  const move = (idx: number, dir: -1 | 1) => {
+    const j = idx + dir;
+    if (j < 0 || j >= blocks.length) return;
+    const arr = [...blocks];
+    [arr[idx], arr[j]] = [arr[j], arr[idx]];
+    onChange(arr);
+  };
+  const duplicate = (idx: number) => {
+    const src = blocks[idx];
+    const copy = { ...src, id: crypto.randomUUID() } as ProjectBlock;
+    const arr = [...blocks];
+    arr.splice(idx + 1, 0, copy);
+    onChange(arr);
+  };
+  const add = (type: BlockType) => {
+    const b = newBlock(type);
+    onChange([...blocks, b]);
+    setOpen((s) => ({ ...s, [b.id]: true }));
+  };
+
+  return (
+    <div className="grid gap-4">
+      {blocks.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-border/70 p-8 text-center text-sm text-muted-foreground">
+          لم تُضف أي بلوكات بعد. اختر نوع البلوك من الأسفل لبدء بناء صفحة المشروع.
+        </div>
+      ) : (
+        <ol className="grid gap-3">
+          {blocks.map((b, i) => {
+            const Icon = ICONS[b.type];
+            const isOpen = open[b.id] ?? false;
+            return (
+              <li key={b.id} className="rounded-xl border border-border/70 bg-background">
+                <div className="flex items-center gap-2 border-b border-border/60 px-3 py-2">
+                  <button
+                    type="button"
+                    onClick={() => setOpen((s) => ({ ...s, [b.id]: !isOpen }))}
+                    className="flex flex-1 items-center gap-2 text-start text-sm font-medium"
+                  >
+                    <Icon className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">#{i + 1}</span>
+                    <span>{BLOCK_LABELS[b.type].ar}</span>
+                    <span className="ms-auto text-muted-foreground">
+                      {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </span>
+                  </button>
+                  <div className="flex gap-1">
+                    <IconBtn title="لأعلى" onClick={() => move(i, -1)} disabled={i === 0}>
+                      <ArrowUp className="h-3.5 w-3.5" />
+                    </IconBtn>
+                    <IconBtn title="لأسفل" onClick={() => move(i, 1)} disabled={i === blocks.length - 1}>
+                      <ArrowDown className="h-3.5 w-3.5" />
+                    </IconBtn>
+                    <IconBtn title="نسخ" onClick={() => duplicate(i)}>
+                      <Copy className="h-3.5 w-3.5" />
+                    </IconBtn>
+                    <IconBtn title="حذف" onClick={() => remove(b.id)}>
+                      <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                    </IconBtn>
+                  </div>
+                </div>
+                {isOpen && (
+                  <div className="p-4">
+                    <BlockEditor block={b} onChange={(patch) => update(b.id, patch)} uploadImage={uploadImage} />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      )}
+      <div className="rounded-xl border border-dashed border-border/70 bg-muted/20 p-4">
+        <div className="mb-2 text-xs font-semibold text-muted-foreground">إضافة بلوك:</div>
+        <div className="flex flex-wrap gap-2">
+          {ALL_TYPES.map((t) => {
+            const Icon = ICONS[t];
+            return (
+              <Button key={t} type="button" size="sm" variant="outline" onClick={() => add(t)}>
+                <Icon className="ms-1 h-4 w-4" /> {BLOCK_LABELS[t].ar}
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function IconBtn({
+  children, onClick, disabled, title,
+}: { children: React.ReactNode; onClick: () => void; disabled?: boolean; title?: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      title={title}
+      className="rounded-md border border-border/60 bg-background p-1.5 text-muted-foreground hover:bg-muted disabled:opacity-40"
+    >
+      {children}
+    </button>
+  );
+}
+
+function BlockEditor({
+  block: b,
+  onChange,
+  uploadImage,
+}: {
+  block: ProjectBlock;
+  onChange: (patch: Partial<ProjectBlock>) => void;
+  uploadImage: (file: File) => Promise<string>;
+}) {
+  switch (b.type) {
+    case "heading":
+      return (
+        <div className="grid gap-3 md:grid-cols-2">
+          <FieldText label="العنوان (عربي)" value={b.text_ar} onChange={(v) => onChange({ text_ar: v } as any)} />
+          <FieldText label="Heading (English)" value={b.text_en} onChange={(v) => onChange({ text_en: v } as any)} dir="ltr" />
+          <FieldSelect
+            label="المستوى"
+            value={String(b.level ?? 2)}
+            onChange={(v) => onChange({ level: (Number(v) as 2 | 3) } as any)}
+            options={[["2", "H2 — كبير"], ["3", "H3 — متوسط"]]}
+          />
+          <FieldSelect
+            label="المحاذاة"
+            value={b.align ?? "start"}
+            onChange={(v) => onChange({ align: v as any } as any)}
+            options={[["start", "بداية السطر"], ["center", "منتصف"]]}
+          />
+        </div>
+      );
+    case "text":
+      return (
+        <div className="grid gap-3 md:grid-cols-2">
+          <FieldTextarea label="النص (عربي)" value={b.content_ar} onChange={(v) => onChange({ content_ar: v } as any)} rows={5} />
+          <FieldTextarea label="Text (English)" value={b.content_en} onChange={(v) => onChange({ content_en: v } as any)} rows={5} dir="ltr" />
+          <FieldSelect
+            label="المحاذاة"
+            value={b.align ?? "start"}
+            onChange={(v) => onChange({ align: v as any } as any)}
+            options={[["start", "بداية"], ["center", "منتصف"]]}
+          />
+        </div>
+      );
+    case "image":
+      return (
+        <div className="grid gap-3">
+          <ImageField
+            label="رابط الصورة"
+            url={b.url}
+            uploadImage={uploadImage}
+            onChange={(v) => onChange({ url: v } as any)}
+          />
+          <div className="grid gap-3 md:grid-cols-3">
+            <FieldSelect
+              label="العرض"
+              value={b.width ?? "wide"}
+              onChange={(v) => onChange({ width: v as any } as any)}
+              options={[["full", "شاشة كاملة"], ["wide", "عريض"], ["narrow", "ضيق"]]}
+            />
+            <FieldText label="تسمية (عربي)" value={b.caption_ar} onChange={(v) => onChange({ caption_ar: v } as any)} />
+            <FieldText label="Caption (English)" value={b.caption_en} onChange={(v) => onChange({ caption_en: v } as any)} dir="ltr" />
+          </div>
+        </div>
+      );
+    case "two-col-image":
+      return (
+        <div className="grid gap-3 md:grid-cols-2">
+          <ImageField label="الصورة اليمنى" url={b.url_left} uploadImage={uploadImage} onChange={(v) => onChange({ url_left: v } as any)} />
+          <ImageField label="الصورة اليسرى" url={b.url_right} uploadImage={uploadImage} onChange={(v) => onChange({ url_right: v } as any)} />
+        </div>
+      );
+    case "gallery": {
+      const urls = b.urls ?? [];
+      const remove = (i: number) => onChange({ urls: urls.filter((_, idx) => idx !== i) } as any);
+      const upload = async (files: FileList | null) => {
+        if (!files || files.length === 0) return;
+        const newUrls: string[] = [];
+        for (const f of Array.from(files)) {
+          try { newUrls.push(await uploadImage(f)); } catch {}
+        }
+        onChange({ urls: [...urls, ...newUrls] } as any);
+      };
+      return (
+        <div className="grid gap-3">
+          <FieldSelect
+            label="عدد الأعمدة"
+            value={String(b.columns ?? 3)}
+            onChange={(v) => onChange({ columns: Number(v) as any } as any)}
+            options={[["2", "عمودان"], ["3", "3 أعمدة"], ["4", "4 أعمدة"]]}
+          />
+          {urls.length > 0 && (
+            <div className="grid grid-cols-3 gap-2">
+              {urls.map((u, i) => (
+                <div key={i} className="relative overflow-hidden rounded-md border border-border/60">
+                  <img src={u} alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
+                  <button
+                    type="button"
+                    onClick={() => remove(i)}
+                    className="absolute end-1 top-1 rounded-full bg-black/70 p-1 text-white"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <label className="cursor-pointer">
+            <Button asChild size="sm" variant="outline">
+              <span><Upload className="ms-1 h-4 w-4" /> رفع صور</span>
+            </Button>
+            <input type="file" hidden multiple accept="image/*" onChange={(e) => { upload(e.target.files); e.target.value = ""; }} />
+          </label>
+        </div>
+      );
+    }
+    case "quote":
+      return (
+        <div className="grid gap-3 md:grid-cols-2">
+          <FieldTextarea label="الاقتباس (عربي)" value={b.text_ar} onChange={(v) => onChange({ text_ar: v } as any)} rows={3} />
+          <FieldTextarea label="Quote (English)" value={b.text_en} onChange={(v) => onChange({ text_en: v } as any)} rows={3} dir="ltr" />
+          <FieldText label="القائل" value={b.author} onChange={(v) => onChange({ author: v } as any)} />
+        </div>
+      );
+    case "palette": {
+      const colors = b.colors ?? [];
+      const upd = (i: number, patch: Partial<{ name: string; hex: string }>) =>
+        onChange({ colors: colors.map((c, idx) => (idx === i ? { ...c, ...patch } : c)) } as any);
+      return (
+        <div className="grid gap-3">
+          {colors.map((c, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <input type="color" value={c.hex} onChange={(e) => upd(i, { hex: e.target.value })} className="h-10 w-10 rounded border border-border/60" />
+              <Input value={c.name ?? ""} onChange={(e) => upd(i, { name: e.target.value })} placeholder="اسم اللون" />
+              <Input value={c.hex} onChange={(e) => upd(i, { hex: e.target.value })} placeholder="#000000" dir="ltr" />
+              <Button type="button" size="icon" variant="ghost" onClick={() => onChange({ colors: colors.filter((_, idx) => idx !== i) } as any)}>
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </div>
+          ))}
+          <Button type="button" size="sm" variant="outline" onClick={() => onChange({ colors: [...colors, { name: "", hex: "#000000" }] } as any)}>
+            <Plus className="ms-1 h-4 w-4" /> لون جديد
+          </Button>
+        </div>
+      );
+    }
+    case "video":
+      return (
+        <div className="grid gap-3 md:grid-cols-2">
+          <FieldText label="رابط الفيديو (YouTube/Vimeo/mp4)" value={b.url} onChange={(v) => onChange({ url: v } as any)} dir="ltr" />
+          <FieldText label="تسمية (عربي)" value={b.caption_ar} onChange={(v) => onChange({ caption_ar: v } as any)} />
+          <FieldText label="Caption (English)" value={b.caption_en} onChange={(v) => onChange({ caption_en: v } as any)} dir="ltr" />
+        </div>
+      );
+    case "stats": {
+      const items = b.items ?? [];
+      const upd = (i: number, patch: Partial<{ value: string; label_ar: string; label_en: string }>) =>
+        onChange({ items: items.map((it, idx) => (idx === i ? { ...it, ...patch } : it)) } as any);
+      return (
+        <div className="grid gap-3">
+          {items.map((it, i) => (
+            <div key={i} className="grid gap-2 rounded-lg border border-border/60 p-3 md:grid-cols-4">
+              <Input value={it.value} onChange={(e) => upd(i, { value: e.target.value })} placeholder="120+" />
+              <Input value={it.label_ar ?? ""} onChange={(e) => upd(i, { label_ar: e.target.value })} placeholder="التسمية (عربي)" />
+              <Input value={it.label_en ?? ""} onChange={(e) => upd(i, { label_en: e.target.value })} placeholder="Label (English)" dir="ltr" />
+              <Button type="button" size="icon" variant="ghost" onClick={() => onChange({ items: items.filter((_, idx) => idx !== i) } as any)}>
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </div>
+          ))}
+          <Button type="button" size="sm" variant="outline" onClick={() => onChange({ items: [...items, { value: "", label_ar: "", label_en: "" }] } as any)}>
+            <Plus className="ms-1 h-4 w-4" /> إحصائية جديدة
+          </Button>
+        </div>
+      );
+    }
+    case "callout":
+      return (
+        <div className="grid gap-3">
+          <FieldSelect
+            label="الطابع"
+            value={b.tone ?? "accent"}
+            onChange={(v) => onChange({ tone: v as any } as any)}
+            options={[["accent", "بارز"], ["info", "معلومة"], ["success", "إيجابي"]]}
+          />
+          <div className="grid gap-3 md:grid-cols-2">
+            <FieldTextarea label="النص (عربي)" value={b.text_ar} onChange={(v) => onChange({ text_ar: v } as any)} rows={3} />
+            <FieldTextarea label="Text (English)" value={b.text_en} onChange={(v) => onChange({ text_en: v } as any)} rows={3} dir="ltr" />
+          </div>
+        </div>
+      );
+    case "spacer":
+      return (
+        <FieldSelect
+          label="حجم الفراغ"
+          value={b.size ?? "md"}
+          onChange={(v) => onChange({ size: v as any } as any)}
+          options={[["sm", "صغير"], ["md", "متوسط"], ["lg", "كبير"]]}
+        />
+      );
+  }
+}
+
+function FieldText({
+  label, value, onChange, dir,
+}: { label: string; value?: string; onChange: (v: string) => void; dir?: "ltr" | "rtl" }) {
+  return (
+    <div className="grid gap-2">
+      <Label>{label}</Label>
+      <Input value={value ?? ""} onChange={(e) => onChange(e.target.value)} dir={dir} />
+    </div>
+  );
+}
+
+function FieldTextarea({
+  label, value, onChange, rows, dir,
+}: { label: string; value?: string; onChange: (v: string) => void; rows?: number; dir?: "ltr" | "rtl" }) {
+  return (
+    <div className="grid gap-2">
+      <Label>{label}</Label>
+      <Textarea value={value ?? ""} onChange={(e) => onChange(e.target.value)} rows={rows} dir={dir} />
+    </div>
+  );
+}
+
+function FieldSelect({
+  label, value, onChange, options,
+}: { label: string; value: string; onChange: (v: string) => void; options: [string, string][] }) {
+  return (
+    <div className="grid gap-2">
+      <Label>{label}</Label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-10 rounded-md border border-border/70 bg-background px-3 text-sm"
+      >
+        {options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+      </select>
+    </div>
+  );
+}
+
+function ImageField({
+  label, url, onChange, uploadImage,
+}: { label: string; url: string; onChange: (v: string) => void; uploadImage: (f: File) => Promise<string> }) {
+  const [busy, setBusy] = useState(false);
+  const handle = async (file?: File | null) => {
+    if (!file) return;
+    setBusy(true);
+    try { onChange(await uploadImage(file)); } finally { setBusy(false); }
+  };
+  return (
+    <div className="grid gap-2">
+      <Label>{label}</Label>
+      {url ? (
+        <div className="relative overflow-hidden rounded-lg border border-border/60">
+          <img src={url} alt="" className="max-h-56 w-full object-cover" loading="lazy" />
+          <button type="button" onClick={() => onChange("")} className="absolute end-2 top-2 rounded-full bg-black/60 p-1.5 text-white">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      ) : (
+        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-border/70 p-6 text-sm text-muted-foreground hover:bg-muted/30">
+          <Upload className="h-4 w-4" />
+          <span>{busy ? "جاري الرفع…" : "اضغط للرفع"}</span>
+          <input type="file" hidden accept="image/*" onChange={(e) => { handle(e.target.files?.[0]); e.target.value = ""; }} />
+        </label>
+      )}
+      <Input value={url} onChange={(e) => onChange(e.target.value)} placeholder="أو الصق رابطًا" dir="ltr" />
+    </div>
+  );
+}
