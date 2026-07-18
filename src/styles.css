@@ -155,7 +155,11 @@ main {
 }
 
 /* Prevent accidental horizontal scroll on mobile from oversized child scrollers/decorations */
-html, body { overflow-x: clip; }
+/* Use `hidden` for broad browser support (Samsung Internet <21 lacks `clip`) */
+html, body { overflow-x: hidden; }
+@supports (overflow: clip) {
+  html, body { overflow-x: clip; }
+}
 
 /* ============ Testimonials slider (auto + drag) ============ */
 .testimonials-slider { position: relative; }
