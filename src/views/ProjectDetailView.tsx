@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import { ProjectBlocksRenderer } from "@/components/project-blocks/ProjectBlocksRenderer";
+import { ZoomableImage } from "@/components/ZoomableImage";
 
 export function ProjectDetailView({ project, next }: { project: PortfolioDTO; next: PortfolioDTO | null }) {
   const { t, lang } = useLang();
