@@ -31,6 +31,11 @@ export type PortfolioDTO = {
   featured: boolean;
   sort_order: number;
   blocks: ProjectBlock[];
+  seo_title_ar: string | null;
+  seo_title_en: string | null;
+  seo_description_ar: string | null;
+  seo_description_en: string | null;
+  og_image_url: string | null;
   country: string | null;
   year: number | null;
   tags: string[];
