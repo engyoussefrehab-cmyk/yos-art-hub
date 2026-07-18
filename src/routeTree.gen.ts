@@ -22,13 +22,17 @@ import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as EnRssDotxmlRouteImport } from './routes/en.rss[.]xml'
 import { Route as EnPackagesRouteImport } from './routes/en.packages'
 import { Route as EnContactRouteImport } from './routes/en.contact'
+import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AdminTagsRouteImport } from './routes/admin.tags'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminSeoRouteImport } from './routes/admin.seo'
+import { Route as AdminSectionsRouteImport } from './routes/admin.sections'
 import { Route as AdminProfileRouteImport } from './routes/admin.profile'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
+import { Route as AdminPageSeoRouteImport } from './routes/admin.page-seo'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminMenusRouteImport } from './routes/admin.menus'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
@@ -119,6 +123,11 @@ const EnContactRoute = EnContactRouteImport.update({
   path: '/en/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminTagsRoute = AdminTagsRouteImport.update({
   id: '/tags',
   path: '/tags',
@@ -139,6 +148,11 @@ const AdminSeoRoute = AdminSeoRouteImport.update({
   path: '/seo',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSectionsRoute = AdminSectionsRouteImport.update({
+  id: '/sections',
+  path: '/sections',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProfileRoute = AdminProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -149,9 +163,19 @@ const AdminPagesRoute = AdminPagesRouteImport.update({
   path: '/pages',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPageSeoRoute = AdminPageSeoRouteImport.update({
+  id: '/page-seo',
+  path: '/page-seo',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMenusRoute = AdminMenusRouteImport.update({
+  id: '/menus',
+  path: '/menus',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminMediaRoute = AdminMediaRouteImport.update({
@@ -286,13 +310,17 @@ export interface FileRoutesByFullPath {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/page-seo': typeof AdminPageSeoRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/profile': typeof AdminProfileRoute
+  '/admin/sections': typeof AdminSectionsRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -331,13 +359,17 @@ export interface FileRoutesByTo {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/page-seo': typeof AdminPageSeoRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/profile': typeof AdminProfileRoute
+  '/admin/sections': typeof AdminSectionsRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -378,13 +410,17 @@ export interface FileRoutesById {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/media': typeof AdminMediaRoute
+  '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/page-seo': typeof AdminPageSeoRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/profile': typeof AdminProfileRoute
+  '/admin/sections': typeof AdminSectionsRoute
   '/admin/seo': typeof AdminSeoRoute
   '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -426,13 +462,17 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/categories'
     | '/admin/media'
+    | '/admin/menus'
     | '/admin/messages'
+    | '/admin/page-seo'
     | '/admin/pages'
     | '/admin/profile'
+    | '/admin/sections'
     | '/admin/seo'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
+    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -471,13 +511,17 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/categories'
     | '/admin/media'
+    | '/admin/menus'
     | '/admin/messages'
+    | '/admin/page-seo'
     | '/admin/pages'
     | '/admin/profile'
+    | '/admin/sections'
     | '/admin/seo'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
+    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -517,13 +561,17 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/categories'
     | '/admin/media'
+    | '/admin/menus'
     | '/admin/messages'
+    | '/admin/page-seo'
     | '/admin/pages'
     | '/admin/profile'
+    | '/admin/sections'
     | '/admin/seo'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
+    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -676,6 +724,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/testimonials': {
+      id: '/admin/testimonials'
+      path: '/testimonials'
+      fullPath: '/admin/testimonials'
+      preLoaderRoute: typeof AdminTestimonialsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/tags': {
       id: '/admin/tags'
       path: '/tags'
@@ -704,6 +759,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSeoRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/sections': {
+      id: '/admin/sections'
+      path: '/sections'
+      fullPath: '/admin/sections'
+      preLoaderRoute: typeof AdminSectionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/profile': {
       id: '/admin/profile'
       path: '/profile'
@@ -718,11 +780,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPagesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/page-seo': {
+      id: '/admin/page-seo'
+      path: '/page-seo'
+      fullPath: '/admin/page-seo'
+      preLoaderRoute: typeof AdminPageSeoRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/messages': {
       id: '/admin/messages'
       path: '/messages'
       fullPath: '/admin/messages'
       preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/menus': {
+      id: '/admin/menus'
+      path: '/menus'
+      fullPath: '/admin/menus'
+      preLoaderRoute: typeof AdminMenusRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/media': {
@@ -914,13 +990,17 @@ interface AdminRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminMediaRoute: typeof AdminMediaRoute
+  AdminMenusRoute: typeof AdminMenusRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminPageSeoRoute: typeof AdminPageSeoRoute
   AdminPagesRoute: typeof AdminPagesRoute
   AdminProfileRoute: typeof AdminProfileRoute
+  AdminSectionsRoute: typeof AdminSectionsRoute
   AdminSeoRoute: typeof AdminSeoRoute
   AdminServicesRoute: typeof AdminServicesRouteWithChildren
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTagsRoute: typeof AdminTagsRoute
+  AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminInsightsIdRoute: typeof AdminInsightsIdRoute
   AdminInsightsNewRoute: typeof AdminInsightsNewRoute
@@ -934,13 +1014,17 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminMediaRoute: AdminMediaRoute,
+  AdminMenusRoute: AdminMenusRoute,
   AdminMessagesRoute: AdminMessagesRoute,
+  AdminPageSeoRoute: AdminPageSeoRoute,
   AdminPagesRoute: AdminPagesRoute,
   AdminProfileRoute: AdminProfileRoute,
+  AdminSectionsRoute: AdminSectionsRoute,
   AdminSeoRoute: AdminSeoRoute,
   AdminServicesRoute: AdminServicesRouteWithChildren,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTagsRoute: AdminTagsRoute,
+  AdminTestimonialsRoute: AdminTestimonialsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminInsightsIdRoute: AdminInsightsIdRoute,
   AdminInsightsNewRoute: AdminInsightsNewRoute,
