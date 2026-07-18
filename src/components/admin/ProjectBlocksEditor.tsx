@@ -69,6 +69,16 @@ export function ProjectBlocksEditor({
     onChange([...blocks, b]);
     setOpen((s) => ({ ...s, [b.id]: true }));
   };
+  const insertTemplate = (id: TemplateId) => {
+    const tpl = buildTemplate(id);
+    onChange([...blocks, ...tpl]);
+    setOpen((s) => {
+      const next = { ...s };
+      for (const b of tpl) next[b.id] = false;
+      return next;
+    });
+  };
+
 
   return (
     <div className="grid gap-4">
