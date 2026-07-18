@@ -72,13 +72,36 @@ export function formatDate(iso: string | null, lang: Lang): string {
   }
 }
 
-// Simple defense-in-depth sanitizer for admin-authored HTML.
+// Defense-in-depth sanitizer for admin-authored HTML using DOMPurify.
+// Uses a strict allow-list of tags/attributes suitable for article content.
+import DOMPurify from "isomorphic-dompurify";
+
+const ALLOWED_TAGS = [
+  "a", "b", "strong", "i", "em", "u", "s", "mark", "small", "sub", "sup",
+  "p", "br", "hr", "span", "div",
+  "h1", "h2", "h3", "h4", "h5", "h6",
+  "ul", "ol", "li",
+  "blockquote", "pre", "code",
+  "img", "figure", "figcaption",
+  "table", "thead", "tbody", "tfoot", "tr", "th", "td",
+];
+
+const ALLOWED_ATTR = [
+  "href", "title", "target", "rel",
+  "src", "alt", "width", "height", "loading",
+  "class", "id", "dir", "lang",
+  "colspan", "rowspan",
+];
+
 export function sanitizeHtml(html: string): string {
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-    .replace(/\son\w+\s*=\s*"[^"]*"/gi, "")
-    .replace(/\son\w+\s*=\s*'[^']*'/gi, "")
-    .replace(/javascript:/gi, "");
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS,
+    ALLOWED_ATTR,
+    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
+    FORBID_TAGS: ["script", "style", "iframe", "object", "embed", "form", "input", "svg", "math"],
+    FORBID_ATTR: ["style", "srcdoc", "formaction", "xlink:href"],
+    ALLOW_DATA_ATTR: false,
+  });
 }
 
 export function coverUrl(row: { cover_url: string | null }): string | null {
