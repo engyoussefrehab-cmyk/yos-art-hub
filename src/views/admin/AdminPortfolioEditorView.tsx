@@ -157,6 +157,9 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [categories, setCategories] = useState<CategoryOpt[]>([]);
   const [tags, setTags] = useState<TagOpt[]>([]);
+  const [autoState, setAutoState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
     (async () => {
