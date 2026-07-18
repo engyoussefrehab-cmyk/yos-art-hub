@@ -225,6 +225,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
           status: (r.status ?? "draft") as any,
           published_at: toLocalInput(r.published_at),
           sort_order: r.sort_order ?? 0,
+          blocks: normalizeBlocks(r.layout_blocks),
         });
       }
       setLoading(false);
