@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useRef } from "react";
-import { testimonials, testimonialStats } from "@/lib/testimonials";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { testimonials as staticTestimonials, testimonialStats } from "@/lib/testimonials";
 import { useLang } from "@/i18n/use-lang";
+import { useCmsTestimonials } from "@/hooks/use-cms-data";
+
+type Item = { name: string; project: string; quote: string; rating: number };
 
 
 function Stars({ n }: { n: number }) {
