@@ -39,7 +39,7 @@ function Mini({ n, labelKey }: { n: string; labelKey: DictKey }) {
   return <div><div className="font-display text-3xl font-bold">{n}</div><div className="mt-1 text-xs text-white/60">{t(labelKey)}</div></div>;
 }
 
-type FieldErrors = Partial<Record<"name" | "email" | "subject" | "message", string>>;
+type FieldErrors = Partial<Record<"name" | "email" | "subject" | "message" | "call_date", string>>;
 
 function ContactForm() {
   const { t, lang } = useLang();
