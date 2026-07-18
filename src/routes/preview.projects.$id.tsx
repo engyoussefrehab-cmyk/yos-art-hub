@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { ProjectDetailView } from "@/views/ProjectDetailView";
-import { normalizeBlocks } from "@/lib/project-blocks";
+import { synthesizeDefaultBlocks } from "@/lib/project-blocks";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 
 type PreviewState =
