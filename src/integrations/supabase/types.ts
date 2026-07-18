@@ -409,6 +409,57 @@ export type Database = {
           },
         ]
       }
+      page_seo: {
+        Row: {
+          canonical_url: string | null
+          created_at: string
+          description_ar: string | null
+          description_en: string | null
+          id: string
+          is_active: boolean
+          json_ld: Json | null
+          keywords: string | null
+          og_image_url: string | null
+          robots: string
+          route_key: string
+          title_ar: string | null
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          canonical_url?: string | null
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          is_active?: boolean
+          json_ld?: Json | null
+          keywords?: string | null
+          og_image_url?: string | null
+          robots?: string
+          route_key: string
+          title_ar?: string | null
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          canonical_url?: string | null
+          created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
+          id?: string
+          is_active?: boolean
+          json_ld?: Json | null
+          keywords?: string | null
+          og_image_url?: string | null
+          robots?: string
+          route_key?: string
+          title_ar?: string | null
+          title_en?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pages: {
         Row: {
           blocks: Json
@@ -870,6 +921,90 @@ export type Database = {
           },
         ]
       }
+      site_menus: {
+        Row: {
+          created_at: string
+          icon: string | null
+          id: string
+          is_external: boolean
+          is_visible: boolean
+          label_ar: string
+          label_en: string
+          location: string
+          open_in_new_tab: boolean
+          order_index: number
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_external?: boolean
+          is_visible?: boolean
+          label_ar: string
+          label_en: string
+          location: string
+          open_in_new_tab?: boolean
+          order_index?: number
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_external?: boolean
+          is_visible?: boolean
+          label_ar?: string
+          label_en?: string
+          location?: string
+          open_in_new_tab?: boolean
+          order_index?: number
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      site_sections: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          is_visible: boolean
+          layout_variant: string
+          order_index: number
+          page_key: string
+          section_key: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          id?: string
+          is_visible?: boolean
+          layout_variant?: string
+          order_index?: number
+          page_key: string
+          section_key: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          is_visible?: boolean
+          layout_variant?: string
+          order_index?: number
+          page_key?: string
+          section_key?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           address: string | null
@@ -877,11 +1012,17 @@ export type Database = {
           company_name: string | null
           contact_email: string | null
           contact_phone: string | null
+          copy: Json
+          default_lang: string
           favicon_url: string | null
           key: string
           logo_url: string | null
+          logo_url_dark: string | null
+          og_default_image_url: string | null
           socials: Json
+          theme: Json
           updated_at: string
+          whatsapp_number: string | null
         }
         Insert: {
           address?: string | null
@@ -889,11 +1030,17 @@ export type Database = {
           company_name?: string | null
           contact_email?: string | null
           contact_phone?: string | null
+          copy?: Json
+          default_lang?: string
           favicon_url?: string | null
           key: string
           logo_url?: string | null
+          logo_url_dark?: string | null
+          og_default_image_url?: string | null
           socials?: Json
+          theme?: Json
           updated_at?: string
+          whatsapp_number?: string | null
         }
         Update: {
           address?: string | null
@@ -901,11 +1048,17 @@ export type Database = {
           company_name?: string | null
           contact_email?: string | null
           contact_phone?: string | null
+          copy?: Json
+          default_lang?: string
           favicon_url?: string | null
           key?: string
           logo_url?: string | null
+          logo_url_dark?: string | null
+          og_default_image_url?: string | null
           socials?: Json
+          theme?: Json
           updated_at?: string
+          whatsapp_number?: string | null
         }
         Relationships: []
       }
@@ -932,6 +1085,69 @@ export type Database = {
           label_ar?: string
           label_en?: string
           slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          is_featured: boolean
+          is_verified: boolean
+          is_visible: boolean
+          name_ar: string
+          name_en: string | null
+          order_index: number
+          project_date: string | null
+          rating: number
+          role_ar: string | null
+          role_en: string | null
+          source: string | null
+          source_url: string | null
+          text_ar: string
+          text_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          is_featured?: boolean
+          is_verified?: boolean
+          is_visible?: boolean
+          name_ar: string
+          name_en?: string | null
+          order_index?: number
+          project_date?: string | null
+          rating?: number
+          role_ar?: string | null
+          role_en?: string | null
+          source?: string | null
+          source_url?: string | null
+          text_ar: string
+          text_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          is_featured?: boolean
+          is_verified?: boolean
+          is_visible?: boolean
+          name_ar?: string
+          name_en?: string | null
+          order_index?: number
+          project_date?: string | null
+          rating?: number
+          role_ar?: string | null
+          role_en?: string | null
+          source?: string | null
+          source_url?: string | null
+          text_ar?: string
+          text_en?: string | null
           updated_at?: string
         }
         Relationships: []
