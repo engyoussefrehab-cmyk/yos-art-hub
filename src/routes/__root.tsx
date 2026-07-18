@@ -222,6 +222,29 @@ function LangSync() {
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
     }
+    // Manage hreflang alternate links
+    try {
+      const isEn = pathname === "/en" || pathname.startsWith("/en/");
+      const arPath = isEn ? (pathname.replace(/^\/en/, "") || "/") : pathname;
+      const enPath = isEn ? pathname : `/en${pathname === "/" ? "" : pathname}`;
+      const origin = "https://yrstudio.art";
+      const entries: Array<[string, string]> = [
+        ["ar", `${origin}${arPath}`],
+        ["ar-SA", `${origin}${arPath}`],
+        ["ar-AE", `${origin}${arPath}`],
+        ["en", `${origin}${enPath}`],
+        ["x-default", `${origin}${arPath}`],
+      ];
+      document.querySelectorAll('link[rel="alternate"][data-hreflang="1"]').forEach((n) => n.remove());
+      for (const [hl, href] of entries) {
+        const l = document.createElement("link");
+        l.rel = "alternate";
+        l.hreflang = hl;
+        l.href = href;
+        l.setAttribute("data-hreflang", "1");
+        document.head.appendChild(l);
+      }
+    } catch {}
   }, [pathname]);
   return null;
 }
