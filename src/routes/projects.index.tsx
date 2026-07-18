@@ -1,16 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { zodValidator, fallback } from "@tanstack/zod-adapter";
-import { z } from "zod";
 import { ProjectsHubView } from "@/views/ProjectsHubView";
 import { listPortfolio } from "@/lib/portfolio.functions";
 
-const searchSchema = z.object({
-  cat: fallback(z.string(), "").default(""),
-  country: fallback(z.string(), "").default(""),
-  year: fallback(z.string(), "").default(""),
-  tag: fallback(z.string(), "").default(""),
-  sort: fallback(z.string(), "newest").default("newest"),
-});
+const SORTS = new Set(["newest", "oldest", "featured", "az"]);
+const asStr = (v: unknown) => (typeof v === "string" ? v : "");
+const asSort = (v: unknown) => {
+  const s = asStr(v);
+  return (SORTS.has(s) ? s : "newest") as "newest" | "oldest" | "featured" | "az";
+};
+
+
 
 export const Route = createFileRoute("/projects/")({
   validateSearch: zodValidator(searchSchema),
