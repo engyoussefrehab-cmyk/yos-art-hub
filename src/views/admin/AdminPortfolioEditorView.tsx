@@ -11,6 +11,8 @@ import {
   Upload, X, ArrowUp, ArrowDown, Star, ExternalLink, Trash2, AlertCircle,
   Plus, Palette, Tag as TagIcon,
 } from "lucide-react";
+import { ProjectBlocksEditor } from "@/components/admin/ProjectBlocksEditor";
+import { normalizeBlocks, type ProjectBlock } from "@/lib/project-blocks";
 
 type CategoryOpt = { id: string; slug: string; name_ar: string; name_en: string };
 type TagOpt = { id: string; slug: string; label_ar: string; label_en: string };
