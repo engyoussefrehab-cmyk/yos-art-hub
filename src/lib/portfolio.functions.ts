@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { normalizeBlocks, type ProjectBlock } from "@/lib/project-blocks";
+import { normalizeBlocks, synthesizeDefaultBlocks, type ProjectBlock } from "@/lib/project-blocks";
 
 function publicClient() {
   return createClient<Database>(
