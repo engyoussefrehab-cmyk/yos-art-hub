@@ -12,7 +12,14 @@ const asSort = (v: unknown) => {
 
 
 export const Route = createFileRoute("/projects/")({
-  validateSearch: zodValidator(searchSchema),
+  validateSearch: (s: Record<string, unknown>) => ({
+    cat: asStr(s.cat),
+    country: asStr(s.country),
+    year: asStr(s.year),
+    tag: asStr(s.tag),
+    sort: asSort(s.sort),
+  }),
+
   head: () => ({
     meta: [
       { title: "أعمال يوسف رحاب — هويات بصرية وشعارات وملفات شركات" },
