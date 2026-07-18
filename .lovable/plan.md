@@ -1,93 +1,87 @@
-# خطة إعادة بناء نظام المشاريع (Projects CMS)
+# Full CMS control over Project Details page
 
-هذا مشروع ضخم — لا يمكن تنفيذه في جولة واحدة. سأقسّمه إلى **6 مراحل مستقلة قابلة للنشر**، كل مرحلة تُبنى فوق سابقتها. سنُنفّذ مرحلة واحدة كل جولة، وأنت توافق قبل الانتقال للتالية.
+## Current gaps (from audit)
 
----
+The public project page (`src/views/ProjectDetailView.tsx`) mixes three data sources today:
 
-## المرحلة 1 — أساس البيانات (Schema + Categories CMS)
+1. **Dynamic blocks** — `layout_blocks` JSONB, drag-and-drop, per-block show/hide. Works well.
+2. **Hardcoded frontend sections** — breadcrumb category label, "Specialty / Type" info card, "How We Built the Identity" (Approach) section, "Next Project" CTA. Section titles/kickers live in `i18n/dictionary.ts`, not in the DB.
+3. **Orphaned DB columns** — `brand_colors`, `typography`, `deliverables`, `client`, `role`, `team`, `duration`, `year`, `project_url`, `behance_url`, `figma_url`, `stats`, `testimonial`, `videos`, `embeds`, `seo_*`. The admin editor lets you fill many of these, but `mapRow()` in `src/lib/portfolio.functions.ts` drops them so nothing renders. `stats`/`testimonial`/`videos`/`embeds` have no admin UI at all.
 
-**قاعدة البيانات:**
-- جدول `project_categories` جديد: `slug, name_ar, name_en, description_ar/en, icon, cover_image, sort_order, is_hidden, meta`.
-- توسيع `portfolio_projects` بحقول: `category_id (FK)`, `client_country`, `year`, `duration`, `role`, `team`, `completed_at`, `is_confidential`, `is_archived`, `is_pinned`, `hero_image`, `thumbnail`, `videos jsonb`, `embeds jsonb`, `pdf_url`, `behance_url`, `figma_url`, `brand_colors jsonb`, `typography jsonb`, `deliverables jsonb`, `stats jsonb`, `testimonial jsonb`, `layout_blocks jsonb`, `tags jsonb`, `views_count`, `locale_content jsonb` (AR/EN منفصلة).
-- RLS + GRANTs + سياسات anon للقراءة.
+Goal: `layout_blocks` becomes the **single source of truth** for the body. Legacy fields either feed a block or are removed from the render path.
 
-**لوحة التحكم:**
-- `/admin/categories`: CRUD + إعادة ترتيب بالسحب + إخفاء/إظهار + رفع أيقونة وغلاف.
+## Approach
 
-**الواجهة:** لا تغيير مرئي بعد.
+Consolidate everything into the block system that already supports drag-and-drop, per-block visibility, and localized content. Add the missing block types, remove hardcoded sections, and use the SEO columns in `head()`.
 
----
+## Changes
 
-## المرحلة 2 — محرر المشروع الشامل (Fields + Media)
+### 1. New / upgraded block types (`src/lib/project-block-templates.ts` + `ProjectBlocksRenderer.tsx` + `ProjectBlocksEditor.tsx`)
 
-- إعادة بناء `AdminPortfolioEditorView` كتبويبات:
-  1. **الأساسيات** (اسم/slug/عميل/قطاع/بلد/سنة/دور/فريق/حالة/سرّي).
-  2. **الوسائط** (Cover/Thumbnail/Hero/Gallery/Videos/Embeds/PDF/Before-After).
-  3. **البراند** (ألوان unlimited + طباعة + Deliverables checklist).
-  4. **الإحصائيات + الشهادة** (KPI cards + Testimonial).
-  5. **الروابط** (Behance/Figma/Website).
-  6. **SEO** (title/desc/keywords/OG/canonical).
-  7. **ثنائي اللغة** (كل الحقول النصية AR + EN).
-- Auto-save، Draft/Publish/Schedule، Duplicate، Archive، Pin، Feature.
+Add these block types with full show/hide, title, subtitle, and content editing:
 
----
+- `approach` — replaces the hardcoded "How We Built the Identity" section. Editable kicker, title, bullet list, optional highlighted "value" box. No more parsing of `solution_ar/en` bullets.
+- `meta` — client, role, team, duration, year, country. Displayed as an info grid; admin picks which fields to show.
+- `deliverables` — bilingual list with icons.
+- `palette` — already exists but upgrade to read from `brand_colors` column shape (name + hex + optional token).
+- `typography` — heading font, body font, optional sample text.
+- `links` — external buttons: live site, Behance, Figma, custom.
+- `stats` — already a block; keep as-is but also mount the schema `stats` column here (migrate on read).
+- `testimonial` — quote, author, role, avatar, rating.
+- `video` — hosted MP4 or embed URL (already partially there; extend).
+- `embed` — raw iframe (YouTube/Vimeo/Framer) with safe allowlist.
+- `hero` — first-class hero block controlling title, kicker, industry chip, short description, cover image, and the "Specialty / Type" info card (with per-label editable text). One `hero` block is auto-inserted for existing projects during migration.
+- `next-project` — CTA. Toggleable, custom label.
 
-## المرحلة 3 — Page Builder (Modular Layout Blocks)
+Every block already has `enabled: boolean` for show/hide and drag handles for ordering — reused as-is.
 
-- محرر بلوكات قابلة للسحب: Hero/Overview/Challenge/Research/Strategy/Moodboard/Logo Process/Sketches/Typography/Colors/Grid/Mockups/Gallery/Video/Testimonials/Downloads/CTA/Divider/Image/Text/2-3 Columns/Quote/Full-width/Before-After/Carousel/Accordion/Timeline.
-- كل بلوك: JSON schema + محرر جانبي + معاينة حية.
-- تخزين في `layout_blocks jsonb` (مصفوفة مرتّبة).
-- زر **Preview** (رابط مؤقت بدون نشر).
+### 2. Public page refactor (`src/views/ProjectDetailView.tsx`)
 
----
+Reduce the view to:
 
-## المرحلة 4 — قائمة المشاريع في الإدارة (UX احترافي)
+```
+<Breadcrumb />           // category label from project_categories table, not CAT_LABELS
+<ProjectBlocksRenderer blocks={project.layout_blocks} />
+```
 
-- Grid/List toggle، بحث فوري، فلاتر (فئة/سنة/حالة/tag)، فرز، Drag-to-reorder، Bulk actions (delete/edit/archive)، Pin/Feature toggles inline، Duplicate، Version History (سجل تعديلات في `article_revisions` pattern موسّع للمشاريع).
+Remove: hardcoded hero JSX, "Specialty / Type" `<dl>`, "Approach" section, cover image block, legacy gallery fallback, hardcoded "Next Project" CTA, `CAT_LABELS` map. All become blocks.
 
----
+### 3. Data layer (`src/lib/portfolio.functions.ts`)
 
-## المرحلة 5 — الواجهة العامة (Visitor Experience)
+- Extend `mapRow()` to surface every column the block editor consumes: `brand_colors`, `typography`, `deliverables`, `client`, `role`, `team`, `duration`, `year`, `project_url`, `behance_url`, `figma_url`, `stats`, `testimonial`, `videos`, `embeds`, `seo_*`, and the joined category label from `project_categories`.
+- On read, if `layout_blocks` is empty or missing the new block types, synthesize a default block list from legacy columns (hero + approach + palette + typography + deliverables + links + gallery + next-project). This keeps existing projects looking right without a data migration, and the admin can save to persist the blocks.
 
-- `/projects` hub ديناميكي: يقرأ الفئات من CMS (لا hardcode).
-- `/projects/[category]` صفحة فئة مع فلاتر instant (industry/service/year/tag/search) بدون reload.
-- `/projects/[category]/[slug]` صفحة المشروع:
-  - Reading progress bar، Breadcrumb، Sticky TOC، Read time.
-  - عرض البلوكات ديناميكيًا حسب `layout_blocks`.
-  - Gallery: Grid/Masonry/Carousel/Lightbox/Zoom/Keyboard.
-  - Colors/Typography/Deliverables/Stats/Testimonial sections.
-  - Previous/Next/Related/Same-category/Featured.
-  - Share (LinkedIn/X/Copy)، Inquiry button (prefill)، Views counter.
-  - JSON-LD CreativeWork + Breadcrumb + Article schema.
-- الصفحة الرئيسية: قسم **Latest Projects** (سلايدر أفقي premium: 3/2/1 cards، drag/swipe/loop/autoplay/glassmorphism/zoom-hover) + قسم **Featured Projects**.
+### 4. Admin editor (`src/components/admin/AdminPortfolioEditorView.tsx` + block editors)
 
----
+- Add "Add block" entries in the block picker for every new type above.
+- Move the standalone form fields (client/role/team/duration/brand_colors/typography/deliverables/links) into read-only "legacy fields" — still editable, but a "Convert to blocks" button generates the corresponding blocks and clears the legacy fields. New projects skip legacy fields entirely and use blocks only.
+- SEO fields (`seo_title_*`, `seo_description_*`, `seo_keywords`, `og_image_url`) stay as project-level fields (they're not sections), and the route `head()` starts consuming them.
 
-## المرحلة 6 — تحسينات وتوسّع
+### 5. SEO (`src/routes/projects.$category.$slug.tsx`)
 
-- Image optimization pipeline (WebP/AVIF/responsive srcset).
-- Recently Viewed (localStorage)، Recommendations (بنفس الخدمات/الفئة).
-- Scheduled publishing cron.
-- Dashboard overview: counts, storage usage, recent activity, quick add.
-- Architecture hooks لأنواع محتوى مستقبلية (Awards/Speaking/Courses/Resources) — جداول جاهزة لكن UI لاحقًا عند الطلب.
+`head()` reads `seo_title_ar/en`, `seo_description_ar/en`, `og_image_url` with fallbacks to `name`/`short_description`/`thumbnail_url`.
 
----
+### 6. Category labels
 
-## تفاصيل تقنية
+Replace `CAT_LABELS` in `ProjectDetailView.tsx` with a lookup against `project_categories` (already fetched by `listCategories`). Passed through loader data.
 
-- **Stack:** TanStack Start + Supabase (نفس ما هو قائم).
-- **Drag & Drop:** `@dnd-kit/core`.
-- **Animations:** `framer-motion` (مركّبة بالفعل جزئيًا) + `embla-carousel-react` للسلايدرز.
-- **Rich blocks:** JSON schema + React switch renderer.
-- **i18n للمشاريع:** حقول `*_ar` / `*_en` أو `locale_content jsonb`.
-- **Storage:** استخدام bucket `portfolio-covers` الحالي + توسيعه لبقية الأصول.
-- **SEO:** كل مشروع يولّد `head()` كامل مع OG/Twitter/JSON-LD.
-- **الأداء:** lazy load، prefetch على hover، `<img loading="lazy" decoding="async">`، srcset تلقائي.
+## Out of scope
 
----
+- No schema changes — every column already exists.
+- No changes to the Projects listing, Home slider, or admin projects list.
+- Testimonials CMS page (separate from per-project testimonial block) untouched.
 
-## نطاق كل جولة
+## Technical notes
 
-كل جولة ≈ 15-30 ملف. الحجم الكلي للمشروع ≈ 100+ ملف جديد/معدّل. لن أخلط مراحل — كل مرحلة تنتهي بحالة قابلة للاستخدام.
+- Block enabled/disabled and drag order are already implemented in `ProjectBlocksEditor` via `@dnd-kit/*`; new block types plug into the existing registry.
+- Backfill logic in `mapRow` is idempotent: it only synthesizes defaults when `layout_blocks` is empty/absent for a given block kind.
+- `ZoomableImage` continues to wrap images inside blocks (mobile pinch-zoom is unchanged).
+- i18n dictionary keys for section titles become defaults inside each block template's `title_ar/en`, so existing translations survive as seed values — admins can override per project.
 
-**نبدأ بالمرحلة 1 (الأساس)؟** أم تريد تعديل الترتيب أو دمج مراحل؟
+## Verification
+
+After implementation:
+1. Existing published project renders identically without any admin action (thanks to `mapRow` synthesis).
+2. In the admin editor, every visible section on the public page has a corresponding block card with show/hide, edit, delete, drag.
+3. Grepping `src/views/ProjectDetailView.tsx` shows no bilingual copy strings for section headings — only structural JSX.
+4. SEO tab in admin controls the `<head>` tags of the public project page.
