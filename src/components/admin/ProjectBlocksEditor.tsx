@@ -111,6 +111,7 @@ export function ProjectBlocksEditor({
           {blocks.map((b, i) => {
             const Icon = ICONS[b.type];
             const isOpen = open[b.id] ?? false;
+            const isHidden = b.enabled === false;
             return (
               <li
                 key={b.id}
@@ -119,7 +120,7 @@ export function ProjectBlocksEditor({
                 onDrop={(e) => { e.preventDefault(); onDrop(b.id); }}
                 className={`rounded-xl border bg-background transition-colors ${
                   overId === b.id ? "border-accent ring-2 ring-accent/30" : "border-border/70"
-                } ${dragId === b.id ? "opacity-50" : ""}`}
+                } ${dragId === b.id ? "opacity-50" : ""} ${isHidden ? "opacity-60" : ""}`}
               >
                 <div className="flex items-center gap-2 border-b border-border/60 px-3 py-2">
                   <button
@@ -139,12 +140,23 @@ export function ProjectBlocksEditor({
                   >
                     <Icon className="h-4 w-4 text-muted-foreground" />
                     <span className="text-xs text-muted-foreground">#{i + 1}</span>
-                    <span>{BLOCK_LABELS[b.type].ar}</span>
+                    <span className={isHidden ? "line-through" : ""}>{BLOCK_LABELS[b.type].ar}</span>
+                    {isHidden && (
+                      <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                        مخفي
+                      </span>
+                    )}
                     <span className="ms-auto text-muted-foreground">
                       {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     </span>
                   </button>
                   <div className="flex gap-1">
+                    <IconBtn
+                      title={isHidden ? "إظهار البلوك" : "إخفاء البلوك"}
+                      onClick={() => update(b.id, { enabled: isHidden ? true : false } as any)}
+                    >
+                      {isHidden ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                    </IconBtn>
                     <IconBtn title="لأعلى" onClick={() => move(i, -1)} disabled={i === 0}>
                       <ArrowUp className="h-3.5 w-3.5" />
                     </IconBtn>
