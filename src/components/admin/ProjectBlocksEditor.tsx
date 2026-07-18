@@ -7,7 +7,8 @@ import {
   ArrowUp, ArrowDown, Trash2, Plus, Upload, X, Copy, ChevronDown, ChevronUp,
   Type, Heading as HeadingIcon, Image as ImageIcon, Images, Quote,
   Palette, PlayCircle, BarChart3, MessageSquare, Minus, Columns2, GripVertical,
-  SplitSquareHorizontal, Eye, EyeOff,
+  SplitSquareHorizontal, Eye, EyeOff, Star, Link as LinkIcon, Layout, ImageDown,
+  Info, PackageCheck, TypeOutline, Code2, ArrowRight,
 } from "lucide-react";
 import {
   BLOCK_LABELS,
@@ -19,6 +20,16 @@ import { BLOCK_TEMPLATES, buildTemplate, type TemplateId } from "@/lib/project-b
 
 
 const ICONS: Record<BlockType, React.ComponentType<{ className?: string }>> = {
+  hero: Layout,
+  cover: ImageDown,
+  approach: Star,
+  meta: Info,
+  deliverables: PackageCheck,
+  typography: TypeOutline,
+  links: LinkIcon,
+  testimonial: Quote,
+  embed: Code2,
+  "next-project": ArrowRight,
   heading: HeadingIcon,
   text: Type,
   image: ImageIcon,
@@ -34,8 +45,10 @@ const ICONS: Record<BlockType, React.ComponentType<{ className?: string }>> = {
 };
 
 const ALL_TYPES: BlockType[] = [
+  "hero", "cover", "approach", "meta", "deliverables", "typography", "links",
   "heading", "text", "image", "two-col-image", "gallery", "before-after",
-  "quote", "palette", "video", "stats", "callout", "spacer",
+  "quote", "palette", "video", "embed", "stats", "testimonial", "callout",
+  "spacer", "next-project",
 ];
 
 export function ProjectBlocksEditor({
