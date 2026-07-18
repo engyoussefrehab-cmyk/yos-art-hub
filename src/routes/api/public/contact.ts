@@ -6,6 +6,9 @@ const schema = z.object({
   email: z.string().trim().email().max(255),
   subject: z.string().trim().min(2).max(150),
   message: z.string().trim().min(10).max(2000),
+  call_date: z.string().trim().max(20).optional().default(""),
+  call_time: z.string().trim().max(10).optional().default(""),
+  call_tz: z.string().trim().max(120).optional().default(""),
   website: z.string().optional(), // honeypot
 });
 
@@ -49,15 +52,22 @@ export const Route = createFileRoute("/api/public/contact")({
           return Response.json({ ok: true }, { headers: corsHeaders() });
         }
 
-        const { name, email, subject, message } = parsed.data;
+        const { name, email, subject, message, call_date, call_time, call_tz } = parsed.data;
+        const callRequested = Boolean(call_date || call_time || call_tz);
+        const callSummary = callRequested
+          ? [call_date, call_time].filter(Boolean).join(" · ") + (call_tz ? ` (${call_tz})` : "")
+          : "";
+        const messageWithCall = callRequested
+          ? `${message}\n\n---\nطلب مكالمة مجانية / Free call requested:\n${callSummary}`
+          : message;
 
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           const { error: insertError } = await supabaseAdmin.from("contact_messages").insert({
             name,
             email,
-            subject,
-            message,
+            subject: callRequested ? `${subject} [مكالمة: ${callSummary}]` : subject,
+            message: messageWithCall,
             status: "unread",
           });
           if (insertError) {
@@ -67,6 +77,10 @@ export const Route = createFileRoute("/api/public/contact")({
           console.error("contact_messages insert threw:", e);
         }
 
+        const callRow = callRequested
+          ? `<tr><td style="padding:8px 0;color:#666">مكالمة مجانية</td><td style="padding:8px 0;font-weight:600;color:#c2410c">${esc(callSummary)}</td></tr>`
+          : "";
+
         const html = `
           <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#ffffff;color:#111">
             <h2 style="margin:0 0 16px;color:#0b1a2b">رسالة جديدة من موقع YR Studio</h2>
@@ -74,6 +88,7 @@ export const Route = createFileRoute("/api/public/contact")({
               <tr><td style="padding:8px 0;color:#666;width:120px">الاسم</td><td style="padding:8px 0;font-weight:600">${esc(name)}</td></tr>
               <tr><td style="padding:8px 0;color:#666">البريد</td><td style="padding:8px 0"><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
               <tr><td style="padding:8px 0;color:#666">الموضوع</td><td style="padding:8px 0">${esc(subject)}</td></tr>
+              ${callRow}
             </table>
             <hr style="border:none;border-top:1px solid #eee;margin:16px 0" />
             <div style="white-space:pre-wrap;line-height:1.7">${esc(message)}</div>
