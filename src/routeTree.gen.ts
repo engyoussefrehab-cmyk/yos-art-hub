@@ -22,6 +22,7 @@ import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as EnRssDotxmlRouteImport } from './routes/en.rss[.]xml'
 import { Route as EnPackagesRouteImport } from './routes/en.packages'
 import { Route as EnContactRouteImport } from './routes/en.contact'
+import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AdminTagsRouteImport } from './routes/admin.tags'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
@@ -120,6 +121,11 @@ const EnContactRoute = EnContactRouteImport.update({
   id: '/en/contact',
   path: '/en/contact',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminTagsRoute = AdminTagsRouteImport.update({
   id: '/tags',
@@ -307,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -354,6 +361,7 @@ export interface FileRoutesByTo {
   '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -403,6 +411,7 @@ export interface FileRoutesById {
   '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
@@ -453,6 +462,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
+    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -500,6 +510,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
+    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -548,6 +559,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
+    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
@@ -699,6 +711,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/en/contact'
       preLoaderRoute: typeof EnContactRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/testimonials': {
+      id: '/admin/testimonials'
+      path: '/testimonials'
+      fullPath: '/admin/testimonials'
+      preLoaderRoute: typeof AdminTestimonialsRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/tags': {
       id: '/admin/tags'
@@ -961,6 +980,7 @@ interface AdminRouteChildren {
   AdminServicesRoute: typeof AdminServicesRouteWithChildren
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTagsRoute: typeof AdminTagsRoute
+  AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminInsightsIdRoute: typeof AdminInsightsIdRoute
   AdminInsightsNewRoute: typeof AdminInsightsNewRoute
@@ -983,6 +1003,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminServicesRoute: AdminServicesRouteWithChildren,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTagsRoute: AdminTagsRoute,
+  AdminTestimonialsRoute: AdminTestimonialsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminInsightsIdRoute: AdminInsightsIdRoute,
   AdminInsightsNewRoute: AdminInsightsNewRoute,
