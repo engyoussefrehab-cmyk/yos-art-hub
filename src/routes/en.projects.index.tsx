@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProjectsHubView } from "@/views/ProjectsHubView";
-import { listPortfolio } from "@/lib/portfolio.functions";
+import { listPortfolio, listCategories } from "@/lib/portfolio.functions";
+
 
 const SORTS = new Set(["newest", "oldest", "featured", "az"]);
 const asStr = (v: unknown) => (typeof v === "string" ? v : "");
