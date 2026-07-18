@@ -459,7 +459,10 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       solution_en: f.solution_en || null,
       results_ar: f.results_ar || null,
       results_en: f.results_en || null,
-      services_used: f.services_used.split(",").map((s) => s.trim()).filter(Boolean),
+      // services_used is uuid[] in DB; the free-text UI field stores its raw value
+      // in `industry`/tags elsewhere. Never send arbitrary strings into a uuid column.
+      services_used: [],
+
       deliverables: {
         ar: f.deliverables_ar.split("\n").map((s) => s.trim()).filter(Boolean),
         en: f.deliverables_en.split("\n").map((s) => s.trim()).filter(Boolean),
@@ -540,6 +543,12 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
   };
 
   const previewProject = async () => {
+    // Validate BEFORE opening a popup so we never leave a blank tab behind.
+    const eObj = validate({ publishing: false });
+    if (Object.keys(eObj).length > 0) {
+      await save({ stay: true, preview: true }); // will surface errors via toast + summary
+      return;
+    }
     const popup = window.open("about:blank", "_blank");
     const projectId = await save({ stay: true, preview: true });
     if (!projectId) {
@@ -550,6 +559,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
     if (popup) popup.location.href = previewPath;
     else window.location.assign(previewPath);
   };
+
 
   if (loading) return <div className="text-sm text-muted-foreground">جاري التحميل…</div>;
 
@@ -1018,16 +1028,31 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       </section>
 
       <div className="sticky bottom-0 z-20 -mx-4 border-t border-border/70 bg-background/90 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
-          <div className="text-xs text-muted-foreground">
-            {dirty ? "توجد تغييرات غير محفوظة" : lastSavedAt ? `آخر حفظ ${lastSavedAt.toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}` : "جاهز للحفظ"}
+        <div className="mx-auto flex max-w-5xl flex-col gap-2">
+          {actionMessage && (
+            <div
+              role={actionMessage.type === "error" ? "alert" : "status"}
+              className={`rounded-md px-3 py-2 text-xs ${
+                actionMessage.type === "error"
+                  ? "bg-destructive/10 text-destructive"
+                  : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+              }`}
+            >
+              {actionMessage.text.split("\n").map((l, i) => <div key={i}>{l}</div>)}
+            </div>
+          )}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs text-muted-foreground">
+              {dirty ? "توجد تغييرات غير محفوظة" : lastSavedAt ? `آخر حفظ ${lastSavedAt.toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })}` : "جاهز للحفظ"}
+            </div>
+            <div className="flex flex-wrap items-center gap-2">{actionButtons}</div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">{actionButtons}</div>
         </div>
       </div>
     </div>
   );
 }
+
 
 function MediaSlot({
   label, url, uploading, err, onUpload, onClear, onUrl,
