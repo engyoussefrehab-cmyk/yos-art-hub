@@ -15,8 +15,11 @@ import {
   Eye,
   EyeOff,
   FolderTree,
+  Upload,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
+
 
 type Category = {
   id: string;
