@@ -99,8 +99,8 @@ export function LatestProjectsSlider({
   if (items.length === 0) return null;
 
   const cardWidth = compact
-    ? "basis-[78%] xs:basis-[62%] sm:basis-[42%] md:basis-[32%] lg:basis-[24%] shrink-0 grow-0 min-w-0 snap-start"
-    : "basis-[85%] sm:basis-[60%] lg:basis-[40%] shrink-0 grow-0 min-w-0 snap-start";
+    ? "basis-[74%] sm:basis-[44%] md:basis-[32%] lg:basis-[24%] shrink-0 grow-0 min-w-0 snap-start"
+    : "basis-[86%] sm:basis-[60%] lg:basis-[40%] shrink-0 grow-0 min-w-0 snap-start";
   const aspect = "aspect-[4/3]";
   const titleClass = compact ? "text-sm sm:text-base" : "text-2xl";
   const pad = compact ? "p-3 sm:p-4" : "p-6";
