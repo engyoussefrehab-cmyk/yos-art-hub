@@ -130,7 +130,7 @@ export function ProjectDetailView({ project, next }: { project: PortfolioDTO; ne
               <div className="mt-2 font-display text-3xl md:text-4xl font-bold">{nextName}</div>
             </div>
             <div className="flex gap-3">
-              <Link to={brandingHref} className="rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold hover:bg-cream">{t("proj_all")}</Link>
+              <Link to={categoryHref} className="rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold hover:bg-cream">{t("proj_all")}</Link>
               <Link to={nextHref} className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground">{lang === "ar" ? `التالي ${arrow}` : `Next ${arrow}`}</Link>
             </div>
           </div>
