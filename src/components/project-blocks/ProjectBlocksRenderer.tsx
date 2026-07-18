@@ -95,7 +95,7 @@ function BlockRender({ block: b, lang }: { block: ProjectBlock; lang: Lang }) {
           <div className={`grid grid-cols-2 gap-4 ${grid}`}>
             {urls.map((u, i) => (
               <div key={i} className="overflow-hidden rounded-2xl border border-border bg-cream">
-                <img src={u} alt="" loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover" />
+                <ZoomableImage src={u} alt="" imgClassName="aspect-[4/3] w-full object-cover" />
               </div>
             ))}
           </div>
