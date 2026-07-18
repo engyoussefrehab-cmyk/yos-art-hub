@@ -76,6 +76,9 @@ function ContactForm() {
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
       subject: (form.elements.namedItem("subject") as HTMLInputElement).value,
       message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+      call_date: (form.elements.namedItem("call_date") as HTMLInputElement)?.value || "",
+      call_time: (form.elements.namedItem("call_time") as HTMLInputElement)?.value || "",
+      call_tz: (form.elements.namedItem("call_tz") as HTMLInputElement)?.value || "",
     };
     const result = schema.safeParse(data);
     if (!result.success) {
@@ -86,6 +89,14 @@ function ContactForm() {
       }
       setErrors(fe);
       return;
+    }
+    // Validate that requested call date (if provided) is in the future
+    if (data.call_date) {
+      const picked = new Date(`${data.call_date}T${data.call_time || "23:59"}`);
+      if (!Number.isNaN(picked.getTime()) && picked.getTime() < Date.now()) {
+        setErrors({ call_date: t("err_call_date_past") });
+        return;
+      }
     }
     setErrors({});
     setSending(true);
