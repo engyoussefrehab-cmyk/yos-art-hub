@@ -110,8 +110,26 @@ export function ProjectBlocksEditor({
             const Icon = ICONS[b.type];
             const isOpen = open[b.id] ?? false;
             return (
-              <li key={b.id} className="rounded-xl border border-border/70 bg-background">
+              <li
+                key={b.id}
+                onDragOver={(e) => { e.preventDefault(); if (dragId && dragId !== b.id) setOverId(b.id); }}
+                onDragLeave={() => { if (overId === b.id) setOverId(null); }}
+                onDrop={(e) => { e.preventDefault(); onDrop(b.id); }}
+                className={`rounded-xl border bg-background transition-colors ${
+                  overId === b.id ? "border-accent ring-2 ring-accent/30" : "border-border/70"
+                } ${dragId === b.id ? "opacity-50" : ""}`}
+              >
                 <div className="flex items-center gap-2 border-b border-border/60 px-3 py-2">
+                  <button
+                    type="button"
+                    draggable
+                    onDragStart={(e) => { setDragId(b.id); e.dataTransfer.effectAllowed = "move"; }}
+                    onDragEnd={() => { setDragId(null); setOverId(null); }}
+                    title="اسحب لإعادة الترتيب"
+                    className="cursor-grab rounded p-1 text-muted-foreground hover:bg-muted active:cursor-grabbing"
+                  >
+                    <GripVertical className="h-4 w-4" />
+                  </button>
                   <button
                     type="button"
                     onClick={() => setOpen((s) => ({ ...s, [b.id]: !isOpen }))}
