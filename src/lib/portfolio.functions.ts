@@ -105,3 +105,40 @@ export const getPortfolioBySlug = createServerFn({ method: "GET" })
     if (!row) return null;
     return mapRow(row);
   });
+
+export type CategoryDTO = {
+  slug: string;
+  name_ar: string;
+  name_en: string;
+  description_ar: string | null;
+  description_en: string | null;
+  cover_image_url: string | null;
+  sort_order: number;
+  project_count: number;
+};
+
+export const listCategories = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const supabase = publicClient();
+    const [cats, projs] = await Promise.all([
+      supabase
+        .from("project_categories")
+        .select("slug,name_ar,name_en,description_ar,description_en,cover_image_url,sort_order")
+        .eq("is_hidden", false)
+        .order("sort_order", { ascending: true }),
+      supabase
+        .from("portfolio_projects")
+        .select("category_slug")
+        .eq("status", "published"),
+    ]);
+    if (cats.error) throw new Error(cats.error.message);
+    const counts = new Map<string, number>();
+    (projs.data ?? []).forEach((r: any) => {
+      if (r.category_slug) counts.set(r.category_slug, (counts.get(r.category_slug) ?? 0) + 1);
+    });
+    return (cats.data ?? []).map((c: any) => ({
+      ...c,
+      project_count: counts.get(c.slug) ?? 0,
+    })) as CategoryDTO[];
+  });
+
