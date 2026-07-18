@@ -146,6 +146,18 @@ export function newBlock(type: BlockType): ProjectBlock {
       return { id, type, text_ar: "", text_en: "", tone: "accent" };
     case "spacer":
       return { id, type, size: "md" };
+    case "before-after":
+      return {
+        id,
+        type,
+        before_url: "",
+        after_url: "",
+        label_before_ar: "قبل",
+        label_before_en: "Before",
+        label_after_ar: "بعد",
+        label_after_en: "After",
+        orientation: "horizontal",
+      };
   }
 }
 
