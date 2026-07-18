@@ -95,6 +95,7 @@ const empty: ProjectForm = {
   featured: false, is_pinned: false, is_confidential: false, is_archived: false,
   status: "draft", published_at: "",
   sort_order: 0,
+  blocks: [],
 };
 
 const MAX_FILE_MB = 10;
