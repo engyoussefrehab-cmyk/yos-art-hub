@@ -256,9 +256,9 @@ function RootComponent() {
       <LangSync />
       <SiteLoader />
       <LanguageWelcome />
-      <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden">
         <SiteNav />
-        <main className="flex-1 flex flex-col"><Outlet /></main>
+        <main className="flex-1 w-full min-w-0"><Outlet /></main>
         <SiteFooter />
         <WhatsAppFab />
         <BackToTop />
