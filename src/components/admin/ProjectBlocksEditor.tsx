@@ -46,6 +46,24 @@ export function ProjectBlocksEditor({
   uploadImage: (file: File) => Promise<string>;
 }) {
   const [open, setOpen] = useState<Record<string, boolean>>({});
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+
+  const reorder = (from: number, to: number) => {
+    if (from === to || from < 0 || to < 0 || from >= blocks.length || to >= blocks.length) return;
+    const arr = [...blocks];
+    const [item] = arr.splice(from, 1);
+    arr.splice(to, 0, item);
+    onChange(arr);
+  };
+  const onDrop = (targetId: string) => {
+    if (!dragId || dragId === targetId) { setDragId(null); setOverId(null); return; }
+    const from = blocks.findIndex((b) => b.id === dragId);
+    const to = blocks.findIndex((b) => b.id === targetId);
+    reorder(from, to);
+    setDragId(null);
+    setOverId(null);
+  };
 
   const update = (id: string, patch: Partial<ProjectBlock>) =>
     onChange(blocks.map((b) => (b.id === id ? ({ ...b, ...patch } as ProjectBlock) : b)));
