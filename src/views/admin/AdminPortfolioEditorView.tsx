@@ -237,6 +237,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
 
   const set = <K extends keyof ProjectForm>(k: K, v: ProjectForm[K]) => {
     setF((s) => ({ ...s, [k]: v }));
+    setDirty(true);
     setErrors((prev) => { if (!prev[k]) return prev; const n = { ...prev }; delete n[k]; return n; });
   };
 
