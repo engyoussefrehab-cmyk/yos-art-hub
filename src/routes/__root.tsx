@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import logoFull from "@/assets/logo-full.png.asset.json";
 import { useLang, detectLang } from "@/i18n/use-lang";
 import { useCmsMenu, useCmsSettings } from "@/hooks/use-cms-data";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   const { t, lang } = useLang();
@@ -256,6 +257,7 @@ function RootComponent() {
       <LangSync />
       <SiteLoader />
       <LanguageWelcome />
+      <Toaster position="top-center" richColors closeButton />
       <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden">
         <SiteNav />
         <main className="flex-1 w-full min-w-0"><Outlet /></main>

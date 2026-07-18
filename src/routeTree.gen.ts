@@ -43,6 +43,7 @@ import { Route as EnInsightsIndexRouteImport } from './routes/en.insights.index'
 import { Route as AdminPortfolioIndexRouteImport } from './routes/admin.portfolio.index'
 import { Route as AdminInsightsIndexRouteImport } from './routes/admin.insights.index'
 import { Route as ProjectsCategorySlugRouteImport } from './routes/projects.$category.$slug'
+import { Route as PreviewProjectsIdRouteImport } from './routes/preview.projects.$id'
 import { Route as InsightsCategorySlugRouteImport } from './routes/insights.$category.$slug'
 import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
 import { Route as AdminServicesNewRouteImport } from './routes/admin.services.new'
@@ -228,6 +229,11 @@ const ProjectsCategorySlugRoute = ProjectsCategorySlugRouteImport.update({
   path: '/projects/$category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PreviewProjectsIdRoute = PreviewProjectsIdRouteImport.update({
+  id: '/preview/projects/$id',
+  path: '/preview/projects/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InsightsCategorySlugRoute = InsightsCategorySlugRouteImport.update({
   id: '/insights/$category/$slug',
   path: '/insights/$category/$slug',
@@ -337,6 +343,7 @@ export interface FileRoutesByFullPath {
   '/admin/services/new': typeof AdminServicesNewRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
+  '/preview/projects/$id': typeof PreviewProjectsIdRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights/': typeof AdminInsightsIndexRoute
   '/admin/portfolio/': typeof AdminPortfolioIndexRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/admin/services/new': typeof AdminServicesNewRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
+  '/preview/projects/$id': typeof PreviewProjectsIdRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights': typeof AdminInsightsIndexRoute
   '/admin/portfolio': typeof AdminPortfolioIndexRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/admin/services/new': typeof AdminServicesNewRoute
   '/api/public/contact': typeof ApiPublicContactRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
+  '/preview/projects/$id': typeof PreviewProjectsIdRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights/': typeof AdminInsightsIndexRoute
   '/admin/portfolio/': typeof AdminPortfolioIndexRoute
@@ -489,6 +498,7 @@ export interface FileRouteTypes {
     | '/admin/services/new'
     | '/api/public/contact'
     | '/insights/$category/$slug'
+    | '/preview/projects/$id'
     | '/projects/$category/$slug'
     | '/admin/insights/'
     | '/admin/portfolio/'
@@ -538,6 +548,7 @@ export interface FileRouteTypes {
     | '/admin/services/new'
     | '/api/public/contact'
     | '/insights/$category/$slug'
+    | '/preview/projects/$id'
     | '/projects/$category/$slug'
     | '/admin/insights'
     | '/admin/portfolio'
@@ -588,6 +599,7 @@ export interface FileRouteTypes {
     | '/admin/services/new'
     | '/api/public/contact'
     | '/insights/$category/$slug'
+    | '/preview/projects/$id'
     | '/projects/$category/$slug'
     | '/admin/insights/'
     | '/admin/portfolio/'
@@ -618,6 +630,7 @@ export interface RootRouteChildren {
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ApiPublicContactRoute: typeof ApiPublicContactRoute
   InsightsCategorySlugRoute: typeof InsightsCategorySlugRoute
+  PreviewProjectsIdRoute: typeof PreviewProjectsIdRoute
   ProjectsCategorySlugRoute: typeof ProjectsCategorySlugRoute
   EnInsightsIndexRoute: typeof EnInsightsIndexRoute
   EnProjectsIndexRoute: typeof EnProjectsIndexRoute
@@ -871,6 +884,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/preview/projects/$id': {
+      id: '/preview/projects/$id'
+      path: '/preview/projects/$id'
+      fullPath: '/preview/projects/$id'
+      preLoaderRoute: typeof PreviewProjectsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/insights/$category/$slug': {
       id: '/insights/$category/$slug'
       path: '/insights/$category/$slug'
@@ -1051,6 +1071,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProjectsIndexRoute: ProjectsIndexRoute,
   ApiPublicContactRoute: ApiPublicContactRoute,
   InsightsCategorySlugRoute: InsightsCategorySlugRoute,
+  PreviewProjectsIdRoute: PreviewProjectsIdRoute,
   ProjectsCategorySlugRoute: ProjectsCategorySlugRoute,
   EnInsightsIndexRoute: EnInsightsIndexRoute,
   EnProjectsIndexRoute: EnProjectsIndexRoute,
