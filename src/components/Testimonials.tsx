@@ -35,7 +35,7 @@ function QuoteMark() {
   );
 }
 
-function Card({ t: item }: { t: (typeof testimonials)[number] }) {
+function Card({ t: item }: { t: Item }) {
   const { t, lang } = useLang();
   return (
     <article
