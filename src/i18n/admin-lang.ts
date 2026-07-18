@@ -36,6 +36,10 @@ export function useAdminLang() {
 export const A = {
   dashboard:      { ar: "الرئيسية", en: "Dashboard" },
   pages:          { ar: "صفحات الموقع", en: "Site Pages" },
+  sections:       { ar: "أقسام الصفحات", en: "Page Sections" },
+  menus:          { ar: "قوائم التنقل", en: "Menus" },
+  testimonials:   { ar: "آراء العملاء", en: "Testimonials" },
+  page_seo:       { ar: "SEO لكل صفحة", en: "Per-page SEO" },
   insights:       { ar: "المقالات", en: "Insights" },
   portfolio:      { ar: "المشاريع", en: "Projects" },
   services:       { ar: "الخدمات", en: "Services" },
@@ -48,6 +52,7 @@ export const A = {
   settings:       { ar: "إعدادات الموقع", en: "Site Settings" },
   profile:        { ar: "الملف الشخصي", en: "Profile" },
   content_group:  { ar: "المحتوى", en: "Content" },
+  design_group:   { ar: "تصميم الموقع", en: "Site Design" },
   taxonomy_group: { ar: "التصنيفات والوسائط", en: "Taxonomy & Media" },
   ops_group:      { ar: "التشغيل", en: "Operations" },
   settings_group: { ar: "الإعدادات", en: "Settings" },
