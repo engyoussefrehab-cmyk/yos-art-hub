@@ -1,4 +1,5 @@
 import type { ProjectBlock } from "@/lib/project-blocks";
+import { ZoomableImage } from "@/components/ZoomableImage";
 
 type Lang = "ar" | "en";
 
