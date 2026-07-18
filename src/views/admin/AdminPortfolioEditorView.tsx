@@ -398,6 +398,7 @@ export function AdminPortfolioEditorView({ id }: { id?: string }) {
       is_archived: f.is_archived,
       sort_order: Number(f.sort_order) || 0,
       status: nextStatus,
+      layout_blocks: f.blocks,
     };
     if (publishing) payload.published_at = new Date().toISOString();
     else if (nextStatus === "scheduled" && f.published_at) payload.published_at = new Date(f.published_at).toISOString();
