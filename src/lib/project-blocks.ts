@@ -1,7 +1,7 @@
 // Modular page-builder blocks for portfolio project detail pages.
 // All block data is stored inside portfolio_projects.layout_blocks (JSONB).
 
-export type BlockBase = { id: string };
+export type BlockBase = { id: string; enabled?: boolean };
 
 export type TextBlock = BlockBase & {
   type: "text";
