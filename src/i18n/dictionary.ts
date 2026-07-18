@@ -159,6 +159,13 @@ export const dict = {
   err_subject: { ar: "الموضوع مطلوب", en: "Subject is required" },
   err_msg_short: { ar: "الرسالة قصيرة جدًا", en: "Message is too short" },
   err_msg_long: { ar: "الرسالة طويلة جدًا", en: "Message is too long" },
+  f_call_title: { ar: "اطلب مكالمة مجانية (اختياري)", en: "Book a free call (optional)" },
+  f_call_sub: { ar: "اختر يومًا ووقتًا مناسبين لمكالمة قصيرة نرسم فيها ملامح المشروع.", en: "Pick a day and time for a short discovery call to outline your project." },
+  f_call_date: { ar: "التاريخ المفضّل", en: "Preferred date" },
+  f_call_time: { ar: "الوقت المفضّل", en: "Preferred time" },
+  f_call_tz: { ar: "المنطقة الزمنية / ملاحظات", en: "Timezone / notes" },
+  f_call_tz_placeholder: { ar: "مثال: توقيت الرياض، بعد الظهر", en: "e.g. Riyadh time, afternoon" },
+  err_call_date_past: { ar: "اختر تاريخًا في المستقبل", en: "Pick a future date" },
   mail_name_label: { ar: "الاسم", en: "Name" },
   mail_email_label: { ar: "البريد الإلكتروني", en: "Email" },
 
