@@ -1,6 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
+import type { PortfolioDTO } from "@/lib/portfolio.functions";
+import { LatestProjectsSlider } from "@/components/projects/LatestProjectsSlider";
+import { ProjectsBrowser } from "@/components/projects/ProjectsBrowser";
 import p5 from "@/assets/portfolio/page_5.webp";
 import p22 from "@/assets/portfolio/page_22.webp";
 import p27 from "@/assets/portfolio/page_27.webp";
@@ -20,9 +23,14 @@ const catI18n: Record<string, { label: DictKey; desc: DictKey }> = {
   social: { label: "cat_social_label", desc: "cat_social_desc" },
 };
 
-export function ProjectsHubView() {
+export function ProjectsHubView({
+  projects = [],
+  routeId,
+}: {
+  projects?: PortfolioDTO[];
+  routeId: "/projects/" | "/en/projects/";
+}) {
   const { t, lang } = useLang();
-  const catBase = lang === "ar" ? "/projects" : "/en/projects";
   return (
     <section className="mx-auto max-w-7xl px-6 py-20">
       <header className="max-w-3xl">
@@ -30,7 +38,10 @@ export function ProjectsHubView() {
         <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-tight">{t("projects_title")}</h1>
         <p className="mt-5 text-lg text-muted-foreground">{t("projects_lede")}</p>
       </header>
-      <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+
+      {projects.length > 0 && <LatestProjectsSlider projects={projects} />}
+
+      <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2">
         {categories.map((c, i) => {
           const meta = catI18n[c.slug];
           const label = meta ? t(meta.label) : c.slug;
@@ -61,8 +72,8 @@ export function ProjectsHubView() {
           );
         })}
       </div>
-      {/* silence unused when catBase not used */}
-      <span hidden>{catBase}</span>
+
+      {projects.length > 0 && <ProjectsBrowser projects={projects} routeId={routeId} />}
     </section>
   );
 }
