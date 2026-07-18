@@ -77,7 +77,7 @@ function BlockRender({ block: b, lang }: { block: ProjectBlock; lang: Lang }) {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {[b.url_left, b.url_right].filter(Boolean).map((u, i) => (
               <div key={i} className="overflow-hidden rounded-3xl border border-border bg-cream">
-                <img src={u} alt="" loading="lazy" decoding="async" className="w-full" />
+                <ZoomableImage src={u as string} alt="" />
               </div>
             ))}
           </div>
