@@ -42,6 +42,7 @@ import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$ca
 import { Route as InsightsCategoryIndexRouteImport } from './routes/insights.$category.index'
 import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
 import { Route as EnInsightsIndexRouteImport } from './routes/en.insights.index'
+import { Route as AdminServicesIndexRouteImport } from './routes/admin.services.index'
 import { Route as AdminPortfolioIndexRouteImport } from './routes/admin.portfolio.index'
 import { Route as AdminInsightsIndexRouteImport } from './routes/admin.insights.index'
 import { Route as ProjectsCategorySlugRouteImport } from './routes/projects.$category.$slug'
@@ -226,6 +227,11 @@ const EnInsightsIndexRoute = EnInsightsIndexRouteImport.update({
   path: '/en/insights/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminServicesIndexRoute = AdminServicesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminServicesRoute,
+} as any)
 const AdminPortfolioIndexRoute = AdminPortfolioIndexRouteImport.update({
   id: '/portfolio/',
   path: '/portfolio/',
@@ -361,6 +367,7 @@ export interface FileRoutesByFullPath {
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights/': typeof AdminInsightsIndexRoute
   '/admin/portfolio/': typeof AdminPortfolioIndexRoute
+  '/admin/services/': typeof AdminServicesIndexRoute
   '/en/insights/': typeof EnInsightsIndexRoute
   '/en/projects/': typeof EnProjectsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
@@ -389,7 +396,6 @@ export interface FileRoutesByTo {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/sections': typeof AdminSectionsRoute
   '/admin/seo': typeof AdminSeoRoute
-  '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
@@ -413,6 +419,7 @@ export interface FileRoutesByTo {
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights': typeof AdminInsightsIndexRoute
   '/admin/portfolio': typeof AdminPortfolioIndexRoute
+  '/admin/services': typeof AdminServicesIndexRoute
   '/en/insights': typeof EnInsightsIndexRoute
   '/en/projects': typeof EnProjectsIndexRoute
   '/insights/$category': typeof InsightsCategoryIndexRoute
@@ -467,6 +474,7 @@ export interface FileRoutesById {
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/admin/insights/': typeof AdminInsightsIndexRoute
   '/admin/portfolio/': typeof AdminPortfolioIndexRoute
+  '/admin/services/': typeof AdminServicesIndexRoute
   '/en/insights/': typeof EnInsightsIndexRoute
   '/en/projects/': typeof EnProjectsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
@@ -522,6 +530,7 @@ export interface FileRouteTypes {
     | '/projects/$category/$slug'
     | '/admin/insights/'
     | '/admin/portfolio/'
+    | '/admin/services/'
     | '/en/insights/'
     | '/en/projects/'
     | '/insights/$category/'
@@ -550,7 +559,6 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/sections'
     | '/admin/seo'
-    | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
     | '/admin/testimonials'
@@ -574,6 +582,7 @@ export interface FileRouteTypes {
     | '/projects/$category/$slug'
     | '/admin/insights'
     | '/admin/portfolio'
+    | '/admin/services'
     | '/en/insights'
     | '/en/projects'
     | '/insights/$category'
@@ -627,6 +636,7 @@ export interface FileRouteTypes {
     | '/projects/$category/$slug'
     | '/admin/insights/'
     | '/admin/portfolio/'
+    | '/admin/services/'
     | '/en/insights/'
     | '/en/projects/'
     | '/insights/$category/'
@@ -902,6 +912,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnInsightsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/services/': {
+      id: '/admin/services/'
+      path: '/'
+      fullPath: '/admin/services/'
+      preLoaderRoute: typeof AdminServicesIndexRouteImport
+      parentRoute: typeof AdminServicesRoute
+    }
     '/admin/portfolio/': {
       id: '/admin/portfolio/'
       path: '/portfolio'
@@ -1034,11 +1051,13 @@ declare module '@tanstack/react-router' {
 interface AdminServicesRouteChildren {
   AdminServicesIdRoute: typeof AdminServicesIdRoute
   AdminServicesNewRoute: typeof AdminServicesNewRoute
+  AdminServicesIndexRoute: typeof AdminServicesIndexRoute
 }
 
 const AdminServicesRouteChildren: AdminServicesRouteChildren = {
   AdminServicesIdRoute: AdminServicesIdRoute,
   AdminServicesNewRoute: AdminServicesNewRoute,
+  AdminServicesIndexRoute: AdminServicesIndexRoute,
 }
 
 const AdminServicesRouteWithChildren = AdminServicesRoute._addFileChildren(
