@@ -21,6 +21,8 @@ import {
 import { toast } from "sonner";
 
 
+type FAQ = { q_ar?: string; q_en?: string; a_ar?: string; a_en?: string };
+
 type Category = {
   id: string;
   slug: string;
@@ -30,6 +32,21 @@ type Category = {
   description_en: string | null;
   icon: string | null;
   cover_image_url: string | null;
+  hero_image_url: string | null;
+  intro_ar: string | null;
+  intro_en: string | null;
+  content_ar: string | null;
+  content_en: string | null;
+  cta_label_ar: string | null;
+  cta_label_en: string | null;
+  cta_href: string | null;
+  faq: FAQ[];
+  seo_title_ar: string | null;
+  seo_title_en: string | null;
+  seo_description_ar: string | null;
+  seo_description_en: string | null;
+  seo_keywords: string[] | null;
+  og_image_url: string | null;
   is_hidden: boolean;
   sort_order: number;
   project_count?: number;
@@ -120,6 +137,21 @@ function CategoriesPage() {
         description_en: c.description_en,
         icon: c.icon,
         cover_image_url: c.cover_image_url,
+        hero_image_url: c.hero_image_url,
+        intro_ar: c.intro_ar,
+        intro_en: c.intro_en,
+        content_ar: c.content_ar,
+        content_en: c.content_en,
+        cta_label_ar: c.cta_label_ar,
+        cta_label_en: c.cta_label_en,
+        cta_href: c.cta_href,
+        faq: c.faq ?? [],
+        seo_title_ar: c.seo_title_ar,
+        seo_title_en: c.seo_title_en,
+        seo_description_ar: c.seo_description_ar,
+        seo_description_en: c.seo_description_en,
+        seo_keywords: c.seo_keywords,
+        og_image_url: c.og_image_url,
         is_hidden: c.is_hidden,
       })
       .eq("id", c.id);
@@ -447,6 +479,91 @@ function CategoryCard({
             />
           </div>
 
+          <div className="grid gap-1.5 md:col-span-2">
+            <Label className="text-xs">صورة الغلاف الكبيرة (Hero)</Label>
+            <CategoryCoverField
+              url={c.hero_image_url ?? ""}
+              onChange={(v) => setC({ ...c, hero_image_url: v || null })}
+            />
+          </div>
+
+          <div className="grid gap-1.5">
+            <Label className="text-xs">مقدمة قصيرة (عربي)</Label>
+            <Textarea rows={3} value={c.intro_ar ?? ""} onChange={(e) => setC({ ...c, intro_ar: e.target.value || null })} />
+          </div>
+          <div className="grid gap-1.5">
+            <Label className="text-xs">Short intro (EN)</Label>
+            <Textarea rows={3} value={c.intro_en ?? ""} onChange={(e) => setC({ ...c, intro_en: e.target.value || null })} />
+          </div>
+
+          <div className="grid gap-1.5">
+            <Label className="text-xs">محتوى غني بالعربية (HTML مسموح)</Label>
+            <Textarea rows={6} value={c.content_ar ?? ""} onChange={(e) => setC({ ...c, content_ar: e.target.value || null })} />
+          </div>
+          <div className="grid gap-1.5">
+            <Label className="text-xs">Rich content (EN, HTML)</Label>
+            <Textarea rows={6} value={c.content_en ?? ""} onChange={(e) => setC({ ...c, content_en: e.target.value || null })} />
+          </div>
+
+          <div className="grid gap-1.5">
+            <Label className="text-xs">نص زر CTA (عربي)</Label>
+            <Input value={c.cta_label_ar ?? ""} onChange={(e) => setC({ ...c, cta_label_ar: e.target.value || null })} />
+          </div>
+          <div className="grid gap-1.5">
+            <Label className="text-xs">CTA label (EN)</Label>
+            <Input value={c.cta_label_en ?? ""} onChange={(e) => setC({ ...c, cta_label_en: e.target.value || null })} />
+          </div>
+          <div className="grid gap-1.5 md:col-span-2">
+            <Label className="text-xs">رابط CTA (مثال: /contact)</Label>
+            <Input dir="ltr" value={c.cta_href ?? ""} onChange={(e) => setC({ ...c, cta_href: e.target.value || null })} />
+          </div>
+
+          <div className="grid gap-2 md:col-span-2">
+            <Label className="text-xs">الأسئلة الشائعة</Label>
+            <FAQEditor value={c.faq ?? []} onChange={(faq) => setC({ ...c, faq })} />
+          </div>
+
+          <div className="grid gap-1.5 md:col-span-2 rounded-lg border border-border/60 bg-background p-4">
+            <div className="text-xs font-semibold text-muted-foreground mb-1">SEO</div>
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-1.5">
+                <Label className="text-xs">عنوان SEO (عربي)</Label>
+                <Input value={c.seo_title_ar ?? ""} onChange={(e) => setC({ ...c, seo_title_ar: e.target.value || null })} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label className="text-xs">SEO title (EN)</Label>
+                <Input value={c.seo_title_en ?? ""} onChange={(e) => setC({ ...c, seo_title_en: e.target.value || null })} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label className="text-xs">وصف SEO (عربي)</Label>
+                <Textarea rows={2} value={c.seo_description_ar ?? ""} onChange={(e) => setC({ ...c, seo_description_ar: e.target.value || null })} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label className="text-xs">SEO description (EN)</Label>
+                <Textarea rows={2} value={c.seo_description_en ?? ""} onChange={(e) => setC({ ...c, seo_description_en: e.target.value || null })} />
+              </div>
+              <div className="grid gap-1.5 md:col-span-2">
+                <Label className="text-xs">كلمات مفتاحية (مفصولة بفاصلة)</Label>
+                <Input
+                  dir="ltr"
+                  value={(c.seo_keywords ?? []).join(", ")}
+                  onChange={(e) => {
+                    const arr = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
+                    setC({ ...c, seo_keywords: arr.length ? arr : null });
+                  }}
+                />
+              </div>
+              <div className="grid gap-1.5 md:col-span-2">
+                <Label className="text-xs">صورة المشاركة (Open Graph)</Label>
+                <CategoryCoverField
+                  url={c.og_image_url ?? ""}
+                  onChange={(v) => setC({ ...c, og_image_url: v || null })}
+                />
+              </div>
+            </div>
+          </div>
+
+
           <div className="flex items-center gap-2 md:col-span-2">
             <Switch
               checked={!c.is_hidden}
@@ -525,6 +642,38 @@ function CategoryCoverField({ url, onChange }: { url: string; onChange: (v: stri
         placeholder="أو الصق رابطًا للصورة"
         dir="ltr"
       />
+    </div>
+  );
+}
+
+function FAQEditor({ value, onChange }: { value: FAQ[]; onChange: (v: FAQ[]) => void }) {
+  const update = (i: number, patch: Partial<FAQ>) => {
+    const next = value.map((f, idx) => (idx === i ? { ...f, ...patch } : f));
+    onChange(next);
+  };
+  const remove = (i: number) => onChange(value.filter((_, idx) => idx !== i));
+  const add = () => onChange([...value, { q_ar: "", q_en: "", a_ar: "", a_en: "" }]);
+  return (
+    <div className="space-y-3">
+      {value.map((f, i) => (
+        <div key={i} className="rounded-lg border border-border/60 bg-background p-3">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">سؤال #{i + 1}</span>
+            <Button size="icon" variant="ghost" onClick={() => remove(i)} title="حذف">
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
+          <div className="grid gap-2 md:grid-cols-2">
+            <Input placeholder="السؤال (عربي)" value={f.q_ar ?? ""} onChange={(e) => update(i, { q_ar: e.target.value })} />
+            <Input placeholder="Question (EN)" value={f.q_en ?? ""} onChange={(e) => update(i, { q_en: e.target.value })} />
+            <Textarea rows={2} placeholder="الإجابة (عربي)" value={f.a_ar ?? ""} onChange={(e) => update(i, { a_ar: e.target.value })} />
+            <Textarea rows={2} placeholder="Answer (EN)" value={f.a_en ?? ""} onChange={(e) => update(i, { a_en: e.target.value })} />
+          </div>
+        </div>
+      ))}
+      <Button size="sm" variant="outline" onClick={add}>
+        <Plus className="me-1.5 h-3.5 w-3.5" /> إضافة سؤال
+      </Button>
     </div>
   );
 }

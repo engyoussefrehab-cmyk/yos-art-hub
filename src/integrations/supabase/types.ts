@@ -747,17 +747,29 @@ export type Database = {
       }
       project_categories: {
         Row: {
+          content_ar: string | null
+          content_en: string | null
           cover_image_url: string | null
           created_at: string
+          cta_href: string | null
+          cta_label_ar: string | null
+          cta_label_en: string | null
           description_ar: string | null
           description_en: string | null
+          faq: Json
+          featured_project_ids: string[]
+          hero_image_url: string | null
           icon: string | null
           id: string
+          intro_ar: string | null
+          intro_en: string | null
           is_hidden: boolean
           name_ar: string
           name_en: string
+          og_image_url: string | null
           seo_description_ar: string | null
           seo_description_en: string | null
+          seo_keywords: string[] | null
           seo_title_ar: string | null
           seo_title_en: string | null
           slug: string
@@ -765,17 +777,29 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          content_ar?: string | null
+          content_en?: string | null
           cover_image_url?: string | null
           created_at?: string
+          cta_href?: string | null
+          cta_label_ar?: string | null
+          cta_label_en?: string | null
           description_ar?: string | null
           description_en?: string | null
+          faq?: Json
+          featured_project_ids?: string[]
+          hero_image_url?: string | null
           icon?: string | null
           id?: string
+          intro_ar?: string | null
+          intro_en?: string | null
           is_hidden?: boolean
           name_ar: string
           name_en: string
+          og_image_url?: string | null
           seo_description_ar?: string | null
           seo_description_en?: string | null
+          seo_keywords?: string[] | null
           seo_title_ar?: string | null
           seo_title_en?: string | null
           slug: string
@@ -783,17 +807,29 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          content_ar?: string | null
+          content_en?: string | null
           cover_image_url?: string | null
           created_at?: string
+          cta_href?: string | null
+          cta_label_ar?: string | null
+          cta_label_en?: string | null
           description_ar?: string | null
           description_en?: string | null
+          faq?: Json
+          featured_project_ids?: string[]
+          hero_image_url?: string | null
           icon?: string | null
           id?: string
+          intro_ar?: string | null
+          intro_en?: string | null
           is_hidden?: boolean
           name_ar?: string
           name_en?: string
+          og_image_url?: string | null
           seo_description_ar?: string | null
           seo_description_en?: string | null
+          seo_keywords?: string[] | null
           seo_title_ar?: string | null
           seo_title_en?: string | null
           slug?: string
