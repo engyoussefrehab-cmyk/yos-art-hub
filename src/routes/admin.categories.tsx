@@ -479,6 +479,91 @@ function CategoryCard({
             />
           </div>
 
+          <div className="grid gap-1.5 md:col-span-2">
+            <Label className="text-xs">صورة الغلاف الكبيرة (Hero)</Label>
+            <CategoryCoverField
+              url={c.hero_image_url ?? ""}
+              onChange={(v) => setC({ ...c, hero_image_url: v || null })}
+            />
+          </div>
+
+          <div className="grid gap-1.5">
+            <Label className="text-xs">مقدمة قصيرة (عربي)</Label>
+            <Textarea rows={3} value={c.intro_ar ?? ""} onChange={(e) => setC({ ...c, intro_ar: e.target.value || null })} />
+          </div>
+          <div className="grid gap-1.5">
+            <Label className="text-xs">Short intro (EN)</Label>
+            <Textarea rows={3} value={c.intro_en ?? ""} onChange={(e) => setC({ ...c, intro_en: e.target.value || null })} />
+          </div>
+
+          <div className="grid gap-1.5">
+            <Label className="text-xs">محتوى غني بالعربية (HTML مسموح)</Label>
+            <Textarea rows={6} value={c.content_ar ?? ""} onChange={(e) => setC({ ...c, content_ar: e.target.value || null })} />
+          </div>
+          <div className="grid gap-1.5">
+            <Label className="text-xs">Rich content (EN, HTML)</Label>
+            <Textarea rows={6} value={c.content_en ?? ""} onChange={(e) => setC({ ...c, content_en: e.target.value || null })} />
+          </div>
+
+          <div className="grid gap-1.5">
+            <Label className="text-xs">نص زر CTA (عربي)</Label>
+            <Input value={c.cta_label_ar ?? ""} onChange={(e) => setC({ ...c, cta_label_ar: e.target.value || null })} />
+          </div>
+          <div className="grid gap-1.5">
+            <Label className="text-xs">CTA label (EN)</Label>
+            <Input value={c.cta_label_en ?? ""} onChange={(e) => setC({ ...c, cta_label_en: e.target.value || null })} />
+          </div>
+          <div className="grid gap-1.5 md:col-span-2">
+            <Label className="text-xs">رابط CTA (مثال: /contact)</Label>
+            <Input dir="ltr" value={c.cta_href ?? ""} onChange={(e) => setC({ ...c, cta_href: e.target.value || null })} />
+          </div>
+
+          <div className="grid gap-2 md:col-span-2">
+            <Label className="text-xs">الأسئلة الشائعة</Label>
+            <FAQEditor value={c.faq ?? []} onChange={(faq) => setC({ ...c, faq })} />
+          </div>
+
+          <div className="grid gap-1.5 md:col-span-2 rounded-lg border border-border/60 bg-background p-4">
+            <div className="text-xs font-semibold text-muted-foreground mb-1">SEO</div>
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-1.5">
+                <Label className="text-xs">عنوان SEO (عربي)</Label>
+                <Input value={c.seo_title_ar ?? ""} onChange={(e) => setC({ ...c, seo_title_ar: e.target.value || null })} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label className="text-xs">SEO title (EN)</Label>
+                <Input value={c.seo_title_en ?? ""} onChange={(e) => setC({ ...c, seo_title_en: e.target.value || null })} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label className="text-xs">وصف SEO (عربي)</Label>
+                <Textarea rows={2} value={c.seo_description_ar ?? ""} onChange={(e) => setC({ ...c, seo_description_ar: e.target.value || null })} />
+              </div>
+              <div className="grid gap-1.5">
+                <Label className="text-xs">SEO description (EN)</Label>
+                <Textarea rows={2} value={c.seo_description_en ?? ""} onChange={(e) => setC({ ...c, seo_description_en: e.target.value || null })} />
+              </div>
+              <div className="grid gap-1.5 md:col-span-2">
+                <Label className="text-xs">كلمات مفتاحية (مفصولة بفاصلة)</Label>
+                <Input
+                  dir="ltr"
+                  value={(c.seo_keywords ?? []).join(", ")}
+                  onChange={(e) => {
+                    const arr = e.target.value.split(",").map((s) => s.trim()).filter(Boolean);
+                    setC({ ...c, seo_keywords: arr.length ? arr : null });
+                  }}
+                />
+              </div>
+              <div className="grid gap-1.5 md:col-span-2">
+                <Label className="text-xs">صورة المشاركة (Open Graph)</Label>
+                <CategoryCoverField
+                  url={c.og_image_url ?? ""}
+                  onChange={(v) => setC({ ...c, og_image_url: v || null })}
+                />
+              </div>
+            </div>
+          </div>
+
+
           <div className="flex items-center gap-2 md:col-span-2">
             <Switch
               checked={!c.is_hidden}
