@@ -21,6 +21,8 @@ import {
 import { toast } from "sonner";
 
 
+type FAQ = { q_ar?: string; q_en?: string; a_ar?: string; a_en?: string };
+
 type Category = {
   id: string;
   slug: string;
@@ -30,6 +32,21 @@ type Category = {
   description_en: string | null;
   icon: string | null;
   cover_image_url: string | null;
+  hero_image_url: string | null;
+  intro_ar: string | null;
+  intro_en: string | null;
+  content_ar: string | null;
+  content_en: string | null;
+  cta_label_ar: string | null;
+  cta_label_en: string | null;
+  cta_href: string | null;
+  faq: FAQ[];
+  seo_title_ar: string | null;
+  seo_title_en: string | null;
+  seo_description_ar: string | null;
+  seo_description_en: string | null;
+  seo_keywords: string[] | null;
+  og_image_url: string | null;
   is_hidden: boolean;
   sort_order: number;
   project_count?: number;
