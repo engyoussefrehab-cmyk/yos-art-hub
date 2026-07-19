@@ -12,7 +12,14 @@ export function CategoryView({
   const { t, lang } = useLang();
   const label = lang === "ar" ? category.name_ar || category.name_en : category.name_en || category.name_ar;
   const desc = lang === "ar" ? category.description_ar : category.description_en;
+  const intro = lang === "ar" ? category.intro_ar : category.intro_en;
+  const content = lang === "ar" ? category.content_ar : category.content_en;
+  const ctaLabel = lang === "ar" ? category.cta_label_ar : category.cta_label_en;
   const projectsHref = lang === "ar" ? "/projects" : "/en/projects";
+  const featuredIds = new Set(category.featured_project_ids ?? []);
+  const featured = projects.filter((p) => featuredIds.has((p as any).id));
+  const rest = projects.filter((p) => !featuredIds.has((p as any).id));
+  const ordered = [...featured, ...rest];
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-16 md:py-20">
@@ -24,12 +31,53 @@ export function CategoryView({
       <header className="max-w-3xl">
         <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("cat_kicker")}</span>
         <h1 className="mt-3 font-display text-5xl md:text-6xl font-bold leading-tight">{label}</h1>
-        {desc && <p className="mt-5 text-lg text-muted-foreground">{desc}</p>}
+        {intro && <p className="mt-5 text-lg text-muted-foreground">{intro}</p>}
+        {!intro && desc && <p className="mt-5 text-lg text-muted-foreground">{desc}</p>}
       </header>
 
+      {category.hero_image_url && (
+        <div className="mt-10 overflow-hidden rounded-3xl border border-border">
+          <img src={category.hero_image_url} alt={label} className="w-full object-cover" />
+        </div>
+      )}
+
+      {content && (
+        <article className="prose prose-neutral dark:prose-invert mt-10 max-w-3xl" dangerouslySetInnerHTML={{ __html: content }} />
+      )}
+
       <div className="mt-14">
-        <ProjectsList categorySlug={category.slug} projects={projects} />
+        <ProjectsList categorySlug={category.slug} projects={ordered} />
       </div>
+
+      {category.faq && category.faq.length > 0 && (
+        <div className="mt-16 max-w-3xl">
+          <h2 className="font-display text-3xl font-bold">{lang === "ar" ? "الأسئلة الشائعة" : "FAQ"}</h2>
+          <div className="mt-6 space-y-4">
+            {category.faq.map((f, i) => {
+              const q = lang === "ar" ? f.q_ar : f.q_en;
+              const a = lang === "ar" ? f.a_ar : f.a_en;
+              if (!q && !a) return null;
+              return (
+                <details key={i} className="group rounded-2xl border border-border bg-cream/50 p-5">
+                  <summary className="cursor-pointer list-none font-semibold">{q}</summary>
+                  {a && <p className="mt-3 text-muted-foreground leading-relaxed">{a}</p>}
+                </details>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {ctaLabel && category.cta_href && (
+        <div className="mt-14">
+          <Link
+            to={category.cta_href}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+          >
+            {ctaLabel}
+          </Link>
+        </div>
+      )}
     </section>
   );
 }
