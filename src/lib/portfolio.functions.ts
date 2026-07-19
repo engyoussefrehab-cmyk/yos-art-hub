@@ -116,6 +116,8 @@ export const getPortfolioBySlug = createServerFn({ method: "GET" })
     return mapRow(row);
   });
 
+export type CategoryFAQ = { q_ar?: string; q_en?: string; a_ar?: string; a_en?: string };
+
 export type CategoryDTO = {
   slug: string;
   name_ar: string;
@@ -123,9 +125,57 @@ export type CategoryDTO = {
   description_ar: string | null;
   description_en: string | null;
   cover_image_url: string | null;
+  hero_image_url: string | null;
+  intro_ar: string | null;
+  intro_en: string | null;
+  content_ar: string | null;
+  content_en: string | null;
+  cta_label_ar: string | null;
+  cta_label_en: string | null;
+  cta_href: string | null;
+  faq: CategoryFAQ[];
+  seo_title_ar: string | null;
+  seo_title_en: string | null;
+  seo_description_ar: string | null;
+  seo_description_en: string | null;
+  seo_keywords: string[] | null;
+  og_image_url: string | null;
+  featured_project_ids: string[];
   sort_order: number;
   project_count: number;
 };
+
+const CAT_COLS =
+  "slug,name_ar,name_en,description_ar,description_en,cover_image_url,hero_image_url,intro_ar,intro_en,content_ar,content_en,cta_label_ar,cta_label_en,cta_href,faq,seo_title_ar,seo_title_en,seo_description_ar,seo_description_en,seo_keywords,og_image_url,featured_project_ids,sort_order";
+
+function mapCat(c: any, project_count = 0): CategoryDTO {
+  return {
+    slug: c.slug,
+    name_ar: c.name_ar,
+    name_en: c.name_en,
+    description_ar: c.description_ar ?? null,
+    description_en: c.description_en ?? null,
+    cover_image_url: c.cover_image_url ?? null,
+    hero_image_url: c.hero_image_url ?? null,
+    intro_ar: c.intro_ar ?? null,
+    intro_en: c.intro_en ?? null,
+    content_ar: c.content_ar ?? null,
+    content_en: c.content_en ?? null,
+    cta_label_ar: c.cta_label_ar ?? null,
+    cta_label_en: c.cta_label_en ?? null,
+    cta_href: c.cta_href ?? null,
+    faq: Array.isArray(c.faq) ? (c.faq as CategoryFAQ[]) : [],
+    seo_title_ar: c.seo_title_ar ?? null,
+    seo_title_en: c.seo_title_en ?? null,
+    seo_description_ar: c.seo_description_ar ?? null,
+    seo_description_en: c.seo_description_en ?? null,
+    seo_keywords: Array.isArray(c.seo_keywords) ? c.seo_keywords : null,
+    og_image_url: c.og_image_url ?? null,
+    featured_project_ids: Array.isArray(c.featured_project_ids) ? c.featured_project_ids : [],
+    sort_order: c.sort_order ?? 0,
+    project_count,
+  };
+}
 
 export const listCategories = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -133,7 +183,7 @@ export const listCategories = createServerFn({ method: "GET" })
     const [cats, projs] = await Promise.all([
       supabase
         .from("project_categories")
-        .select("slug,name_ar,name_en,description_ar,description_en,cover_image_url,sort_order")
+        .select(CAT_COLS)
         .eq("is_hidden", false)
         .order("sort_order", { ascending: true }),
       supabase
@@ -146,10 +196,7 @@ export const listCategories = createServerFn({ method: "GET" })
     (projs.data ?? []).forEach((r: any) => {
       if (r.category_slug) counts.set(r.category_slug, (counts.get(r.category_slug) ?? 0) + 1);
     });
-    return (cats.data ?? []).map((c: any) => ({
-      ...c,
-      project_count: counts.get(c.slug) ?? 0,
-    })) as CategoryDTO[];
+    return (cats.data ?? []).map((c: any) => mapCat(c, counts.get(c.slug) ?? 0));
   });
 
 export const getCategoryBySlug = createServerFn({ method: "GET" })
@@ -158,13 +205,13 @@ export const getCategoryBySlug = createServerFn({ method: "GET" })
     const supabase = publicClient();
     const { data: row, error } = await supabase
       .from("project_categories")
-      .select("slug,name_ar,name_en,description_ar,description_en,cover_image_url,sort_order")
+      .select(CAT_COLS)
       .eq("slug", data.slug)
       .eq("is_hidden", false)
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!row) return null;
-    return { ...row, project_count: 0 } as CategoryDTO;
+    return mapCat(row);
   });
 
 
