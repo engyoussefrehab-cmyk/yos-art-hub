@@ -646,6 +646,38 @@ function CategoryCoverField({ url, onChange }: { url: string; onChange: (v: stri
   );
 }
 
+function FAQEditor({ value, onChange }: { value: FAQ[]; onChange: (v: FAQ[]) => void }) {
+  const update = (i: number, patch: Partial<FAQ>) => {
+    const next = value.map((f, idx) => (idx === i ? { ...f, ...patch } : f));
+    onChange(next);
+  };
+  const remove = (i: number) => onChange(value.filter((_, idx) => idx !== i));
+  const add = () => onChange([...value, { q_ar: "", q_en: "", a_ar: "", a_en: "" }]);
+  return (
+    <div className="space-y-3">
+      {value.map((f, i) => (
+        <div key={i} className="rounded-lg border border-border/60 bg-background p-3">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">سؤال #{i + 1}</span>
+            <Button size="icon" variant="ghost" onClick={() => remove(i)} title="حذف">
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
+          <div className="grid gap-2 md:grid-cols-2">
+            <Input placeholder="السؤال (عربي)" value={f.q_ar ?? ""} onChange={(e) => update(i, { q_ar: e.target.value })} />
+            <Input placeholder="Question (EN)" value={f.q_en ?? ""} onChange={(e) => update(i, { q_en: e.target.value })} />
+            <Textarea rows={2} placeholder="الإجابة (عربي)" value={f.a_ar ?? ""} onChange={(e) => update(i, { a_ar: e.target.value })} />
+            <Textarea rows={2} placeholder="Answer (EN)" value={f.a_en ?? ""} onChange={(e) => update(i, { a_en: e.target.value })} />
+          </div>
+        </div>
+      ))}
+      <Button size="sm" variant="outline" onClick={add}>
+        <Plus className="me-1.5 h-3.5 w-3.5" /> إضافة سؤال
+      </Button>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/admin/categories")({
   component: CategoriesPage,
 });
