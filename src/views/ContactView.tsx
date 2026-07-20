@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useId, useRef, useState, type FormEvent } from "react";
 import { z } from "zod";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
@@ -51,6 +51,16 @@ function ContactForm() {
   const mountedAt = useRef(Date.now());
   const lastSubmitAt = useRef(0);
 
+  const nameId = useId();
+  const emailId = useId();
+  const subjectId = useId();
+  const messageId = useId();
+  const budgetId = useId();
+  const ptypeId = useId();
+  const callDateId = useId();
+  const callTimeId = useId();
+  const callTzId = useId();
+
   const schema = z.object({
     name: z.string().trim().min(2, t("err_name")).max(100, t("err_name_long")),
     email: z.string().trim().email(t("err_email")).max(255),
@@ -71,11 +81,18 @@ function ContactForm() {
     lastSubmitAt.current = now;
     setSpamNotice(false);
     setSendError(null);
+    const budget = (form.elements.namedItem("budget") as HTMLSelectElement)?.value || "";
+    const project_type = (form.elements.namedItem("project_type") as HTMLSelectElement)?.value || "";
+    const rawMessage = (form.elements.namedItem("message") as HTMLTextAreaElement).value;
+    const extras: string[] = [];
+    if (project_type) extras.push(`${lang === "ar" ? "نوع المشروع" : "Project type"}: ${project_type}`);
+    if (budget) extras.push(`${lang === "ar" ? "الميزانيّة" : "Budget"}: ${budget}`);
+    const messageWithExtras = extras.length ? `${rawMessage}\n\n---\n${extras.join("\n")}` : rawMessage;
     const data = {
       name: (form.elements.namedItem("name") as HTMLInputElement).value,
       email: (form.elements.namedItem("email") as HTMLInputElement).value,
       subject: (form.elements.namedItem("subject") as HTMLInputElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+      message: messageWithExtras,
       call_date: (form.elements.namedItem("call_date") as HTMLInputElement)?.value || "",
       call_time: (form.elements.namedItem("call_time") as HTMLInputElement)?.value || "",
       call_tz: (form.elements.namedItem("call_tz") as HTMLInputElement)?.value || "",
@@ -88,9 +105,13 @@ function ContactForm() {
         if (!fe[key]) fe[key] = issue.message;
       }
       setErrors(fe);
+      // Focus first invalid field
+      const firstKey = Object.keys(fe)[0];
+      const idMap: Record<string, string> = { name: nameId, email: emailId, subject: subjectId, message: messageId };
+      const el = firstKey && idMap[firstKey] ? document.getElementById(idMap[firstKey]) : null;
+      el?.focus();
       return;
     }
-    // Validate that requested call date (if provided) is in the future
     if (data.call_date) {
       const picked = new Date(`${data.call_date}T${data.call_time || "23:59"}`);
       if (!Number.isNaN(picked.getTime()) && picked.getTime() < Date.now()) {
@@ -116,100 +137,124 @@ function ContactForm() {
     }
   };
 
+  const inputClass =
+    "mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40";
+
   return (
-    <form onSubmit={onSubmit} noValidate dir={lang === "ar" ? "rtl" : "ltr"} className="rounded-3xl border border-white/10 bg-white/5 p-6 md:p-8 backdrop-blur">
+    <form onSubmit={onSubmit} noValidate dir={lang === "ar" ? "rtl" : "ltr"} aria-labelledby="contact-form-title" className="rounded-3xl border border-white/10 bg-white/5 p-6 md:p-8 backdrop-blur">
       <div className="mb-6">
-        <h2 className="font-display text-2xl font-bold text-white">{t("form_title")}</h2>
+        <h2 id="contact-form-title" className="font-display text-2xl font-bold text-white">{t("form_title")}</h2>
         <p className="mt-1 text-sm text-white/60">{t("form_sub")}</p>
       </div>
       <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Field label={t("f_name")} name="name" error={errors.name} />
-        <Field label={t("f_email")} name="email" type="email" dir="ltr" error={errors.email} />
+        <Field id={nameId} label={t("f_name")} name="name" error={errors.name} autoComplete="name" />
+        <Field id={emailId} label={t("f_email")} name="email" type="email" dir="ltr" error={errors.email} autoComplete="email" />
       </div>
       <div className="mt-4">
-        <Field label={t("f_subject")} name="subject" error={errors.subject} />
+        <Field id={subjectId} label={t("f_subject")} name="subject" error={errors.subject} />
+      </div>
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div>
+          <label htmlFor={ptypeId} className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_project_type")}</label>
+          <select id={ptypeId} name="project_type" defaultValue="" className={`${inputClass} [color-scheme:dark]`}>
+            <option value="">{t("f_project_type_placeholder")}</option>
+            <option value={t("ptype_identity")}>{t("ptype_identity")}</option>
+            <option value={t("ptype_logo")}>{t("ptype_logo")}</option>
+            <option value={t("ptype_profile")}>{t("ptype_profile")}</option>
+            <option value={t("ptype_social")}>{t("ptype_social")}</option>
+            <option value={t("ptype_other")}>{t("ptype_other")}</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor={budgetId} className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_budget")}</label>
+          <select id={budgetId} name="budget" defaultValue="" className={`${inputClass} [color-scheme:dark]`}>
+            <option value="">{t("f_budget_placeholder")}</option>
+            <option value={t("budget_under_1k")}>{t("budget_under_1k")}</option>
+            <option value={t("budget_1k_3k")}>{t("budget_1k_3k")}</option>
+            <option value={t("budget_3k_8k")}>{t("budget_3k_8k")}</option>
+            <option value={t("budget_8k_plus")}>{t("budget_8k_plus")}</option>
+            <option value={t("budget_unsure")}>{t("budget_unsure")}</option>
+          </select>
+        </div>
       </div>
       <div className="mt-4">
-        <label className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_message")}</label>
+        <label htmlFor={messageId} className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_message")}</label>
         <textarea
+          id={messageId}
           name="message" rows={6} maxLength={2000}
-          className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
+          aria-invalid={errors.message ? true : undefined}
+          aria-describedby={errors.message ? `${messageId}-err` : undefined}
+          className={inputClass}
           placeholder={t("f_message_placeholder")}
         />
-        {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
+        {errors.message && <p id={`${messageId}-err`} className="mt-1 text-xs text-red-400">{errors.message}</p>}
       </div>
-      <div className="mt-6 rounded-2xl border border-accent/30 bg-accent/5 p-5">
-        <div className="flex items-start gap-2">
+      <details className="group mt-6 rounded-2xl border border-accent/30 bg-accent/5 p-5 open:pb-6">
+        <summary className="flex cursor-pointer list-none items-start gap-2 focus:outline-none">
           <span aria-hidden="true" className="text-lg leading-none">📞</span>
-          <div>
+          <div className="flex-1">
             <h3 className="font-display text-base font-bold text-white">{t("f_call_title")}</h3>
             <p className="mt-1 text-xs text-white/60">{t("f_call_sub")}</p>
           </div>
-        </div>
+          <span aria-hidden className="mt-1 text-xs text-white/50 transition-transform group-open:rotate-180">▾</span>
+        </summary>
         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_date")}</label>
-            <input
-              name="call_date"
-              type="date"
-              min={new Date().toISOString().slice(0, 10)}
-              dir="ltr"
-              className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40 [color-scheme:dark]"
-            />
+            <label htmlFor={callDateId} className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_date")}</label>
+            <input id={callDateId} name="call_date" type="date" min={new Date().toISOString().slice(0, 10)} dir="ltr" className={`${inputClass} [color-scheme:dark]`} />
             {errors.call_date && <p className="mt-1 text-xs text-red-400">{errors.call_date}</p>}
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_time")}</label>
-            <input
-              name="call_time"
-              type="time"
-              dir="ltr"
-              className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40 [color-scheme:dark]"
-            />
+            <label htmlFor={callTimeId} className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_time")}</label>
+            <input id={callTimeId} name="call_time" type="time" dir="ltr" className={`${inputClass} [color-scheme:dark]`} />
           </div>
         </div>
         <div className="mt-4">
-          <label className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_tz")}</label>
-          <input
-            name="call_tz"
-            type="text"
-            maxLength={120}
-            placeholder={t("f_call_tz_placeholder")}
-            className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
-          />
+          <label htmlFor={callTzId} className="block text-xs font-semibold uppercase tracking-widest text-white/60">{t("f_call_tz")}</label>
+          <input id={callTzId} name="call_tz" type="text" maxLength={120} placeholder={t("f_call_tz_placeholder")} className={inputClass} />
         </div>
-      </div>
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+      </details>
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4" aria-live="polite">
         <button
           type="submit"
           disabled={sending}
-          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
+          className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:opacity-60 disabled:hover:translate-y-0"
         >
           {sending ? (lang === "ar" ? "جارٍ الإرسال..." : "Sending...") : t("f_send")}
         </button>
         {sent && <span className="text-xs text-accent">{t("f_sent")}</span>}
         {spamNotice && <span className="text-xs text-red-400">{t("f_spam")}</span>}
-        {sendError && <span className="text-xs text-red-400">{sendError}</span>}
+        {sendError && <span className="text-xs text-red-400" role="alert">{sendError}</span>}
       </div>
     </form>
   );
 }
 
-function Field({ label, name, type = "text", dir, error }: { label: string; name: string; type?: string; dir?: "ltr" | "rtl"; error?: string }) {
+function Field({ id, label, name, type = "text", dir, error, autoComplete }: { id: string; label: string; name: string; type?: string; dir?: "ltr" | "rtl"; error?: string; autoComplete?: string }) {
+  const errId = error ? `${id}-err` : undefined;
   return (
     <div>
-      <label className="block text-xs font-semibold uppercase tracking-widest text-white/60">{label}</label>
-      <input name={name} type={type} dir={dir} maxLength={255}
-        className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40" />
-      {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
+      <label htmlFor={id} className="block text-xs font-semibold uppercase tracking-widest text-white/60">{label}</label>
+      <input
+        id={id}
+        name={name}
+        type={type}
+        dir={dir}
+        maxLength={255}
+        autoComplete={autoComplete}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={errId}
+        className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
+      />
+      {error && <p id={errId} className="mt-1 text-xs text-red-400">{error}</p>}
     </div>
   );
 }
 
 function ContactCard({ label, value, href, arrow }: { label: string; value: string; href: string; arrow: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-accent hover:text-primary">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-accent hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ink">
       <div>
         <div className="text-xs uppercase tracking-widest opacity-60">{label}</div>
         <div className="mt-1 font-display text-lg font-bold" dir="ltr">{value}</div>
