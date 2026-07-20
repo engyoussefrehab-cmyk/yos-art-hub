@@ -301,10 +301,12 @@ function LanguageWelcome() {
     document.body.style.overflow = "hidden";
 
     // Focus first button
-    const focusables = () =>
-      dialogRef.current?.querySelectorAll<HTMLElement>(
+    const focusables = (): HTMLElement[] => {
+      const nodes = dialogRef.current?.querySelectorAll<HTMLElement>(
         'button, [href], input, [tabindex]:not([tabindex="-1"])'
-      ) ?? ([] as unknown as NodeListOf<HTMLElement>);
+      );
+      return nodes ? Array.from(nodes) : [];
+    };
     const first = focusables()[0];
     first?.focus();
 
