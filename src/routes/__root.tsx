@@ -300,7 +300,7 @@ function LanguageWelcome() {
 
   useEffect(() => {
     try {
-      if (!localStorage.getItem("yr_lang_chosen")) {
+      if (!sessionStorage.getItem("yr_lang_chosen")) {
         const id = window.setTimeout(() => setOpen(true), 700);
         return () => window.clearTimeout(id);
       }
@@ -311,10 +311,12 @@ function LanguageWelcome() {
 
   const choose = useCallback((lang: "ar" | "en") => {
     try {
-      localStorage.setItem("yr_lang_chosen", lang);
+      sessionStorage.setItem("yr_lang_chosen", lang);
+      localStorage.removeItem("yr_lang_chosen");
     } catch {
       /* ignore */
     }
+
     const path = window.location.pathname;
     const isOnEn = path === "/en" || path.startsWith("/en/");
     let target = path;
