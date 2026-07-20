@@ -1,12 +1,28 @@
 import { Link } from "@tanstack/react-router";
 import youssefPortrait from "@/assets/youssef-portrait.jpg.asset.json";
 import portfolioPdf from "@/assets/portfolio.pdf.asset.json";
+import svcVisualIdentity from "@/assets/services/visual-identity.jpg.asset.json";
+import svcLogoDesign from "@/assets/services/logo-design.jpg.asset.json";
+import svcCompanyProfile from "@/assets/services/company-profile.jpg.asset.json";
+import svcSocialMedia from "@/assets/services/social-media.jpg.asset.json";
+import svcDesignSystem from "@/assets/services/design-system.jpg.asset.json";
+import svcCreativeDirection from "@/assets/services/creative-direction.jpg.asset.json";
 import { Testimonials } from "@/components/Testimonials";
 import { LatestProjectsSlider } from "@/components/projects/LatestProjectsSlider";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
 import type { ServiceDTO } from "@/lib/services.functions";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
+
+const SERVICE_FALLBACK_IMAGES = [
+  svcVisualIdentity.url,
+  svcLogoDesign.url,
+  svcCompanyProfile.url,
+  svcSocialMedia.url,
+  svcDesignSystem.url,
+  svcCreativeDirection.url,
+];
+
 
 export function HomeView({ services = [], projects = [] }: { services?: ServiceDTO[]; projects?: PortfolioDTO[] }) {
   return (
