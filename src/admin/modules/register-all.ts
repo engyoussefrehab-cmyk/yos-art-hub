@@ -10,6 +10,13 @@
 import { registerModule } from "@/admin/lib/module-registry";
 import { registerCommand } from "@/admin/lib/command-registry";
 
+// Entity registrations — importing these files runs registerEntity().
+import "@/admin/entities/project";
+import "@/admin/entities/article";
+import "@/admin/entities/service";
+
+
+
 let bootstrapped = false;
 
 export function bootstrapAdminModules(): void {
@@ -39,42 +46,43 @@ export function bootstrapAdminModules(): void {
   registerModule({
     key: "portfolio",
     label: "Projects",
-    route: "/admin/portfolio",
+    route: "/admin/cms/project",
     icon: "Briefcase",
     section: "content",
     order: 20,
-    entityKey: "portfolio_project",
+    entityKey: "project",
     permissions: { view: ["admin", "editor", "author"] },
     quickActions: [
-      { id: "portfolio.new", label: "New Project", to: "/admin/portfolio/new", icon: "Plus" },
+      { id: "portfolio.new", label: "New Project", to: "/admin/cms/project/new", icon: "Plus" },
     ],
   });
   registerModule({
     key: "insights",
     label: "Articles",
-    route: "/admin/insights",
+    route: "/admin/cms/article",
     icon: "Newspaper",
     section: "content",
     order: 30,
-    entityKey: "insight_article",
+    entityKey: "article",
     permissions: { view: ["admin", "editor", "author"] },
     quickActions: [
-      { id: "insights.new", label: "New Article", to: "/admin/insights/new", icon: "Plus" },
+      { id: "insights.new", label: "New Article", to: "/admin/cms/article/new", icon: "Plus" },
     ],
   });
   registerModule({
     key: "services",
     label: "Services",
-    route: "/admin/services",
+    route: "/admin/cms/service",
     icon: "Sparkles",
     section: "content",
     order: 40,
     entityKey: "service",
     permissions: { view: ["admin", "editor"] },
     quickActions: [
-      { id: "services.new", label: "New Service", to: "/admin/services/new", icon: "Plus" },
+      { id: "services.new", label: "New Service", to: "/admin/cms/service/new", icon: "Plus" },
     ],
   });
+
 
   // Design ----------------------------------------------------------------
   registerModule({
@@ -215,21 +223,21 @@ export function bootstrapAdminModules(): void {
     id: "create.project",
     label: "New Project",
     group: "create",
-    to: "/admin/portfolio/new",
+    to: "/admin/cms/project/new",
     icon: "Plus",
   });
   registerCommand({
     id: "create.article",
     label: "New Article",
     group: "create",
-    to: "/admin/insights/new",
+    to: "/admin/cms/article/new",
     icon: "Plus",
   });
   registerCommand({
     id: "create.service",
     label: "New Service",
     group: "create",
-    to: "/admin/services/new",
+    to: "/admin/cms/service/new",
     icon: "Plus",
   });
   registerCommand({
