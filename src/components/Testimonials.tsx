@@ -141,6 +141,10 @@ function Slider({ items: base }: { items: Item[] }) {
     let raf = 0;
     let startX = 0;
     let startScroll = 0;
+    const reducedMotion =
+      typeof window !== "undefined" && window.matchMedia
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
 
     scroller.scrollLeft = 0;
 
