@@ -360,16 +360,24 @@ function LanguageWelcome() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-6 animate-in fade-in duration-300"
+      ref={dialogRef}
+      className="fixed inset-0 z-[100] flex items-center justify-center px-6 animate-in fade-in duration-300 motion-reduce:animate-none"
       role="dialog"
       aria-modal="true"
       aria-labelledby="lang-welcome-title"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-ink/80 backdrop-blur-md" />
+      <button
+        type="button"
+        aria-label="Close"
+        onClick={() => setOpen(false)}
+        className="absolute inset-0 bg-ink/80 backdrop-blur-md"
+        tabIndex={-1}
+      />
 
       {/* Card */}
-      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/70 bg-card shadow-[0_40px_120px_-30px_rgb(0_0_0/0.5)] animate-in zoom-in-95 slide-in-from-bottom-4 duration-500">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/70 bg-card shadow-[0_40px_120px_-30px_rgb(0_0_0/0.5)] animate-in zoom-in-95 slide-in-from-bottom-4 duration-500 motion-reduce:animate-none">
+
         {/* Ambient glow */}
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70">
           <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
