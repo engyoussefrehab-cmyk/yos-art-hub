@@ -37,11 +37,11 @@ function SeoManager() {
         supabase.from("pages").select("id,slug,title_ar,seo_title_ar,seo_description_ar,og_image_url,status"),
         supabase
           .from("insight_articles")
-          .select("id,slug,title_ar,seo_title_ar,seo_description_ar,cover_image_url,status,category:insight_categories(slug)"),
+          .select("id,slug,title_ar,seo_title_ar,seo_description_ar,cover_url,status,category:insight_categories(slug)"),
         supabase
           .from("portfolio_projects")
-          .select("id,slug,title_ar,seo_title_ar,seo_description_ar,cover_image_url,status,category"),
-        supabase.from("services").select("id,slug,title_ar,seo_title_ar,seo_description_ar,cover_image_url,status"),
+          .select("id,slug,name_ar,seo_title_ar,seo_description_ar,og_image_url,status,category_slug"),
+        supabase.from("services").select("id,slug,title_ar,seo_title_ar,seo_description_ar,og_image_url,status"),
       ]);
       const out: SeoRow[] = [];
       (pages.data ?? []).forEach((r: any) =>
@@ -66,7 +66,7 @@ function SeoManager() {
           title: r.title_ar,
           seo_title: r.seo_title_ar,
           seo_description: r.seo_description_ar,
-          og_image: r.cover_image_url,
+          og_image: r.cover_url,
           status: r.status,
           editHref: `/admin/insights/${r.id}`,
           publicHref: `/insights/${r.category?.slug ?? "all"}/${r.slug}`,
@@ -77,13 +77,13 @@ function SeoManager() {
           kind: "project",
           id: r.id,
           slug: r.slug,
-          title: r.title_ar,
+          title: r.name_ar,
           seo_title: r.seo_title_ar,
           seo_description: r.seo_description_ar,
-          og_image: r.cover_image_url,
+          og_image: r.og_image_url,
           status: r.status,
           editHref: `/admin/portfolio/${r.id}`,
-          publicHref: `/projects/${r.category}/${r.slug}`,
+          publicHref: `/projects/${r.category_slug}/${r.slug}`,
         }),
       );
       (servs.data ?? []).forEach((r: any) =>
@@ -94,8 +94,9 @@ function SeoManager() {
           title: r.title_ar,
           seo_title: r.seo_title_ar,
           seo_description: r.seo_description_ar,
-          og_image: r.cover_image_url,
+          og_image: r.og_image_url,
           status: r.status,
+
           editHref: `/admin/services/${r.id}`,
           publicHref: `/services/${r.slug}`,
         }),
