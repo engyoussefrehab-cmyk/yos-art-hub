@@ -10,6 +10,13 @@
 import { registerModule } from "@/admin/lib/module-registry";
 import { registerCommand } from "@/admin/lib/command-registry";
 
+// Entity registrations — importing these files runs registerEntity().
+import "@/admin/entities/project";
+import "@/admin/entities/article";
+import "@/admin/entities/service";
+
+
+
 let bootstrapped = false;
 
 export function bootstrapAdminModules(): void {
