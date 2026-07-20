@@ -230,7 +230,7 @@ export function bootstrapAdminModules(): void {
     id: "create.article",
     label: "New Article",
     group: "create",
-    to: "/admin/insights/new",
+    to: "/admin/cms/article/new",
     icon: "Plus",
   });
   registerCommand({
