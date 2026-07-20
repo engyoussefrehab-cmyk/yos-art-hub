@@ -293,13 +293,15 @@ function RootComponent() {
 
 function LanguageWelcome() {
   const [open, setOpen] = useState(false);
+  const [countdown, setCountdown] = useState(5);
+  const [paused, setPaused] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const openerRef = useRef<Element | null>(null);
 
   useEffect(() => {
     try {
       if (!localStorage.getItem("yr_lang_chosen")) {
-        const id = window.setTimeout(() => setOpen(true), 900);
+        const id = window.setTimeout(() => setOpen(true), 700);
         return () => window.clearTimeout(id);
       }
     } catch {
@@ -307,13 +309,49 @@ function LanguageWelcome() {
     }
   }, []);
 
+  const choose = React.useCallback((lang: "ar" | "en") => {
+    try {
+      localStorage.setItem("yr_lang_chosen", lang);
+    } catch {
+      /* ignore */
+    }
+    const path = window.location.pathname;
+    const isOnEn = path === "/en" || path.startsWith("/en/");
+    let target = path;
+    if (lang === "en" && !isOnEn) {
+      target = `/en${path === "/" ? "" : path}`;
+    } else if (lang === "ar" && isOnEn) {
+      target = path.replace(/^\/en/, "") || "/";
+    }
+    setOpen(false);
+    if (target !== path) {
+      window.location.assign(target + window.location.search + window.location.hash);
+    }
+  }, []);
+
+  const skipToBrowser = React.useCallback(() => {
+    const nav = typeof navigator !== "undefined" ? (navigator.language || "").toLowerCase() : "";
+    const detected: "ar" | "en" = nav.startsWith("ar") ? "ar" : "en";
+    choose(detected);
+  }, [choose]);
+
+  // Countdown auto-skip
+  useEffect(() => {
+    if (!open || paused) return;
+    if (countdown <= 0) {
+      skipToBrowser();
+      return;
+    }
+    const id = window.setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => window.clearTimeout(id);
+  }, [open, paused, countdown, skipToBrowser]);
+
   useEffect(() => {
     if (!open) return;
     openerRef.current = document.activeElement;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Focus first button
     const focusables = (): HTMLElement[] => {
       const nodes = dialogRef.current?.querySelectorAll<HTMLElement>(
         'button, [href], input, [tabindex]:not([tabindex="-1"])'
@@ -351,26 +389,6 @@ function LanguageWelcome() {
 
   if (!open) return null;
 
-  const choose = (lang: "ar" | "en") => {
-    try {
-      localStorage.setItem("yr_lang_chosen", lang);
-    } catch {
-      /* ignore */
-    }
-    const path = window.location.pathname;
-    const isOnEn = path === "/en" || path.startsWith("/en/");
-    let target = path;
-    if (lang === "en" && !isOnEn) {
-      target = `/en${path === "/" ? "" : path}`;
-    } else if (lang === "ar" && isOnEn) {
-      target = path.replace(/^\/en/, "") || "/";
-    }
-    setOpen(false);
-    if (target !== path) {
-      window.location.assign(target + window.location.search + window.location.hash);
-    }
-  };
-
   return (
     <div
       ref={dialogRef}
@@ -378,6 +396,9 @@ function LanguageWelcome() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="lang-welcome-title"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
     >
       {/* Backdrop */}
       <button
@@ -390,6 +411,14 @@ function LanguageWelcome() {
 
       {/* Card */}
       <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/70 bg-card shadow-[0_40px_120px_-30px_rgb(0_0_0/0.5)] animate-in zoom-in-95 slide-in-from-bottom-4 duration-500 motion-reduce:animate-none">
+
+        {/* Countdown ring bar */}
+        <div aria-hidden className="absolute inset-x-0 top-0 h-1 overflow-hidden bg-border/40">
+          <div
+            className="h-full bg-accent transition-[width] duration-1000 ease-linear"
+            style={{ width: `${(countdown / 5) * 100}%` }}
+          />
+        </div>
 
         {/* Ambient glow */}
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70">
@@ -439,20 +468,31 @@ function LanguageWelcome() {
             </button>
           </div>
 
-          <div className="mt-6 flex items-center justify-center">
+          {/* Prominent Skip with live countdown */}
+          <div className="mt-7 flex flex-col items-center gap-2">
             <button
               type="button"
-              onClick={() => {
-                const nav = typeof navigator !== "undefined" ? (navigator.language || "").toLowerCase() : "";
-                const detected: "ar" | "en" = nav.startsWith("ar") ? "ar" : "en";
-                choose(detected);
-              }}
-              className="text-[11px] text-muted-foreground/80 underline-offset-4 hover:text-accent hover:underline"
+              onClick={skipToBrowser}
+              className="group inline-flex items-center gap-3 rounded-full border border-accent/40 bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+              aria-live="polite"
             >
-              <span dir="rtl">تخطّي — استخدم لغة المتصفح</span>
-              <span className="mx-2 opacity-40">·</span>
-              <span>Skip — use browser language</span>
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/20 font-mono text-[11px] font-bold text-accent group-hover:bg-accent-foreground/20 group-hover:text-accent-foreground">
+                {countdown}
+              </span>
+              <span className="flex items-center gap-2">
+                <span dir="rtl">تخطّي</span>
+                <span className="opacity-40">·</span>
+                <span>Skip</span>
+                <span className="opacity-40">·</span>
+                <span dir="rtl" className="hidden sm:inline">لغة المتصفح</span>
+                <span className="hidden sm:inline">/ Browser</span>
+              </span>
             </button>
+            <p className="text-[11px] text-muted-foreground/70">
+              <span dir="rtl">سيتم اختيار لغة المتصفح تلقائيًا خلال {countdown} ثوانٍ</span>
+              <span className="mx-2 opacity-40">·</span>
+              <span>Browser language auto-selected in {countdown}s</span>
+            </p>
           </div>
 
           <p className="mt-4 text-[11px] text-muted-foreground/70">
@@ -465,6 +505,7 @@ function LanguageWelcome() {
     </div>
   );
 }
+
 
 
 function SiteLoader() {
