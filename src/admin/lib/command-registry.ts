@@ -1,10 +1,9 @@
 /**
- * Command Registry — powers the ⌘K command palette.
- *
- * Any module can register commands (navigation, create actions, quick
- * settings, integrations). The palette is the primary keyboard-first
- * navigation surface.
+ * Command Registry — powers the ⌘K command palette. Labels accept
+ * bilingual `L = {ar,en}` pairs or plain strings.
  */
+
+import type { LocalizedLabel } from "./entity-registry";
 
 export type CommandGroup =
   | "navigate"
@@ -16,17 +15,14 @@ export type CommandGroup =
 
 export interface CommandEntry {
   id: string;
-  label: string;
-  hint?: string;
+  label: LocalizedLabel;
+  hint?: LocalizedLabel;
   keywords?: string[];
   group: CommandGroup;
   icon?: string;
   shortcut?: string;
-  /** Either navigate to a route... */
   to?: string;
-  /** ...or run a callback. */
   run?: () => void | Promise<void>;
-  /** Permission scopes required. */
   requires?: string[];
   featureFlag?: string;
 }
