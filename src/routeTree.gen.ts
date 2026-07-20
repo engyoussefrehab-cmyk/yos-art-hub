@@ -57,6 +57,7 @@ import { Route as AdminInsightsNewRouteImport } from './routes/admin.insights.ne
 import { Route as AdminInsightsIdRouteImport } from './routes/admin.insights.$id'
 import { Route as EnProjectsCategoryIndexRouteImport } from './routes/en.projects.$category.index'
 import { Route as EnInsightsCategoryIndexRouteImport } from './routes/en.insights.$category.index'
+import { Route as AdminCmsEntityIndexRouteImport } from './routes/admin.cms.$entity.index'
 import { Route as EnProjectsCategorySlugRouteImport } from './routes/en.projects.$category.$slug'
 import { Route as EnInsightsCategorySlugRouteImport } from './routes/en.insights.$category.$slug'
 import { Route as ApiPublicPortfolioCoverSplatRouteImport } from './routes/api/public/portfolio.cover.$'
@@ -302,6 +303,11 @@ const EnInsightsCategoryIndexRoute = EnInsightsCategoryIndexRouteImport.update({
   path: '/en/insights/$category/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCmsEntityIndexRoute = AdminCmsEntityIndexRouteImport.update({
+  id: '/cms/$entity/',
+  path: '/cms/$entity/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const EnProjectsCategorySlugRoute = EnProjectsCategorySlugRouteImport.update({
   id: '/en/projects/$category/$slug',
   path: '/en/projects/$category/$slug',
@@ -374,6 +380,7 @@ export interface FileRoutesByFullPath {
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
   '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
+  '/admin/cms/$entity/': typeof AdminCmsEntityIndexRoute
   '/en/insights/$category/': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
   '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
@@ -426,6 +433,7 @@ export interface FileRoutesByTo {
   '/projects/$category': typeof ProjectsCategoryIndexRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
   '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
+  '/admin/cms/$entity': typeof AdminCmsEntityIndexRoute
   '/en/insights/$category': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category': typeof EnProjectsCategoryIndexRoute
   '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
@@ -481,6 +489,7 @@ export interface FileRoutesById {
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
   '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
+  '/admin/cms/$entity/': typeof AdminCmsEntityIndexRoute
   '/en/insights/$category/': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
   '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
@@ -537,6 +546,7 @@ export interface FileRouteTypes {
     | '/projects/$category/'
     | '/en/insights/$category/$slug'
     | '/en/projects/$category/$slug'
+    | '/admin/cms/$entity/'
     | '/en/insights/$category/'
     | '/en/projects/$category/'
     | '/api/public/insights/cover/$'
@@ -589,6 +599,7 @@ export interface FileRouteTypes {
     | '/projects/$category'
     | '/en/insights/$category/$slug'
     | '/en/projects/$category/$slug'
+    | '/admin/cms/$entity'
     | '/en/insights/$category'
     | '/en/projects/$category'
     | '/api/public/insights/cover/$'
@@ -643,6 +654,7 @@ export interface FileRouteTypes {
     | '/projects/$category/'
     | '/en/insights/$category/$slug'
     | '/en/projects/$category/$slug'
+    | '/admin/cms/$entity/'
     | '/en/insights/$category/'
     | '/en/projects/$category/'
     | '/api/public/insights/cover/$'
@@ -1017,6 +1029,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnInsightsCategoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/cms/$entity/': {
+      id: '/admin/cms/$entity/'
+      path: '/cms/$entity'
+      fullPath: '/admin/cms/$entity/'
+      preLoaderRoute: typeof AdminCmsEntityIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/en/projects/$category/$slug': {
       id: '/en/projects/$category/$slug'
       path: '/en/projects/$category/$slug'
@@ -1087,6 +1106,7 @@ interface AdminRouteChildren {
   AdminPortfolioNewRoute: typeof AdminPortfolioNewRoute
   AdminInsightsIndexRoute: typeof AdminInsightsIndexRoute
   AdminPortfolioIndexRoute: typeof AdminPortfolioIndexRoute
+  AdminCmsEntityIndexRoute: typeof AdminCmsEntityIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -1112,6 +1132,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminPortfolioNewRoute: AdminPortfolioNewRoute,
   AdminInsightsIndexRoute: AdminInsightsIndexRoute,
   AdminPortfolioIndexRoute: AdminPortfolioIndexRoute,
+  AdminCmsEntityIndexRoute: AdminCmsEntityIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
