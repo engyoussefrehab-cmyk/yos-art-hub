@@ -2,6 +2,9 @@
  * Generic editor view — driven by the entity registry. Fully bilingual.
  */
 
+// Same rationale as GenericListView: guarantee entity registration
+// regardless of which route pulls the editor in first.
+import "@/admin/modules/register-all";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
