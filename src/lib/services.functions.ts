@@ -18,6 +18,7 @@ export type ServiceDTO = {
   description_en: string;
   features: string[];
   icon: string | null;
+  cover_url: string | null;
   cta_label_ar: string | null;
   cta_label_en: string | null;
   cta_href: string | null;
@@ -37,6 +38,7 @@ function mapRow(r: any): ServiceDTO {
     description_en: r.description_en ?? r.description_ar ?? "",
     features,
     icon: r.icon,
+    cover_url: r.og_image_url ?? null,
     cta_label_ar: r.cta_label_ar,
     cta_label_en: r.cta_label_en,
     cta_href: r.cta_href,
@@ -44,6 +46,7 @@ function mapRow(r: any): ServiceDTO {
     sort_order: r.sort_order ?? 0,
   };
 }
+
 
 export const listServices = createServerFn({ method: "GET" }).handler(async () => {
   const supabase = publicClient();
