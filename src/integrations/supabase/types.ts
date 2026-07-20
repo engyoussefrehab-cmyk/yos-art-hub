@@ -2021,6 +2021,195 @@ export type Database = {
           },
         ]
       }
+      service_tier_features: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: string
+          is_published: boolean
+          label_ar: string
+          label_en: string
+          launch: string
+          signature: string
+          sort_order: number
+          system: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          is_published?: boolean
+          label_ar: string
+          label_en: string
+          launch?: string
+          signature?: string
+          sort_order?: number
+          system?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          is_published?: boolean
+          label_ar?: string
+          label_en?: string
+          launch?: string
+          signature?: string
+          sort_order?: number
+          system?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      service_tier_page: {
+        Row: {
+          compare_eyebrow_ar: string | null
+          compare_eyebrow_en: string | null
+          compare_title_ar: string | null
+          compare_title_en: string | null
+          cta_button_ar: string | null
+          cta_button_en: string | null
+          cta_eyebrow_ar: string | null
+          cta_eyebrow_en: string | null
+          cta_href: string | null
+          cta_subtitle_ar: string | null
+          cta_subtitle_en: string | null
+          cta_title_ar: string | null
+          cta_title_en: string | null
+          eyebrow_ar: string | null
+          eyebrow_en: string | null
+          footnote_ar: string | null
+          footnote_en: string | null
+          id: string
+          subtitle_ar: string | null
+          subtitle_en: string | null
+          title_ar: string | null
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          compare_eyebrow_ar?: string | null
+          compare_eyebrow_en?: string | null
+          compare_title_ar?: string | null
+          compare_title_en?: string | null
+          cta_button_ar?: string | null
+          cta_button_en?: string | null
+          cta_eyebrow_ar?: string | null
+          cta_eyebrow_en?: string | null
+          cta_href?: string | null
+          cta_subtitle_ar?: string | null
+          cta_subtitle_en?: string | null
+          cta_title_ar?: string | null
+          cta_title_en?: string | null
+          eyebrow_ar?: string | null
+          eyebrow_en?: string | null
+          footnote_ar?: string | null
+          footnote_en?: string | null
+          id?: string
+          subtitle_ar?: string | null
+          subtitle_en?: string | null
+          title_ar?: string | null
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          compare_eyebrow_ar?: string | null
+          compare_eyebrow_en?: string | null
+          compare_title_ar?: string | null
+          compare_title_en?: string | null
+          cta_button_ar?: string | null
+          cta_button_en?: string | null
+          cta_eyebrow_ar?: string | null
+          cta_eyebrow_en?: string | null
+          cta_href?: string | null
+          cta_subtitle_ar?: string | null
+          cta_subtitle_en?: string | null
+          cta_title_ar?: string | null
+          cta_title_en?: string | null
+          eyebrow_ar?: string | null
+          eyebrow_en?: string | null
+          footnote_ar?: string | null
+          footnote_en?: string | null
+          id?: string
+          subtitle_ar?: string | null
+          subtitle_en?: string | null
+          title_ar?: string | null
+          title_en?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      service_tiers: {
+        Row: {
+          badge_ar: string | null
+          badge_en: string | null
+          created_at: string
+          cta_href: string | null
+          cta_label_ar: string | null
+          cta_label_en: string | null
+          deleted_at: string | null
+          deliverables: Json
+          description_ar: string | null
+          description_en: string | null
+          featured: boolean
+          id: string
+          is_published: boolean
+          name_ar: string
+          name_en: string
+          price_ar: string | null
+          price_en: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          badge_ar?: string | null
+          badge_en?: string | null
+          created_at?: string
+          cta_href?: string | null
+          cta_label_ar?: string | null
+          cta_label_en?: string | null
+          deleted_at?: string | null
+          deliverables?: Json
+          description_ar?: string | null
+          description_en?: string | null
+          featured?: boolean
+          id?: string
+          is_published?: boolean
+          name_ar: string
+          name_en: string
+          price_ar?: string | null
+          price_en?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          badge_ar?: string | null
+          badge_en?: string | null
+          created_at?: string
+          cta_href?: string | null
+          cta_label_ar?: string | null
+          cta_label_en?: string | null
+          deleted_at?: string | null
+          deliverables?: Json
+          description_ar?: string | null
+          description_en?: string | null
+          featured?: boolean
+          id?: string
+          is_published?: boolean
+          name_ar?: string
+          name_en?: string
+          price_ar?: string | null
+          price_en?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           cover_media_id: string | null

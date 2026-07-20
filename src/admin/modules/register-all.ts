@@ -12,6 +12,8 @@ import { L, A } from "@/i18n/admin-lang";
 import "@/admin/entities/project";
 import "@/admin/entities/article";
 import "@/admin/entities/service";
+import "@/admin/entities/service-tier";
+import "@/admin/entities/service-tier-feature";
 
 let bootstrapped = false;
 
@@ -77,6 +79,42 @@ export function bootstrapAdminModules(): void {
     quickActions: [
       { id: "services.new", label: L("خدمة جديدة", "New Service"), to: "/admin/cms/service/new", icon: "Plus" },
     ],
+  });
+  registerModule({
+    key: "service-tiers",
+    label: L("فئات الخدمات", "Service Tiers"),
+    route: "/admin/cms/service_tier",
+    icon: "Layers",
+    section: "content",
+    order: 42,
+    entityKey: "service_tier",
+    permissions: { view: ["admin", "editor"] },
+    quickActions: [
+      { id: "service-tier.new", label: L("فئة جديدة", "New Tier"), to: "/admin/cms/service_tier/new", icon: "Plus" },
+      { id: "service-tier.page", label: L("محتوى صفحة الفئات", "Page copy"), to: "/admin/service-tier-page", icon: "FileText" },
+    ],
+  });
+  registerModule({
+    key: "service-tier-features",
+    label: L("مقارنة الفئات", "Tier Comparison"),
+    route: "/admin/cms/service_tier_feature",
+    icon: "ListChecks",
+    section: "content",
+    order: 44,
+    entityKey: "service_tier_feature",
+    permissions: { view: ["admin", "editor"] },
+    quickActions: [
+      { id: "service-tier-feature.new", label: L("صف مقارنة جديد", "New Comparison Row"), to: "/admin/cms/service_tier_feature/new", icon: "Plus" },
+    ],
+  });
+  registerModule({
+    key: "service-tier-page",
+    label: L("نصوص صفحة الفئات", "Tiers Page Copy"),
+    route: "/admin/service-tier-page",
+    icon: "FileText",
+    section: "content",
+    order: 46,
+    permissions: { view: ["admin", "editor"] },
   });
 
   // Design ----------------------------------------------------------------

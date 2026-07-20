@@ -1,0 +1,50 @@
+import { registerEntity } from "@/admin/lib/entity-registry";
+import { L } from "@/i18n/admin-lang";
+
+registerEntity({
+  key: "service_tier",
+  label: L("فئة خدمة", "Service Tier"),
+  labelPlural: L("فئات الخدمات", "Service Tiers"),
+  table: "service_tiers",
+  slugColumn: "slug",
+  hasI18n: true,
+  supportsWorkflow: false,
+  supportsVersioning: false,
+  deletable: true,
+  section: "content",
+  icon: "Layers",
+  fields: [
+    { key: "slug", label: L("المعرّف (Slug)", "Slug"), kind: "slug", required: true },
+    { key: "name_ar", label: L("الاسم (عربي)", "Name (AR)"), kind: "text", required: true, localized: true },
+    { key: "name_en", label: L("الاسم (إنجليزي)", "Name (EN)"), kind: "text", required: true, localized: true },
+    { key: "description_ar", label: L("الوصف (عربي)", "Description (AR)"), kind: "textarea", localized: true },
+    { key: "description_en", label: L("الوصف (إنجليزي)", "Description (EN)"), kind: "textarea", localized: true },
+    {
+      key: "deliverables",
+      label: L("المخرجات", "Deliverables"),
+      kind: "json",
+      helpText: L(
+        'مصفوفة عناصر بصيغة {"ar":"...","en":"..."}.',
+        'Array of items shaped {"ar":"...","en":"..."}.',
+      ),
+    },
+    { key: "price_ar", label: L("السعر (عربي)", "Price (AR)"), kind: "text", localized: true },
+    { key: "price_en", label: L("السعر (إنجليزي)", "Price (EN)"), kind: "text", localized: true },
+    { key: "cta_label_ar", label: L("نص الزر (عربي)", "CTA label (AR)"), kind: "text", localized: true },
+    { key: "cta_label_en", label: L("نص الزر (إنجليزي)", "CTA label (EN)"), kind: "text", localized: true },
+    { key: "cta_href", label: L("رابط الزر", "CTA href"), kind: "text" },
+    { key: "featured", label: L("مميّز (الأكثر اختيارًا)", "Featured (Most Popular)"), kind: "boolean" },
+    { key: "badge_ar", label: L("نص الشارة (عربي)", "Badge (AR)"), kind: "text", localized: true },
+    { key: "badge_en", label: L("نص الشارة (إنجليزي)", "Badge (EN)"), kind: "text", localized: true },
+    { key: "sort_order", label: L("ترتيب العرض", "Sort order"), kind: "number" },
+    { key: "is_published", label: L("منشور", "Published"), kind: "boolean" },
+  ],
+  listColumns: [
+    { key: "name_en", label: L("الاسم", "Name"), sortable: true },
+    { key: "slug", label: L("المعرّف", "Slug") },
+    { key: "price_en", label: L("السعر", "Price") },
+    { key: "featured", label: L("مميّز", "Featured") },
+    { key: "sort_order", label: L("الترتيب", "Order"), sortable: true },
+    { key: "updated_at", label: L("آخر تحديث", "Updated"), render: "date", sortable: true },
+  ],
+});
