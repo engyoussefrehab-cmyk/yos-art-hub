@@ -400,7 +400,6 @@ function LanguageWelcome() {
       aria-labelledby="lang-welcome-title"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
     >
       {/* Backdrop */}
       <button
