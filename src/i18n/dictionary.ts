@@ -74,6 +74,27 @@ export const dict = {
   cta_title_b: { ar: "دعنا نُحوّلها إلى هويّة.", en: "Let's turn it into an identity." },
   cta_sub: { ar: "متاحٌ لمشاريع الهويّة البصريّة والتعاونات الإبداعيّة.", en: "Available for identity projects and creative collaborations." },
   cta_button: { ar: "تواصل معي ←", en: "Get in touch →" },
+  cta_reply_time: { ar: "متوسّط الردّ خلال ٢٤ ساعة", en: "Average reply time under 24 hours" },
+  cta_or_reach: { ar: "أو تواصل مباشرةً عبر:", en: "Or reach out directly via:" },
+
+  // Process
+  process_kicker: { ar: "منهجيّة العمل", en: "How I work" },
+  process_title: { ar: "من الفكرة إلى الهويّة", en: "From idea to identity" },
+  process_lede: {
+    ar: "منهجٌ استراتيجيٌّ واضح يضمن أن تعكس هويّتك جوهر علامتك وتخدم أهدافها التجاريّة.",
+    en: "A clear strategic method that ensures your identity reflects your brand's essence and serves its business goals.",
+  },
+  process_1_t: { ar: "الاكتشاف", en: "Discovery" },
+  process_1_d: { ar: "جلسةٌ عميقة لفهم علامتك، جمهورك، وموقعك في السوق.", en: "A deep session to understand your brand, audience, and market position." },
+  process_2_t: { ar: "الاستراتيجيّة", en: "Strategy" },
+  process_2_d: { ar: "بناء التوجّه البصري والمفاهيم التي تقود التصميم.", en: "Building the visual direction and concepts that guide the design." },
+  process_3_t: { ar: "التصميم", en: "Design" },
+  process_3_d: { ar: "تنفيذ الهويّة عبر شعارٍ ونظامٍ بصريٍّ متكامل.", en: "Executing the identity through a logo and a complete visual system." },
+  process_4_t: { ar: "التسليم", en: "Delivery" },
+  process_4_d: { ar: "دليل استخدامٍ واضح وملفّاتٌ نهائيّة جاهزة للتطبيق.", en: "A clear usage guide and final files ready for real-world application." },
+
+  // Home helpers
+  home_scroll_cue: { ar: "اسحب للأسفل لاستعراض الأعمال", en: "Scroll to explore the work" },
 
   // Testimonials
   t_kicker: { ar: "آراء العملاء", en: "Client testimonials" },
