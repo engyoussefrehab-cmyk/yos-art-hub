@@ -121,8 +121,25 @@ Admin UI listens via `src/admin/lib/events.ts` for in-session reactions
 
 ## Phase status
 
-- **Phase 0** (in progress): foundation migration ✅, architectural
-  primitives (settings/flags/events) ✅, admin shell scaffolding (next).
+- **Phase 0** (shipping in-progress):
+  - ✅ Foundation migration (universal primitives, workflow, media/nav/deps).
+  - ✅ Architectural primitives: settings registry, feature flags, event log.
+  - ✅ Admin shell scaffolding — registry-driven sidebar, command palette (⌘K),
+    widget-based dashboard, module bootstrap, permission client.
+  - Next: generic CRUD server functions + `_authenticated` migration for
+    per-module routes, then module-by-module lift into `src/admin/modules/<key>/`.
 - **Phase 1**: module-by-module migration.
 - **Phase 2**: polish (scheduled publish, side-by-side diff UI, i18n
   workflow, import/export, webhook retry).
+
+## Module system (Phase 0 shipped)
+
+Modules live under `src/admin/modules/<key>/` and self-register via
+`registerModule({...})`. Everything the shell renders — sidebar, command
+palette, dashboard widgets, permission gates — reads registries, so
+adding a module never touches the shell. See `src/admin/modules/README.md`
+and `src/admin/lib/README.md`.
+
+Boundary rule: admin code MUST NOT import from `src/views/` or public
+route files. Shared UI lives in `src/components/ui/`.
+
