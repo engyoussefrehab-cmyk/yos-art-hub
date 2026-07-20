@@ -225,6 +225,34 @@ export const dict = {
     ar: "تواصل مع يوسف رحاب لمشاريع الهوية البصرية والتصميم الإبداعي.",
     en: "Get in touch with Youssef Rehab for visual identity and creative design projects.",
   },
+
+  // A11y & UI helpers
+  skip_to_content: { ar: "تخطَّ إلى المحتوى", en: "Skip to content" },
+  close: { ar: "إغلاق", en: "Close" },
+
+  // Trust strip (client logos)
+  trust_kicker: { ar: "علاماتٌ وثقت بأعمالنا", en: "Trusted by brands" },
+  trust_title: { ar: "شراكاتٌ عبر الخليج ومصر", en: "Partnerships across the Gulf & Egypt" },
+  trust_lede: {
+    ar: "أكثر من ٢٥٠ علامةً تجاريّة في قطاعاتٍ متنوّعة اختارت أعمالنا لبناء هويّاتها البصريّة.",
+    en: "250+ brands across diverse sectors have chosen our work to build their visual identity.",
+  },
+
+  // Contact form (Phase 1 additions)
+  f_budget: { ar: "الميزانيّة التقديريّة (اختياري)", en: "Estimated budget (optional)" },
+  f_budget_placeholder: { ar: "اختر نطاقًا", en: "Select a range" },
+  budget_under_1k: { ar: "أقل من ١٬٠٠٠ دولار", en: "Under $1,000" },
+  budget_1k_3k: { ar: "١٬٠٠٠ – ٣٬٠٠٠ دولار", en: "$1,000 – $3,000" },
+  budget_3k_8k: { ar: "٣٬٠٠٠ – ٨٬٠٠٠ دولار", en: "$3,000 – $8,000" },
+  budget_8k_plus: { ar: "أكثر من ٨٬٠٠٠ دولار", en: "$8,000+" },
+  budget_unsure: { ar: "غير محدّد بعد", en: "Not sure yet" },
+  f_project_type: { ar: "نوع المشروع (اختياري)", en: "Project type (optional)" },
+  f_project_type_placeholder: { ar: "اختر النوع", en: "Select type" },
+  ptype_identity: { ar: "هويّة بصريّة", en: "Visual Identity" },
+  ptype_logo: { ar: "تصميم شعار", en: "Logo Design" },
+  ptype_profile: { ar: "ملفّ شركة", en: "Company Profile" },
+  ptype_social: { ar: "سوشيال ميديا", en: "Social Media" },
+  ptype_other: { ar: "غير ذلك", en: "Other" },
 } as const;
 
 export type DictKey = keyof typeof dict;

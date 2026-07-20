@@ -13,6 +13,7 @@ export function HomeView({ services = [], projects = [] }: { services?: ServiceD
     <>
       <Hero />
       <About />
+      <TrustStrip />
       {projects.length > 0 && (
         <section className="mx-auto max-w-7xl px-6 py-16">
           <LatestProjectsSlider projects={projects} compact limit={10} />
@@ -22,6 +23,35 @@ export function HomeView({ services = [], projects = [] }: { services?: ServiceD
       <Testimonials />
       <CTA />
     </>
+  );
+}
+
+function TrustStrip() {
+  const { t } = useLang();
+  // Placeholder wordmarks — swap in real logo images later via CMS
+  const brands = ["ARAMEX", "STC", "MADA", "NEOM", "TALABAT", "CAREEM", "NOON", "SABIC"];
+  return (
+    <section aria-label={t("trust_kicker")} className="border-y border-border/60 bg-cream/40 dark:bg-white/[0.02]">
+      <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mb-8 flex flex-col items-start gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">{t("trust_kicker")}</span>
+            <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">{t("trust_title")}</h2>
+          </div>
+          <p className="max-w-md text-sm leading-relaxed text-muted-foreground">{t("trust_lede")}</p>
+        </div>
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4 md:grid-cols-8">
+          {brands.map((b) => (
+            <li
+              key={b}
+              className="flex items-center justify-center py-3 font-display text-sm font-bold tracking-[0.15em] text-muted-foreground/70 grayscale opacity-70 transition-all duration-300 hover:opacity-100 hover:text-foreground hover:grayscale-0"
+            >
+              {b}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }
 
@@ -46,14 +76,18 @@ function Hero() {
             {t("hero_intro")}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            <Link to={projectsHref} className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto">{t("hero_cta_projects")}</Link>
-            <Link to={contactHref} className="inline-flex w-full items-center justify-center rounded-full border border-primary/20 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto">{t("cta_start_project")}</Link>
+            <Link to={projectsHref} className="inline-flex w-full items-center justify-center rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto">
+              {t("hero_cta_projects")}
+            </Link>
+            <Link to={contactHref} className="inline-flex w-full items-center justify-center rounded-full border border-foreground/15 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto">
+              {t("cta_start_project")}
+            </Link>
             <a
               href={portfolioPdf.url}
               download="Youssef-Rehab-Portfolio.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold text-muted-foreground underline-offset-4 transition-colors hover:text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto sm:border sm:border-accent/40 sm:bg-accent/10 sm:text-foreground sm:no-underline sm:hover:bg-accent sm:hover:text-primary"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full px-3 py-3 text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
             >
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />

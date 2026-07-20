@@ -8,7 +8,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -254,15 +254,22 @@ function LangSync() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { t } = useLang();
   return (
     <QueryClientProvider client={queryClient}>
       <LangSync />
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground focus:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      >
+        {t("skip_to_content")}
+      </a>
       <SiteLoader />
       <LanguageWelcome />
       <Toaster position="top-center" richColors closeButton />
       <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden">
         <SiteNav />
-        <main className="flex-1 w-full min-w-0"><Outlet /></main>
+        <main id="main-content" tabIndex={-1} className="flex-1 w-full min-w-0"><Outlet /></main>
         <SiteFooter />
         <WhatsAppFab />
         <BackToTop />
@@ -273,11 +280,12 @@ function RootComponent() {
 
 function LanguageWelcome() {
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const openerRef = useRef<Element | null>(null);
 
   useEffect(() => {
     try {
       if (!localStorage.getItem("yr_lang_chosen")) {
-        // small delay so it appears after the loader fades
         const id = window.setTimeout(() => setOpen(true), 900);
         return () => window.clearTimeout(id);
       }
@@ -288,10 +296,43 @@ function LanguageWelcome() {
 
   useEffect(() => {
     if (!open) return;
+    openerRef.current = document.activeElement;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    // Focus first button
+    const focusables = (): HTMLElement[] => {
+      const nodes = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button, [href], input, [tabindex]:not([tabindex="-1"])'
+      );
+      return nodes ? Array.from(nodes) : [];
+    };
+    const first = focusables()[0];
+    first?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const list = Array.from(focusables());
+      if (list.length === 0) return;
+      const firstEl = list[0];
+      const lastEl = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === firstEl) {
+        e.preventDefault();
+        lastEl.focus();
+      } else if (!e.shiftKey && document.activeElement === lastEl) {
+        e.preventDefault();
+        firstEl.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+      (openerRef.current as HTMLElement | null)?.focus?.();
     };
   }, [open]);
 
@@ -319,16 +360,24 @@ function LanguageWelcome() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-6 animate-in fade-in duration-300"
+      ref={dialogRef}
+      className="fixed inset-0 z-[100] flex items-center justify-center px-6 animate-in fade-in duration-300 motion-reduce:animate-none"
       role="dialog"
       aria-modal="true"
       aria-labelledby="lang-welcome-title"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-ink/80 backdrop-blur-md" />
+      <button
+        type="button"
+        aria-label="Close"
+        onClick={() => setOpen(false)}
+        className="absolute inset-0 bg-ink/80 backdrop-blur-md"
+        tabIndex={-1}
+      />
 
       {/* Card */}
-      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/70 bg-card shadow-[0_40px_120px_-30px_rgb(0_0_0/0.5)] animate-in zoom-in-95 slide-in-from-bottom-4 duration-500">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/70 bg-card shadow-[0_40px_120px_-30px_rgb(0_0_0/0.5)] animate-in zoom-in-95 slide-in-from-bottom-4 duration-500 motion-reduce:animate-none">
+
         {/* Ambient glow */}
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70">
           <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
@@ -453,7 +502,7 @@ function WhatsAppFab() {
       aria-label={t("whatsapp")}
       className="fixed bottom-5 left-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-[0_10px_30px_-8px_rgba(37,211,102,0.6)] ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus:outline-none"
     >
-      <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-60 animate-ping" aria-hidden="true" />
+      <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-60 animate-ping motion-reduce:hidden" aria-hidden="true" />
       <svg viewBox="0 0 32 32" className="relative h-8 w-8" aria-hidden="true">
         <path fill="#ffffff" d="M16.003 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.6 4.46 1.73 6.4L3.2 28.8l6.55-1.71a12.77 12.77 0 0 0 6.25 1.6h.01c7.07 0 12.8-5.73 12.8-12.8 0-3.42-1.33-6.63-3.75-9.05a12.72 12.72 0 0 0-9.06-3.64Zm0 23.36h-.01a10.6 10.6 0 0 1-5.4-1.48l-.39-.23-3.89 1.02 1.04-3.79-.25-.39a10.62 10.62 0 0 1-1.63-5.68c0-5.87 4.78-10.65 10.65-10.65 2.85 0 5.52 1.11 7.53 3.12a10.58 10.58 0 0 1 3.12 7.53c0 5.87-4.78 10.65-10.65 10.65Zm5.84-7.98c-.32-.16-1.9-.94-2.19-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.5.14-.66.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.74-.99-2.38-.26-.62-.53-.54-.72-.55-.19-.01-.4-.01-.61-.01-.21 0-.56.08-.85.4-.29.32-1.11 1.09-1.11 2.66 0 1.57 1.14 3.08 1.29 3.29.16.21 2.24 3.42 5.42 4.79.76.33 1.35.52 1.81.67.76.24 1.45.21 2 .13.61-.09 1.9-.78 2.17-1.53.27-.75.27-1.4.19-1.53-.08-.13-.29-.21-.61-.37Z" />
       </svg>

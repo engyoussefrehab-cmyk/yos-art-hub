@@ -141,18 +141,22 @@ function Slider({ items: base }: { items: Item[] }) {
     let raf = 0;
     let startX = 0;
     let startScroll = 0;
+    const reducedMotion =
+      typeof window !== "undefined" && window.matchMedia
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
 
     scroller.scrollLeft = 0;
 
     const tick = () => {
       const s = stateRef.current;
-      if (!s.paused && !s.isDragging) {
+      if (!reducedMotion && !s.paused && !s.isDragging) {
         scroller.scrollLeft += SPEED;
         wrap();
       }
       raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
+    if (!reducedMotion) raf = requestAnimationFrame(tick);
 
     const onEnter = () => { stateRef.current.paused = true; };
     const onLeave = () => { if (!stateRef.current.isDragging) stateRef.current.paused = false; };
