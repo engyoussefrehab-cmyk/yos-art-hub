@@ -27,6 +27,7 @@ import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonia
 import { Route as AdminTagsRouteImport } from './routes/admin.tags'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
+import { Route as AdminServiceTierPageRouteImport } from './routes/admin.service-tier-page'
 import { Route as AdminSeoRouteImport } from './routes/admin.seo'
 import { Route as AdminSectionsRouteImport } from './routes/admin.sections'
 import { Route as AdminProfileRouteImport } from './routes/admin.profile'
@@ -153,6 +154,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminServiceTierPageRoute = AdminServiceTierPageRouteImport.update({
+  id: '/service-tier-page',
+  path: '/service-tier-page',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSeoRoute = AdminSeoRouteImport.update({
@@ -361,6 +367,7 @@ export interface FileRoutesByFullPath {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/sections': typeof AdminSectionsRoute
   '/admin/seo': typeof AdminSeoRoute
+  '/admin/service-tier-page': typeof AdminServiceTierPageRoute
   '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
@@ -417,6 +424,7 @@ export interface FileRoutesByTo {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/sections': typeof AdminSectionsRoute
   '/admin/seo': typeof AdminSeoRoute
+  '/admin/service-tier-page': typeof AdminServiceTierPageRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
@@ -474,6 +482,7 @@ export interface FileRoutesById {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/sections': typeof AdminSectionsRoute
   '/admin/seo': typeof AdminSeoRoute
+  '/admin/service-tier-page': typeof AdminServiceTierPageRoute
   '/admin/services': typeof AdminServicesRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/tags': typeof AdminTagsRoute
@@ -533,6 +542,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/sections'
     | '/admin/seo'
+    | '/admin/service-tier-page'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
@@ -589,6 +599,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/sections'
     | '/admin/seo'
+    | '/admin/service-tier-page'
     | '/admin/settings'
     | '/admin/tags'
     | '/admin/testimonials'
@@ -645,6 +656,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/sections'
     | '/admin/seo'
+    | '/admin/service-tier-page'
     | '/admin/services'
     | '/admin/settings'
     | '/admin/tags'
@@ -841,6 +853,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/admin/services'
       preLoaderRoute: typeof AdminServicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/service-tier-page': {
+      id: '/admin/service-tier-page'
+      path: '/service-tier-page'
+      fullPath: '/admin/service-tier-page'
+      preLoaderRoute: typeof AdminServiceTierPageRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/seo': {
@@ -1133,6 +1152,7 @@ interface AdminRouteChildren {
   AdminProfileRoute: typeof AdminProfileRoute
   AdminSectionsRoute: typeof AdminSectionsRoute
   AdminSeoRoute: typeof AdminSeoRoute
+  AdminServiceTierPageRoute: typeof AdminServiceTierPageRoute
   AdminServicesRoute: typeof AdminServicesRouteWithChildren
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTagsRoute: typeof AdminTagsRoute
@@ -1161,6 +1181,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminProfileRoute: AdminProfileRoute,
   AdminSectionsRoute: AdminSectionsRoute,
   AdminSeoRoute: AdminSeoRoute,
+  AdminServiceTierPageRoute: AdminServiceTierPageRoute,
   AdminServicesRoute: AdminServicesRouteWithChildren,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTagsRoute: AdminTagsRoute,
