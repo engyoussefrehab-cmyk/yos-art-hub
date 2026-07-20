@@ -150,13 +150,13 @@ function Slider({ items: base }: { items: Item[] }) {
 
     const tick = () => {
       const s = stateRef.current;
-      if (!s.paused && !s.isDragging) {
+      if (!reducedMotion && !s.paused && !s.isDragging) {
         scroller.scrollLeft += SPEED;
         wrap();
       }
       raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
+    if (!reducedMotion) raf = requestAnimationFrame(tick);
 
     const onEnter = () => { stateRef.current.paused = true; };
     const onLeave = () => { if (!stateRef.current.isDragging) stateRef.current.paused = false; };
