@@ -1,26 +1,13 @@
 /**
  * Module Registry — the plugin system for admin modules.
  *
- * A module is a self-contained folder under `src/admin/modules/<key>/`
- * that owns its routes, forms, tables, actions, permissions, settings,
- * and components. The core shell reads this registry; adding a module
- * never requires changing the shell.
- *
- *   registerModule({
- *     key: "projects",
- *     label: "Projects",
- *     route: "/admin/portfolio",
- *     icon: "briefcase",
- *     section: "content",
- *     order: 20,
- *     entityKey: "portfolio_project",   // links to entity-registry
- *     permissions: { view: ["admin", "editor", "author"] },
- *     featureFlag: "cms.new_admin_shell",
- *     quickActions: [...],
- *   });
+ * `label` and quick-action `label`s accept either a plain string or an
+ * `L = {ar,en}` pair. Consumers resolve with `resolveL(...)` from
+ * `@/i18n/admin-lang`; every registered module is automatically bilingual.
  */
 
 import type { ComponentType, LazyExoticComponent } from "react";
+import type { LocalizedLabel } from "./entity-registry";
 
 export type SidebarSection =
   | "content"
@@ -32,48 +19,33 @@ export type SidebarSection =
   | "developer";
 
 export interface ModuleQuickAction {
-  /** Stable id — surfaced in command palette. */
   id: string;
-  label: string;
-  /** Optional keyboard shortcut hint, e.g. "N". */
+  label: LocalizedLabel;
   shortcut?: string;
-  /** Where the action navigates (Link `to`). */
   to?: string;
-  /** Or a callback invoked on execute. */
   run?: () => void | Promise<void>;
-  /** Permission scopes required (falls back to the module's permissions). */
   requires?: string[];
   icon?: string;
 }
 
 export interface ModuleDefinition {
-  /** Stable module id. Kebab-case. */
   key: string;
-  label: string;
-  description?: string;
-  /** Sidebar route target (Link `to`). */
+  label: LocalizedLabel;
+  description?: LocalizedLabel;
   route: string;
-  /** Lucide icon name (resolved at render time to keep the registry serializable). */
   icon?: string;
   section: SidebarSection;
   order?: number;
-  /** Related entity key from the entity registry, if this module lists a single entity. */
   entityKey?: string;
-  /** Feature flag key — module is hidden unless the flag evaluates true. */
   featureFlag?: string;
-  /** Role/permission scopes required to see the module in the sidebar. */
   permissions?: {
     view?: string[];
     create?: string[];
     update?: string[];
     delete?: string[];
   };
-  /** Quick actions exposed to the command palette (New Project, New Article, ...). */
   quickActions?: ModuleQuickAction[];
-  /** Optional root component override for /admin/<key>. When omitted, the module
-   *  relies on its own file-based routes under src/routes/admin.*. */
   component?: LazyExoticComponent<ComponentType>;
-  /** Badge shown next to the sidebar entry — computed at render time. */
   badge?: () => Promise<string | number | null> | string | number | null;
 }
 
