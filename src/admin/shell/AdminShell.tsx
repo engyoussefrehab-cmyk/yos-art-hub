@@ -1,33 +1,32 @@
 /**
  * AdminShell — top-level admin layout.
  *
- * Composes registry-driven sidebar, header (with command-palette trigger
- * and search), and the `<Outlet />` for child routes. Bootstraps module
- * registration once on mount.
+ * Wraps the entire admin surface in a `dir` container so every child
+ * (registry-driven views AND legacy routes) automatically flips between
+ * RTL and LTR. Exposes a header language switcher in addition to the
+ * sidebar footer control.
  */
 
 import { Outlet, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Command as CommandIcon } from "lucide-react";
+import { Command as CommandIcon, Languages } from "lucide-react";
 import { AdminSidebar } from "@/admin/shell/AdminSidebar";
 import { CommandPalette } from "@/admin/shell/CommandPalette";
 import { bootstrapAdminModules } from "@/admin/modules/register-all";
 import { setPermissions, DEFAULT_RULES } from "@/admin/lib/permissions";
+import { A, useAdminLang } from "@/i18n/admin-lang";
 
-// Register entities + modules at module load so registry lookups
-// (getEntity, etc.) succeed on the very first render — not only after
-// the shell's useEffect has fired.
 bootstrapAdminModules();
 setPermissions(DEFAULT_RULES);
 
 export function AdminShell({ email }: { email?: string | null }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
-
+  const { t, lang, setLang, dir } = useAdminLang();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div dir={dir} lang={lang} className="min-h-screen bg-background">
       <SidebarProvider defaultOpen>
         <div className="flex min-h-screen w-full">
           <AdminSidebar
@@ -39,7 +38,7 @@ export function AdminShell({ email }: { email?: string | null }) {
               <div className="flex items-center gap-2">
                 <SidebarTrigger />
                 <Link to="/admin" className="text-sm font-semibold">
-                  Studio CMS
+                  {t(A.cms_title)}
                 </Link>
               </div>
               <div className="flex items-center gap-2">
@@ -50,10 +49,18 @@ export function AdminShell({ email }: { email?: string | null }) {
                   onClick={() => setPaletteOpen(true)}
                 >
                   <CommandIcon className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Search or run command…</span>
-                  <kbd className="ml-2 rounded border bg-muted px-1.5 py-0.5 text-[10px]">
-                    ⌘K
-                  </kbd>
+                  <span className="hidden sm:inline">{t(A.cmd_button)}</span>
+                  <kbd className="ms-2 rounded border bg-muted px-1.5 py-0.5 text-[10px]">⌘K</kbd>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 gap-1.5 px-2 text-xs"
+                  onClick={() => setLang(lang === "ar" ? "en" : "ar")}
+                  title={t(A.language)}
+                >
+                  <Languages className="h-3.5 w-3.5" />
+                  <span>{lang === "ar" ? "EN" : "عربي"}</span>
                 </Button>
                 {email && (
                   <span className="hidden md:inline text-xs text-muted-foreground truncate max-w-[220px]">
