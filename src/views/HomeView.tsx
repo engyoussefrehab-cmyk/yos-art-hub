@@ -13,6 +13,7 @@ export function HomeView({ services = [], projects = [] }: { services?: ServiceD
     <>
       <Hero />
       <About />
+      <TrustStrip />
       {projects.length > 0 && (
         <section className="mx-auto max-w-7xl px-6 py-16">
           <LatestProjectsSlider projects={projects} compact limit={10} />
@@ -22,6 +23,35 @@ export function HomeView({ services = [], projects = [] }: { services?: ServiceD
       <Testimonials />
       <CTA />
     </>
+  );
+}
+
+function TrustStrip() {
+  const { t } = useLang();
+  // Placeholder wordmarks — swap in real logo images later via CMS
+  const brands = ["ARAMEX", "STC", "MADA", "NEOM", "TALABAT", "CAREEM", "NOON", "SABIC"];
+  return (
+    <section aria-label={t("trust_kicker")} className="border-y border-border/60 bg-cream/40 dark:bg-white/[0.02]">
+      <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="mb-8 flex flex-col items-start gap-2 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">{t("trust_kicker")}</span>
+            <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">{t("trust_title")}</h2>
+          </div>
+          <p className="max-w-md text-sm leading-relaxed text-muted-foreground">{t("trust_lede")}</p>
+        </div>
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4 md:grid-cols-8">
+          {brands.map((b) => (
+            <li
+              key={b}
+              className="flex items-center justify-center py-3 font-display text-sm font-bold tracking-[0.15em] text-muted-foreground/70 grayscale opacity-70 transition-all duration-300 hover:opacity-100 hover:text-foreground hover:grayscale-0"
+            >
+              {b}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }
 
