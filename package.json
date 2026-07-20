@@ -1,7 +1,17 @@
 {
   "name": "tanstack_start_ts",
   "private": true,
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css",
+    "src/admin/modules/**",
+    "src/admin/entities/**",
+    "src/admin/lib/block-registry.ts",
+    "src/admin/lib/command-registry.ts",
+    "src/admin/lib/module-registry.ts",
+    "src/admin/lib/entity-registry.ts",
+    "src/admin/lib/widget-registry.ts",
+    "src/admin/lib/settings-registry.ts"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite dev",
