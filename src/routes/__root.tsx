@@ -309,7 +309,7 @@ function LanguageWelcome() {
     }
   }, []);
 
-  const choose = React.useCallback((lang: "ar" | "en") => {
+  const choose = useCallback((lang: "ar" | "en") => {
     try {
       localStorage.setItem("yr_lang_chosen", lang);
     } catch {
@@ -329,7 +329,7 @@ function LanguageWelcome() {
     }
   }, []);
 
-  const skipToBrowser = React.useCallback(() => {
+  const skipToBrowser = useCallback(() => {
     const nav = typeof navigator !== "undefined" ? (navigator.language || "").toLowerCase() : "";
     const detected: "ar" | "en" = nav.startsWith("ar") ? "ar" : "en";
     choose(detected);
