@@ -237,7 +237,7 @@ export function bootstrapAdminModules(): void {
     id: "create.service",
     label: "New Service",
     group: "create",
-    to: "/admin/services/new",
+    to: "/admin/cms/service/new",
     icon: "Plus",
   });
   registerCommand({
