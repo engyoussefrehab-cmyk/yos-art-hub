@@ -419,6 +419,81 @@ export type Database = {
         }
         Relationships: []
       }
+      cms_events: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          event_type: string
+          id: string
+          payload: Json
+          processed_at: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          event_type: string
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          processed_at?: string | null
+        }
+        Relationships: []
+      }
+      cms_feature_flags: {
+        Row: {
+          created_at: string
+          description: string | null
+          enabled: boolean
+          enabled_roles: string[]
+          enabled_user_ids: string[]
+          id: string
+          key: string
+          label: string
+          metadata: Json
+          rollout_percent: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          enabled_roles?: string[]
+          enabled_user_ids?: string[]
+          id?: string
+          key: string
+          label: string
+          metadata?: Json
+          rollout_percent?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          enabled_roles?: string[]
+          enabled_user_ids?: string[]
+          id?: string
+          key?: string
+          label?: string
+          metadata?: Json
+          rollout_percent?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cms_form_fields: {
         Row: {
           conditional: Json
@@ -938,6 +1013,86 @@ export type Database = {
           version_number?: number
         }
         Relationships: []
+      }
+      cms_settings_groups: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          is_system: boolean
+          key: string
+          label: string
+          schema: Json
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_system?: boolean
+          key: string
+          label: string
+          schema?: Json
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_system?: boolean
+          key?: string
+          label?: string
+          schema?: Json
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cms_settings_values: {
+        Row: {
+          created_at: string
+          group_key: string
+          id: string
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json | null
+        }
+        Insert: {
+          created_at?: string
+          group_key: string
+          id?: string
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json | null
+        }
+        Update: {
+          created_at?: string
+          group_key?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cms_settings_values_group_key_fkey"
+            columns: ["group_key"]
+            isOneToOne: false
+            referencedRelation: "cms_settings_groups"
+            referencedColumns: ["key"]
+          },
+        ]
       }
       cms_theme_presets: {
         Row: {
@@ -2237,6 +2392,15 @@ export type Database = {
     }
     Functions: {
       cms_can_manage: { Args: never; Returns: boolean }
+      cms_emit_event: {
+        Args: {
+          _entity_id?: string
+          _entity_type?: string
+          _event_type: string
+          _payload?: Json
+        }
+        Returns: string
+      }
       cms_is_admin: { Args: never; Returns: boolean }
       has_role: {
         Args: {

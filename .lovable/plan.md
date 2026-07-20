@@ -12,6 +12,13 @@ Full CMS reboot at `/admin` — Webflow/Sanity-grade shell, isolated from the pu
 - **No hardcoded content.** Categories, layouts, homepage, navigation, footer, sections, forms, themes — all defined in DB.
 - **Zero code for content changes.** New category → new template + layout auto-generated. New form → drag-and-drop builder. New homepage block → picker. New nav item → suggested.
 - **Longevity over convenience.** Every decision optimizes for a platform that keeps growing for years.
+- **Registry-driven.** New entities, blocks, and settings pages plug in via registries — no bespoke CRUD, no shell edits. See `docs/ARCHITECTURE.md`.
+- **API-first.** Every module is a server-function surface reusable by a future client portal, mobile app, or external integration.
+- **Feature-flagged.** Every in-flight module ships behind a `cms.*` flag (`cms_feature_flags`).
+- **Eventful.** Durable `cms_events` log powers automations and integrations; DB triggers emit `published`, `updated`, `lead.created`, `form.submitted`, `media.deleted`, `workflow_changed`.
+- **Universal settings.** `cms_settings_groups` + `cms_settings_values` host General / Branding / SEO / Email / Storage / Integrations / Analytics / Social / Scripts, and any future module can register its own.
+- **Performance-aware.** Lazy blocks, paginated queries, virtualized lists, cached flags/settings — enforced from Phase 0.
+- **Server-validated + audited.** RLS is the floor; every mutation flows through `createServerFn` with role check + `cms_audit_log`.
 
 ---
 
