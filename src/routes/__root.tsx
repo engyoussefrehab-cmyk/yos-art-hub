@@ -254,15 +254,22 @@ function LangSync() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { t } = useLang();
   return (
     <QueryClientProvider client={queryClient}>
       <LangSync />
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground focus:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      >
+        {t("skip_to_content")}
+      </a>
       <SiteLoader />
       <LanguageWelcome />
       <Toaster position="top-center" richColors closeButton />
       <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden">
         <SiteNav />
-        <main className="flex-1 w-full min-w-0"><Outlet /></main>
+        <main id="main-content" tabIndex={-1} className="flex-1 w-full min-w-0"><Outlet /></main>
         <SiteFooter />
         <WhatsAppFab />
         <BackToTop />
