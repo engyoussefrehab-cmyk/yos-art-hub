@@ -223,7 +223,7 @@ export function bootstrapAdminModules(): void {
     id: "create.project",
     label: "New Project",
     group: "create",
-    to: "/admin/portfolio/new",
+    to: "/admin/cms/project/new",
     icon: "Plus",
   });
   registerCommand({
