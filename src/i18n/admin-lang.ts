@@ -216,6 +216,47 @@ export const A = {
 
   // Sign-in
   admin_signin_title: L("تسجيل دخول لوحة التحكم", "Admin sign-in"),
+
+  // Legacy portfolio list (kept until fully migrated to Generic engine)
+  portfolio_title:      L("المشاريع", "Projects"),
+  portfolio_subtitle:   L("إدارة مشاريع البرتفوليو والتصنيفات والحالة.", "Manage your portfolio projects, categories, and status."),
+  new_project:          L("مشروع جديد", "New Project"),
+  status_all:           L("كل الحالات", "All statuses"),
+  status_draft:         L("مسودة", "Draft"),
+  status_published:     L("منشور", "Published"),
+  selected_count:       L("محدد", "selected"),
+  clear_selection:      L("إلغاء التحديد", "Clear selection"),
+  select_all:           L("تحديد الكل", "Select all"),
+  no_projects:          L("لا توجد مشاريع بعد. ابدأ بإضافة مشروع جديد.", "No projects yet. Start by creating a new one."),
+  col_name:             L("الاسم", "Name"),
+  col_client:           L("العميل", "Client"),
+  col_category:         L("التصنيف", "Category"),
+  col_status:           L("الحالة", "Status"),
+  confirm_delete_project: L("تأكيد حذف المشروع", "Confirm project deletion"),
+  confirm_delete_project_desc: L("سيتم حذف المشروع نهائيًا. لا يمكن التراجع عن هذا الإجراء.", "This project will be permanently deleted. This action cannot be undone."),
+  bulk_delete_title:    L("حذف عدة مشاريع", "Delete multiple projects"),
+  bulk_delete_desc:     L("سيتم حذف المشاريع المحددة بشكل نهائي. لا يمكن التراجع عن هذا الإجراء.", "The selected projects will be permanently deleted. This action cannot be undone."),
+  project_deleted:      L("تم حذف المشروع", "Project deleted"),
+  project_duplicated:   L("تم نسخ المشروع كمسودة", "Project duplicated as draft"),
+  bulk_published:       L("تم النشر", "Published"),
+  bulk_drafted:         L("تم الإرجاع كمسودة", "Moved to draft"),
+  bulk_deleted:         L("تم الحذف", "Deleted"),
+  deleting:             L("جاري الحذف…", "Deleting…"),
+  delete_final:         L("حذف نهائي", "Delete permanently"),
+
+  // Legacy settings page
+  settings_title:       L("إعدادات الموقع", "Site Settings"),
+  settings_subtitle:    L("اللوجو، بيانات الشركة، السوشيال ميديا، وإعدادات التتبع.", "Logo, company info, social media, and analytics settings."),
+  identity:             L("الهوية", "Identity"),
+  logo_url:             L("رابط اللوجو", "Logo URL"),
+  favicon_url:          L("رابط الفافيكون", "Favicon URL"),
+  company_name:         L("اسم الشركة", "Company name"),
+  contact_email:        L("بريد التواصل", "Contact email"),
+  contact_phone:        L("رقم الهاتف", "Phone number"),
+  address:              L("العنوان", "Address"),
+  socials:              L("السوشيال ميديا", "Social Media"),
+  analytics:            L("التتبع والتحليلات", "Tracking & Analytics"),
+  settings_saved:       L("تم حفظ الإعدادات", "Settings saved"),
 } as const;
 
 export type ALiteral = keyof typeof A;
