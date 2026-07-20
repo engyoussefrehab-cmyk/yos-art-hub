@@ -7,7 +7,7 @@
  */
 
 import { Outlet, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Command as CommandIcon } from "lucide-react";
@@ -16,14 +16,15 @@ import { CommandPalette } from "@/admin/shell/CommandPalette";
 import { bootstrapAdminModules } from "@/admin/modules/register-all";
 import { setPermissions, DEFAULT_RULES } from "@/admin/lib/permissions";
 
+// Register entities + modules at module load so registry lookups
+// (getEntity, etc.) succeed on the very first render — not only after
+// the shell's useEffect has fired.
+bootstrapAdminModules();
+setPermissions(DEFAULT_RULES);
+
 export function AdminShell({ email }: { email?: string | null }) {
   const [paletteOpen, setPaletteOpen] = useState(false);
 
-  useEffect(() => {
-    bootstrapAdminModules();
-    // Seed default permissions; a follow-up will hydrate from cms_permissions.
-    setPermissions(DEFAULT_RULES);
-  }, []);
 
   return (
     <div className="min-h-screen bg-background">

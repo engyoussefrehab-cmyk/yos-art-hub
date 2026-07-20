@@ -255,6 +255,18 @@ function LangSync() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { t } = useLang();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+
+  if (isAdmin) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <Toaster position="top-center" richColors closeButton />
+        <Outlet />
+      </QueryClientProvider>
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <LangSync />
@@ -277,6 +289,7 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+
 
 function LanguageWelcome() {
   const [open, setOpen] = useState(false);
