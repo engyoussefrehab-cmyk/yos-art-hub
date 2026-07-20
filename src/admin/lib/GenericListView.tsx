@@ -6,6 +6,10 @@
  * Every visible string is resolved through the admin i18n dictionary.
  */
 
+// Ensure all entities/modules are registered before this view resolves them.
+// Route load order isn't guaranteed to hit AdminShell first, so import the
+// bootstrap module directly for its side effects.
+import "@/admin/modules/register-all";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
