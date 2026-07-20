@@ -7,7 +7,7 @@
  */
 
 import { Outlet, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Command as CommandIcon } from "lucide-react";
