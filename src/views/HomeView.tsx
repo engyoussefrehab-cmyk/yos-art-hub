@@ -158,19 +158,24 @@ function About() {
 
 function Services({ items }: { items: ServiceDTO[] }) {
   const { t, lang } = useLang();
-  const fallback: Array<{ title: string; desc: string }> = ([
+  const fallback: Array<{ title: string; desc: string; image: string }> = ([
     ["svc_1_t", "svc_1_d"],
     ["svc_2_t", "svc_2_d"],
     ["svc_3_t", "svc_3_d"],
     ["svc_4_t", "svc_4_d"],
     ["svc_5_t", "svc_5_d"],
     ["svc_6_t", "svc_6_d"],
-  ] as [DictKey, DictKey][]).map(([tk, dk]) => ({ title: t(tk), desc: t(dk) }));
+  ] as [DictKey, DictKey][]).map(([tk, dk], i) => ({
+    title: t(tk),
+    desc: t(dk),
+    image: SERVICE_FALLBACK_IMAGES[i],
+  }));
 
   const list = items.length
-    ? items.map((s) => ({
+    ? items.map((s, i) => ({
         title: lang === "ar" ? s.title_ar : s.title_en,
         desc: lang === "ar" ? s.description_ar : s.description_en,
+        image: s.cover_url || SERVICE_FALLBACK_IMAGES[i % SERVICE_FALLBACK_IMAGES.length],
       }))
     : fallback;
 
@@ -183,18 +188,45 @@ function Services({ items }: { items: ServiceDTO[] }) {
         </div>
         <p className="hidden md:block max-w-md text-muted-foreground">{t("services_lede")}</p>
       </div>
-      <div className="mt-12 grid grid-cols-1 gap-px bg-border md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((item, i) => (
-          <div key={i} className="group bg-background p-8 transition-colors hover:bg-cream">
-            <div className="font-display text-6xl font-bold text-accent/20 group-hover:text-accent/40 transition-colors">{String(i + 1).padStart(2, "0")}</div>
-            <h3 className="mt-4 font-display text-2xl font-bold">{item.title}</h3>
-            <p className="mt-2 text-muted-foreground">{item.desc}</p>
-          </div>
+          <article
+            key={i}
+            className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-background transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_30px_60px_-30px_rgb(0_0_0/0.25)]"
+          >
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream">
+              <img
+                src={item.image}
+                alt={item.title}
+                loading="lazy"
+                width={1024}
+                height={768}
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/60 via-ink/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90" />
+              <span
+                className={`absolute top-4 font-display text-xs font-semibold tracking-widest text-white/90 ${lang === "ar" ? "right-4" : "left-4"}`}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+            </div>
+            <div className="flex flex-1 flex-col p-6">
+              <h3 className="font-display text-xl font-bold text-foreground transition-colors group-hover:text-accent md:text-2xl">
+                {item.title}
+              </h3>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
+              <div className={`mt-5 inline-flex items-center gap-2 text-xs font-semibold text-accent opacity-0 transition-all duration-300 group-hover:opacity-100 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
+                <span>{lang === "ar" ? "اعرف المزيد" : "Learn more"}</span>
+                <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
+              </div>
+            </div>
+          </article>
         ))}
       </div>
     </section>
   );
 }
+
 
 function CTA() {
   const { t, lang } = useLang();
