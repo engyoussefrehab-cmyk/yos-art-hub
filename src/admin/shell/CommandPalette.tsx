@@ -1,12 +1,9 @@
 /**
  * Command Palette — primary keyboard-first navigation.
  *
- * Aggregates:
- *   - navigation entries from module-registry
- *   - registered commands from command-registry
- *   - quick-create actions from every module
- *
- * Shortcut: ⌘K / Ctrl+K.
+ * Aggregates navigation entries from module-registry, registered commands
+ * from command-registry, and quick-create actions from every module. All
+ * labels resolve through the admin i18n dictionary.
  */
 
 import { useEffect, useMemo, useState } from "react";
@@ -24,14 +21,16 @@ import {
 import { AdminIcon } from "@/admin/shell/icon";
 import { listModules } from "@/admin/lib/module-registry";
 import { listCommands, type CommandGroup as CmdGroup } from "@/admin/lib/command-registry";
+import { A, useAdminLang, type L } from "@/i18n/admin-lang";
+import type { LocalizedLabel } from "@/admin/lib/entity-registry";
 
-const GROUP_LABEL: Record<CmdGroup, string> = {
-  navigate: "Navigate",
-  create: "Create",
-  search: "Search",
-  actions: "Actions",
-  settings: "Settings",
-  help: "Help",
+const GROUP_LABEL: Record<CmdGroup, L> = {
+  navigate: A.cmd_group_navigate,
+  create: A.cmd_group_create,
+  search: A.cmd_group_search,
+  actions: A.cmd_group_actions,
+  settings: A.cmd_group_settings,
+  help: A.cmd_group_help,
 };
 
 export function CommandPalette({
@@ -43,6 +42,7 @@ export function CommandPalette({
 }) {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
+  const { t } = useAdminLang();
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -60,7 +60,7 @@ export function CommandPalette({
     const commands = listCommands();
     const groups: Record<CmdGroup, Array<{
       id: string;
-      label: string;
+      label: LocalizedLabel;
       icon?: string;
       shortcut?: string;
       to?: string;
@@ -75,14 +75,15 @@ export function CommandPalette({
       help: [],
     };
 
-    // Modules -> Navigate
+    const goTo = t(A.go_to);
     for (const m of modules) {
+      const moduleLabel = t(m.label);
       groups.navigate.push({
         id: `module.${m.key}`,
-        label: `Go to ${m.label}`,
+        label: `${goTo} ${moduleLabel}`,
         icon: m.icon,
         to: m.route,
-        keywords: [m.key, m.label, m.section],
+        keywords: [m.key, moduleLabel, m.section],
       });
       for (const qa of m.quickActions ?? []) {
         groups.create.push({
@@ -91,7 +92,7 @@ export function CommandPalette({
           icon: qa.icon,
           to: qa.to,
           run: qa.run,
-          keywords: [m.key, m.label],
+          keywords: [m.key, moduleLabel],
         });
       }
     }
@@ -108,7 +109,9 @@ export function CommandPalette({
       });
     }
     return groups;
-  }, [open]);
+    // Regenerate when the palette re-opens or language switches.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, t]);
 
   const execute = (entry: { to?: string; run?: () => void | Promise<void> }) => {
     onOpenChange(false);
@@ -123,30 +126,33 @@ export function CommandPalette({
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput
-        placeholder="Type a command or search…"
+        placeholder={t(A.cmd_placeholder)}
         value={query}
         onValueChange={setQuery}
       />
       <CommandList>
-        <CommandEmpty>No results.</CommandEmpty>
+        <CommandEmpty>{t(A.cmd_empty)}</CommandEmpty>
         {(Object.keys(grouped) as CmdGroup[]).map((g, idx) => {
           const items = grouped[g];
           if (items.length === 0) return null;
           return (
             <div key={g}>
               {idx > 0 && <CommandSeparator />}
-              <CommandGroup heading={GROUP_LABEL[g]}>
-                {items.map((it) => (
-                  <CommandItem
-                    key={it.id}
-                    value={`${it.label} ${(it.keywords ?? []).join(" ")}`}
-                    onSelect={() => execute(it)}
-                  >
-                    <AdminIcon name={it.icon} className="mr-2 h-4 w-4" />
-                    <span>{it.label}</span>
-                    {it.shortcut && <CommandShortcut>{it.shortcut}</CommandShortcut>}
-                  </CommandItem>
-                ))}
+              <CommandGroup heading={t(GROUP_LABEL[g])}>
+                {items.map((it) => {
+                  const label = t(it.label);
+                  return (
+                    <CommandItem
+                      key={it.id}
+                      value={`${label} ${(it.keywords ?? []).join(" ")}`}
+                      onSelect={() => execute(it)}
+                    >
+                      <AdminIcon name={it.icon} className="me-2 h-4 w-4" />
+                      <span>{label}</span>
+                      {it.shortcut && <CommandShortcut>{it.shortcut}</CommandShortcut>}
+                    </CommandItem>
+                  );
+                })}
               </CommandGroup>
             </div>
           );

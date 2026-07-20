@@ -1,10 +1,12 @@
 /**
  * Registry-driven admin sidebar. Reads modules from `module-registry`,
- * groups them by section, filters by feature flag + permission.
+ * groups them by section, filters by feature flag + permission, and
+ * resolves all labels through the admin i18n dictionary so every module
+ * gets Arabic + English for free.
  */
 
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ExternalLink, LogOut, Command } from "lucide-react";
+import { ExternalLink, LogOut, Command, Languages } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -25,15 +27,16 @@ import {
   type SidebarSection,
 } from "@/admin/lib/module-registry";
 import { AdminIcon } from "@/admin/shell/icon";
+import { A, useAdminLang, type L } from "@/i18n/admin-lang";
 
-const SECTION_LABELS: Record<SidebarSection, string> = {
-  content: "Content",
-  commerce: "Commerce",
-  design: "Design",
-  taxonomy: "Taxonomy",
-  operations: "Operations",
-  system: "System",
-  developer: "Developer",
+const SECTION_LABELS: Record<SidebarSection, L> = {
+  content: A.content_group,
+  commerce: A.commerce_group,
+  design: A.design_group,
+  taxonomy: A.taxonomy_group,
+  operations: A.ops_group,
+  system: A.system_group,
+  developer: A.developer_group,
 };
 
 function ModuleItem({
@@ -43,16 +46,18 @@ function ModuleItem({
   module: ModuleDefinition;
   currentPath: string;
 }) {
+  const { t } = useAdminLang();
   const active =
     module.route === "/admin"
       ? currentPath === "/admin" || currentPath === "/admin/"
       : currentPath === module.route || currentPath.startsWith(module.route + "/");
+  const label = t(module.label);
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild isActive={active} tooltip={module.label}>
+      <SidebarMenuButton asChild isActive={active} tooltip={label}>
         <Link to={module.route} className="flex items-center gap-3">
           <AdminIcon name={module.icon} className="h-4 w-4 shrink-0" />
-          <span className="truncate">{module.label}</span>
+          <span className="truncate">{label}</span>
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
@@ -68,11 +73,12 @@ export function AdminSidebar({
 }) {
   const currentPath = useRouterState({ select: (r) => r.location.pathname });
   const { state } = useSidebar();
+  const { lang, setLang, t } = useAdminLang();
   const collapsed = state === "collapsed";
   const sections = listModulesBySection();
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" side={lang === "ar" ? "right" : "left"}>
       <SidebarHeader className="border-b border-sidebar-border">
         <Link to="/admin" className="flex items-center gap-2 px-2 py-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
@@ -80,9 +86,9 @@ export function AdminSidebar({
           </div>
           {!collapsed && (
             <div className="flex flex-col leading-tight">
-              <span className="text-sm font-semibold">Studio CMS</span>
+              <span className="text-sm font-semibold">{t(A.cms_title)}</span>
               <span className="text-[10px] text-muted-foreground">
-                Yousef Rehab · CMS
+                {t(A.cms_subtitle)}
               </span>
             </div>
           )}
@@ -96,7 +102,7 @@ export function AdminSidebar({
           return (
             <SidebarGroup key={section}>
               {!collapsed && (
-                <SidebarGroupLabel>{SECTION_LABELS[section]}</SidebarGroupLabel>
+                <SidebarGroupLabel>{t(SECTION_LABELS[section])}</SidebarGroupLabel>
               )}
               <SidebarGroupContent>
                 <SidebarMenu>
@@ -114,25 +120,36 @@ export function AdminSidebar({
         <SidebarMenu>
           {onOpenCommandPalette && (
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={onOpenCommandPalette} tooltip="Command Palette (⌘K)">
+              <SidebarMenuButton onClick={onOpenCommandPalette} tooltip={t(A.cmd_button) + " (⌘K)"}>
                 <Command className="h-4 w-4 shrink-0" />
-                <span className="truncate">Command Palette</span>
-                <span className="ml-auto text-[10px] text-muted-foreground">⌘K</span>
+                <span className="truncate">{t(A.cmd_button)}</span>
+                <span className="ms-auto text-[10px] text-muted-foreground">⌘K</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="View Site">
+            <SidebarMenuButton
+              onClick={() => setLang(lang === "ar" ? "en" : "ar")}
+              tooltip={t(A.language)}
+            >
+              <Languages className="h-4 w-4 shrink-0" />
+              <span className="truncate">
+                {lang === "ar" ? "English" : "العربية"}
+              </span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild tooltip={t(A.view_site)}>
               <Link to="/" className="flex items-center gap-3">
                 <ExternalLink className="h-4 w-4 shrink-0" />
-                <span className="truncate">View Site</span>
+                <span className="truncate">{t(A.view_site)}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={() => supabase.auth.signOut()} tooltip="Sign Out">
+            <SidebarMenuButton onClick={() => supabase.auth.signOut()} tooltip={t(A.sign_out)}>
               <LogOut className="h-4 w-4 shrink-0" />
-              <span className="truncate">Sign Out</span>
+              <span className="truncate">{t(A.sign_out)}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

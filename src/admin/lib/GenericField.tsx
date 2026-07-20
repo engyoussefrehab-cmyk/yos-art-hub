@@ -1,9 +1,6 @@
 /**
  * Generic form-field renderers for the entity registry.
- * Kept intentionally minimal — the goal is architectural validation, not UI
- * polish. Each field kind maps to a single component. Complex kinds (blocks,
- * media) fall through to a raw JSON textarea until a dedicated renderer is
- * registered.
+ * Every visible label / helper is resolved through the admin i18n dictionary.
  */
 
 import { Input } from "@/components/ui/input";
@@ -18,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { EntityField } from "@/admin/lib/entity-registry";
+import { A, useAdminLang } from "@/i18n/admin-lang";
 
 interface Props {
   field: EntityField;
@@ -35,45 +33,42 @@ function jsonString(v: unknown) {
 
 export function GenericField({ field, value, onChange }: Props) {
   const id = `f-${field.key}`;
-  const common = (
-    <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id} className="text-xs font-medium">
-        {field.label}
-        {field.required ? <span className="text-destructive"> *</span> : null}
-      </Label>
-    </div>
+  const { t } = useAdminLang();
+  const label = t(field.label);
+  const help = field.helpText ? t(field.helpText) : null;
+
+  const LabelBlock = (
+    <Label htmlFor={id} className="text-xs font-medium">
+      {label}
+      {field.required ? <span className="text-destructive"> *</span> : null}
+    </Label>
   );
 
   switch (field.kind) {
     case "boolean":
       return (
         <div className="flex items-center justify-between rounded-md border px-3 py-2">
-          <Label htmlFor={id} className="text-sm">
-            {field.label}
-          </Label>
-          <Switch
-            id={id}
-            checked={Boolean(value)}
-            onCheckedChange={(v) => onChange(v)}
-          />
+          <Label htmlFor={id} className="text-sm">{label}</Label>
+          <Switch id={id} checked={Boolean(value)} onCheckedChange={(v) => onChange(v)} />
         </div>
       );
     case "textarea":
       return (
         <div className="flex flex-col gap-1.5">
-          {common.props.children}
+          {LabelBlock}
           <Textarea
             id={id}
             value={(value as string) ?? ""}
             rows={4}
             onChange={(e) => onChange(e.target.value)}
           />
+          {help && <span className="text-[10px] text-muted-foreground">{help}</span>}
         </div>
       );
     case "number":
       return (
         <div className="flex flex-col gap-1.5">
-          {common.props.children}
+          {LabelBlock}
           <Input
             id={id}
             type="number"
@@ -82,27 +77,26 @@ export function GenericField({ field, value, onChange }: Props) {
               onChange(e.target.value === "" ? null : Number(e.target.value))
             }
           />
+          {help && <span className="text-[10px] text-muted-foreground">{help}</span>}
         </div>
       );
     case "select":
       return (
         <div className="flex flex-col gap-1.5">
-          {common.props.children}
-          <Select
-            value={(value as string) ?? ""}
-            onValueChange={(v) => onChange(v)}
-          >
+          {LabelBlock}
+          <Select value={(value as string) ?? ""} onValueChange={(v) => onChange(v)}>
             <SelectTrigger id={id}>
-              <SelectValue placeholder="Select…" />
+              <SelectValue placeholder={t(A.select_placeholder)} />
             </SelectTrigger>
             <SelectContent>
               {(field.options ?? []).map((o) => (
                 <SelectItem key={o.value} value={o.value}>
-                  {o.label}
+                  {t(o.label)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+          {help && <span className="text-[10px] text-muted-foreground">{help}</span>}
         </div>
       );
     case "json":
@@ -113,7 +107,7 @@ export function GenericField({ field, value, onChange }: Props) {
     case "richtext":
       return (
         <div className="flex flex-col gap-1.5">
-          {common.props.children}
+          {LabelBlock}
           <Textarea
             id={id}
             className="font-mono text-xs"
@@ -124,12 +118,12 @@ export function GenericField({ field, value, onChange }: Props) {
               try {
                 onChange(JSON.parse(raw));
               } catch {
-                onChange(raw); // keep string until valid; parsed on save
+                onChange(raw);
               }
             }}
           />
           <span className="text-[10px] text-muted-foreground">
-            JSON — parsed on save
+            {help ?? t(A.json_hint)}
           </span>
         </div>
       );
@@ -139,12 +133,13 @@ export function GenericField({ field, value, onChange }: Props) {
     default:
       return (
         <div className="flex flex-col gap-1.5">
-          {common.props.children}
+          {LabelBlock}
           <Input
             id={id}
             value={(value as string) ?? ""}
             onChange={(e) => onChange(e.target.value)}
           />
+          {help && <span className="text-[10px] text-muted-foreground">{help}</span>}
         </div>
       );
   }
