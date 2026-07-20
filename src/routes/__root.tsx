@@ -280,11 +280,12 @@ function RootComponent() {
 
 function LanguageWelcome() {
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const openerRef = useRef<Element | null>(null);
 
   useEffect(() => {
     try {
       if (!localStorage.getItem("yr_lang_chosen")) {
-        // small delay so it appears after the loader fades
         const id = window.setTimeout(() => setOpen(true), 900);
         return () => window.clearTimeout(id);
       }
@@ -295,10 +296,41 @@ function LanguageWelcome() {
 
   useEffect(() => {
     if (!open) return;
+    openerRef.current = document.activeElement;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    // Focus first button
+    const focusables = () =>
+      dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button, [href], input, [tabindex]:not([tabindex="-1"])'
+      ) ?? ([] as unknown as NodeListOf<HTMLElement>);
+    const first = focusables()[0];
+    first?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const list = Array.from(focusables());
+      if (list.length === 0) return;
+      const firstEl = list[0];
+      const lastEl = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === firstEl) {
+        e.preventDefault();
+        lastEl.focus();
+      } else if (!e.shiftKey && document.activeElement === lastEl) {
+        e.preventDefault();
+        firstEl.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+      (openerRef.current as HTMLElement | null)?.focus?.();
     };
   }, [open]);
 
