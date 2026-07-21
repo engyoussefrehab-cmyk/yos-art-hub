@@ -29,12 +29,6 @@ export const Route = createFileRoute("/api/public/contact")({
     handlers: {
       OPTIONS: async () => new Response(null, { status: 204, headers: corsHeaders() }),
       POST: async ({ request }) => {
-        const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
-        const RESEND_API_KEY = process.env.RESEND_API_KEY;
-        if (!LOVABLE_API_KEY || !RESEND_API_KEY) {
-          return Response.json({ error: "Email service not configured" }, { status: 500, headers: corsHeaders() });
-        }
-
         let payload: unknown;
         try {
           payload = await request.json();
@@ -61,6 +55,8 @@ export const Route = createFileRoute("/api/public/contact")({
           ? `${message}\n\n---\nطلب مكالمة مجانية / Free call requested:\n${callSummary}`
           : message;
 
+        // Always persist to the admin inbox first — this is the source of truth.
+        let stored = false;
         try {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           const { error: insertError } = await supabaseAdmin.from("contact_messages").insert({
@@ -72,48 +68,63 @@ export const Route = createFileRoute("/api/public/contact")({
           });
           if (insertError) {
             console.error("contact_messages insert failed:", insertError);
+          } else {
+            stored = true;
           }
         } catch (e) {
           console.error("contact_messages insert threw:", e);
         }
 
-        const callRow = callRequested
-          ? `<tr><td style="padding:8px 0;color:#666">مكالمة مجانية</td><td style="padding:8px 0;font-weight:600;color:#c2410c">${esc(callSummary)}</td></tr>`
-          : "";
+        if (!stored) {
+          return Response.json({ error: "Failed to save message" }, { status: 500, headers: corsHeaders() });
+        }
 
-        const html = `
-          <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#ffffff;color:#111">
-            <h2 style="margin:0 0 16px;color:#0b1a2b">رسالة جديدة من موقع YR Studio</h2>
-            <table style="width:100%;border-collapse:collapse">
-              <tr><td style="padding:8px 0;color:#666;width:120px">الاسم</td><td style="padding:8px 0;font-weight:600">${esc(name)}</td></tr>
-              <tr><td style="padding:8px 0;color:#666">البريد</td><td style="padding:8px 0"><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
-              <tr><td style="padding:8px 0;color:#666">الموضوع</td><td style="padding:8px 0">${esc(subject)}</td></tr>
-              ${callRow}
-            </table>
-            <hr style="border:none;border-top:1px solid #eee;margin:16px 0" />
-            <div style="white-space:pre-wrap;line-height:1.7">${esc(message)}</div>
-          </div>`;
+        // Best-effort email notification. Only fires if Resend is configured.
+        const LOVABLE_API_KEY = process.env.LOVABLE_API_KEY;
+        const RESEND_API_KEY = process.env.RESEND_API_KEY;
+        if (LOVABLE_API_KEY && RESEND_API_KEY) {
+          const callRow = callRequested
+            ? `<tr><td style="padding:8px 0;color:#666">مكالمة مجانية</td><td style="padding:8px 0;font-weight:600;color:#c2410c">${esc(callSummary)}</td></tr>`
+            : "";
 
-        const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "X-Connection-Api-Key": RESEND_API_KEY,
-          },
-          body: JSON.stringify({
-            from: "YR Studio <noreply@yrstudio.art>",
-            to: ["info@yrstudio.art"],
-            reply_to: email,
-            subject: `[نموذج التواصل] ${subject}`,
-            html,
-          }),
-        });
+          const html = `
+            <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;background:#ffffff;color:#111">
+              <h2 style="margin:0 0 16px;color:#0b1a2b">رسالة جديدة من موقع YR Studio</h2>
+              <table style="width:100%;border-collapse:collapse">
+                <tr><td style="padding:8px 0;color:#666;width:120px">الاسم</td><td style="padding:8px 0;font-weight:600">${esc(name)}</td></tr>
+                <tr><td style="padding:8px 0;color:#666">البريد</td><td style="padding:8px 0"><a href="mailto:${esc(email)}">${esc(email)}</a></td></tr>
+                <tr><td style="padding:8px 0;color:#666">الموضوع</td><td style="padding:8px 0">${esc(subject)}</td></tr>
+                ${callRow}
+              </table>
+              <hr style="border:none;border-top:1px solid #eee;margin:16px 0" />
+              <div style="white-space:pre-wrap;line-height:1.7">${esc(message)}</div>
+            </div>`;
 
-        if (!res.ok) {
-          const body = await res.text();
-          console.error(`Resend send failed [${res.status}]: ${body}`);
-          return Response.json({ error: "Failed to send" }, { status: 502, headers: corsHeaders() });
+          try {
+            const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${LOVABLE_API_KEY}`,
+                "X-Connection-Api-Key": RESEND_API_KEY,
+              },
+              body: JSON.stringify({
+                from: "YR Studio <noreply@yrstudio.art>",
+                to: ["info@yrstudio.art"],
+                reply_to: email,
+                subject: `[نموذج التواصل] ${subject}`,
+                html,
+              }),
+            });
+            if (!res.ok) {
+              const body = await res.text();
+              console.error(`Resend send failed [${res.status}]: ${body}`);
+            }
+          } catch (e) {
+            console.error("Resend send threw:", e);
+          }
+        } else {
+          console.warn("Resend not configured — message stored to inbox only.");
         }
 
         return Response.json({ ok: true }, { headers: corsHeaders() });
