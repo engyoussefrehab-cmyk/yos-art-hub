@@ -145,15 +145,6 @@ export function LatestProjectsSlider({
           )}
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          {!compact && (
-            <Link
-              to={allProjectsHref}
-              className="hidden items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold text-foreground transition-colors hover:border-accent/50 hover:text-accent sm:inline-flex"
-            >
-              {t("كل المشاريع", "View all")}
-              <ArrowUpRight className={`h-3.5 w-3.5 ${isAr ? "-scale-x-100" : ""}`} />
-            </Link>
-          )}
           {autoPlay && items.length > 1 && (
             <button
               type="button"
