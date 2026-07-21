@@ -160,7 +160,19 @@ export function ProjectsBrowser({
         )}
       </div>
 
-      {filtered.length === 0 ? (
+      {!active ? (
+        <div className="mt-10 rounded-2xl border border-dashed border-border/70 bg-cream/40 p-12 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
+            <Search className="h-5 w-5" />
+          </div>
+          <p className="mt-4 text-sm text-muted-foreground">
+            {t(
+              "اختر تخصّصًا أو استخدم الفلاتر بالأعلى لعرض نتائج مخصّصة من الأرشيف.",
+              "Pick a specialty or use the filters above to browse tailored results from the archive.",
+            )}
+          </p>
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="mt-10 rounded-2xl border border-dashed border-border/70 p-12 text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <Search className="h-5 w-5" />
@@ -228,6 +240,7 @@ export function ProjectsBrowser({
           })}
         </div>
       )}
+
     </div>
   );
 }
