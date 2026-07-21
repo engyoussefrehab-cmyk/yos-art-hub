@@ -273,18 +273,6 @@ export function LatestProjectsSlider({
         </div>
       )}
 
-      {/* Mobile "View all" */}
-      {!compact && (
-        <div className="mt-6 flex justify-center sm:hidden">
-          <Link
-            to={allProjectsHref}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold text-foreground transition-colors hover:border-accent/50 hover:text-accent"
-          >
-            {t("عرض كل المشاريع", "View all projects")}
-            <ArrowUpRight className={`h-3.5 w-3.5 ${isAr ? "-scale-x-100" : ""}`} />
-          </Link>
-        </div>
-      )}
     </section>
   );
 }
