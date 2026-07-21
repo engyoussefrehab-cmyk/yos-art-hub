@@ -75,9 +75,10 @@ export function ProjectsBrowser({
   }, [projects, search, isAr]);
 
   const setParam = (key: keyof ProjectFilters, value: string) =>
-    navigate({ search: (prev: any) => ({ ...prev, [key]: value }) });
+    navigate({ search: (prev: any) => ({ ...prev, [key]: value }), resetScroll: false });
   const reset = () =>
-    navigate({ search: () => ({ cat: "", country: "", year: "", tag: "", sort: "newest" }) as any });
+    navigate({ search: () => ({ cat: "", country: "", year: "", tag: "", sort: "newest" }) as any, resetScroll: false });
+
 
   const active = !!(search.cat || search.country || search.year || search.tag) || search.sort !== "newest";
   const projectHref = (p: PortfolioDTO) =>
