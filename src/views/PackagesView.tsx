@@ -143,7 +143,7 @@ function Cell({ value }: { value: Inclusion }) {
 
 /* ---------------------------- Small primitives ---------------------------- */
 
-function MetaRow({ icon, label, featured }: { icon: React.ReactNode; label: string; featured?: boolean }) {
+function MetaRow({ icon, label, featured }: { icon: ReactNode; label: string; featured?: boolean }) {
   return (
     <div className={`flex items-center gap-2 text-xs ${featured ? "text-white/70" : "text-muted-foreground"}`}>
       <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${featured ? "bg-white/10" : "bg-accent/10 text-accent"}`}>
