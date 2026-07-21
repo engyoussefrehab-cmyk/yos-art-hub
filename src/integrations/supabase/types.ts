@@ -2623,6 +2623,10 @@ export type Database = {
         }
         Returns: string
       }
+      cms_entity_is_public: {
+        Args: { _entity_id: string; _entity_type: string }
+        Returns: boolean
+      }
       cms_is_admin: { Args: never; Returns: boolean }
       has_role: {
         Args: {
