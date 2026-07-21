@@ -1,27 +1,51 @@
+import { useEffect, useState } from "react";
 import { useLang } from "@/i18n/use-lang";
+import { supabase } from "@/integrations/supabase/client";
 
-const CLIENTS = [
-  "ARAMCO", "STC", "NEOM", "ROSHN", "SABIC", "MAADEN",
-  "ALINMA", "ELM", "TAWUNIYA", "ALRAJHI", "MOBILY", "SAUDIA",
-  "DIRIYAH", "QIDDIYA", "TABBY", "TAMARA", "JAHEZ", "NOON",
-];
+type Logo = { id: string; name: string; logo_url: string; href: string | null };
 
-function LogoItem({ label }: { label: string }) {
+function LogoItem({ logo }: { logo: Logo }) {
+  const img = (
+    <img
+      src={logo.logo_url}
+      alt={logo.name}
+      loading="lazy"
+      className="h-10 w-auto max-w-[180px] object-contain opacity-50 grayscale brightness-200 contrast-200 transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-110 md:h-12"
+    />
+  );
   return (
     <span
       className="group inline-flex shrink-0 items-center justify-center px-8 py-4"
       dir="ltr"
+      title={logo.name}
     >
-      <span className="font-display text-2xl md:text-3xl font-bold tracking-[0.2em] text-white/40 transition-all duration-500 group-hover:text-white group-hover:scale-110 group-hover:tracking-[0.25em]">
-        {label}
-      </span>
+      {logo.href ? (
+        <a href={logo.href} target="_blank" rel="noopener noreferrer">{img}</a>
+      ) : img}
     </span>
   );
 }
 
 export function ClientsMarquee() {
-  const { t, lang } = useLang();
-  const items = [...CLIENTS, ...CLIENTS];
+  const { lang } = useLang();
+  const [logos, setLogos] = useState<Logo[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    supabase
+      .from("client_logos")
+      .select("id,name,logo_url,href")
+      .eq("is_visible", true)
+      .order("sort_order", { ascending: true })
+      .then(({ data }) => {
+        if (!cancelled) setLogos((data ?? []) as Logo[]);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  if (!logos || logos.length === 0) return null;
+  const items = [...logos, ...logos];
+
   return (
     <section className="relative overflow-hidden bg-ink py-20" id="clients">
       <div aria-hidden className="pointer-events-none absolute inset-0">
@@ -55,7 +79,7 @@ export function ClientsMarquee() {
       >
         <div className="clients-marquee-track flex w-max items-center gap-4" dir="ltr">
           {items.map((c, i) => (
-            <LogoItem key={i} label={c} />
+            <LogoItem key={`${c.id}-${i}`} logo={c} />
           ))}
         </div>
       </div>

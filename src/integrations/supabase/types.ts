@@ -136,6 +136,39 @@ export type Database = {
         }
         Relationships: []
       }
+      client_logos: {
+        Row: {
+          created_at: string
+          href: string | null
+          id: string
+          is_visible: boolean
+          logo_url: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          href?: string | null
+          id?: string
+          is_visible?: boolean
+          logo_url: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          href?: string | null
+          id?: string
+          is_visible?: boolean
+          logo_url?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cms_audit_log: {
         Row: {
           action: string

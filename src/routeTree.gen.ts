@@ -37,6 +37,7 @@ import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminMenusRouteImport } from './routes/admin.menus'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
 import { Route as AdminIndexingRouteImport } from './routes/admin.indexing'
+import { Route as AdminClientsRouteImport } from './routes/admin.clients'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
@@ -206,6 +207,11 @@ const AdminIndexingRoute = AdminIndexingRouteImport.update({
   path: '/indexing',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminClientsRoute = AdminClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -358,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/clients': typeof AdminClientsRoute
   '/admin/indexing': typeof AdminIndexingRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
@@ -415,6 +422,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/clients': typeof AdminClientsRoute
   '/admin/indexing': typeof AdminIndexingRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
@@ -473,6 +481,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/clients': typeof AdminClientsRoute
   '/admin/indexing': typeof AdminIndexingRoute
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
@@ -533,6 +542,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
+    | '/admin/clients'
     | '/admin/indexing'
     | '/admin/media'
     | '/admin/menus'
@@ -590,6 +600,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
+    | '/admin/clients'
     | '/admin/indexing'
     | '/admin/media'
     | '/admin/menus'
@@ -647,6 +658,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin/audit'
     | '/admin/categories'
+    | '/admin/clients'
     | '/admin/indexing'
     | '/admin/media'
     | '/admin/menus'
@@ -925,6 +937,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexingRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/clients': {
+      id: '/admin/clients'
+      path: '/clients'
+      fullPath: '/admin/clients'
+      preLoaderRoute: typeof AdminClientsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
@@ -1143,6 +1162,7 @@ const AdminServicesRouteWithChildren = AdminServicesRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminClientsRoute: typeof AdminClientsRoute
   AdminIndexingRoute: typeof AdminIndexingRoute
   AdminMediaRoute: typeof AdminMediaRoute
   AdminMenusRoute: typeof AdminMenusRoute
@@ -1172,6 +1192,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminClientsRoute: AdminClientsRoute,
   AdminIndexingRoute: AdminIndexingRoute,
   AdminMediaRoute: AdminMediaRoute,
   AdminMenusRoute: AdminMenusRoute,
