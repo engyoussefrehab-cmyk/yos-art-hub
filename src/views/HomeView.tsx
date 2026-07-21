@@ -8,6 +8,7 @@ import svcSocialMedia from "@/assets/services/social-media.jpg.asset.json";
 import svcDesignSystem from "@/assets/services/design-system.jpg.asset.json";
 import svcCreativeDirection from "@/assets/services/creative-direction.jpg.asset.json";
 import { Testimonials } from "@/components/Testimonials";
+import { ClientsMarquee } from "@/components/ClientsMarquee";
 import { LatestProjectsSlider } from "@/components/projects/LatestProjectsSlider";
 import { Reveal } from "@/components/Reveal";
 import { useLang } from "@/i18n/use-lang";
