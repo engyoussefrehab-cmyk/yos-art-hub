@@ -293,26 +293,25 @@ function RootComponent() {
 
 function LanguageWelcome() {
   const [open, setOpen] = useState(false);
-  const [countdown, setCountdown] = useState(5);
-  const [paused, setPaused] = useState(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const openerRef = useRef<Element | null>(null);
 
   useEffect(() => {
     try {
-      if (!sessionStorage.getItem("yr_lang_chosen")) {
+      // Persist choice across sessions — only show when the visitor has
+      // never made a selection on this device.
+      if (!localStorage.getItem("yr_lang_chosen")) {
         const id = window.setTimeout(() => setOpen(true), 700);
         return () => window.clearTimeout(id);
       }
     } catch {
-      setOpen(true);
+      /* storage unavailable — skip modal rather than nag every load */
     }
   }, []);
 
   const choose = useCallback((lang: "ar" | "en") => {
     try {
-      sessionStorage.setItem("yr_lang_chosen", lang);
-      localStorage.removeItem("yr_lang_chosen");
+      localStorage.setItem("yr_lang_chosen", lang);
     } catch {
       /* ignore */
     }
@@ -331,22 +330,18 @@ function LanguageWelcome() {
     }
   }, []);
 
-  const skipToBrowser = useCallback(() => {
-    const nav = typeof navigator !== "undefined" ? (navigator.language || "").toLowerCase() : "";
-    const detected: "ar" | "en" = nav.startsWith("ar") ? "ar" : "en";
-    choose(detected);
-  }, [choose]);
-
-  // Countdown auto-skip
-  useEffect(() => {
-    if (!open || paused) return;
-    if (countdown <= 0) {
-      skipToBrowser();
-      return;
+  const dismiss = useCallback(() => {
+    // User dismissed without picking — remember the current URL's language
+    // so we don't nag again, and don't silently navigate them away.
+    try {
+      const path = window.location.pathname;
+      const isOnEn = path === "/en" || path.startsWith("/en/");
+      localStorage.setItem("yr_lang_chosen", isOnEn ? "en" : "ar");
+    } catch {
+      /* ignore */
     }
-    const id = window.setTimeout(() => setCountdown((c) => c - 1), 1000);
-    return () => window.clearTimeout(id);
-  }, [open, paused, countdown, skipToBrowser]);
+    setOpen(false);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
