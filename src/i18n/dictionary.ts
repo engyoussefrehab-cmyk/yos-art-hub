@@ -119,6 +119,14 @@ export const dict = {
   },
   projects_items: { ar: "عملًا", en: "projects" },
   projects_view_section: { ar: "استعراض القسم", en: "View section" },
+  projects_stat_projects: { ar: "مشروعًا مختارًا", en: "Selected projects" },
+  projects_stat_sectors: { ar: "قطاعًا", en: "Sectors" },
+  projects_stat_countries: { ar: "دولًا وأسواقًا", en: "Countries & markets" },
+  projects_browser_kicker: { ar: "استكشف الأرشيف", en: "Browse the archive" },
+  projects_browser_title: { ar: "كل الأعمال بين يديك", en: "Every project, one search away" },
+  projects_browser_hint: { ar: "استخدم الفلاتر أدناه لتصفية الأعمال بحسب التخصّص أو السنة أو السوق.", en: "Use the filters below to narrow the archive by specialty, year or market." },
+  projects_filter_all: { ar: "كل التخصّصات", en: "All specialties" },
+  projects_results_count: { ar: "نتيجة", en: "results" },
 
   // Category
   cat_kicker: { ar: "تخصّص", en: "Specialty" },

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Link, useNavigate, getRouteApi } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
-import { X } from "lucide-react";
+import { X, ArrowUpRight, Search } from "lucide-react";
 
 const CAT_LABELS: Record<string, { ar: string; en: string }> = {
   branding: { ar: "الهوية البصرية", en: "Brand Identity" },
@@ -93,24 +93,33 @@ export function ProjectsBrowser({
             {t("استكشاف كل الأعمال", "Browse all work")}
           </div>
           <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">
-            {t("فلاتر متقدمة", "Advanced filters")}
+            {t("الأرشيف الكامل", "The full archive")}
           </h2>
+          <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+            {t("استخدم الفلاتر لتصفية الأعمال بحسب التخصّص أو السنة أو السوق.", "Filter the archive by specialty, year, market or tag.")}
+          </p>
         </div>
-        <div className="text-sm text-muted-foreground">
-          {filtered.length} {t("مشروع", "projects")}
+        <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-cream/60 px-4 py-2 text-sm">
+          <Search className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="font-semibold text-foreground">{filtered.length}</span>
+          <span className="text-muted-foreground">{t("نتيجة", "results")}</span>
         </div>
       </div>
 
-      <div className="mt-6 grid gap-3 rounded-2xl border border-border/70 bg-cream/50 p-4 md:grid-cols-5">
-        <FilterSelect
-          label={t("التصنيف", "Category")}
-          value={search.cat}
-          onChange={(v) => setParam("cat", v)}
-          options={[
-            ["", t("الكل", "All")],
-            ...cats.map((c) => [c, CAT_LABELS[c]?.[isAr ? "ar" : "en"] ?? c] as [string, string]),
-          ]}
-        />
+      {/* Category chips */}
+      <div className="mt-6 flex flex-wrap gap-2">
+        <CatChip active={!search.cat} onClick={() => setParam("cat", "")}>
+          {t("كل التخصّصات", "All specialties")}
+        </CatChip>
+        {cats.map((c) => (
+          <CatChip key={c} active={search.cat === c} onClick={() => setParam("cat", c)}>
+            {CAT_LABELS[c]?.[isAr ? "ar" : "en"] ?? c}
+          </CatChip>
+        ))}
+      </div>
+
+      {/* Advanced filters */}
+      <div className="mt-4 grid gap-3 rounded-2xl border border-border/70 bg-cream/50 p-4 md:grid-cols-4">
         <FilterSelect
           label={t("البلد", "Country")}
           value={search.country}
@@ -143,7 +152,7 @@ export function ProjectsBrowser({
         {active && (
           <button
             onClick={reset}
-            className="inline-flex items-center gap-1.5 self-end rounded-full border border-border/60 bg-background px-4 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground md:col-span-5 md:w-max"
+            className="inline-flex items-center gap-1.5 self-end rounded-full border border-border/60 bg-background px-4 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground md:col-span-4 md:w-max"
           >
             <X className="h-3.5 w-3.5" />
             {t("مسح الفلاتر", "Clear filters")}
@@ -152,8 +161,20 @@ export function ProjectsBrowser({
       </div>
 
       {filtered.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-dashed border-border/70 p-12 text-center text-muted-foreground">
-          {t("لا توجد نتائج مطابقة. جرّب تعديل الفلاتر.", "No results. Try adjusting the filters.")}
+        <div className="mt-10 rounded-2xl border border-dashed border-border/70 p-12 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <Search className="h-5 w-5" />
+          </div>
+          <p className="mt-4 text-muted-foreground">
+            {t("لا توجد نتائج مطابقة. جرّب تعديل الفلاتر.", "No results. Try adjusting the filters.")}
+          </p>
+          <button
+            onClick={reset}
+            className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
+          >
+            <X className="h-3.5 w-3.5" />
+            {t("مسح الفلاتر", "Clear filters")}
+          </button>
         </div>
       ) : (
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -164,17 +185,25 @@ export function ProjectsBrowser({
               <Link
                 key={p.slug}
                 to={projectHref(p)}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-cream transition-all hover:-translate-y-1 hover:shadow-lg"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-cream transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-xl"
               >
-                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                   {p.cover && (
                     <img
                       src={p.cover}
                       alt={name}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
                     />
                   )}
+                  {p.featured && (
+                    <span className="absolute end-3 top-3 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-accent-foreground shadow-sm">
+                      {t("مميّز", "Featured")}
+                    </span>
+                  )}
+                  <span className="absolute bottom-3 end-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/90 text-foreground opacity-0 shadow-sm backdrop-blur transition-all duration-500 group-hover:opacity-100">
+                    <ArrowUpRight className={`h-4 w-4 ${isAr ? "-scale-x-100" : ""}`} />
+                  </span>
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
@@ -182,7 +211,7 @@ export function ProjectsBrowser({
                     {p.year && <span>· {p.year}</span>}
                     {p.country && <span>· {p.country}</span>}
                   </div>
-                  <h3 className="mt-2 font-display text-xl font-bold">{name}</h3>
+                  <h3 className="mt-2 font-display text-xl font-bold transition-colors group-hover:text-accent">{name}</h3>
                   {short && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{short}</p>}
                   {p.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1">
@@ -200,6 +229,30 @@ export function ProjectsBrowser({
         </div>
       )}
     </div>
+  );
+}
+
+function CatChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
+        active
+          ? "border-accent bg-accent text-accent-foreground shadow-sm"
+          : "border-border bg-background text-muted-foreground hover:border-accent/40 hover:text-foreground"
+      }`}
+    >
+      {children}
+    </button>
   );
 }
 
