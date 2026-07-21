@@ -39,6 +39,7 @@ export function HomeView({ services = [], projects = [] }: { services?: ServiceD
       )}
       <Services items={services} />
       <Process />
+      <ClientsMarquee />
       <Testimonials />
       <CTA />
     </>
