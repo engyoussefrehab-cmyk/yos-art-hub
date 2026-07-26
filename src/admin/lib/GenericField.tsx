@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select";
 import type { EntityField } from "@/admin/lib/entity-registry";
 import { A, useAdminLang } from "@/i18n/admin-lang";
+import { SingleImageField, GalleryField } from "@/admin/lib/MediaUploadField";
+
 
 interface Props {
   field: EntityField;
@@ -136,12 +138,40 @@ export function GenericField({ field, value, onChange }: Props) {
           {help && <span className="text-[10px] text-muted-foreground">{help}</span>}
         </div>
       );
+    case "media":
+      return (
+        <div className="flex flex-col gap-1.5">
+          {LabelBlock}
+          <SingleImageField
+            value={typeof value === "string" ? value : ""}
+            onChange={(v) => onChange(v)}
+          />
+          {help && <span className="text-[10px] text-muted-foreground">{help}</span>}
+        </div>
+      );
+    case "gallery":
+      return (
+        <div className="flex flex-col gap-1.5">
+          {LabelBlock}
+          <GalleryField
+            value={
+              Array.isArray(value)
+                ? (value as unknown[])
+                    .map((g: any) => (typeof g === "string" ? g : g?.url))
+                    .filter(Boolean)
+                : []
+            }
+            onChange={(v) => onChange(v)}
+          />
+          {help && <span className="text-[10px] text-muted-foreground">{help}</span>}
+        </div>
+      );
     case "json":
     case "blocks":
     case "multiselect":
-    case "media":
     case "relation":
     case "richtext":
+
       return (
         <div className="flex flex-col gap-1.5">
           {LabelBlock}

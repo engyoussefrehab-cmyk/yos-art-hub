@@ -34,6 +34,8 @@ export type EntityFieldKind =
   | "select"
   | "multiselect"
   | "media"
+  | "gallery"
+
   | "relation"
   | "blocks"
   | "json";
