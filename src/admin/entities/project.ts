@@ -43,7 +43,25 @@ registerEntity({
     { key: "results_ar", label: L("النتائج (عربي)", "Results (AR)"), kind: "richtext", localized: true },
     { key: "results_en", label: L("النتائج (إنجليزي)", "Results (EN)"), kind: "richtext", localized: true },
     { key: "services_used", label: L("الخدمات المستخدمة", "Services used"), kind: "multiselect" },
-    { key: "gallery", label: L("معرض الصور", "Gallery"), kind: "json" },
+    {
+      key: "thumbnail_url",
+      label: L("صورة الغلاف", "Cover image"),
+      kind: "media",
+      helpText: L("تظهر في قوائم المشاريع والبطاقات.", "Shown in project lists and cards."),
+    },
+    {
+      key: "hero_image_url",
+      label: L("صورة الهيرو", "Hero image"),
+      kind: "media",
+      helpText: L("الصورة الكبيرة أعلى صفحة المشروع.", "Large image at the top of the project page."),
+    },
+    {
+      key: "gallery",
+      label: L("صور إضافية", "Additional images"),
+      kind: "gallery",
+      helpText: L("معرض صور المشروع بالترتيب.", "Project gallery images, in order."),
+    },
+
     { key: "featured", label: L("مميّز", "Featured"), kind: "boolean" },
     { key: "sort_order", label: L("ترتيب العرض", "Sort order"), kind: "number" },
     { key: "project_url", label: L("رابط المشروع", "Project URL"), kind: "text" },
