@@ -3,6 +3,8 @@
  * Every visible label / helper is resolved through the admin i18n dictionary.
  */
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
