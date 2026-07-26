@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select";
 import type { EntityField } from "@/admin/lib/entity-registry";
 import { A, useAdminLang } from "@/i18n/admin-lang";
+import { SingleImageField, GalleryField } from "@/admin/lib/MediaUploadField";
+
 
 interface Props {
   field: EntityField;
