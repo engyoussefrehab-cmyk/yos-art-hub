@@ -70,7 +70,7 @@ registerEntity({
     { key: "seo_description_ar", label: L("وصف SEO (عربي)", "SEO description (AR)"), kind: "textarea", localized: true },
     { key: "seo_description_en", label: L("وصف SEO (إنجليزي)", "SEO description (EN)"), kind: "textarea", localized: true },
     { key: "seo_keywords", label: L("كلمات SEO المفتاحية", "SEO keywords"), kind: "multiselect" },
-    { key: "og_image_url", label: L("رابط صورة OG", "OG image URL"), kind: "text" },
+    { key: "og_image_url", label: L("صورة OG", "OG image"), kind: "media" },
   ],
   listColumns: [
     { key: "name_en", label: L("الاسم", "Name"), sortable: true },
