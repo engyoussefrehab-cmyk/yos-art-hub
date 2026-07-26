@@ -45,6 +45,17 @@ export interface EntityField {
   required?: boolean;
   localized?: boolean;
   options?: Array<{ value: string; label: LocalizedLabel }>;
+  /**
+   * Dynamic option source for `select` fields — options are loaded live from a
+   * table instead of being hardcoded (e.g. project categories).
+   */
+  optionsSource?: {
+    table: string;
+    valueColumn: string;
+    labelArColumn?: string;
+    labelEnColumn?: string;
+    orderBy?: string;
+  };
   relationTo?: string;
   helpText?: LocalizedLabel;
   /** Path used by media/dependency scanners (e.g. "blocks[].image"). */
