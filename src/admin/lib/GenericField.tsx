@@ -126,9 +126,9 @@ export function GenericField({ field, value, onChange }: Props) {
               <SelectValue placeholder={t(A.select_placeholder)} />
             </SelectTrigger>
             <SelectContent>
-              {(field.options ?? []).map((o) => (
+              {selectOptions.map((o) => (
                 <SelectItem key={o.value} value={o.value}>
-                  {t(o.label)}
+                  {o.label}
                 </SelectItem>
               ))}
             </SelectContent>
