@@ -33,9 +33,44 @@ function jsonString(v: unknown) {
 
 export function GenericField({ field, value, onChange }: Props) {
   const id = `f-${field.key}`;
-  const { t } = useAdminLang();
+  const { t, lang } = useAdminLang();
   const label = t(field.label);
   const help = field.helpText ? t(field.helpText) : null;
+
+  const [remoteOptions, setRemoteOptions] = useState<Array<{ value: string; label: string }>>([]);
+  const src = field.optionsSource;
+  useEffect(() => {
+    if (!src) return;
+    let cancelled = false;
+    (async () => {
+      const cols = [src.valueColumn, src.labelArColumn, src.labelEnColumn].filter(Boolean).join(",");
+      let q = supabase.from(src.table as any).select(cols);
+      if (src.orderBy) q = q.order(src.orderBy, { ascending: true });
+      const { data } = await q;
+      if (cancelled || !data) return;
+      setRemoteOptions(
+        (data as any[])
+          .map((r) => ({
+            value: String(r[src.valueColumn] ?? ""),
+            label:
+              String(
+                (lang === "ar" ? r[src.labelArColumn ?? ""] : r[src.labelEnColumn ?? ""]) ??
+                  r[src.labelArColumn ?? ""] ??
+                  r[src.labelEnColumn ?? ""] ??
+                  r[src.valueColumn],
+              ),
+          }))
+          .filter((o) => o.value),
+      );
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [src?.table, src?.valueColumn, src?.labelArColumn, src?.labelEnColumn, src?.orderBy, lang]);
+
+  const selectOptions = src
+    ? remoteOptions
+    : (field.options ?? []).map((o) => ({ value: o.value, label: t(o.label) }));
 
   const LabelBlock = (
     <Label htmlFor={id} className="text-xs font-medium">
