@@ -1307,6 +1307,81 @@ export type Database = {
           },
         ]
       }
+      home_methodology_page: {
+        Row: {
+          id: string
+          is_visible: boolean
+          kicker_ar: string | null
+          kicker_en: string | null
+          lede_ar: string | null
+          lede_en: string | null
+          title_ar: string | null
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          is_visible?: boolean
+          kicker_ar?: string | null
+          kicker_en?: string | null
+          lede_ar?: string | null
+          lede_en?: string | null
+          title_ar?: string | null
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          is_visible?: boolean
+          kicker_ar?: string | null
+          kicker_en?: string | null
+          lede_ar?: string | null
+          lede_en?: string | null
+          title_ar?: string | null
+          title_en?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      home_methodology_steps: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          description_ar: string
+          description_en: string
+          id: string
+          is_published: boolean
+          sort_order: number
+          title_ar: string
+          title_en: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          description_ar?: string
+          description_en?: string
+          id?: string
+          is_published?: boolean
+          sort_order?: number
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          description_ar?: string
+          description_en?: string
+          id?: string
+          is_published?: boolean
+          sort_order?: number
+          title_ar?: string
+          title_en?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       insight_articles: {
         Row: {
           author_avatar_url: string | null
