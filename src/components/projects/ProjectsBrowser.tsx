@@ -100,11 +100,13 @@ export function ProjectsBrowser({
             {t("استخدم الفلاتر لتصفية الأعمال بحسب التخصّص أو السنة أو السوق.", "Filter the archive by specialty, year, market or tag.")}
           </p>
         </div>
-        <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-cream/60 px-4 py-2 text-sm">
-          <Search className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="font-semibold text-foreground">{filtered.length}</span>
-          <span className="text-muted-foreground">{t("نتيجة", "results")}</span>
-        </div>
+        {active && (
+          <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-cream/60 px-4 py-2 text-sm">
+            <Search className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="font-semibold text-foreground">{filtered.length}</span>
+            <span className="text-muted-foreground">{t("نتيجة", "results")}</span>
+          </div>
+        )}
       </div>
 
       {/* Category chips */}
