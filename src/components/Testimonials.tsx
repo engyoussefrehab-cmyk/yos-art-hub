@@ -123,7 +123,8 @@ function Slider({ items: base }: { items: Item[] }) {
       const scroller = scrollerRef.current;
       if (!scroller) return;
       const firstCard = scroller.querySelector<HTMLElement>("article");
-      const cardWidth = firstCard ? firstCard.offsetWidth + 28 : 348;
+      const gap = typeof window !== "undefined" && window.innerWidth < 768 ? 14 : 28;
+      const cardWidth = firstCard ? firstCard.offsetWidth + gap : 348;
       scroller.scrollBy({ left: dir * cardWidth, behavior: "smooth" });
       pauseFor(2500);
       // Ensure wrap after smooth scroll completes
@@ -131,6 +132,7 @@ function Slider({ items: base }: { items: Item[] }) {
     },
     [pauseFor, wrap]
   );
+
 
   useEffect(() => {
     const scroller = scrollerRef.current;
