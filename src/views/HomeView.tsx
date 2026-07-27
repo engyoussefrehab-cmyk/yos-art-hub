@@ -258,36 +258,57 @@ function Services({ items }: { items: ServiceDTO[] }) {
   );
 }
 
-function Process() {
+function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
   const { t, lang } = useLang();
-  const steps: Array<{ t: DictKey; d: DictKey }> = [
+  const fallback: Array<{ t: DictKey; d: DictKey }> = [
     { t: "process_1_t", d: "process_1_d" },
     { t: "process_2_t", d: "process_2_d" },
     { t: "process_3_t", d: "process_3_d" },
     { t: "process_4_t", d: "process_4_d" },
   ];
+  const copy = methodology?.copy;
+  if (copy && copy.is_visible === false) return null;
+
+  const pick = (ar?: string | null, en?: string | null, fb?: string) => {
+    const v = lang === "ar" ? ar : en;
+    return v && v.trim() ? v : fb ?? "";
+  };
+
+  const cmsSteps = methodology?.steps ?? [];
+  const steps = cmsSteps.length
+    ? cmsSteps.map((s) => ({
+        key: s.id,
+        title: pick(s.title_ar, s.title_en),
+        desc: pick(s.description_ar, s.description_en),
+      }))
+    : fallback.map((s) => ({ key: s.t, title: t(s.t), desc: t(s.d) }));
+
+  const kicker = pick(copy?.kicker_ar, copy?.kicker_en, t("process_kicker"));
+  const title = pick(copy?.title_ar, copy?.title_en, t("process_title"));
+  const lede = pick(copy?.lede_ar, copy?.lede_en, t("process_lede"));
+
   return (
     <section className="border-y border-border bg-cream/60">
       <div className="mx-auto max-w-7xl px-6 py-24">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("process_kicker")}</span>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold">{t("process_title")}</h2>
-          <p className="mt-4 text-muted-foreground">{t("process_lede")}</p>
+          <span className="text-xs font-semibold uppercase tracking-widest text-accent">{kicker}</span>
+          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold">{title}</h2>
+          <p className="mt-4 text-muted-foreground">{lede}</p>
         </div>
         <div className="relative mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Connector line — desktop only */}
           <div aria-hidden className="pointer-events-none absolute inset-x-6 top-10 hidden h-px bg-gradient-to-r from-transparent via-border to-transparent lg:block" />
           {steps.map((step, i) => (
-            <Reveal key={step.t} delay={i * 90}>
+            <Reveal key={step.key} delay={i * 90}>
               <div className="relative flex h-full flex-col rounded-2xl border border-border bg-background p-6 transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.2)]">
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 font-display text-sm font-bold text-accent ring-4 ring-background">
-                    {lang === "ar" ? ["١","٢","٣","٤"][i] : String(i + 1).padStart(2, "0")}
+                    {lang === "ar" ? ["١","٢","٣","٤","٥","٦","٧","٨"][i] ?? String(i + 1) : String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="h-px flex-1 bg-border" />
                 </div>
-                <h3 className="font-display text-lg font-bold">{t(step.t)}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(step.d)}</p>
+                <h3 className="font-display text-lg font-bold">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
               </div>
             </Reveal>
           ))}
