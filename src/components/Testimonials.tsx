@@ -39,7 +39,7 @@ function Card({ t: item }: { t: Item }) {
   const { t, lang } = useLang();
   return (
     <article
-      className="group relative flex h-full min-h-[340px] w-[320px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-background p-8 shadow-[0_1px_0_rgb(0_0_0/0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_24px_50px_-24px_rgb(0_0_0/0.18)] sm:min-h-[360px] sm:w-[380px] sm:p-9"
+      className="group relative flex h-full min-h-[300px] w-[86vw] max-w-[420px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-background p-6 shadow-[0_1px_0_rgb(0_0_0/0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_24px_50px_-24px_rgb(0_0_0/0.18)] sm:min-h-[360px] sm:w-[380px] sm:p-9"
       dir="rtl"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-l from-accent/0 via-accent/60 to-accent/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
