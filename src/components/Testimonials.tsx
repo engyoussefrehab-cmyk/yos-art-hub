@@ -147,18 +147,26 @@ function Slider({ items: base }: { items: Item[] }) {
       typeof window !== "undefined" && window.matchMedia
         ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
         : false;
+    // On touch/mobile the track uses CSS scroll-snap; a JS auto-scroll would
+    // fight the snap points and feel jittery, so we let the user swipe freely.
+    const isTouch =
+      typeof window !== "undefined" && window.matchMedia
+        ? window.matchMedia("(max-width: 767px), (pointer: coarse)").matches
+        : false;
+    const autoScroll = !reducedMotion && !isTouch;
 
     scroller.scrollLeft = 0;
 
     const tick = () => {
       const s = stateRef.current;
-      if (!reducedMotion && !s.paused && !s.isDragging) {
+      if (!s.paused && !s.isDragging) {
         scroller.scrollLeft += SPEED;
         wrap();
       }
       raf = requestAnimationFrame(tick);
     };
-    if (!reducedMotion) raf = requestAnimationFrame(tick);
+    if (autoScroll) raf = requestAnimationFrame(tick);
+
 
     const onEnter = () => { stateRef.current.paused = true; };
     const onLeave = () => { if (!stateRef.current.isDragging) stateRef.current.paused = false; };
