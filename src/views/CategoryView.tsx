@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { useLang } from "@/i18n/use-lang";
+import { sanitizeHtml } from "@/lib/insights-types";
 import type { PortfolioDTO, CategoryDTO } from "@/lib/portfolio.functions";
 
 export function CategoryView({
@@ -13,7 +15,8 @@ export function CategoryView({
   const label = lang === "ar" ? category.name_ar || category.name_en : category.name_en || category.name_ar;
   const desc = lang === "ar" ? category.description_ar : category.description_en;
   const intro = lang === "ar" ? category.intro_ar : category.intro_en;
-  const content = lang === "ar" ? category.content_ar : category.content_en;
+  const rawContent = lang === "ar" ? category.content_ar : category.content_en;
+  const content = useMemo(() => (rawContent ? sanitizeHtml(rawContent) : ""), [rawContent]);
   const ctaLabel = lang === "ar" ? category.cta_label_ar : category.cta_label_en;
   const projectsHref = lang === "ar" ? "/projects" : "/en/projects";
   const featuredIds = new Set(category.featured_project_ids ?? []);
