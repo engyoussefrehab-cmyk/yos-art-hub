@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { useLang } from "@/i18n/use-lang";
+import { sanitizeHtml } from "@/lib/insights-types";
 import type { PortfolioDTO, CategoryDTO } from "@/lib/portfolio.functions";
 
 export function CategoryView({
