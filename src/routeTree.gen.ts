@@ -33,6 +33,7 @@ import { Route as AdminSectionsRouteImport } from './routes/admin.sections'
 import { Route as AdminProfileRouteImport } from './routes/admin.profile'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminPageSeoRouteImport } from './routes/admin.page-seo'
+import { Route as AdminMethodologyRouteImport } from './routes/admin.methodology'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminMenusRouteImport } from './routes/admin.menus'
 import { Route as AdminMediaRouteImport } from './routes/admin.media'
@@ -185,6 +186,11 @@ const AdminPagesRoute = AdminPagesRouteImport.update({
 const AdminPageSeoRoute = AdminPageSeoRouteImport.update({
   id: '/page-seo',
   path: '/page-seo',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMethodologyRoute = AdminMethodologyRouteImport.update({
+  id: '/methodology',
+  path: '/methodology',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
@@ -369,6 +375,7 @@ export interface FileRoutesByFullPath {
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/methodology': typeof AdminMethodologyRoute
   '/admin/page-seo': typeof AdminPageSeoRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/profile': typeof AdminProfileRoute
@@ -427,6 +434,7 @@ export interface FileRoutesByTo {
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/methodology': typeof AdminMethodologyRoute
   '/admin/page-seo': typeof AdminPageSeoRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/profile': typeof AdminProfileRoute
@@ -486,6 +494,7 @@ export interface FileRoutesById {
   '/admin/media': typeof AdminMediaRoute
   '/admin/menus': typeof AdminMenusRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/methodology': typeof AdminMethodologyRoute
   '/admin/page-seo': typeof AdminPageSeoRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/profile': typeof AdminProfileRoute
@@ -547,6 +556,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/menus'
     | '/admin/messages'
+    | '/admin/methodology'
     | '/admin/page-seo'
     | '/admin/pages'
     | '/admin/profile'
@@ -605,6 +615,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/menus'
     | '/admin/messages'
+    | '/admin/methodology'
     | '/admin/page-seo'
     | '/admin/pages'
     | '/admin/profile'
@@ -663,6 +674,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/menus'
     | '/admin/messages'
+    | '/admin/methodology'
     | '/admin/page-seo'
     | '/admin/pages'
     | '/admin/profile'
@@ -907,6 +919,13 @@ declare module '@tanstack/react-router' {
       path: '/page-seo'
       fullPath: '/admin/page-seo'
       preLoaderRoute: typeof AdminPageSeoRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/methodology': {
+      id: '/admin/methodology'
+      path: '/methodology'
+      fullPath: '/admin/methodology'
+      preLoaderRoute: typeof AdminMethodologyRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/messages': {
@@ -1167,6 +1186,7 @@ interface AdminRouteChildren {
   AdminMediaRoute: typeof AdminMediaRoute
   AdminMenusRoute: typeof AdminMenusRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminMethodologyRoute: typeof AdminMethodologyRoute
   AdminPageSeoRoute: typeof AdminPageSeoRoute
   AdminPagesRoute: typeof AdminPagesRoute
   AdminProfileRoute: typeof AdminProfileRoute
@@ -1197,6 +1217,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMediaRoute: AdminMediaRoute,
   AdminMenusRoute: AdminMenusRoute,
   AdminMessagesRoute: AdminMessagesRoute,
+  AdminMethodologyRoute: AdminMethodologyRoute,
   AdminPageSeoRoute: AdminPageSeoRoute,
   AdminPagesRoute: AdminPagesRoute,
   AdminProfileRoute: AdminProfileRoute,

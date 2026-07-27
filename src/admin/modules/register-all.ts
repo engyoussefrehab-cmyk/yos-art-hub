@@ -122,6 +122,7 @@ export function bootstrapAdminModules(): void {
   registerModule({ key: "menus", label: A.menus, route: "/admin/menus", icon: "Menu", section: "design", order: 60, permissions: { view: ["admin", "editor"] } });
   registerModule({ key: "testimonials", label: A.testimonials, route: "/admin/testimonials", icon: "MessageSquareQuote", section: "design", order: 70, permissions: { view: ["admin", "editor"] } });
   registerModule({ key: "clients", label: L("أبرز العملاء", "Selected Clients"), route: "/admin/clients", icon: "Building2", section: "design", order: 75, permissions: { view: ["admin", "editor"] } });
+  registerModule({ key: "methodology", label: L("منهجية العمل", "Methodology"), route: "/admin/methodology", icon: "Workflow", section: "design", order: 78, permissions: { view: ["admin", "editor"] } });
   registerModule({ key: "page-seo", label: A.page_seo, route: "/admin/page-seo", icon: "Search", section: "design", order: 80, permissions: { view: ["admin", "editor"] } });
 
   // Taxonomy --------------------------------------------------------------

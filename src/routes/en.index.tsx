@@ -2,14 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { HomeView } from "@/views/HomeView";
 import { listServices } from "@/lib/services.functions";
 import { listPortfolio } from "@/lib/portfolio.functions";
+import { getMethodology } from "@/lib/methodology.functions";
 
 export const Route = createFileRoute("/en/")({
   loader: async () => {
-    const [services, projects] = await Promise.all([
+    const [services, projects, methodology] = await Promise.all([
       listServices().catch(() => []),
       listPortfolio({ data: {} }).catch(() => []),
+      getMethodology().catch(() => ({ copy: null, steps: [] })),
     ]);
-    return { services, projects };
+    return { services, projects, methodology };
   },
   head: () => ({
     meta: [
@@ -42,6 +44,6 @@ export const Route = createFileRoute("/en/")({
 });
 
 function HomeRoute() {
-  const { services, projects } = Route.useLoaderData();
-  return <HomeView services={services} projects={projects} />;
+  const { services, projects, methodology } = Route.useLoaderData();
+  return <HomeView services={services} projects={projects} methodology={methodology} />;
 }
