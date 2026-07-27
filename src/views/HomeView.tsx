@@ -15,6 +15,7 @@ import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
 import type { ServiceDTO } from "@/lib/services.functions";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
+import type { MethodologyDataDTO } from "@/lib/methodology.functions";
 
 const SERVICE_FALLBACK_IMAGES = [
   svcVisualIdentity.url,
