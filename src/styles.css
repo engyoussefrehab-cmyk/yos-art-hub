@@ -241,6 +241,24 @@ html, body { overflow-x: hidden; }
   will-change: scroll-position;
 }
 
+/* Mobile: snap one card at a time for a calmer, thumb-friendly swipe */
+@media (max-width: 767px) {
+  .testimonials-scroller {
+    scroll-snap-type: x mandatory;
+    touch-action: pan-x;
+    cursor: default;
+  }
+  .testimonials-track {
+    gap: 0.875rem;
+    padding: 1rem 1.25rem 1.5rem;
+  }
+  .testimonials-track > article {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+}
+
+
 
 
 /* ============ Initial site loader ============ */
