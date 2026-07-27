@@ -26,7 +26,7 @@ const SERVICE_FALLBACK_IMAGES = [
   svcCreativeDirection.url,
 ];
 
-export function HomeView({ services = [], projects = [] }: { services?: ServiceDTO[]; projects?: PortfolioDTO[] }) {
+export function HomeView({ services = [], projects = [], methodology }: { services?: ServiceDTO[]; projects?: PortfolioDTO[]; methodology?: MethodologyDataDTO }) {
   return (
     <>
       <Hero />
@@ -39,7 +39,7 @@ export function HomeView({ services = [], projects = [] }: { services?: ServiceD
         </section>
       )}
       <Services items={services} />
-      <Process />
+      <Process methodology={methodology} />
       <ClientsMarquee />
       <Testimonials />
       <CTA />
