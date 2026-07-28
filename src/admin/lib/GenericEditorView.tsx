@@ -156,6 +156,57 @@ export function GenericEditorView({
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const initialRef = useMemo(
+    () => JSON.stringify(mode === "edit" ? (rowQ.data ?? null) : null),
+    [mode, rowQ.data],
+  );
+  const isDirty =
+    mode === "create"
+      ? Object.keys(values).length > 0
+      : rowQ.data
+        ? JSON.stringify(values) !== initialRef
+        : false;
+
+  const [invalidKeys, setInvalidKeys] = useState<string[]>([]);
+
+  const isEmpty = (v: unknown) =>
+    v === undefined || v === null || (typeof v === "string" && v.trim() === "");
+
+  const submit = () => {
+    const missing = (def?.fields ?? [])
+      .filter((f) => f.required && isEmpty(values[f.key]))
+      .map((f) => f.key);
+    setInvalidKeys(missing);
+    if (missing.length > 0) {
+      toast.error(t(A.required_missing));
+      return;
+    }
+    save.mutate();
+  };
+
+  // ⌘/Ctrl + S saves.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        submit();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
+  // Warn before leaving with unsaved changes.
+  useEffect(() => {
+    if (!isDirty) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [isDirty]);
+
   if (!def) {
     return (
       <div className="p-6 text-destructive">
@@ -166,27 +217,39 @@ export function GenericEditorView({
 
   const wfState = (values.workflow_state as WorkflowState) ?? "draft";
   const BackIcon = isRTL ? ArrowRight : ArrowLeft;
+  const title = String(values.name_ar ?? values.name_en ?? values.title_ar ?? values.title_en ?? "");
+  const setField = (k: string, v: unknown) => {
+    setInvalidKeys((s) => (s.includes(k) ? s.filter((x) => x !== k) : s));
+    setValues((s) => ({ ...s, [k]: v }));
+  };
 
   return (
-    <div className="flex flex-col gap-4 p-4 md:p-6">
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+    <div className="flex flex-col gap-5 p-4 pb-24 md:p-6">
+      <header className="sticky top-0 z-20 -mx-4 flex flex-wrap items-center justify-between gap-3 border-b bg-background/85 px-4 py-3 backdrop-blur md:-mx-6 md:px-6">
+        <div className="flex min-w-0 items-center gap-3">
           <Button asChild variant="ghost" size="sm">
             <Link to="/admin/cms/$entity" params={{ entity: entityKey }}>
               <BackIcon className="me-1 h-3.5 w-3.5" /> {t(A.back)}
             </Link>
           </Button>
-          <div>
-            <h1 className="text-lg font-semibold">
+          <div className="min-w-0">
+            <h1 className="truncate text-base font-semibold md:text-lg">
               {mode === "create"
                 ? `${t(A.new_prefix)} ${t(def.label)}`
-                : `${t(A.edit_record)} — ${t(def.label)}`}
+                : title || `${t(A.edit_record)} — ${t(def.label)}`}
             </h1>
-            {mode === "edit" && (
-              <p className="text-xs text-muted-foreground">
-                {String(values.slug ?? id)}
-              </p>
-            )}
+            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+              {mode === "edit" && <span className="truncate">{String(values.slug ?? id)}</span>}
+              {mode === "edit" && (
+                <span className="rounded-full border px-2 py-0.5">{t(WF_LABELS[wfState])}</span>
+              )}
+              {isDirty && (
+                <span className="inline-flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                  {t(A.unsaved_changes)}
+                </span>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -203,129 +266,156 @@ export function GenericEditorView({
               </a>
             </Button>
           ) : null}
-          <Button size="sm" onClick={() => save.mutate()} disabled={save.isPending}>
+          <Button size="sm" onClick={submit} disabled={save.isPending}>
             <Save className="me-1 h-3.5 w-3.5" />
             {save.isPending ? t(A.saving) : t(A.save)}
           </Button>
         </div>
       </header>
 
-      <Tabs defaultValue="content" className="w-full">
-        <TabsList>
-          <TabsTrigger value="content">{t(A.tab_content)}</TabsTrigger>
-          <TabsTrigger value="seo">{t(A.tab_seo)}</TabsTrigger>
-          <TabsTrigger value="workflow" disabled={mode === "create"}>
-            {t(A.tab_workflow)}
-          </TabsTrigger>
-          <TabsTrigger value="history" disabled={mode === "create"}>
-            {t(A.tab_history)}
-          </TabsTrigger>
-          <TabsTrigger value="activity" disabled={mode === "create"}>
-            {t(A.tab_activity)}
-          </TabsTrigger>
-          <TabsTrigger value="deps" disabled={mode === "create"}>
-            {t(A.tab_deps)}
-          </TabsTrigger>
-        </TabsList>
+      {mode === "edit" && rowQ.isLoading ? (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-16 animate-pulse rounded-md bg-muted" />
+          ))}
+        </div>
+      ) : (
+        <Tabs defaultValue="content" className="w-full">
+          <TabsList className="flex w-full flex-wrap justify-start">
+            <TabsTrigger value="content">{t(A.tab_content)}</TabsTrigger>
+            <TabsTrigger value="seo">{t(A.tab_seo)}</TabsTrigger>
+            <TabsTrigger value="workflow" disabled={mode === "create"}>
+              {t(A.tab_workflow)}
+            </TabsTrigger>
+            <TabsTrigger value="history" disabled={mode === "create"}>
+              {t(A.tab_history)}
+            </TabsTrigger>
+            <TabsTrigger value="activity" disabled={mode === "create"}>
+              {t(A.tab_activity)}
+            </TabsTrigger>
+            <TabsTrigger value="deps" disabled={mode === "create"}>
+              {t(A.tab_deps)}
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="content">
-          <FieldGrid
-            fields={contentFields}
-            values={values}
-            onChange={(k, v) => setValues((s) => ({ ...s, [k]: v }))}
-          />
-        </TabsContent>
+          <TabsContent value="content" className="mt-4">
+            <GroupedFields fields={contentFields} values={values} invalidKeys={invalidKeys} onChange={setField} />
+          </TabsContent>
 
-        <TabsContent value="seo">
-          <FieldGrid
-            fields={seoFields}
-            values={values}
-            onChange={(k, v) => setValues((s) => ({ ...s, [k]: v }))}
-          />
-        </TabsContent>
+          <TabsContent value="seo" className="mt-4">
+            <GroupedFields fields={seoFields} values={values} invalidKeys={invalidKeys} onChange={setField} />
+          </TabsContent>
 
-        <TabsContent value="workflow">
-          <div className="rounded-md border p-4">
-            <div className="mb-3 text-sm font-medium">{t(A.wf_current_state)}</div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Select
-                value={wfState}
-                onValueChange={(v) => changeWf.mutate(v as WorkflowState)}
-                disabled={changeWf.isPending}
-              >
-                <SelectTrigger className="h-9 w-56">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {WORKFLOW_STATES.map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {t(WF_LABELS[s])}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">
-                {t(A.wf_publish_note)}<code>published_at</code>{t(A.wf_publish_note_2)}
-              </p>
+          <TabsContent value="workflow" className="mt-4">
+            <div className="rounded-lg border bg-card p-4">
+              <div className="mb-3 text-sm font-medium">{t(A.wf_current_state)}</div>
+              <div className="flex flex-wrap items-center gap-3">
+                <Select
+                  value={wfState}
+                  onValueChange={(v) => changeWf.mutate(v as WorkflowState)}
+                  disabled={changeWf.isPending}
+                >
+                  <SelectTrigger className="h-9 w-56">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {WORKFLOW_STATES.map((s) => (
+                      <SelectItem key={s} value={s}>
+                        {t(WF_LABELS[s])}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  {t(A.wf_publish_note)}<code>published_at</code>{t(A.wf_publish_note_2)}
+                </p>
+              </div>
             </div>
-          </div>
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="history">
-          {mode === "edit" && id && (
-            <HistoryPanel
-              entityKey={entityKey}
-              id={id}
-              listFn={listRevFn as never}
-              restoreFn={restoreRevFn as never}
-            />
-          )}
-        </TabsContent>
+          <TabsContent value="history" className="mt-4">
+            {mode === "edit" && id && (
+              <HistoryPanel
+                entityKey={entityKey}
+                id={id}
+                listFn={listRevFn as never}
+                restoreFn={restoreRevFn as never}
+              />
+            )}
+          </TabsContent>
 
-        <TabsContent value="activity">
-          {mode === "edit" && id && (
-            <ActivityPanel entityKey={entityKey} id={id} listFn={listActFn as never} />
-          )}
-        </TabsContent>
+          <TabsContent value="activity" className="mt-4">
+            {mode === "edit" && id && (
+              <ActivityPanel entityKey={entityKey} id={id} listFn={listActFn as never} />
+            )}
+          </TabsContent>
 
-        <TabsContent value="deps">
-          {mode === "edit" && id && (
-            <DepsPanel entityKey={entityKey} id={id} listFn={listDepFn as never} />
-          )}
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="deps" className="mt-4">
+            {mode === "edit" && id && (
+              <DepsPanel entityKey={entityKey} id={id} listFn={listDepFn as never} />
+            )}
+          </TabsContent>
+        </Tabs>
+      )}
     </div>
   );
 }
 
 /* ---------------------------- sub-components --------------------------- */
 
-function FieldGrid({
+function GroupedFields({
   fields,
   values,
+  invalidKeys,
   onChange,
 }: {
   fields: EntityField[];
   values: Record<string, unknown>;
+  invalidKeys: string[];
   onChange: (k: string, v: unknown) => void;
 }) {
+  const { t } = useAdminLang();
+  const groups = useMemo(() => {
+    const out: Array<{ title: string; fields: EntityField[] }> = [];
+    for (const f of fields) {
+      const title = f.group ? t(f.group) : t(A.group_general);
+      const last = out[out.length - 1];
+      if (last && last.title === title) last.fields.push(f);
+      else out.push({ title, fields: [f] });
+    }
+    return out;
+  }, [fields, t]);
+
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {fields.map((f) => (
-        <div
-          key={f.key}
-          className={
-            f.kind === "textarea" || f.kind === "json" || f.kind === "blocks"
-              ? "md:col-span-2"
-              : undefined
-          }
-        >
-          <GenericField
-            field={f}
-            value={values[f.key]}
-            onChange={(v) => onChange(f.key, v)}
-          />
-        </div>
+    <div className="flex flex-col gap-5">
+      {groups.map((g) => (
+        <section key={g.title} className="rounded-lg border bg-card">
+          <div className="border-b px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {g.title}
+          </div>
+          <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2">
+            {g.fields.map((f) => (
+              <div
+                key={f.key}
+                className={[
+                  f.fullWidth ||
+                  ["textarea", "richtext", "json", "blocks", "gallery", "multiselect", "relation"].includes(f.kind)
+                    ? "md:col-span-2"
+                    : "",
+                  invalidKeys.includes(f.key)
+                    ? "rounded-md ring-1 ring-destructive/60 p-2 -m-2"
+                    : "",
+                ].join(" ")}
+              >
+                <GenericField
+                  field={f}
+                  value={values[f.key]}
+                  onChange={(v) => onChange(f.key, v)}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
       ))}
     </div>
   );

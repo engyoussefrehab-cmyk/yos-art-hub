@@ -60,6 +60,10 @@ export interface EntityField {
   };
   relationTo?: string;
   helpText?: LocalizedLabel;
+  /** Optional group heading used by the editor form to organise fields. */
+  group?: LocalizedLabel;
+  /** Force the field to span the full width of the editor grid. */
+  fullWidth?: boolean;
   /** Path used by media/dependency scanners (e.g. "blocks[].image"). */
   scanPath?: string;
 }
