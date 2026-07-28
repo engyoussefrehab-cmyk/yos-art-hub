@@ -215,3 +215,27 @@ export const getCategoryBySlug = createServerFn({ method: "GET" })
   });
 
 
+
+/* ── Projects page statistics (admin-controlled) ─────────────── */
+
+export type ProjectsStatsDTO = {
+  projects_count: number;
+  countries_count: number;
+  sectors_count: number;
+};
+
+export const getProjectsStats = createServerFn({ method: "GET" }).handler(
+  async (): Promise<ProjectsStatsDTO> => {
+    const supabase = publicClient();
+    const { data } = await supabase
+      .from("projects_page_stats")
+      .select("projects_count,countries_count,sectors_count")
+      .eq("id", "default")
+      .maybeSingle();
+    return {
+      projects_count: data?.projects_count ?? 0,
+      countries_count: data?.countries_count ?? 0,
+      sectors_count: data?.sectors_count ?? 0,
+    };
+  },
+);

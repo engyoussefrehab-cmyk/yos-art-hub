@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProjectsHubView } from "@/views/ProjectsHubView";
-import { listPortfolio, listCategories } from "@/lib/portfolio.functions";
+import { listPortfolio, listCategories, getProjectsStats } from "@/lib/portfolio.functions";
 
 
 const SORTS = new Set(["newest", "oldest", "featured", "az"]);
@@ -30,17 +30,18 @@ export const Route = createFileRoute("/en/projects/")({
     links: [{ rel: "canonical", href: "/en/projects" }],
   }),
   loader: async () => {
-    const [projects, categories] = await Promise.all([
+    const [projects, categories, stats] = await Promise.all([
       listPortfolio({ data: {} }),
       listCategories(),
+      getProjectsStats(),
     ]);
-    return { projects, categories };
+    return { projects, categories, stats };
   },
   component: Page,
 });
 
 function Page() {
-  const { projects, categories } = Route.useLoaderData();
-  return <ProjectsHubView projects={projects} categories={categories} routeId="/en/projects/" />;
+  const { projects, categories, stats } = Route.useLoaderData();
+  return <ProjectsHubView projects={projects} categories={categories} stats={stats} routeId="/en/projects/" />;
 }
 

@@ -54,6 +54,7 @@ export type MetaBlock = BlockBase & {
   title_ar?: string;
   title_en?: string;
   items: { label_ar?: string; label_en?: string; value_ar?: string; value_en?: string; icon?: string }[];
+  logo_url?: string;
 };
 
 export type DeliverablesBlock = BlockBase & {
@@ -459,7 +460,7 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
     ["year", row?.year],
     ["country", row?.client_country],
   ].filter(([, v]) => v);
-  if (!hasType("meta") && metaFields.length > 0) {
+  if (!hasType("meta") && (metaFields.length > 0 || row?.client_logo_url)) {
     const LBL: Record<string, { ar: string; en: string }> = {
       client: { ar: "العميل", en: "Client" },
       role: { ar: "الدور", en: "Role" },
@@ -471,6 +472,7 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
     prefix.push({
       id: rid("meta"),
       type: "meta",
+      logo_url: row?.client_logo_url ?? "",
       title_ar: "بيانات المشروع",
       title_en: "Project Details",
       items: metaFields.map(([k, v]) => ({
@@ -526,7 +528,9 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
   }
 
   // Append legacy gallery tail (all but the first, which becomes cover)
-  const galleryTail = gallery.slice(1);
+  // Only skip the first image when it is the one being used as the cover —
+  // otherwise every uploaded gallery image must be rendered, in order.
+  const galleryTail = gallery.length > 0 && gallery[0] === cover ? gallery.slice(1) : gallery;
   const suffix: ProjectBlock[] = [];
   if (galleryTail.length > 0 && !hasType("gallery")) {
     suffix.push({

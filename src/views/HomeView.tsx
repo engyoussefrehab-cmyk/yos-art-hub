@@ -302,10 +302,7 @@ function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
           {steps.map((step, i) => (
             <Reveal key={step.key} delay={i * 90}>
               <div className="relative flex h-full flex-col rounded-2xl border border-border bg-background p-6 transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.2)]">
-                <div className="mb-5 flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 font-display text-sm font-bold text-accent ring-4 ring-background">
-                    {lang === "ar" ? ["١","٢","٣","٤","٥","٦","٧","٨"][i] ?? String(i + 1) : String(i + 1).padStart(2, "0")}
-                  </span>
+                <div className="mb-5 flex h-10 items-center gap-3">
                   <span className="h-px flex-1 bg-border" />
                 </div>
                 <h3 className="font-display text-lg font-bold">{step.title}</h3>

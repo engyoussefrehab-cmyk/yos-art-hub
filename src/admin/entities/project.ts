@@ -19,6 +19,13 @@ registerEntity({
     { key: "name_ar", label: L("الاسم (عربي)", "Name (AR)"), kind: "text", required: true, localized: true , group: L("الأساسيات", "Basics") },
     { key: "name_en", label: L("الاسم (إنجليزي)", "Name (EN)"), kind: "text", required: true, localized: true , group: L("الأساسيات", "Basics") },
     { key: "client", label: L("العميل", "Client"), kind: "text" , group: L("الأساسيات", "Basics") },
+    {
+      key: "client_logo_url",
+      group: L("الأساسيات", "Basics"),
+      label: L("شعار العميل (PNG)", "Client Logo (PNG)"),
+      kind: "media",
+      helpText: L("يفضّل PNG بخلفية شفافة، يظهر داخل بطاقة بيانات المشروع.", "Transparent PNG preferred; shown inside the project information card."),
+    },
     { key: "industry", label: L("الصناعة", "Industry"), kind: "text" , group: L("الأساسيات", "Basics") },
     {
       key: "category_slug",
