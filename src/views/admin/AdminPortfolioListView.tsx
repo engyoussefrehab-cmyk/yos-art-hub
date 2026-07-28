@@ -17,6 +17,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { A, useAdminLang } from "@/i18n/admin-lang";
+import { ProjectsStatsCard } from "@/components/admin/ProjectsStatsCard";
 
 type Row = {
   id: string;
@@ -147,6 +148,8 @@ export function AdminPortfolioListView() {
           </Link>
         </Button>
       </div>
+
+      <ProjectsStatsCard />
 
       <div className="flex flex-wrap items-center gap-2">
         <Input placeholder={t(A.search_ph)} value={q} onChange={(e) => setQ(e.target.value)} className="max-w-xs" />
