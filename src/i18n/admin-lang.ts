@@ -257,6 +257,9 @@ export const A = {
   socials:              L("السوشيال ميديا", "Social Media"),
   analytics:            L("التتبع والتحليلات", "Tracking & Analytics"),
   settings_saved:       L("تم حفظ الإعدادات", "Settings saved"),
+  required_missing:     L("يرجى تعبئة الحقول المطلوبة", "Please fill in the required fields"),
+  unsaved_changes:      L("تغييرات غير محفوظة", "Unsaved changes"),
+  group_general:        L("عام", "General"),
 } as const;
 
 export type ALiteral = keyof typeof A;
