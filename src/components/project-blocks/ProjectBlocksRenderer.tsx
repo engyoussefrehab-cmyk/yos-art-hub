@@ -138,11 +138,22 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
     }
     case "meta": {
       const items = (b.items ?? []).filter((it) => (pick(it.label_ar, it.label_en, lang) || pick(it.value_ar, it.value_en, lang)));
-      if (items.length === 0) return null;
+      const logoUrl = b.logo_url ?? "";
+      if (items.length === 0 && !logoUrl) return null;
       const title = pick(b.title_ar, b.title_en, lang);
       return (
         <section className="mx-auto max-w-6xl px-6 py-12">
           {title && <h2 className="font-display text-3xl font-bold mb-6">{title}</h2>}
+          {logoUrl && (
+            <div className="mb-4 flex items-center justify-center rounded-2xl border border-border bg-background p-6">
+              <img
+                src={logoUrl}
+                alt=""
+                loading="lazy"
+                className="max-h-20 w-auto max-w-[220px] object-contain sm:max-h-24 sm:max-w-[280px]"
+              />
+            </div>
+          )}
           <dl className="grid grid-cols-2 gap-4 rounded-2xl border border-border bg-background p-6 md:grid-cols-3">
             {items.map((it, i) => (
               <div key={i}>
