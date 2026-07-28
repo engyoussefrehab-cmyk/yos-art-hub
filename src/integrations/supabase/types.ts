@@ -1761,6 +1761,7 @@ export type Database = {
           challenge_en: string | null
           client: string | null
           client_country: string | null
+          client_logo_url: string | null
           completed_at: string | null
           cover_media_id: string | null
           created_at: string
@@ -1829,6 +1830,7 @@ export type Database = {
           challenge_en?: string | null
           client?: string | null
           client_country?: string | null
+          client_logo_url?: string | null
           completed_at?: string | null
           cover_media_id?: string | null
           created_at?: string
@@ -1897,6 +1899,7 @@ export type Database = {
           challenge_en?: string | null
           client?: string | null
           client_country?: string | null
+          client_logo_url?: string | null
           completed_at?: string | null
           cover_media_id?: string | null
           created_at?: string
@@ -2128,6 +2131,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      projects_page_stats: {
+        Row: {
+          countries_count: number
+          id: string
+          projects_count: number
+          sectors_count: number
+          updated_at: string
+        }
+        Insert: {
+          countries_count?: number
+          id?: string
+          projects_count?: number
+          sectors_count?: number
+          updated_at?: string
+        }
+        Update: {
+          countries_count?: number
+          id?: string
+          projects_count?: number
+          sectors_count?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       service_tier_features: {
         Row: {
