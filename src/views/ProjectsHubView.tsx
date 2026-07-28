@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
-import type { PortfolioDTO, CategoryDTO } from "@/lib/portfolio.functions";
+import type { PortfolioDTO, CategoryDTO, ProjectsStatsDTO } from "@/lib/portfolio.functions";
 import { LatestProjectsSlider } from "@/components/projects/LatestProjectsSlider";
 import { ProjectsBrowser } from "@/components/projects/ProjectsBrowser";
 import { Reveal } from "@/components/Reveal";
@@ -28,10 +28,12 @@ const FALLBACK_I18N: Record<string, { label: DictKey; desc: DictKey }> = {
 export function ProjectsHubView({
   projects = [],
   categories = [],
+  stats: statsOverride,
   routeId,
 }: {
   projects?: PortfolioDTO[];
   categories?: CategoryDTO[];
+  stats?: ProjectsStatsDTO;
   routeId: "/projects/" | "/en/projects/";
 }) {
   const { t, lang } = useLang();
@@ -42,9 +44,18 @@ export function ProjectsHubView({
   const countryCount = new Set(projects.map((p) => p.country).filter(Boolean) as string[]).size;
 
   const stats: { value: string; label: string }[] = [
-    { value: `${totalProjects}+`, label: t("projects_stat_projects") },
-    { value: `${sectorCount || categories.length}+`, label: t("projects_stat_sectors") },
-    { value: `${countryCount || 4}+`, label: t("projects_stat_countries") },
+    {
+      value: `${statsOverride?.projects_count || totalProjects}+`,
+      label: t("projects_stat_projects"),
+    },
+    {
+      value: `${statsOverride?.sectors_count || sectorCount || categories.length}+`,
+      label: t("projects_stat_sectors"),
+    },
+    {
+      value: `${statsOverride?.countries_count || countryCount || 4}+`,
+      label: t("projects_stat_countries"),
+    },
   ];
 
   return (
