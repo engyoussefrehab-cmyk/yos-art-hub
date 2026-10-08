@@ -2,15 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { InsightsHubView } from "@/views/InsightsHubView";
 import { getInsightsHubDataFn } from "@/lib/insights.functions";
 
+import seo from "@/content/seo.json";
 export const Route = createFileRoute("/insights/")({
   loader: () => getInsightsHubDataFn(),
   head: () => ({
     meta: [
-      { title: "رؤى ومقالات — يوسف رحاب | استراتيجية العلامة والهوية البصرية" },
-      { name: "description", content: "مقالات ورؤى متخصّصة في استراتيجية العلامة، الهوية البصرية، تصميم الشعارات، تصميم العروض، والذكاء الاصطناعي — من يوسف رحاب." },
-      { name: "keywords", content: "مقالات هوية بصرية, استراتيجية العلامة, تصميم شعارات, نصائح تصميم, برند, brand strategy blog Arabic" },
-      { property: "og:title", content: "رؤى ومقالات — يوسف رحاب" },
-      { property: "og:description", content: "استراتيجيات ومقالات في الهوية البصرية والعلامات التجارية." },
+      { title: seo.insights.ar.title },
+      { name: "description", content: seo.insights.ar.description },
+      { name: "keywords", content: seo.insights.ar.keywords },
+      { property: "og:title", content: seo.insights.ar.og_title },
+      { property: "og:description", content: seo.insights.ar.og_description },
       { property: "og:url", content: "/insights" },
       { property: "og:type", content: "website" },
     ],

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Expand, Minus, Plus, RotateCcw, X } from "lucide-react";
 import { useLang } from "@/i18n/use-lang";
 
+import { pair } from "@/i18n/dictionary";
 type Props = {
   src: string;
   alt?: string;
@@ -35,7 +36,7 @@ export function ZoomableImage({ src, alt = "", className = "", imgClassName = ""
         <button
           type="button"
           onClick={() => setOpen(true)}
-          aria-label={t("عرض بحجم كامل", "View fullscreen")}
+          aria-label={t(...pair("ui_zoomableimage_1"))}
           className="absolute end-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white shadow-lg backdrop-blur-sm transition md:opacity-0 md:group-hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           <Expand className="h-4 w-4" />
@@ -155,7 +156,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={t("عارض الصور", "Image viewer")}
+      aria-label={t(...pair("ui_zoomableimage_2"))}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95"
       onClick={onClose}
     >
@@ -163,7 +164,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); setScale((s) => clamp(s / 1.25, 1, 6)); }}
-          aria-label={t("تصغير", "Zoom out")}
+          aria-label={t(...pair("ui_zoomableimage_3"))}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
         >
           <Minus className="h-4 w-4" />
@@ -171,7 +172,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); setScale((s) => clamp(s * 1.25, 1, 6)); }}
-          aria-label={t("تكبير", "Zoom in")}
+          aria-label={t(...pair("ui_zoomableimage_4"))}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
         >
           <Plus className="h-4 w-4" />
@@ -179,7 +180,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); reset(); }}
-          aria-label={t("إعادة الضبط", "Reset")}
+          aria-label={t(...pair("ui_zoomableimage_5"))}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
         >
           <RotateCcw className="h-4 w-4" />
@@ -187,7 +188,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); onClose(); }}
-          aria-label={t("إغلاق", "Close")}
+          aria-label={t(...pair("close"))}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-black transition hover:bg-white/90"
         >
           <X className="h-5 w-5" />
@@ -211,7 +212,7 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
           style={{ transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(${scale})`, transition: pointersRef.current.size === 0 ? "transform 120ms ease-out" : "none" }}
         />
         <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-3 py-1 text-xs text-white/80 backdrop-blur-sm">
-          {t("قرص للتكبير · اسحب للتحريك · انقر مرتين للتبديل", "Pinch to zoom · drag to pan · double-tap to toggle")}
+          {t(...pair("ui_zoomableimage_6"))}
         </div>
       </div>
     </div>

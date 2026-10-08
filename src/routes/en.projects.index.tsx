@@ -3,6 +3,7 @@ import { ProjectsHubView } from "@/views/ProjectsHubView";
 import { listPortfolio, listCategories, getProjectsStats } from "@/lib/portfolio.functions";
 
 
+import seo from "@/content/seo.json";
 const SORTS = new Set(["newest", "oldest", "featured", "az"]);
 const asStr = (v: unknown) => (typeof v === "string" ? v : "");
 const asSort = (v: unknown) => {
@@ -20,11 +21,11 @@ export const Route = createFileRoute("/en/projects/")({
   }),
   head: () => ({
     meta: [
-      { title: "Youssef Rehab Portfolio — Brand Identity, Logos & Profiles" },
-      { name: "description", content: "Selected work across four specialties: visual identity, logos, company profiles, and social media — for brands in Saudi Arabia, UAE and the Gulf." },
-      { name: "keywords", content: "brand identity portfolio, logo designer, company profile design, social media design, Youssef Rehab" },
-      { property: "og:title", content: "Projects — Youssef Rehab" },
-      { property: "og:description", content: "Brand identity, logos, company profiles, and social media design." },
+      { title: seo.projects.en.title },
+      { name: "description", content: seo.projects.en.description },
+      { name: "keywords", content: seo.projects.en.keywords },
+      { property: "og:title", content: seo.projects.en.og_title },
+      { property: "og:description", content: seo.projects.en.og_description },
       { property: "og:url", content: "/en/projects" },
     ],
     links: [{ rel: "canonical", href: "/en/projects" }],

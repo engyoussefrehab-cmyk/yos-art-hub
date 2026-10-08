@@ -1,14 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PackagesView } from "@/views/PackagesView";
 
+import seo from "@/content/seo.json";
 export const Route = createFileRoute("/en/packages")({
   head: () => ({
     meta: [
-      { title: "Service Tiers — Youssef Rehab" },
-      { name: "description", content: "Choose the right branding solution — tailored service tiers from Brand Launch to a complete Brand System. Strategic identity design for growing businesses." },
-      { name: "keywords", content: "branding service tiers, brand identity pricing, logo design packages, brand strategy consultancy" },
-      { property: "og:title", content: "Service Tiers — Youssef Rehab" },
-      { property: "og:description", content: "Tailored branding service tiers — from launch to a complete brand system." },
+      { title: seo.packages.en.title },
+      { name: "description", content: seo.packages.en.description },
+      { name: "keywords", content: seo.packages.en.keywords },
+      { property: "og:title", content: seo.packages.en.og_title },
+      { property: "og:description", content: seo.packages.en.og_description },
       { property: "og:url", content: "/en/packages" },
     ],
     links: [{ rel: "canonical", href: "/en/packages" }],

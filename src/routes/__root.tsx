@@ -17,6 +17,8 @@ import { useLang, detectLang } from "@/i18n/use-lang";
 import { useCmsMenu, useCmsSettings } from "@/hooks/use-cms-data";
 import { Toaster } from "@/components/ui/sonner";
 
+import { pair } from "@/i18n/dictionary";
+import seo from "@/content/seo.json";
 export function NotFoundComponent() {
   const { t, lang } = useLang();
   const isAr = lang === "ar";
@@ -111,24 +113,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
       { name: "googlebot", content: "index, follow" },
-      { title: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
-      { name: "description", content: "مصمم هوية بصرية استراتيجي لعلامات السعودية والإمارات والخليج — 8+ سنوات خبرة و250+ علامة تجارية." },
+      { title: seo.site.ar.title },
+      { name: "description", content: seo.site.ar.description },
       { name: "author", content: "Youssef Rehab" },
-      { name: "keywords", content: "مصمم هوية بصرية, تصميم شعار, هوية تجارية, تصميم لوجو, السعودية, الرياض, جدة, الإمارات, دبي, أبوظبي, الخليج, brand identity designer Saudi Arabia, logo designer UAE, visual identity Riyadh Dubai" },
+      { name: "keywords", content: seo.site.ar.keywords },
       { name: "geo.region", content: "SA" },
       { name: "geo.placename", content: "Riyadh; Jeddah; Dubai; Abu Dhabi" },
       { name: "target", content: "SA, AE" },
-      { property: "og:title", content: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
-      { property: "og:description", content: "مصمم هوية بصرية استراتيجي لعلامات السعودية والإمارات والخليج — 8+ سنوات خبرة و250+ علامة تجارية." },
+      { property: "og:title", content: seo.site.ar.og_title },
+      { property: "og:description", content: seo.site.ar.og_description },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "ar_SA" },
       { property: "og:locale:alternate", content: "ar_AE" },
       { property: "og:locale:alternate", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
-      { name: "twitter:description", content: "مصمم هوية بصرية استراتيجي لعلامات السعودية والإمارات والخليج — 8+ سنوات خبرة و250+ علامة تجارية." },
-      { property: "og:image", content: "https://yrstudio.art/media/external/social-1783592902412-ChatGPT_Image_Jul_9__2026__01_28_06_PM.webp" },
-      { name: "twitter:image", content: "https://yrstudio.art/media/external/social-1783592902412-ChatGPT_Image_Jul_9__2026__01_28_06_PM.webp" },
+      { name: "twitter:title", content: seo.site.ar.twitter_title },
+      { name: "twitter:description", content: seo.site.ar.twitter_description },
+      { property: "og:image", content: seo.site.ar.og_image },
+      { name: "twitter:image", content: seo.site.ar.og_image },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -547,7 +549,7 @@ function NewsletterForm() {
           subject: "[yrstudio.art] اشتراك جديد في النشرة البريدية",
           email: value,
           replyto: value,
-          message: `اشتراك جديد في النشرة البريدية: ${value} (${lang === "ar" ? "عربي" : "English"})`,
+          message: `اشتراك جديد في النشرة البريدية: ${value} (${lang === "ar" ? pair("ui_root_1")[0] : pair("ui_root_1")[1]})`,
         }),
       });
       const json = await res.json().catch(() => ({}));

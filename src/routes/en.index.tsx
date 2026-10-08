@@ -4,6 +4,7 @@ import { listServices } from "@/lib/services.functions";
 import { listPortfolio } from "@/lib/portfolio.functions";
 import { getMethodology } from "@/lib/methodology.functions";
 
+import seo from "@/content/seo.json";
 export const Route = createFileRoute("/en/")({
   loader: async () => {
     const [services, projects, methodology] = await Promise.all([
@@ -15,19 +16,19 @@ export const Route = createFileRoute("/en/")({
   },
   head: () => ({
     meta: [
-      { title: "Youssef Rehab — Visual Identity Designer in Saudi Arabia & UAE" },
-      { name: "description", content: "Strategic visual identity and logo designer serving brands across Saudi Arabia, UAE and the Gulf — 8+ years and 250+ brand collaborations." },
-      { name: "keywords", content: "visual identity designer, logo designer Saudi Arabia, brand identity UAE, graphic designer Gulf, company profile design, Youssef Rehab" },
-      { property: "og:title", content: "Youssef Rehab — Visual Identity Designer" },
-      { property: "og:description", content: "Brand identities and logos for Saudi Arabia & UAE businesses." },
+      { title: seo.home.en.title },
+      { name: "description", content: seo.home.en.description },
+      { name: "keywords", content: seo.home.en.keywords },
+      { property: "og:title", content: seo.home.en.og_title },
+      { property: "og:description", content: seo.home.en.og_description },
       { property: "og:url", content: "/en" },
       { property: "og:locale", content: "en_US" },
-      { property: "og:image", content: "https://yrstudio.art/og-image.jpg" },
+      { property: "og:image", content: seo.home.en.og_image },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "Youssef Rehab — Visual Identity Designer" },
+      { property: "og:image:alt", content: seo.home.en.og_image_alt },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://yrstudio.art/og-image.jpg" },
+      { name: "twitter:image", content: seo.home.en.og_image },
     ],
     links: [
       { rel: "canonical", href: "/en" },

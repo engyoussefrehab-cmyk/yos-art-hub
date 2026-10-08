@@ -4,6 +4,7 @@ import { listServices } from "@/lib/services.functions";
 import { listPortfolio } from "@/lib/portfolio.functions";
 import { getMethodology } from "@/lib/methodology.functions";
 
+import seo from "@/content/seo.json";
 export const Route = createFileRoute("/")({
   loader: async () => {
     const [services, projects, methodology] = await Promise.all([
@@ -15,18 +16,18 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
-      { name: "description", content: "مصمم هوية بصرية استراتيجي لعلامات السعودية والإمارات والخليج — 8+ سنوات خبرة و250+ علامة تجارية." },
-      { name: "keywords", content: "مصمم هوية بصرية, تصميم شعار السعودية, تصميم هوية الإمارات, مصمم جرافيك الخليج, ملفات شركات, يوسف رحاب" },
-      { property: "og:title", content: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
-      { property: "og:description", content: "مصمم هوية بصرية استراتيجي لعلامات السعودية والإمارات والخليج — 8+ سنوات خبرة و250+ علامة تجارية." },
+      { title: seo.home.ar.title },
+      { name: "description", content: seo.home.ar.description },
+      { name: "keywords", content: seo.home.ar.keywords },
+      { property: "og:title", content: seo.home.ar.og_title },
+      { property: "og:description", content: seo.home.ar.og_description },
       { property: "og:url", content: "/" },
-      { property: "og:image", content: "https://yrstudio.art/media/external/social-1783592902412-ChatGPT_Image_Jul_9__2026__01_28_06_PM.webp" },
+      { property: "og:image", content: seo.home.ar.og_image },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "يوسف رحاب — مصمم هويات بصرية" },
+      { property: "og:image:alt", content: seo.home.ar.og_image_alt },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://yrstudio.art/media/external/social-1783592902412-ChatGPT_Image_Jul_9__2026__01_28_06_PM.webp" },
+      { name: "twitter:image", content: seo.home.ar.og_image },
     ],
     links: [
       { rel: "canonical", href: "/" },

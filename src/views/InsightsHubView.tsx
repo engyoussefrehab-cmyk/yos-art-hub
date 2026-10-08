@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import { formatDate, type InsightArticle, type InsightCategoryRow } from "@/lib/insights-types";
 
+import { pair } from "@/i18n/dictionary";
 /** Score an article/category against a lowercase query. Higher = better. */
 function scoreMatch(text: string, q: string): number {
   if (!q) return 0;
@@ -70,7 +71,7 @@ function ArticleCard({ article }: { article: InsightArticle }) {
         <div className="flex items-center gap-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
           <span className="text-accent">{lang === "ar" ? article.category.label_ar : article.category.label_en}</span>
           <span aria-hidden>·</span>
-          <span>{article.reading_minutes} {lang === "ar" ? "دقائق" : "min"}</span>
+          <span>{article.reading_minutes} {lang === "ar" ? pair("ui_insightscategoryview_4")[0] : pair("ui_insightscategoryview_4")[1]}</span>
         </div>
         <h3 className="mt-3 font-display text-xl font-semibold leading-snug text-foreground transition-colors group-hover:text-accent">
           {title}
@@ -79,7 +80,7 @@ function ArticleCard({ article }: { article: InsightArticle }) {
         <div className="mt-5 flex items-center justify-between text-xs text-muted-foreground/80">
           <span>{formatDate(article.published_at, lang)}</span>
           <span className="inline-flex items-center gap-1 font-medium text-foreground/80 transition-colors group-hover:text-accent">
-            {lang === "ar" ? "اقرأ المقال" : "Read article"}
+            {lang === "ar" ? pair("ui_insightshubview_1")[0] : pair("ui_insightshubview_1")[1]}
             <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
           </span>
         </div>
@@ -168,15 +169,13 @@ export function InsightsHubView({ categories, articles }: HubProps) {
         </div>
         <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-20 sm:pt-28">
           <span className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
-            {lang === "ar" ? "رؤى ومقالات" : "Insights"}
+            {lang === "ar" ? pair("ui_insightshubview_2")[0] : pair("ui_insightshubview_2")[1]}
           </span>
           <h1 className="mt-4 font-display text-4xl font-semibold leading-tight tracking-tight text-foreground sm:text-6xl">
-            {lang === "ar" ? "رؤًى تُبنى بها العلامات" : "Insights that build brands"}
+            {lang === "ar" ? pair("ui_insightshubview_3")[0] : pair("ui_insightshubview_3")[1]}
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            {lang === "ar"
-              ? "استراتيجيات عمليّة، أنظمة هويّة بصريّة، تصميم شعارات، تصميم العروض، رؤى الأعمال، سير عمل الذكاء الاصطناعي، ودراسات حالة من العالم الحقيقي."
-              : "Practical brand strategies, visual identity systems, logo design, presentation design, business insights, AI workflows, and real-world case studies."}
+            {lang === "ar" ? pair("ui_insightshubview_4")[0] : pair("ui_insightshubview_4")[1]}
           </p>
 
           <div ref={searchWrapRef} className="relative mt-8 max-w-xl">
@@ -189,9 +188,9 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                 value={query}
                 onChange={(e) => { setQuery(e.target.value); setSuggestOpen(true); }}
                 onFocus={() => setSuggestOpen(true)}
-                placeholder={lang === "ar" ? "ابحث في المقالات، الكلمات المفتاحية، التصنيفات…" : "Search articles, keywords, categories…"}
+                placeholder={lang === "ar" ? pair("ui_insightshubview_5")[0] : pair("ui_insightshubview_5")[1]}
                 className="w-full bg-transparent py-1.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
-                aria-label={lang === "ar" ? "بحث" : "Search"}
+                aria-label={lang === "ar" ? pair("ui_insightshubview_6")[0] : pair("ui_insightshubview_6")[1]}
                 aria-expanded={showSuggestions}
                 aria-controls="insights-suggestions"
                 autoComplete="off"
@@ -200,7 +199,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                 <button
                   type="button"
                   onClick={() => { setQuery(""); setSuggestOpen(false); }}
-                  aria-label={lang === "ar" ? "مسح" : "Clear"}
+                  aria-label={lang === "ar" ? pair("ui_insightshubview_7")[0] : pair("ui_insightshubview_7")[1]}
                   className="text-muted-foreground hover:text-accent"
                 >
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -219,7 +218,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                 {matchedCategories.length > 0 && (
                   <div className="border-b border-border/60 p-2">
                     <div className="px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-                      {lang === "ar" ? "التصنيفات" : "Categories"}
+                      {lang === "ar" ? pair("ui_insightshubview_8")[0] : pair("ui_insightshubview_8")[1]}
                     </div>
                     <div className="flex flex-wrap gap-1.5 p-2">
                       {matchedCategories.map((c) => (
@@ -257,7 +256,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                             <div className="mt-0.5 truncate text-[11px] text-muted-foreground">
                               {lang === "ar" ? a.category.label_ar : a.category.label_en}
                               {" · "}
-                              {a.reading_minutes} {lang === "ar" ? "دقائق" : "min"}
+                              {a.reading_minutes} {lang === "ar" ? pair("ui_insightscategoryview_4")[0] : pair("ui_insightscategoryview_4")[1]}
                             </div>
                           </div>
                         </Link>
@@ -266,7 +265,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                   </ul>
                 ) : (
                   <p className="p-4 text-center text-xs text-muted-foreground">
-                    {lang === "ar" ? "لا توجد اقتراحات مطابقة." : "No matching suggestions."}
+                    {lang === "ar" ? pair("ui_insightshubview_9")[0] : pair("ui_insightshubview_9")[1]}
                   </p>
                 )}
               </div>
@@ -275,7 +274,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
 
           <div className="mt-6 flex flex-wrap gap-2">
             <FilterChip active={active === "all"} onClick={() => setActive("all")}>
-              {lang === "ar" ? "الكل" : "All"}
+              {lang === "ar" ? pair("ui_insightshubview_10")[0] : pair("ui_insightshubview_10")[1]}
             </FilterChip>
             {categories.map((c) => (
               <FilterChip key={c.slug} active={active === c.slug} onClick={() => setActive(c.slug)}>
@@ -289,7 +288,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
       {!query && active === "all" && featured && (
         <section className="mx-auto max-w-6xl px-6 pt-16">
           <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-            {lang === "ar" ? "مقال مميّز" : "Featured"}
+            {lang === "ar" ? pair("ui_insightshubview_11")[0] : pair("ui_insightshubview_11")[1]}
           </span>
           <Link
             to={`${base}/${featured.category.slug}/${featured.slug}`}
@@ -301,7 +300,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                 <span className="rounded-full bg-accent/10 px-2.5 py-1 text-accent">
                   {lang === "ar" ? featured.category.label_ar : featured.category.label_en}
                 </span>
-                <span>{featured.reading_minutes} {lang === "ar" ? "دقائق قراءة" : "min read"}</span>
+                <span>{featured.reading_minutes} {lang === "ar" ? pair("ui_insightsarticleview_1")[0] : pair("ui_insightsarticleview_1")[1]}</span>
                 <span aria-hidden>·</span>
                 <span>{formatDate(featured.published_at, lang)}</span>
               </div>
@@ -312,7 +311,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                 {lang === "ar" ? featured.excerpt_ar : featured.excerpt_en || featured.excerpt_ar}
               </p>
               <span className="mt-2 inline-flex items-center gap-2 self-start rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-transform group-hover:-translate-y-0.5">
-                {lang === "ar" ? "اقرأ المقال" : "Read article"}
+                {lang === "ar" ? pair("ui_insightshubview_1")[0] : pair("ui_insightshubview_1")[1]}
                 <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
               </span>
             </div>
@@ -324,8 +323,8 @@ export function InsightsHubView({ categories, articles }: HubProps) {
         <div className="mb-8 flex items-baseline justify-between">
           <h2 className="font-display text-2xl font-semibold text-foreground">
             {query || active !== "all"
-              ? lang === "ar" ? "نتائج البحث" : "Results"
-              : lang === "ar" ? "أحدث المقالات" : "Latest articles"}
+              ? lang === "ar" ? pair("ui_insightshubview_12")[0] : pair("ui_insightshubview_12")[1]
+              : lang === "ar" ? pair("ui_insightshubview_13")[0] : pair("ui_insightshubview_13")[1]}
           </h2>
           <span className="text-sm text-muted-foreground">
             {filtered.length} {lang === "ar" ? "مقال" : filtered.length === 1 ? "article" : "articles"}
@@ -335,8 +334,8 @@ export function InsightsHubView({ categories, articles }: HubProps) {
           <div className="rounded-2xl border border-dashed border-border py-20 text-center">
             <p className="text-muted-foreground">
               {articles.length === 0
-                ? lang === "ar" ? "قريبًا — نُعِدّ أوّل مقالاتنا." : "Coming soon — we're preparing our first articles."
-                : lang === "ar" ? "لا توجد نتائج مطابقة." : "No matching results."}
+                ? lang === "ar" ? pair("ui_insightshubview_14")[0] : pair("ui_insightshubview_14")[1]
+                : lang === "ar" ? pair("ui_insightshubview_15")[0] : pair("ui_insightshubview_15")[1]}
             </p>
           </div>
         ) : (

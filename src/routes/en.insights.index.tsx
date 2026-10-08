@@ -2,15 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { InsightsHubView } from "@/views/InsightsHubView";
 import { getInsightsHubDataFn } from "@/lib/insights.functions";
 
+import seo from "@/content/seo.json";
 export const Route = createFileRoute("/en/insights/")({
   loader: () => getInsightsHubDataFn(),
   head: () => ({
     meta: [
-      { title: "Insights — Youssef Rehab | Brand Strategy & Visual Identity" },
-      { name: "description", content: "Practical articles on brand strategy, visual identity, logo design, presentation design, AI workflows, and real-world case studies — by Youssef Rehab." },
-      { name: "keywords", content: "brand strategy blog, visual identity articles, logo design tips, presentation design, brand insights" },
-      { property: "og:title", content: "Insights — Youssef Rehab" },
-      { property: "og:description", content: "Brand strategy and visual identity insights." },
+      { title: seo.insights.en.title },
+      { name: "description", content: seo.insights.en.description },
+      { name: "keywords", content: seo.insights.en.keywords },
+      { property: "og:title", content: seo.insights.en.og_title },
+      { property: "og:description", content: seo.insights.en.og_description },
       { property: "og:url", content: "/en/insights" },
       { property: "og:type", content: "website" },
     ],

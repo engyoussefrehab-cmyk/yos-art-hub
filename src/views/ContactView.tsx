@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
 
+import { pair } from "@/i18n/dictionary";
 export function ContactView() {
   const { t, lang } = useLang();
   return (
@@ -21,9 +22,9 @@ export function ContactView() {
               <ContactCard label={t("contact_email_label")} value="info@yrstudio.art" href="mailto:info@yrstudio.art" arrow={lang === "ar" ? "←" : "→"} />
             </div>
             <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/10 pt-8">
-              <Mini n={lang === "ar" ? "+٨" : "8+"} labelKey="stat_years_short" />
-              <Mini n={lang === "ar" ? "+٢٥٠" : "250+"} labelKey="stat_brand_short" />
-              <Mini n={lang === "ar" ? "+٢٠" : "20+"} labelKey="stat_sector_short" />
+              <Mini n={lang === "ar" ? pair("ui_contactview_1")[0] : pair("ui_contactview_1")[1]} labelKey="stat_years_short" />
+              <Mini n={lang === "ar" ? pair("ui_contactview_2")[0] : pair("ui_contactview_2")[1]} labelKey="stat_brand_short" />
+              <Mini n={lang === "ar" ? pair("ui_contactview_3")[0] : pair("ui_contactview_3")[1]} labelKey="stat_sector_short" />
             </div>
           </div>
           <div className="md:col-span-7">
@@ -86,8 +87,8 @@ function ContactForm() {
     const project_type = (form.elements.namedItem("project_type") as HTMLSelectElement)?.value || "";
     const rawMessage = (form.elements.namedItem("message") as HTMLTextAreaElement).value;
     const extras: string[] = [];
-    if (project_type) extras.push(`${lang === "ar" ? "نوع المشروع" : "Project type"}: ${project_type}`);
-    if (budget) extras.push(`${lang === "ar" ? "الميزانيّة" : "Budget"}: ${budget}`);
+    if (project_type) extras.push(`${lang === "ar" ? pair("ui_contactview_4")[0] : pair("ui_contactview_4")[1]}: ${project_type}`);
+    if (budget) extras.push(`${lang === "ar" ? pair("ui_contactview_5")[0] : pair("ui_contactview_5")[1]}: ${budget}`);
     const messageWithExtras = extras.length ? `${rawMessage}\n\n---\n${extras.join("\n")}` : rawMessage;
     const data = {
       name: (form.elements.namedItem("name") as HTMLInputElement).value,
@@ -140,7 +141,7 @@ function ContactForm() {
       setSent(true);
       form.reset();
     } catch {
-      setSendError(lang === "ar" ? "تعذّر الإرسال، حاول لاحقًا." : "Failed to send. Please try again.");
+      setSendError(lang === "ar" ? pair("ui_contactview_6")[0] : pair("ui_contactview_6")[1]);
     } finally {
       setSending(false);
     }
@@ -230,7 +231,7 @@ function ContactForm() {
           disabled={sending}
           className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:opacity-60 disabled:hover:translate-y-0"
         >
-          {sending ? (lang === "ar" ? "جارٍ الإرسال..." : "Sending...") : t("f_send")}
+          {sending ? (lang === "ar" ? pair("ui_contactview_7")[0] : pair("ui_contactview_7")[1]) : t("f_send")}
         </button>
         {sent && <span className="text-xs text-accent">{t("f_sent")}</span>}
         {spamNotice && <span className="text-xs text-red-400">{t("f_spam")}</span>}

@@ -4,6 +4,7 @@ import { ExternalLink, Star } from "lucide-react";
 import type { ProjectBlock } from "@/lib/project-blocks";
 import { ZoomableImage } from "@/components/ZoomableImage";
 
+import { pair } from "@/i18n/dictionary";
 type Lang = "ar" | "en";
 
 export type RenderContext = {
@@ -48,9 +49,9 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const kicker = pick(b.kicker_ar, b.kicker_en, lang);
       const subtitle = pick(b.subtitle_ar, b.subtitle_en, lang);
       const description = pick(b.description_ar, b.description_en, lang);
-      const specialtyLabel = pick(b.specialty_label_ar, b.specialty_label_en, lang) || (lang === "ar" ? "التخصص" : "Specialty");
+      const specialtyLabel = pick(b.specialty_label_ar, b.specialty_label_en, lang) || (lang === "ar" ? pair("ui_projectblocksrenderer_1")[0] : pair("ui_projectblocksrenderer_1")[1]);
       const specialtyValue = pick(b.specialty_value_ar, b.specialty_value_en, lang) || context?.categoryLabel || "";
-      const typeLabel = pick(b.type_label_ar, b.type_label_en, lang) || (lang === "ar" ? "النوع" : "Type");
+      const typeLabel = pick(b.type_label_ar, b.type_label_en, lang) || (lang === "ar" ? pair("proj_type")[0] : pair("proj_type")[1]);
       const typeValue = pick(b.type_value_ar, b.type_value_en, lang) || context?.industry || context?.categoryLabel || "";
       const showMeta = b.show_meta_card !== false;
       return (
@@ -106,7 +107,7 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const kicker = pick(b.kicker_ar, b.kicker_en, lang);
       const title = pick(b.title_ar, b.title_en, lang);
       const value = pick(b.value_ar, b.value_en, lang);
-      const valueLabel = pick(b.value_label_ar, b.value_label_en, lang) || (lang === "ar" ? "القيمة" : "Value");
+      const valueLabel = pick(b.value_label_ar, b.value_label_en, lang) || (lang === "ar" ? pair("ui_projectblocksrenderer_2")[0] : pair("ui_projectblocksrenderer_2")[1]);
       return (
         <section className="border-y border-border bg-ink text-white">
           <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12">
@@ -188,21 +189,21 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
     case "typography": {
       if (!b.heading_font && !b.body_font && !pick(b.sample_ar, b.sample_en, lang)) return null;
       const title = pick(b.title_ar, b.title_en, lang);
-      const sample = pick(b.sample_ar, b.sample_en, lang) || (lang === "ar" ? "الطباعة هي صوت العلامة." : "Typography is the voice of the brand.");
+      const sample = pick(b.sample_ar, b.sample_en, lang) || (lang === "ar" ? pair("ui_projectblocksrenderer_3")[0] : pair("ui_projectblocksrenderer_3")[1]);
       return (
         <section className="mx-auto max-w-6xl px-6 py-12">
           {title && <h2 className="font-display text-3xl font-bold mb-6">{title}</h2>}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {b.heading_font && (
               <div className="rounded-2xl border border-border bg-background p-6">
-                <div className="text-xs uppercase tracking-widest text-muted-foreground">{lang === "ar" ? "خط العناوين" : "Heading font"}</div>
+                <div className="text-xs uppercase tracking-widest text-muted-foreground">{lang === "ar" ? pair("ui_projectblocksrenderer_4")[0] : pair("ui_projectblocksrenderer_4")[1]}</div>
                 <div className="mt-2 font-display text-3xl font-bold">{b.heading_font}</div>
                 <p className="mt-3 text-2xl leading-snug" style={{ fontFamily: b.heading_font }}>{sample}</p>
               </div>
             )}
             {b.body_font && (
               <div className="rounded-2xl border border-border bg-background p-6">
-                <div className="text-xs uppercase tracking-widest text-muted-foreground">{lang === "ar" ? "خط المتن" : "Body font"}</div>
+                <div className="text-xs uppercase tracking-widest text-muted-foreground">{lang === "ar" ? pair("ui_projectblocksrenderer_5")[0] : pair("ui_projectblocksrenderer_5")[1]}</div>
                 <div className="mt-2 font-display text-3xl font-bold">{b.body_font}</div>
                 <p className="mt-3 text-base leading-relaxed" style={{ fontFamily: b.body_font }}>{sample}</p>
               </div>
@@ -292,9 +293,9 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
     }
     case "next-project": {
       if (!context?.next) return null;
-      const label = pick(b.label_ar, b.label_en, lang) || (lang === "ar" ? "المشروع التالي" : "Next Project");
-      const cta = pick(b.cta_ar, b.cta_en, lang) || (lang === "ar" ? "التالي" : "Next");
-      const allLabel = pick(b.all_label_ar, b.all_label_en, lang) || (lang === "ar" ? "كل المشاريع" : "All projects");
+      const label = pick(b.label_ar, b.label_en, lang) || (lang === "ar" ? pair("ui_projectblocksrenderer_6")[0] : pair("ui_projectblocksrenderer_6")[1]);
+      const cta = pick(b.cta_ar, b.cta_en, lang) || (lang === "ar" ? pair("t_next")[0] : pair("t_next")[1]);
+      const allLabel = pick(b.all_label_ar, b.all_label_en, lang) || (lang === "ar" ? pair("ui_projectblocksrenderer_7")[0] : pair("ui_projectblocksrenderer_7")[1]);
       const arrow = lang === "ar" ? "←" : "→";
       return (
         <section className="border-t border-border">
@@ -485,8 +486,8 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
     case "before-after": {
       if (!b.before_url || !b.after_url) return null;
       const caption = pick(b.caption_ar, b.caption_en, lang);
-      const labelBefore = pick(b.label_before_ar, b.label_before_en, lang) || (lang === "ar" ? "قبل" : "Before");
-      const labelAfter = pick(b.label_after_ar, b.label_after_en, lang) || (lang === "ar" ? "بعد" : "After");
+      const labelBefore = pick(b.label_before_ar, b.label_before_en, lang) || (lang === "ar" ? pair("ui_projectblocksrenderer_8")[0] : pair("ui_projectblocksrenderer_8")[1]);
+      const labelAfter = pick(b.label_after_ar, b.label_after_en, lang) || (lang === "ar" ? pair("ui_projectblocksrenderer_9")[0] : pair("ui_projectblocksrenderer_9")[1]);
       return (
         <section className="mx-auto max-w-6xl px-6 py-10">
           <BeforeAfterCompare

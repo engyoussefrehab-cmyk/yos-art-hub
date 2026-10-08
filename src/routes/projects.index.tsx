@@ -3,6 +3,7 @@ import { ProjectsHubView } from "@/views/ProjectsHubView";
 import { listPortfolio, listCategories, getProjectsStats } from "@/lib/portfolio.functions";
 
 
+import seo from "@/content/seo.json";
 const SORTS = new Set(["newest", "oldest", "featured", "az"]);
 const asStr = (v: unknown) => (typeof v === "string" ? v : "");
 const asSort = (v: unknown) => {
@@ -23,11 +24,11 @@ export const Route = createFileRoute("/projects/")({
 
   head: () => ({
     meta: [
-      { title: "أعمال يوسف رحاب — هويات بصرية وشعارات وملفات شركات" },
-      { name: "description", content: "مشاريع مختارة عبر أربعة تخصصات: الهوية البصرية، الشعارات، ملفات الشركات، والسوشيال ميديا — لعلامات السعودية والإمارات والخليج." },
-      { name: "keywords", content: "أعمال هوية بصرية, بورتفوليو مصمم شعارات, ملفات شركات, سوشيال ميديا ديزاين, يوسف رحاب" },
-      { property: "og:title", content: "المشاريع — يوسف رحاب" },
-      { property: "og:description", content: "أعمال هوية بصرية وشعارات وملفات شركات وسوشيال ميديا." },
+      { title: seo.projects.ar.title },
+      { name: "description", content: seo.projects.ar.description },
+      { name: "keywords", content: seo.projects.ar.keywords },
+      { property: "og:title", content: seo.projects.ar.og_title },
+      { property: "og:description", content: seo.projects.ar.og_description },
       { property: "og:url", content: "/projects" },
     ],
     links: [{ rel: "canonical", href: "/projects" }],

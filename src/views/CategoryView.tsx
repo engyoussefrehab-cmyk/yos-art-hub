@@ -4,6 +4,7 @@ import { useLang } from "@/i18n/use-lang";
 import { sanitizeHtml } from "@/lib/insights-types";
 import type { PortfolioDTO, CategoryDTO } from "@/lib/portfolio.functions";
 
+import { pair } from "@/i18n/dictionary";
 export function CategoryView({
   category,
   projects,
@@ -54,7 +55,7 @@ export function CategoryView({
 
       {category.faq && category.faq.length > 0 && (
         <div className="mt-16 max-w-3xl">
-          <h2 className="font-display text-3xl font-bold">{lang === "ar" ? "الأسئلة الشائعة" : "FAQ"}</h2>
+          <h2 className="font-display text-3xl font-bold">{lang === "ar" ? pair("ui_categoryview_1")[0] : pair("ui_categoryview_1")[1]}</h2>
           <div className="mt-6 space-y-4">
             {category.faq.map((f, i) => {
               const q = lang === "ar" ? f.q_ar : f.q_en;
@@ -90,7 +91,7 @@ function ProjectsList({ categorySlug, projects }: { categorySlug: string; projec
   if (projects.length === 0) {
     return (
       <div className="rounded-3xl border border-dashed border-border bg-cream/50 p-10 text-center text-muted-foreground">
-        {lang === "ar" ? "لا توجد مشاريع منشورة بعد في هذا القسم." : "No published projects yet in this section."}
+        {lang === "ar" ? pair("ui_categoryview_2")[0] : pair("ui_categoryview_2")[1]}
       </div>
     );
   }

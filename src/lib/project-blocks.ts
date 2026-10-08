@@ -1,3 +1,4 @@
+import { pair } from "@/i18n/dictionary";
 // Modular page-builder blocks for portfolio project detail pages.
 // All block data is stored inside portfolio_projects.layout_blocks (JSONB).
 //
@@ -376,10 +377,10 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
       description_ar: row?.challenge_ar ?? "",
       description_en: row?.challenge_en ?? row?.challenge_ar ?? "",
       show_meta_card: true,
-      specialty_label_ar: "التخصص",
-      specialty_label_en: "Specialty",
-      type_label_ar: "النوع",
-      type_label_en: "Type",
+      specialty_label_ar: pair("ui_projectblocksrenderer_1")[0],
+      specialty_label_en: pair("ui_projectblocksrenderer_1")[1],
+      type_label_ar: pair("proj_type")[0],
+      type_label_en: pair("proj_type")[1],
       type_value_ar: row?.industry ?? "",
       type_value_en: row?.industry ?? "",
     } as HeroBlock);
@@ -393,14 +394,14 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
     prefix.push({
       id: rid("approach"),
       type: "approach",
-      kicker_ar: "منهجية العمل",
-      kicker_en: "Our Approach",
-      title_ar: "كيف بنينا الهوية",
-      title_en: "How We Built the Identity",
+      kicker_ar: pair("ui_project_blocks_9")[0],
+      kicker_en: pair("ui_project_blocks_9")[1],
+      title_ar: pair("ui_project_blocks_10")[0],
+      title_en: pair("ui_project_blocks_10")[1],
       items_ar,
       items_en,
-      value_label_ar: "القيمة",
-      value_label_en: "Value",
+      value_label_ar: pair("ui_projectblocksrenderer_2")[0],
+      value_label_en: pair("ui_projectblocksrenderer_2")[1],
       value_ar: row?.results_ar ?? "",
       value_en: row?.results_en ?? row?.results_ar ?? "",
     } as ApproachBlock);
@@ -412,8 +413,8 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
     prefix.push({
       id: rid("palette"),
       type: "palette",
-      title_ar: "لوحة الألوان",
-      title_en: "Color Palette",
+      title_ar: pair("ui_project_blocks_11")[0],
+      title_en: pair("ui_project_blocks_11")[1],
       colors: brandColors
         .map((c: any) => (typeof c === "string" ? { hex: c } : { name: c?.name, hex: c?.hex, token: c?.token }))
         .filter((c: any) => c && c.hex),
@@ -425,8 +426,8 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
     prefix.push({
       id: rid("typo"),
       type: "typography",
-      title_ar: "الطباعة",
-      title_en: "Typography",
+      title_ar: pair("ui_project_blocks_12")[0],
+      title_en: pair("ui_project_blocks_12")[1],
       heading_font: typo.heading_font ?? "",
       body_font: typo.body_font ?? "",
       sample_ar: typo.sample_ar ?? "",
@@ -441,8 +442,8 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
       prefix.push({
         id: rid("deliv"),
         type: "deliverables",
-        title_ar: "المخرجات",
-        title_en: "Deliverables",
+        title_ar: pair("ui_project_blocks_13")[0],
+        title_en: pair("ui_project_blocks_13")[1],
         items: arr.map((d: any) => ({
           label_ar: typeof d === "string" ? d : d?.label_ar ?? d?.ar,
           label_en: typeof d === "string" ? d : d?.label_en ?? d?.en,
@@ -462,19 +463,19 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
   ].filter(([, v]) => v);
   if (!hasType("meta") && (metaFields.length > 0 || row?.client_logo_url)) {
     const LBL: Record<string, { ar: string; en: string }> = {
-      client: { ar: "العميل", en: "Client" },
-      role: { ar: "الدور", en: "Role" },
-      team: { ar: "الفريق", en: "Team" },
-      duration: { ar: "المدة", en: "Duration" },
-      year: { ar: "السنة", en: "Year" },
-      country: { ar: "الدولة", en: "Country" },
+      client: { ar: pair("ui_project_blocks_1")[0], en: pair("ui_project_blocks_1")[1] },
+      role: { ar: pair("ui_project_blocks_2")[0], en: pair("ui_project_blocks_2")[1] },
+      team: { ar: pair("ui_project_blocks_3")[0], en: pair("ui_project_blocks_3")[1] },
+      duration: { ar: pair("ui_project_blocks_4")[0], en: pair("ui_project_blocks_4")[1] },
+      year: { ar: pair("proj_year")[0], en: pair("proj_year")[1] },
+      country: { ar: pair("proj_country")[0], en: pair("proj_country")[1] },
     };
     prefix.push({
       id: rid("meta"),
       type: "meta",
       logo_url: row?.client_logo_url ?? "",
-      title_ar: "بيانات المشروع",
-      title_en: "Project Details",
+      title_ar: pair("ui_project_blocks_14")[0],
+      title_en: pair("ui_project_blocks_14")[1],
       items: metaFields.map(([k, v]) => ({
         label_ar: LBL[k as string].ar,
         label_en: LBL[k as string].en,
@@ -492,16 +493,16 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
   ].filter((l) => l.url);
   if (!hasType("links") && linkItems.length > 0) {
     const KIND: Record<string, { ar: string; en: string }> = {
-      live: { ar: "الموقع المباشر", en: "Live site" },
-      behance: { ar: "على بيهانس", en: "On Behance" },
-      figma: { ar: "على فيجما", en: "On Figma" },
-      custom: { ar: "رابط", en: "Link" },
+      live: { ar: pair("ui_project_blocks_5")[0], en: pair("ui_project_blocks_5")[1] },
+      behance: { ar: pair("ui_project_blocks_6")[0], en: pair("ui_project_blocks_6")[1] },
+      figma: { ar: pair("ui_project_blocks_7")[0], en: pair("ui_project_blocks_7")[1] },
+      custom: { ar: pair("ui_project_blocks_8")[0], en: pair("ui_project_blocks_8")[1] },
     };
     prefix.push({
       id: rid("links"),
       type: "links",
-      title_ar: "روابط ذات صلة",
-      title_en: "Related Links",
+      title_ar: pair("ui_project_blocks_15")[0],
+      title_en: pair("ui_project_blocks_15")[1],
       items: linkItems.map((l) => ({
         url: l.url,
         kind: l.kind,
@@ -546,12 +547,12 @@ export function synthesizeDefaultBlocks(row: any): ProjectBlock[] {
     suffix.push({
       id: rid("nextp"),
       type: "next-project",
-      label_ar: "المشروع التالي",
-      label_en: "Next Project",
-      cta_ar: "التالي",
-      cta_en: "Next",
-      all_label_ar: "كل المشاريع",
-      all_label_en: "All projects",
+      label_ar: pair("ui_projectblocksrenderer_6")[0],
+      label_en: pair("ui_projectblocksrenderer_6")[1],
+      cta_ar: pair("t_next")[0],
+      cta_en: pair("t_next")[1],
+      all_label_ar: pair("ui_projectblocksrenderer_7")[0],
+      all_label_en: pair("ui_projectblocksrenderer_7")[1],
     } as NextProjectBlock);
   }
 

@@ -3,13 +3,14 @@ import { useLang } from "@/i18n/use-lang";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import { ProjectBlocksRenderer, type RenderContext } from "@/components/project-blocks/ProjectBlocksRenderer";
 
+import { pair } from "@/i18n/dictionary";
 const CAT_LABELS: Record<string, { ar: string; en: string }> = {
-  branding: { ar: "الهوية البصرية", en: "Visual Identity" },
-  logos: { ar: "الشعارات", en: "Logos" },
-  profiles: { ar: "ملفات الشركات", en: "Company Profiles" },
-  social: { ar: "سوشيال ميديا", en: "Social Media" },
-  presentations: { ar: "العروض التقديمية", en: "Presentations" },
-  packaging: { ar: "التغليف", en: "Packaging" },
+  branding: { ar: pair("cat_branding_label")[0], en: pair("cat_branding_label")[1] },
+  logos: { ar: pair("cat_logos_label")[0], en: pair("cat_logos_label")[1] },
+  profiles: { ar: pair("cat_profiles_label")[0], en: pair("cat_profiles_label")[1] },
+  social: { ar: pair("ptype_social")[0], en: pair("ptype_social")[1] },
+  presentations: { ar: pair("ui_projectdetailview_1")[0], en: pair("ui_projectdetailview_1")[1] },
+  packaging: { ar: pair("ui_projectdetailview_2")[0], en: pair("ui_projectdetailview_2")[1] },
 };
 
 export function ProjectDetailView({

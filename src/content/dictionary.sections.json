@@ -1,0 +1,488 @@
+[
+  {
+    "title": "القائمة العلوية",
+    "keys": [
+      "nav_home",
+      "nav_projects",
+      "nav_contact",
+      "nav_packages",
+      "nav_insights",
+      "cta_start_project",
+      "menu_label"
+    ]
+  },
+  {
+    "title": "أول الصفحة الرئيسية",
+    "keys": [
+      "hero_badge",
+      "hero_title_a",
+      "hero_title_b",
+      "hero_subtitle",
+      "hero_intro",
+      "hero_cta_projects",
+      "hero_cta_download",
+      "stat_years",
+      "stat_brands",
+      "stat_sectors",
+      "strategic_brand",
+      "identity_designer"
+    ]
+  },
+  {
+    "title": "من أنا",
+    "keys": [
+      "about_kicker",
+      "about_title_a",
+      "about_title_b",
+      "about_p1",
+      "about_p2",
+      "about_skills_kicker",
+      "skill_visual_identity",
+      "skill_visual_systems",
+      "skill_logo_design",
+      "skill_generative_ai",
+      "skill_presentation",
+      "skill_social",
+      "skill_typography",
+      "skill_creative_direction"
+    ]
+  },
+  {
+    "title": "الخدمات",
+    "keys": [
+      "services_kicker",
+      "services_title",
+      "services_lede",
+      "svc_1_t",
+      "svc_1_d",
+      "svc_2_t",
+      "svc_2_d",
+      "svc_3_t",
+      "svc_3_d",
+      "svc_4_t",
+      "svc_4_d",
+      "svc_5_t",
+      "svc_5_d",
+      "svc_6_t",
+      "svc_6_d"
+    ]
+  },
+  {
+    "title": "دعوة للتواصل",
+    "keys": [
+      "cta_title_a",
+      "cta_title_b",
+      "cta_sub",
+      "cta_button",
+      "cta_reply_time",
+      "cta_or_reach"
+    ]
+  },
+  {
+    "title": "منهجية العمل",
+    "keys": [
+      "process_kicker",
+      "process_title",
+      "process_lede",
+      "process_1_t",
+      "process_1_d",
+      "process_2_t",
+      "process_2_d",
+      "process_3_t",
+      "process_3_d",
+      "process_4_t",
+      "process_4_d"
+    ]
+  },
+  {
+    "title": "الصفحة الرئيسية — إضافي",
+    "keys": [
+      "home_scroll_cue"
+    ]
+  },
+  {
+    "title": "آراء العملاء",
+    "keys": [
+      "t_kicker",
+      "t_title",
+      "t_lede",
+      "t_verified",
+      "t_verified_badge",
+      "t_prev",
+      "t_next",
+      "t_hint",
+      "t_original_note"
+    ]
+  },
+  {
+    "title": "صفحة المشاريع",
+    "keys": [
+      "projects_kicker",
+      "projects_title",
+      "projects_lede",
+      "projects_items",
+      "projects_view_section",
+      "projects_stat_projects",
+      "projects_stat_sectors",
+      "projects_stat_countries",
+      "projects_browser_kicker",
+      "projects_browser_title",
+      "projects_browser_hint",
+      "projects_filter_all",
+      "projects_results_count"
+    ]
+  },
+  {
+    "title": "صفحة القسم",
+    "keys": [
+      "cat_kicker",
+      "crumb_projects",
+      "view_project",
+      "logo_board",
+      "profile_board",
+      "post_board"
+    ]
+  },
+  {
+    "title": "أسماء الأقسام",
+    "keys": [
+      "cat_branding_label",
+      "cat_branding_desc",
+      "cat_logos_label",
+      "cat_logos_desc",
+      "cat_profiles_label",
+      "cat_profiles_desc",
+      "cat_social_label",
+      "cat_social_desc"
+    ]
+  },
+  {
+    "title": "صفحة المشروع",
+    "keys": [
+      "proj_kind",
+      "proj_specialty",
+      "proj_year",
+      "proj_country",
+      "proj_type",
+      "proj_approach_kicker",
+      "proj_approach_title",
+      "proj_value",
+      "proj_next",
+      "proj_all",
+      "proj_next_btn"
+    ]
+  },
+  {
+    "title": "صفحة التواصل",
+    "keys": [
+      "contact_kicker",
+      "contact_title_a",
+      "contact_title_b",
+      "contact_lede",
+      "contact_wa_label",
+      "contact_email_label",
+      "stat_years_short",
+      "stat_brand_short",
+      "stat_sector_short",
+      "form_title",
+      "form_sub",
+      "f_name",
+      "f_email",
+      "f_subject",
+      "f_message",
+      "f_message_placeholder",
+      "f_send",
+      "f_sent",
+      "f_spam",
+      "err_name",
+      "err_name_long",
+      "err_email",
+      "err_subject",
+      "err_msg_short",
+      "err_msg_long",
+      "f_call_title",
+      "f_call_sub",
+      "f_call_date",
+      "f_call_time",
+      "f_call_tz",
+      "f_call_tz_placeholder",
+      "err_call_date_past",
+      "mail_name_label",
+      "mail_email_label"
+    ]
+  },
+  {
+    "title": "الفوتر",
+    "keys": [
+      "footer_bio",
+      "explore",
+      "contact",
+      "newsletter",
+      "newsletter_sub",
+      "newsletter_placeholder",
+      "newsletter_subscribe",
+      "newsletter_ok",
+      "newsletter_err",
+      "rights",
+      "built_with_care"
+    ]
+  },
+  {
+    "title": "صفحة الخطأ 404",
+    "keys": [
+      "nf_eyebrow",
+      "nf_title",
+      "nf_desc",
+      "nf_back",
+      "nf_explore_projects",
+      "nf_contact",
+      "nf_suggested",
+      "err_title",
+      "err_desc",
+      "err_retry",
+      "err_home",
+      "back_to_top",
+      "whatsapp",
+      "linkedin",
+      "brand_alt",
+      "logo_variant"
+    ]
+  },
+  {
+    "title": "عناوين وأوصاف (SEO)",
+    "keys": [
+      "meta_home_title",
+      "meta_home_desc",
+      "meta_projects_title",
+      "meta_projects_desc",
+      "meta_contact_title",
+      "meta_contact_desc"
+    ]
+  },
+  {
+    "title": "أزرار ونصوص مساعدة",
+    "keys": [
+      "skip_to_content",
+      "close"
+    ]
+  },
+  {
+    "title": "شريط العملاء",
+    "keys": [
+      "trust_kicker",
+      "trust_title",
+      "trust_lede"
+    ]
+  },
+  {
+    "title": "فورم التواصل",
+    "keys": [
+      "f_budget",
+      "f_budget_placeholder",
+      "budget_under_1k",
+      "budget_1k_3k",
+      "budget_3k_8k",
+      "budget_8k_plus",
+      "budget_unsure",
+      "f_project_type",
+      "f_project_type_placeholder",
+      "ptype_identity",
+      "ptype_logo",
+      "ptype_profile",
+      "ptype_social",
+      "ptype_other"
+    ]
+  },
+  {
+    "title": "شريط العملاء",
+    "keys": [
+      "ui_clientsmarquee_1",
+      "ui_clientsmarquee_2",
+      "ui_clientsmarquee_3",
+      "ui_clientsmarquee_4",
+      "ui_clientsmarquee_5"
+    ]
+  },
+  {
+    "title": "عارض الصور",
+    "keys": [
+      "ui_zoomableimage_1",
+      "ui_zoomableimage_2",
+      "ui_zoomableimage_3",
+      "ui_zoomableimage_4",
+      "ui_zoomableimage_5",
+      "ui_zoomableimage_6"
+    ]
+  },
+  {
+    "title": "صفحة المشروع — أجزاء",
+    "keys": [
+      "ui_projectblocksrenderer_1",
+      "ui_projectblocksrenderer_2",
+      "ui_projectblocksrenderer_3",
+      "ui_projectblocksrenderer_4",
+      "ui_projectblocksrenderer_5",
+      "ui_projectblocksrenderer_6",
+      "ui_projectblocksrenderer_7",
+      "ui_projectblocksrenderer_8",
+      "ui_projectblocksrenderer_9"
+    ]
+  },
+  {
+    "title": "سلايدر أحدث المشاريع",
+    "keys": [
+      "ui_latestprojectsslider_1",
+      "ui_latestprojectsslider_2",
+      "ui_latestprojectsslider_3",
+      "ui_latestprojectsslider_4",
+      "ui_latestprojectsslider_5",
+      "ui_latestprojectsslider_6"
+    ]
+  },
+  {
+    "title": "صفحة المشاريع — الفلاتر والبحث",
+    "keys": [
+      "ui_projectsbrowser_1",
+      "ui_projectsbrowser_2",
+      "ui_projectsbrowser_3",
+      "ui_projectsbrowser_4",
+      "ui_projectsbrowser_5",
+      "ui_projectsbrowser_6",
+      "ui_projectsbrowser_7",
+      "ui_projectsbrowser_8",
+      "ui_projectsbrowser_9",
+      "ui_projectsbrowser_10",
+      "ui_projectsbrowser_11",
+      "ui_projectsbrowser_12",
+      "ui_projectsbrowser_13",
+      "ui_projectsbrowser_14",
+      "ui_projectsbrowser_15"
+    ]
+  },
+  {
+    "title": "صفحة المشروع — العناوين الافتراضية",
+    "keys": [
+      "ui_project_blocks_1",
+      "ui_project_blocks_2",
+      "ui_project_blocks_3",
+      "ui_project_blocks_4",
+      "ui_project_blocks_5",
+      "ui_project_blocks_6",
+      "ui_project_blocks_7",
+      "ui_project_blocks_8",
+      "ui_project_blocks_9",
+      "ui_project_blocks_10",
+      "ui_project_blocks_11",
+      "ui_project_blocks_12",
+      "ui_project_blocks_13",
+      "ui_project_blocks_14",
+      "ui_project_blocks_15"
+    ]
+  },
+  {
+    "title": "عناصر عامة (الهيدر والفوتر)",
+    "keys": [
+      "ui_root_1"
+    ]
+  },
+  {
+    "title": "rss[.]xml",
+    "keys": [
+      "ui_rss_xml_1"
+    ]
+  },
+  {
+    "title": "صفحة القسم",
+    "keys": [
+      "ui_categoryview_1",
+      "ui_categoryview_2"
+    ]
+  },
+  {
+    "title": "صفحة التواصل",
+    "keys": [
+      "ui_contactview_1",
+      "ui_contactview_2",
+      "ui_contactview_3",
+      "ui_contactview_4",
+      "ui_contactview_5",
+      "ui_contactview_6",
+      "ui_contactview_7"
+    ]
+  },
+  {
+    "title": "الصفحة الرئيسية",
+    "keys": [
+      "ui_homeview_1"
+    ]
+  },
+  {
+    "title": "صفحة المقال",
+    "keys": [
+      "ui_insightsarticleview_1",
+      "ui_insightsarticleview_2",
+      "ui_insightsarticleview_3",
+      "ui_insightsarticleview_4",
+      "ui_insightsarticleview_5",
+      "ui_insightsarticleview_6",
+      "ui_insightsarticleview_7",
+      "ui_insightsarticleview_8",
+      "ui_insightsarticleview_9",
+      "ui_insightsarticleview_10",
+      "ui_insightsarticleview_11"
+    ]
+  },
+  {
+    "title": "قسم الرؤى",
+    "keys": [
+      "ui_insightscategoryview_1",
+      "ui_insightscategoryview_2",
+      "ui_insightscategoryview_3",
+      "ui_insightscategoryview_4"
+    ]
+  },
+  {
+    "title": "صفحة الرؤى",
+    "keys": [
+      "ui_insightshubview_1",
+      "ui_insightshubview_2",
+      "ui_insightshubview_3",
+      "ui_insightshubview_4",
+      "ui_insightshubview_5",
+      "ui_insightshubview_6",
+      "ui_insightshubview_7",
+      "ui_insightshubview_8",
+      "ui_insightshubview_9",
+      "ui_insightshubview_10",
+      "ui_insightshubview_11",
+      "ui_insightshubview_12",
+      "ui_insightshubview_13",
+      "ui_insightshubview_14",
+      "ui_insightshubview_15"
+    ]
+  },
+  {
+    "title": "صفحة فئات الخدمات",
+    "keys": [
+      "ui_packagesview_1",
+      "ui_packagesview_2",
+      "ui_packagesview_3",
+      "ui_packagesview_4",
+      "ui_packagesview_5",
+      "ui_packagesview_6",
+      "ui_packagesview_7",
+      "ui_packagesview_8",
+      "ui_packagesview_9",
+      "ui_packagesview_10",
+      "ui_packagesview_11",
+      "ui_packagesview_12"
+    ]
+  },
+  {
+    "title": "صفحة المشروع",
+    "keys": [
+      "ui_projectdetailview_1",
+      "ui_projectdetailview_2"
+    ]
+  }
+]

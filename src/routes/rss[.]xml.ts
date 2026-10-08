@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { getPublishedArticlesFn } from "@/lib/insights.functions";
 import { SITE_URL, SITE_NAME_AR } from "@/lib/site";
 
+import { pair } from "@/i18n/dictionary";
 function xmlEscape(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -28,9 +29,7 @@ async function buildRss(lang: "ar" | "en"): Promise<string> {
   const feedUrl = `${SITE_URL}${isAr ? "/rss.xml" : "/en/rss.xml"}`;
   const homeUrl = `${SITE_URL}${isAr ? "/insights" : "/en/insights"}`;
   const title = isAr ? `${SITE_NAME_AR} — رؤى ومقالات` : "Youssef Rehab — Insights";
-  const description = isAr
-    ? "أحدث المقالات في استراتيجية العلامة، الهوية البصرية، تصميم الشعارات والعروض."
-    : "Latest articles on brand strategy, visual identity, logo & presentation design.";
+  const description = isAr ? pair("ui_rss_xml_1")[0] : pair("ui_rss_xml_1")[1];
 
   const items = articles
     .filter((a) => a.published_at && new Date(a.published_at) <= new Date())

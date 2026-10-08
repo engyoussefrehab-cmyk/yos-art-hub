@@ -4,11 +4,12 @@ import { ChevronLeft, ChevronRight, ArrowUpRight, Pause, Play, Sparkles } from "
 import { useLang } from "@/i18n/use-lang";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 
+import { pair } from "@/i18n/dictionary";
 const CAT_LABELS: Record<string, { ar: string; en: string }> = {
-  branding: { ar: "الهوية البصرية", en: "Brand Identity" },
-  logos: { ar: "الشعارات", en: "Logos" },
-  profiles: { ar: "ملفات الشركات", en: "Company Profiles" },
-  social: { ar: "سوشيال ميديا", en: "Social Media" },
+  branding: { ar: pair("ui_latestprojectsslider_6")[0], en: pair("ui_latestprojectsslider_6")[1] },
+  logos: { ar: pair("cat_logos_label")[0], en: pair("cat_logos_label")[1] },
+  profiles: { ar: pair("cat_profiles_label")[0], en: pair("cat_profiles_label")[1] },
+  social: { ar: pair("ptype_social")[0], en: pair("ptype_social")[1] },
 };
 
 export function LatestProjectsSlider({
@@ -130,10 +131,10 @@ export function LatestProjectsSlider({
         <div className="min-w-0">
           <div className={`inline-flex items-center gap-1.5 font-semibold uppercase tracking-widest text-accent ${compact ? "text-[10px]" : "text-xs"}`}>
             <Sparkles className="h-3 w-3" />
-            {t("مختارات جديدة", "Fresh work")}
+            {t(...pair("ui_latestprojectsslider_1"))}
           </div>
           <h2 className={`mt-2 font-display font-bold leading-[1.1] ${compact ? "text-xl md:text-2xl" : "text-3xl md:text-5xl"}`}>
-            {t("أحدث المشاريع", "Latest projects")}
+            {t(...pair("ui_latestprojectsslider_2"))}
           </h2>
           {!compact && (
             <p className="mt-2 max-w-lg text-sm text-muted-foreground">
@@ -148,7 +149,7 @@ export function LatestProjectsSlider({
           {autoPlay && items.length > 1 && (
             <button
               type="button"
-              aria-label={isPlaying ? t("إيقاف", "Pause") : t("تشغيل", "Play")}
+              aria-label={isPlaying ? t(...pair("ui_latestprojectsslider_3")) : t(...pair("ui_latestprojectsslider_4"))}
               onClick={() => setIsPlaying((v) => !v)}
               className={`rounded-full border border-border bg-background text-foreground transition-colors hover:bg-muted inline-flex items-center justify-center min-h-10 min-w-10 md:min-h-0 md:min-w-0 ${compact ? "p-1.5" : "p-2"}`}
             >
@@ -157,7 +158,7 @@ export function LatestProjectsSlider({
           )}
           <button
             type="button"
-            aria-label={t("السابق", "Previous")}
+            aria-label={t(...pair("t_prev"))}
             onMouseEnter={pause}
             onMouseLeave={resume}
             onClick={() => scrollBy(-1)}
@@ -168,7 +169,7 @@ export function LatestProjectsSlider({
           </button>
           <button
             type="button"
-            aria-label={t("التالي", "Next")}
+            aria-label={t(...pair("t_next"))}
             onMouseEnter={pause}
             onMouseLeave={resume}
             onClick={() => scrollBy(1)}
@@ -227,13 +228,13 @@ export function LatestProjectsSlider({
                 {/* Featured badge */}
                 {p.featured && !compact && (
                   <span className="absolute end-4 top-4 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-accent-foreground shadow-sm">
-                    {t("مميّز", "Featured")}
+                    {t(...pair("ui_latestprojectsslider_5"))}
                   </span>
                 )}
                 {/* Hover CTA */}
                 {!compact && (
                   <span className="absolute bottom-4 end-4 inline-flex translate-y-2 items-center gap-1.5 rounded-full bg-background px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 shadow-md transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                    {t("عرض المشروع", "View project")}
+                    {t(...pair("view_project"))}
                     <ArrowUpRight className={`h-3.5 w-3.5 ${isAr ? "-scale-x-100" : ""}`} />
                   </span>
                 )}

@@ -12,6 +12,8 @@ import {
   type ServiceTiersPageDataDTO,
 } from "@/lib/service-tiers.functions";
 
+import { pair } from "@/i18n/dictionary";
+import packagesContent from "@/content/packages.json";
 /* ------------------------------- Fallbacks ------------------------------- */
 
 const DEFAULT_TIERS: ServiceTierDTO[] = [
@@ -98,23 +100,7 @@ const DEFAULT_PAGE: ServiceTierPageDTO = {
 
 /* --------------------------- Per-tier meta hints -------------------------- */
 
-const TIER_META: Record<string, { timeline: { ar: string; en: string }; revisions: { ar: string; en: string }; bestFor: { ar: string; en: string } }> = {
-  launch: {
-    timeline: { ar: "٧–١٠ أيام", en: "7–10 days" },
-    revisions: { ar: "جولتا مراجعة", en: "2 revision rounds" },
-    bestFor: { ar: "الشركات الناشئة والمشاريع الجديدة", en: "Startups & new ventures" },
-  },
-  signature: {
-    timeline: { ar: "٣–٤ أسابيع", en: "3–4 weeks" },
-    revisions: { ar: "٣ جولات مراجعة", en: "3 revision rounds" },
-    bestFor: { ar: "الأعمال النامية والعلامات المتوسّطة", en: "Growing brands & SMBs" },
-  },
-  system: {
-    timeline: { ar: "٦–٨ أسابيع", en: "6–8 weeks" },
-    revisions: { ar: "مراجعات مفتوحة", en: "Open revisions" },
-    bestFor: { ar: "المؤسّسات والفرق التسويقيّة", en: "Enterprises & marketing teams" },
-  },
-};
+const TIER_META = packagesContent.tier_meta as Record<string, { timeline: { ar: string; en: string }; revisions: { ar: string; en: string }; bestFor: { ar: string; en: string } }>;
 
 /* --------------------------------- Cell ---------------------------------- */
 
@@ -208,47 +194,11 @@ export function PackagesView() {
   const [activeSlug, setActiveSlug] = useState<string | undefined>(featuredSlug);
 
   // Trust stats
-  const stats = isAr
-    ? [
-        { k: "+٦٠", v: "علامة تجاريّة" },
-        { k: "٩ سنوات", v: "خبرة تصميم" },
-        { k: "٤.٩/٥", v: "تقييم العملاء" },
-      ]
-    : [
-        { k: "60+", v: "brands crafted" },
-        { k: "9 yrs", v: "design experience" },
-        { k: "4.9/5", v: "client rating" },
-      ];
+  const stats = packagesContent.trust_stats.map((x) => ({ k: isAr ? x.value_ar : x.value_en, v: isAr ? x.label_ar : x.label_en }));
 
-  const steps = isAr
-    ? [
-        { t: "الاكتشاف", d: "جلسة تعريفيّة لفهم علامتك وأهدافك." },
-        { t: "الاستراتيجيّة", d: "تحديد الموقع والرسالة والجمهور." },
-        { t: "التصميم", d: "بناء الهوية البصريّة ومكوّناتها." },
-        { t: "التسليم", d: "الملفات والدليل ودعم التطبيق." },
-      ]
-    : [
-        { t: "Discover", d: "Kick-off call to understand your brand and goals." },
-        { t: "Strategy", d: "Positioning, message, and audience clarity." },
-        { t: "Design", d: "Crafting the visual identity system." },
-        { t: "Handoff", d: "Files, guidelines, and rollout support." },
-      ];
+  const steps = packagesContent.process_steps.map((x) => ({ t: isAr ? x.title_ar : x.title_en, d: isAr ? x.desc_ar : x.desc_en }));
 
-  const faqs = isAr
-    ? [
-        { q: "كم يستغرق المشروع عادةً؟", a: "الجدول الزمنيّ يعتمد على الفئة المختارة: انطلاق العلامة يستغرق ٧–١٠ أيام، توقيع العلامة ٣–٤ أسابيع، ونظام العلامة ٦–٨ أسابيع." },
-        { q: "هل الأسعار المعروضة نهائيّة؟", a: "الأسعار تُمثّل قيمة الاستثمار الأوّليّة. يُحدَّد السعر النهائي بعد جلسة الاكتشاف وفقًا لنطاق المشروع وأهدافك." },
-        { q: "كم عدد جولات المراجعة المتاحة؟", a: "تختلف بحسب الفئة — من جولتين إلى مراجعات مفتوحة في فئة نظام العلامة. أُشجّع دائمًا على جمع الملاحظات في جولة واحدة موحّدة." },
-        { q: "ما طريقة الدفع؟", a: "دفعة أولى بنسبة ٥٠٪ لبدء المشروع، والمتبقّي عند التسليم النهائي. أستقبل التحويلات البنكيّة، Wise، وInstaPay." },
-        { q: "هل تعمل مع عملاء خارج الخليج؟", a: "نعم، أعمل مع عملاء في السعوديّة والإمارات ومصر وأوروبا. جميع الاجتماعات تُعقد عبر الإنترنت." },
-      ]
-    : [
-        { q: "How long does a typical project take?", a: "It depends on the tier: Brand Launch runs 7–10 days, Brand Signature 3–4 weeks, and Brand System 6–8 weeks." },
-        { q: "Are the listed prices final?", a: "They represent the starting investment. The final quote is confirmed after the discovery call based on project scope and goals." },
-        { q: "How many revision rounds are included?", a: "It varies by tier — from 2 rounds up to open revisions on Brand System. I always recommend consolidating feedback into a single round for the best results." },
-        { q: "How does payment work?", a: "A 50% deposit to start and 50% on final delivery. I accept bank transfer, Wise, and InstaPay." },
-        { q: "Do you work with clients outside the Gulf?", a: "Yes — I work with clients across KSA, UAE, Egypt, and Europe. All meetings happen remotely." },
-      ];
+  const faqs = packagesContent.faqs.map((x) => ({ q: isAr ? x.q_ar : x.q_en, a: isAr ? x.a_ar : x.a_en }));
 
   return (
     <div className="bg-background">
@@ -316,8 +266,8 @@ export function PackagesView() {
             const name = isAr ? tier.name_ar : tier.name_en;
             const desc = (isAr ? tier.description_ar : tier.description_en) ?? "";
             const price = (isAr ? tier.price_ar : tier.price_en) ?? "";
-            const ctaLabel = (isAr ? tier.cta_label_ar : tier.cta_label_en) ?? (isAr ? "تواصل" : "Contact");
-            const badge = (isAr ? tier.badge_ar : tier.badge_en) ?? (isAr ? "الأكثر اختيارًا" : "Most Popular");
+            const ctaLabel = (isAr ? tier.cta_label_ar : tier.cta_label_en) ?? (isAr ? pair("contact")[0] : pair("contact")[1]);
+            const badge = (isAr ? tier.badge_ar : tier.badge_en) ?? (isAr ? pair("ui_packagesview_1")[0] : pair("ui_packagesview_1")[1]);
             const href = tier.cta_href || "/contact";
             const to = `${base}${href.startsWith("/") ? href : `/${href}`}`;
             const meta = TIER_META[tier.slug];
@@ -419,10 +369,10 @@ export function PackagesView() {
         <div className="mx-auto max-w-6xl px-6 py-20 sm:py-24">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">
-              {isAr ? "المنهجيّة" : "Process"}
+              {isAr ? pair("ui_packagesview_2")[0] : pair("ui_packagesview_2")[1]}
             </span>
             <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              {isAr ? "كيف نبني علامتك خطوةً بخطوة" : "How we build your brand, step by step"}
+              {isAr ? pair("ui_packagesview_3")[0] : pair("ui_packagesview_3")[1]}
             </h2>
           </div>
           <ol className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -456,10 +406,10 @@ export function PackagesView() {
           {/* Legend */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
             {[
-              { v: "core" as Inclusion, label: isAr ? "أساسيّ" : "Core" },
-              { v: "extended" as Inclusion, label: isAr ? "موسّع" : "Extended" },
-              { v: "full" as Inclusion, label: isAr ? "متكامل" : "Full" },
-              { v: "none" as Inclusion, label: isAr ? "غير مُضمَّن" : "Not included" },
+              { v: "core" as Inclusion, label: isAr ? pair("ui_packagesview_4")[0] : pair("ui_packagesview_4")[1] },
+              { v: "extended" as Inclusion, label: isAr ? pair("ui_packagesview_5")[0] : pair("ui_packagesview_5")[1] },
+              { v: "full" as Inclusion, label: isAr ? pair("ui_packagesview_6")[0] : pair("ui_packagesview_6")[1] },
+              { v: "none" as Inclusion, label: isAr ? pair("ui_packagesview_7")[0] : pair("ui_packagesview_7")[1] },
             ].map((it) => (
               <span key={it.v} className="inline-flex items-center gap-2">
                 <Cell value={it.v} />
@@ -469,7 +419,7 @@ export function PackagesView() {
           </div>
 
           <p className="mt-6 text-center text-[11px] text-muted-foreground/70 md:hidden">
-            {isAr ? "← اسحب لعرض جميع الفئات →" : "← Swipe to see all tiers →"}
+            {isAr ? pair("ui_packagesview_8")[0] : pair("ui_packagesview_8")[1]}
           </p>
 
           <div className="mt-4 overflow-hidden rounded-3xl border border-border/70 bg-card md:mt-10">
@@ -478,7 +428,7 @@ export function PackagesView() {
                 <thead>
                   <tr className="border-b border-border/70 bg-background/40">
                     <th className={`px-6 py-5 font-medium text-muted-foreground ${isAr ? "text-right" : "text-left"}`}>
-                      {isAr ? "المكوّنات" : "Deliverables"}
+                      {isAr ? pair("ui_packagesview_9")[0] : pair("ui_packagesview_9")[1]}
                     </th>
                     {tiers.map((tier) => {
                       const isActive = activeSlug === tier.slug;
@@ -493,7 +443,7 @@ export function PackagesView() {
                           </span>
                           {tier.featured && (
                             <span className="mx-auto mt-1 block text-[9px] font-bold uppercase tracking-[0.2em] text-accent/70">
-                              {(isAr ? tier.badge_ar : tier.badge_en) ?? (isAr ? "الأكثر اختيارًا" : "Most Popular")}
+                              {(isAr ? tier.badge_ar : tier.badge_en) ?? (isAr ? pair("ui_packagesview_1")[0] : pair("ui_packagesview_1")[1])}
                             </span>
                           )}
                         </th>
@@ -540,10 +490,10 @@ export function PackagesView() {
         <div className="mx-auto max-w-3xl px-6 py-20 sm:py-24">
           <div className="text-center">
             <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-accent">
-              {isAr ? "أسئلة شائعة" : "FAQ"}
+              {isAr ? pair("ui_packagesview_10")[0] : pair("ui_packagesview_10")[1]}
             </span>
             <h2 className="mt-4 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              {isAr ? "أسئلةٌ يسألها العملاء عادةً" : "Questions clients usually ask"}
+              {isAr ? pair("ui_packagesview_11")[0] : pair("ui_packagesview_11")[1]}
             </h2>
           </div>
           <div className="mt-12 space-y-3">
@@ -584,7 +534,7 @@ export function PackagesView() {
                 to={`${base}/projects` as string}
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-transparent px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/5"
               >
-                {isAr ? "استعرض الأعمال" : "Explore projects"}
+                {isAr ? pair("ui_packagesview_12")[0] : pair("ui_packagesview_12")[1]}
               </Link>
             </div>
           </div>

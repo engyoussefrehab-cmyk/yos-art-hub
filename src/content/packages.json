@@ -1,0 +1,124 @@
+{
+  "tier_meta": {
+    "launch": {
+      "timeline": {
+        "ar": "٧–١٠ أيام",
+        "en": "7–10 days"
+      },
+      "revisions": {
+        "ar": "جولتا مراجعة",
+        "en": "2 revision rounds"
+      },
+      "bestFor": {
+        "ar": "الشركات الناشئة والمشاريع الجديدة",
+        "en": "Startups & new ventures"
+      }
+    },
+    "signature": {
+      "timeline": {
+        "ar": "٣–٤ أسابيع",
+        "en": "3–4 weeks"
+      },
+      "revisions": {
+        "ar": "٣ جولات مراجعة",
+        "en": "3 revision rounds"
+      },
+      "bestFor": {
+        "ar": "الأعمال النامية والعلامات المتوسّطة",
+        "en": "Growing brands & SMBs"
+      }
+    },
+    "system": {
+      "timeline": {
+        "ar": "٦–٨ أسابيع",
+        "en": "6–8 weeks"
+      },
+      "revisions": {
+        "ar": "مراجعات مفتوحة",
+        "en": "Open revisions"
+      },
+      "bestFor": {
+        "ar": "المؤسّسات والفرق التسويقيّة",
+        "en": "Enterprises & marketing teams"
+      }
+    }
+  },
+  "trust_stats": [
+    {
+      "value_ar": "+٦٠",
+      "label_ar": "علامة تجاريّة",
+      "value_en": "60+",
+      "label_en": "brands crafted"
+    },
+    {
+      "value_ar": "٩ سنوات",
+      "label_ar": "خبرة تصميم",
+      "value_en": "9 yrs",
+      "label_en": "design experience"
+    },
+    {
+      "value_ar": "٤.٩/٥",
+      "label_ar": "تقييم العملاء",
+      "value_en": "4.9/5",
+      "label_en": "client rating"
+    }
+  ],
+  "process_steps": [
+    {
+      "title_ar": "الاكتشاف",
+      "desc_ar": "جلسة تعريفيّة لفهم علامتك وأهدافك.",
+      "title_en": "Discover",
+      "desc_en": "Kick-off call to understand your brand and goals."
+    },
+    {
+      "title_ar": "الاستراتيجيّة",
+      "desc_ar": "تحديد الموقع والرسالة والجمهور.",
+      "title_en": "Strategy",
+      "desc_en": "Positioning, message, and audience clarity."
+    },
+    {
+      "title_ar": "التصميم",
+      "desc_ar": "بناء الهوية البصريّة ومكوّناتها.",
+      "title_en": "Design",
+      "desc_en": "Crafting the visual identity system."
+    },
+    {
+      "title_ar": "التسليم",
+      "desc_ar": "الملفات والدليل ودعم التطبيق.",
+      "title_en": "Handoff",
+      "desc_en": "Files, guidelines, and rollout support."
+    }
+  ],
+  "faqs": [
+    {
+      "q_ar": "كم يستغرق المشروع عادةً؟",
+      "a_ar": "الجدول الزمنيّ يعتمد على الفئة المختارة: انطلاق العلامة يستغرق ٧–١٠ أيام، توقيع العلامة ٣–٤ أسابيع، ونظام العلامة ٦–٨ أسابيع.",
+      "q_en": "How long does a typical project take?",
+      "a_en": "It depends on the tier: Brand Launch runs 7–10 days, Brand Signature 3–4 weeks, and Brand System 6–8 weeks."
+    },
+    {
+      "q_ar": "هل الأسعار المعروضة نهائيّة؟",
+      "a_ar": "الأسعار تُمثّل قيمة الاستثمار الأوّليّة. يُحدَّد السعر النهائي بعد جلسة الاكتشاف وفقًا لنطاق المشروع وأهدافك.",
+      "q_en": "Are the listed prices final?",
+      "a_en": "They represent the starting investment. The final quote is confirmed after the discovery call based on project scope and goals."
+    },
+    {
+      "q_ar": "كم عدد جولات المراجعة المتاحة؟",
+      "a_ar": "تختلف بحسب الفئة — من جولتين إلى مراجعات مفتوحة في فئة نظام العلامة. أُشجّع دائمًا على جمع الملاحظات في جولة واحدة موحّدة.",
+      "q_en": "How many revision rounds are included?",
+      "a_en": "It varies by tier — from 2 rounds up to open revisions on Brand System. I always recommend consolidating feedback into a single round for the best results."
+    },
+    {
+      "q_ar": "ما طريقة الدفع؟",
+      "a_ar": "دفعة أولى بنسبة ٥٠٪ لبدء المشروع، والمتبقّي عند التسليم النهائي. أستقبل التحويلات البنكيّة، Wise، وInstaPay.",
+      "q_en": "How does payment work?",
+      "a_en": "A 50% deposit to start and 50% on final delivery. I accept bank transfer, Wise, and InstaPay."
+    },
+    {
+      "q_ar": "هل تعمل مع عملاء خارج الخليج؟",
+      "a_ar": "نعم، أعمل مع عملاء في السعوديّة والإمارات ومصر وأوروبا. جميع الاجتماعات تُعقد عبر الإنترنت.",
+      "q_en": "Do you work with clients outside the Gulf?",
+      "a_en": "Yes — I work with clients across KSA, UAE, Egypt, and Europe. All meetings happen remotely."
+    }
+  ]
+}

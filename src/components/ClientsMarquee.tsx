@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/i18n/use-lang";
 import { supabase } from "@/integrations/supabase/client";
 
+import { pair } from "@/i18n/dictionary";
 type Logo = { id: string; name: string; logo_url: string; href: string | null };
 
 function LogoTile({ logo }: { logo: Logo }) {
@@ -115,7 +116,7 @@ export function ClientsMarquee() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
             </span>
-            {lang === "ar" ? "أبرز العملاء" : "Selected clients"}
+            {lang === "ar" ? pair("ui_clientsmarquee_1")[0] : pair("ui_clientsmarquee_1")[1]}
           </span>
           <h2
             id="clients-heading"
@@ -134,9 +135,7 @@ export function ClientsMarquee() {
             )}
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-white/60 md:text-base">
-            {lang === "ar"
-              ? "نخبةٌ من العلامات في السعودية والإمارات ومصر والخليج — شراكاتٌ بنيت على الأثر لا على الظهور."
-              : "A selection of brands across KSA, UAE, Egypt and the Gulf — partnerships built on impact, not visibility."}
+            {lang === "ar" ? pair("ui_clientsmarquee_2")[0] : pair("ui_clientsmarquee_2")[1]}
           </p>
         </div>
 
@@ -147,19 +146,19 @@ export function ClientsMarquee() {
               {count}+
             </div>
             <div className="mt-1 text-[11px] uppercase tracking-widest text-white/50">
-              {lang === "ar" ? "علامة" : "Brands"}
+              {lang === "ar" ? pair("ui_clientsmarquee_3")[0] : pair("ui_clientsmarquee_3")[1]}
             </div>
           </div>
           <div className="px-3">
             <div className="font-display text-2xl font-bold text-white md:text-3xl">4</div>
             <div className="mt-1 text-[11px] uppercase tracking-widest text-white/50">
-              {lang === "ar" ? "أسواق" : "Markets"}
+              {lang === "ar" ? pair("ui_clientsmarquee_4")[0] : pair("ui_clientsmarquee_4")[1]}
             </div>
           </div>
           <div className="px-3">
             <div className="font-display text-2xl font-bold text-white md:text-3xl">100%</div>
             <div className="mt-1 text-[11px] uppercase tracking-widest text-white/50">
-              {lang === "ar" ? "التزام" : "Delivery"}
+              {lang === "ar" ? pair("ui_clientsmarquee_5")[0] : pair("ui_clientsmarquee_5")[1]}
             </div>
           </div>
         </div>

@@ -17,6 +17,7 @@ import type { ServiceDTO } from "@/lib/services.functions";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import type { MethodologyDataDTO } from "@/lib/methodology.functions";
 
+import { pair } from "@/i18n/dictionary";
 const SERVICE_FALLBACK_IMAGES = [
   svcVisualIdentity.url,
   svcLogoDesign.url,
@@ -103,9 +104,9 @@ function Hero() {
             </a>
           </div>
           <div className="mt-12 grid grid-cols-3 gap-6 border-t border-border pt-8">
-            <Stat n={lang === "ar" ? "+٨" : "8+"} labelKey="stat_years" />
-            <Stat n={lang === "ar" ? "+٢٥٠" : "250+"} labelKey="stat_brands" />
-            <Stat n={lang === "ar" ? "+٢٠" : "20+"} labelKey="stat_sectors" />
+            <Stat n={lang === "ar" ? pair("ui_contactview_1")[0] : pair("ui_contactview_1")[1]} labelKey="stat_years" />
+            <Stat n={lang === "ar" ? pair("ui_contactview_2")[0] : pair("ui_contactview_2")[1]} labelKey="stat_brands" />
+            <Stat n={lang === "ar" ? pair("ui_contactview_3")[0] : pair("ui_contactview_3")[1]} labelKey="stat_sectors" />
           </div>
         </div>
         <div className="md:col-span-5 relative flex items-center justify-center">
@@ -247,7 +248,7 @@ function Services({ items }: { items: ServiceDTO[] }) {
                 </h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
                 <div className={`mt-5 inline-flex items-center gap-2 text-xs font-semibold text-accent opacity-0 transition-all duration-300 group-hover:opacity-100 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
-                  <span>{lang === "ar" ? "اعرف المزيد" : "Learn more"}</span>
+                  <span>{lang === "ar" ? pair("ui_homeview_1")[0] : pair("ui_homeview_1")[1]}</span>
                   <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
                 </div>
               </div>
