@@ -15,4 +15,4 @@ export function absUrl(path: string): string {
  * Contact form delivery (Web3Forms — free, sends every message to your email).
  * Get a key at https://web3forms.com by entering your email, then paste it here.
  */
-export const WEB3FORMS_ACCESS_KEY = "PASTE_WEB3FORMS_KEY_HERE";
+export const WEB3FORMS_ACCESS_KEY = "5b2a3b0a-0f52-48bc-80db-bbeeeb5bff27";
