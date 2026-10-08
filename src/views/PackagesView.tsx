@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
+const useServerFn = <T,>(fn: T) => fn;
 import { useLang } from "@/i18n/use-lang";
 import { Reveal } from "@/components/Reveal";
 import {

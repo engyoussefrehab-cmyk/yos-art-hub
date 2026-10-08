@@ -13,60 +13,26 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as AdminRouteImport } from './routes/admin'
+import { Route as R404RouteImport } from './routes/404'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as EnIndexRouteImport } from './routes/en.index'
-import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as EnRssDotxmlRouteImport } from './routes/en.rss[.]xml'
 import { Route as EnPackagesRouteImport } from './routes/en.packages'
 import { Route as EnContactRouteImport } from './routes/en.contact'
-import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
-import { Route as AdminTagsRouteImport } from './routes/admin.tags'
-import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
-import { Route as AdminServicesRouteImport } from './routes/admin.services'
-import { Route as AdminServiceTierPageRouteImport } from './routes/admin.service-tier-page'
-import { Route as AdminSeoRouteImport } from './routes/admin.seo'
-import { Route as AdminSectionsRouteImport } from './routes/admin.sections'
-import { Route as AdminProfileRouteImport } from './routes/admin.profile'
-import { Route as AdminPagesRouteImport } from './routes/admin.pages'
-import { Route as AdminPageSeoRouteImport } from './routes/admin.page-seo'
-import { Route as AdminMethodologyRouteImport } from './routes/admin.methodology'
-import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
-import { Route as AdminMenusRouteImport } from './routes/admin.menus'
-import { Route as AdminMediaRouteImport } from './routes/admin.media'
-import { Route as AdminIndexingRouteImport } from './routes/admin.indexing'
-import { Route as AdminClientsRouteImport } from './routes/admin.clients'
-import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
-import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
 import { Route as InsightsCategoryIndexRouteImport } from './routes/insights.$category.index'
 import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
 import { Route as EnInsightsIndexRouteImport } from './routes/en.insights.index'
-import { Route as AdminServicesIndexRouteImport } from './routes/admin.services.index'
-import { Route as AdminPortfolioIndexRouteImport } from './routes/admin.portfolio.index'
-import { Route as AdminInsightsIndexRouteImport } from './routes/admin.insights.index'
 import { Route as ProjectsCategorySlugRouteImport } from './routes/projects.$category.$slug'
-import { Route as PreviewProjectsIdRouteImport } from './routes/preview.projects.$id'
 import { Route as InsightsCategorySlugRouteImport } from './routes/insights.$category.$slug'
-import { Route as ApiPublicContactRouteImport } from './routes/api/public/contact'
-import { Route as AdminServicesNewRouteImport } from './routes/admin.services.new'
-import { Route as AdminServicesIdRouteImport } from './routes/admin.services.$id'
-import { Route as AdminPortfolioNewRouteImport } from './routes/admin.portfolio.new'
-import { Route as AdminPortfolioIdRouteImport } from './routes/admin.portfolio.$id'
-import { Route as AdminInsightsNewRouteImport } from './routes/admin.insights.new'
-import { Route as AdminInsightsIdRouteImport } from './routes/admin.insights.$id'
+import { Route as EnGoSplatRouteImport } from './routes/en.go.$'
 import { Route as EnProjectsCategoryIndexRouteImport } from './routes/en.projects.$category.index'
 import { Route as EnInsightsCategoryIndexRouteImport } from './routes/en.insights.$category.index'
-import { Route as AdminCmsEntityIndexRouteImport } from './routes/admin.cms.$entity.index'
 import { Route as EnProjectsCategorySlugRouteImport } from './routes/en.projects.$category.$slug'
 import { Route as EnInsightsCategorySlugRouteImport } from './routes/en.insights.$category.$slug'
-import { Route as AdminCmsEntityNewRouteImport } from './routes/admin.cms.$entity.new'
-import { Route as AdminCmsEntityIdRouteImport } from './routes/admin.cms.$entity.$id'
-import { Route as ApiPublicPortfolioCoverSplatRouteImport } from './routes/api/public/portfolio.cover.$'
-import { Route as ApiPublicInsightsCoverSplatRouteImport } from './routes/api/public/insights.cover.$'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -88,9 +54,9 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const R404Route = R404RouteImport.update({
+  id: '/404',
+  path: '/404',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -113,11 +79,6 @@ const EnIndexRoute = EnIndexRouteImport.update({
   path: '/en/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminRoute,
-} as any)
 const GoSplatRoute = GoSplatRouteImport.update({
   id: '/go/$',
   path: '/go/$',
@@ -137,96 +98,6 @@ const EnContactRoute = EnContactRouteImport.update({
   id: '/en/contact',
   path: '/en/contact',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
-  id: '/testimonials',
-  path: '/testimonials',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminTagsRoute = AdminTagsRouteImport.update({
-  id: '/tags',
-  path: '/tags',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminServicesRoute = AdminServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminServiceTierPageRoute = AdminServiceTierPageRouteImport.update({
-  id: '/service-tier-page',
-  path: '/service-tier-page',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminSeoRoute = AdminSeoRouteImport.update({
-  id: '/seo',
-  path: '/seo',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminSectionsRoute = AdminSectionsRouteImport.update({
-  id: '/sections',
-  path: '/sections',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminProfileRoute = AdminProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPagesRoute = AdminPagesRouteImport.update({
-  id: '/pages',
-  path: '/pages',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPageSeoRoute = AdminPageSeoRouteImport.update({
-  id: '/page-seo',
-  path: '/page-seo',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMethodologyRoute = AdminMethodologyRouteImport.update({
-  id: '/methodology',
-  path: '/methodology',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMessagesRoute = AdminMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMenusRoute = AdminMenusRouteImport.update({
-  id: '/menus',
-  path: '/menus',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMediaRoute = AdminMediaRouteImport.update({
-  id: '/media',
-  path: '/media',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminIndexingRoute = AdminIndexingRouteImport.update({
-  id: '/indexing',
-  path: '/indexing',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminClientsRoute = AdminClientsRouteImport.update({
-  id: '/clients',
-  path: '/clients',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
-  id: '/categories',
-  path: '/categories',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminAuditRoute = AdminAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
-  getParentRoute: () => AdminRoute,
 } as any)
 const ProjectsCategoryIndexRoute = ProjectsCategoryIndexRouteImport.update({
   id: '/projects/$category/',
@@ -248,29 +119,9 @@ const EnInsightsIndexRoute = EnInsightsIndexRouteImport.update({
   path: '/en/insights/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminServicesIndexRoute = AdminServicesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminServicesRoute,
-} as any)
-const AdminPortfolioIndexRoute = AdminPortfolioIndexRouteImport.update({
-  id: '/portfolio/',
-  path: '/portfolio/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminInsightsIndexRoute = AdminInsightsIndexRouteImport.update({
-  id: '/insights/',
-  path: '/insights/',
-  getParentRoute: () => AdminRoute,
-} as any)
 const ProjectsCategorySlugRoute = ProjectsCategorySlugRouteImport.update({
   id: '/projects/$category/$slug',
   path: '/projects/$category/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PreviewProjectsIdRoute = PreviewProjectsIdRouteImport.update({
-  id: '/preview/projects/$id',
-  path: '/preview/projects/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsightsCategorySlugRoute = InsightsCategorySlugRouteImport.update({
@@ -278,40 +129,10 @@ const InsightsCategorySlugRoute = InsightsCategorySlugRouteImport.update({
   path: '/insights/$category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicContactRoute = ApiPublicContactRouteImport.update({
-  id: '/api/public/contact',
-  path: '/api/public/contact',
+const EnGoSplatRoute = EnGoSplatRouteImport.update({
+  id: '/en/go/$',
+  path: '/en/go/$',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AdminServicesNewRoute = AdminServicesNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AdminServicesRoute,
-} as any)
-const AdminServicesIdRoute = AdminServicesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AdminServicesRoute,
-} as any)
-const AdminPortfolioNewRoute = AdminPortfolioNewRouteImport.update({
-  id: '/portfolio/new',
-  path: '/portfolio/new',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPortfolioIdRoute = AdminPortfolioIdRouteImport.update({
-  id: '/portfolio/$id',
-  path: '/portfolio/$id',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminInsightsNewRoute = AdminInsightsNewRouteImport.update({
-  id: '/insights/new',
-  path: '/insights/new',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminInsightsIdRoute = AdminInsightsIdRouteImport.update({
-  id: '/insights/$id',
-  path: '/insights/$id',
-  getParentRoute: () => AdminRoute,
 } as any)
 const EnProjectsCategoryIndexRoute = EnProjectsCategoryIndexRouteImport.update({
   id: '/en/projects/$category/',
@@ -323,11 +144,6 @@ const EnInsightsCategoryIndexRoute = EnInsightsCategoryIndexRouteImport.update({
   path: '/en/insights/$category/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminCmsEntityIndexRoute = AdminCmsEntityIndexRouteImport.update({
-  id: '/cms/$entity/',
-  path: '/cms/$entity/',
-  getParentRoute: () => AdminRoute,
-} as any)
 const EnProjectsCategorySlugRoute = EnProjectsCategorySlugRouteImport.update({
   id: '/en/projects/$category/$slug',
   path: '/en/projects/$category/$slug',
@@ -338,392 +154,170 @@ const EnInsightsCategorySlugRoute = EnInsightsCategorySlugRouteImport.update({
   path: '/en/insights/$category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminCmsEntityNewRoute = AdminCmsEntityNewRouteImport.update({
-  id: '/cms/$entity/new',
-  path: '/cms/$entity/new',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCmsEntityIdRoute = AdminCmsEntityIdRouteImport.update({
-  id: '/cms/$entity/$id',
-  path: '/cms/$entity/$id',
-  getParentRoute: () => AdminRoute,
-} as any)
-const ApiPublicPortfolioCoverSplatRoute =
-  ApiPublicPortfolioCoverSplatRouteImport.update({
-    id: '/api/public/portfolio/cover/$',
-    path: '/api/public/portfolio/cover/$',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicInsightsCoverSplatRoute =
-  ApiPublicInsightsCoverSplatRouteImport.update({
-    id: '/api/public/insights/cover/$',
-    path: '/api/public/insights/cover/$',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/404': typeof R404Route
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/audit': typeof AdminAuditRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/clients': typeof AdminClientsRoute
-  '/admin/indexing': typeof AdminIndexingRoute
-  '/admin/media': typeof AdminMediaRoute
-  '/admin/menus': typeof AdminMenusRoute
-  '/admin/messages': typeof AdminMessagesRoute
-  '/admin/methodology': typeof AdminMethodologyRoute
-  '/admin/page-seo': typeof AdminPageSeoRoute
-  '/admin/pages': typeof AdminPagesRoute
-  '/admin/profile': typeof AdminProfileRoute
-  '/admin/sections': typeof AdminSectionsRoute
-  '/admin/seo': typeof AdminSeoRoute
-  '/admin/service-tier-page': typeof AdminServiceTierPageRoute
-  '/admin/services': typeof AdminServicesRouteWithChildren
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/tags': typeof AdminTagsRoute
-  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
   '/go/$': typeof GoSplatRoute
-  '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
-  '/admin/insights/$id': typeof AdminInsightsIdRoute
-  '/admin/insights/new': typeof AdminInsightsNewRoute
-  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
-  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
-  '/admin/services/$id': typeof AdminServicesIdRoute
-  '/admin/services/new': typeof AdminServicesNewRoute
-  '/api/public/contact': typeof ApiPublicContactRoute
+  '/en/go/$': typeof EnGoSplatRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
-  '/preview/projects/$id': typeof PreviewProjectsIdRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
-  '/admin/insights/': typeof AdminInsightsIndexRoute
-  '/admin/portfolio/': typeof AdminPortfolioIndexRoute
-  '/admin/services/': typeof AdminServicesIndexRoute
   '/en/insights/': typeof EnInsightsIndexRoute
   '/en/projects/': typeof EnProjectsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
-  '/admin/cms/$entity/$id': typeof AdminCmsEntityIdRoute
-  '/admin/cms/$entity/new': typeof AdminCmsEntityNewRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
   '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
-  '/admin/cms/$entity/': typeof AdminCmsEntityIndexRoute
   '/en/insights/$category/': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
-  '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
-  '/api/public/portfolio/cover/$': typeof ApiPublicPortfolioCoverSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/404': typeof R404Route
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/audit': typeof AdminAuditRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/clients': typeof AdminClientsRoute
-  '/admin/indexing': typeof AdminIndexingRoute
-  '/admin/media': typeof AdminMediaRoute
-  '/admin/menus': typeof AdminMenusRoute
-  '/admin/messages': typeof AdminMessagesRoute
-  '/admin/methodology': typeof AdminMethodologyRoute
-  '/admin/page-seo': typeof AdminPageSeoRoute
-  '/admin/pages': typeof AdminPagesRoute
-  '/admin/profile': typeof AdminProfileRoute
-  '/admin/sections': typeof AdminSectionsRoute
-  '/admin/seo': typeof AdminSeoRoute
-  '/admin/service-tier-page': typeof AdminServiceTierPageRoute
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/tags': typeof AdminTagsRoute
-  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
   '/go/$': typeof GoSplatRoute
-  '/admin': typeof AdminIndexRoute
   '/en': typeof EnIndexRoute
   '/insights': typeof InsightsIndexRoute
   '/projects': typeof ProjectsIndexRoute
-  '/admin/insights/$id': typeof AdminInsightsIdRoute
-  '/admin/insights/new': typeof AdminInsightsNewRoute
-  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
-  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
-  '/admin/services/$id': typeof AdminServicesIdRoute
-  '/admin/services/new': typeof AdminServicesNewRoute
-  '/api/public/contact': typeof ApiPublicContactRoute
+  '/en/go/$': typeof EnGoSplatRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
-  '/preview/projects/$id': typeof PreviewProjectsIdRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
-  '/admin/insights': typeof AdminInsightsIndexRoute
-  '/admin/portfolio': typeof AdminPortfolioIndexRoute
-  '/admin/services': typeof AdminServicesIndexRoute
   '/en/insights': typeof EnInsightsIndexRoute
   '/en/projects': typeof EnProjectsIndexRoute
   '/insights/$category': typeof InsightsCategoryIndexRoute
   '/projects/$category': typeof ProjectsCategoryIndexRoute
-  '/admin/cms/$entity/$id': typeof AdminCmsEntityIdRoute
-  '/admin/cms/$entity/new': typeof AdminCmsEntityNewRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
   '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
-  '/admin/cms/$entity': typeof AdminCmsEntityIndexRoute
   '/en/insights/$category': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category': typeof EnProjectsCategoryIndexRoute
-  '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
-  '/api/public/portfolio/cover/$': typeof ApiPublicPortfolioCoverSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/404': typeof R404Route
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin/audit': typeof AdminAuditRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/clients': typeof AdminClientsRoute
-  '/admin/indexing': typeof AdminIndexingRoute
-  '/admin/media': typeof AdminMediaRoute
-  '/admin/menus': typeof AdminMenusRoute
-  '/admin/messages': typeof AdminMessagesRoute
-  '/admin/methodology': typeof AdminMethodologyRoute
-  '/admin/page-seo': typeof AdminPageSeoRoute
-  '/admin/pages': typeof AdminPagesRoute
-  '/admin/profile': typeof AdminProfileRoute
-  '/admin/sections': typeof AdminSectionsRoute
-  '/admin/seo': typeof AdminSeoRoute
-  '/admin/service-tier-page': typeof AdminServiceTierPageRoute
-  '/admin/services': typeof AdminServicesRouteWithChildren
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/tags': typeof AdminTagsRoute
-  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/en/contact': typeof EnContactRoute
   '/en/packages': typeof EnPackagesRoute
   '/en/rss.xml': typeof EnRssDotxmlRoute
   '/go/$': typeof GoSplatRoute
-  '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
-  '/admin/insights/$id': typeof AdminInsightsIdRoute
-  '/admin/insights/new': typeof AdminInsightsNewRoute
-  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
-  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
-  '/admin/services/$id': typeof AdminServicesIdRoute
-  '/admin/services/new': typeof AdminServicesNewRoute
-  '/api/public/contact': typeof ApiPublicContactRoute
+  '/en/go/$': typeof EnGoSplatRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
-  '/preview/projects/$id': typeof PreviewProjectsIdRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
-  '/admin/insights/': typeof AdminInsightsIndexRoute
-  '/admin/portfolio/': typeof AdminPortfolioIndexRoute
-  '/admin/services/': typeof AdminServicesIndexRoute
   '/en/insights/': typeof EnInsightsIndexRoute
   '/en/projects/': typeof EnProjectsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
-  '/admin/cms/$entity/$id': typeof AdminCmsEntityIdRoute
-  '/admin/cms/$entity/new': typeof AdminCmsEntityNewRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
   '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
-  '/admin/cms/$entity/': typeof AdminCmsEntityIndexRoute
   '/en/insights/$category/': typeof EnInsightsCategoryIndexRoute
   '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
-  '/api/public/insights/cover/$': typeof ApiPublicInsightsCoverSplatRoute
-  '/api/public/portfolio/cover/$': typeof ApiPublicPortfolioCoverSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin'
+    | '/404'
     | '/contact'
     | '/packages'
     | '/rss.xml'
     | '/sitemap.xml'
-    | '/admin/audit'
-    | '/admin/categories'
-    | '/admin/clients'
-    | '/admin/indexing'
-    | '/admin/media'
-    | '/admin/menus'
-    | '/admin/messages'
-    | '/admin/methodology'
-    | '/admin/page-seo'
-    | '/admin/pages'
-    | '/admin/profile'
-    | '/admin/sections'
-    | '/admin/seo'
-    | '/admin/service-tier-page'
-    | '/admin/services'
-    | '/admin/settings'
-    | '/admin/tags'
-    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
     | '/go/$'
-    | '/admin/'
     | '/en/'
     | '/insights/'
     | '/projects/'
-    | '/admin/insights/$id'
-    | '/admin/insights/new'
-    | '/admin/portfolio/$id'
-    | '/admin/portfolio/new'
-    | '/admin/services/$id'
-    | '/admin/services/new'
-    | '/api/public/contact'
+    | '/en/go/$'
     | '/insights/$category/$slug'
-    | '/preview/projects/$id'
     | '/projects/$category/$slug'
-    | '/admin/insights/'
-    | '/admin/portfolio/'
-    | '/admin/services/'
     | '/en/insights/'
     | '/en/projects/'
     | '/insights/$category/'
     | '/projects/$category/'
-    | '/admin/cms/$entity/$id'
-    | '/admin/cms/$entity/new'
     | '/en/insights/$category/$slug'
     | '/en/projects/$category/$slug'
-    | '/admin/cms/$entity/'
     | '/en/insights/$category/'
     | '/en/projects/$category/'
-    | '/api/public/insights/cover/$'
-    | '/api/public/portfolio/cover/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/404'
     | '/contact'
     | '/packages'
     | '/rss.xml'
     | '/sitemap.xml'
-    | '/admin/audit'
-    | '/admin/categories'
-    | '/admin/clients'
-    | '/admin/indexing'
-    | '/admin/media'
-    | '/admin/menus'
-    | '/admin/messages'
-    | '/admin/methodology'
-    | '/admin/page-seo'
-    | '/admin/pages'
-    | '/admin/profile'
-    | '/admin/sections'
-    | '/admin/seo'
-    | '/admin/service-tier-page'
-    | '/admin/settings'
-    | '/admin/tags'
-    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
     | '/go/$'
-    | '/admin'
     | '/en'
     | '/insights'
     | '/projects'
-    | '/admin/insights/$id'
-    | '/admin/insights/new'
-    | '/admin/portfolio/$id'
-    | '/admin/portfolio/new'
-    | '/admin/services/$id'
-    | '/admin/services/new'
-    | '/api/public/contact'
+    | '/en/go/$'
     | '/insights/$category/$slug'
-    | '/preview/projects/$id'
     | '/projects/$category/$slug'
-    | '/admin/insights'
-    | '/admin/portfolio'
-    | '/admin/services'
     | '/en/insights'
     | '/en/projects'
     | '/insights/$category'
     | '/projects/$category'
-    | '/admin/cms/$entity/$id'
-    | '/admin/cms/$entity/new'
     | '/en/insights/$category/$slug'
     | '/en/projects/$category/$slug'
-    | '/admin/cms/$entity'
     | '/en/insights/$category'
     | '/en/projects/$category'
-    | '/api/public/insights/cover/$'
-    | '/api/public/portfolio/cover/$'
   id:
     | '__root__'
     | '/'
-    | '/admin'
+    | '/404'
     | '/contact'
     | '/packages'
     | '/rss.xml'
     | '/sitemap.xml'
-    | '/admin/audit'
-    | '/admin/categories'
-    | '/admin/clients'
-    | '/admin/indexing'
-    | '/admin/media'
-    | '/admin/menus'
-    | '/admin/messages'
-    | '/admin/methodology'
-    | '/admin/page-seo'
-    | '/admin/pages'
-    | '/admin/profile'
-    | '/admin/sections'
-    | '/admin/seo'
-    | '/admin/service-tier-page'
-    | '/admin/services'
-    | '/admin/settings'
-    | '/admin/tags'
-    | '/admin/testimonials'
     | '/en/contact'
     | '/en/packages'
     | '/en/rss.xml'
     | '/go/$'
-    | '/admin/'
     | '/en/'
     | '/insights/'
     | '/projects/'
-    | '/admin/insights/$id'
-    | '/admin/insights/new'
-    | '/admin/portfolio/$id'
-    | '/admin/portfolio/new'
-    | '/admin/services/$id'
-    | '/admin/services/new'
-    | '/api/public/contact'
+    | '/en/go/$'
     | '/insights/$category/$slug'
-    | '/preview/projects/$id'
     | '/projects/$category/$slug'
-    | '/admin/insights/'
-    | '/admin/portfolio/'
-    | '/admin/services/'
     | '/en/insights/'
     | '/en/projects/'
     | '/insights/$category/'
     | '/projects/$category/'
-    | '/admin/cms/$entity/$id'
-    | '/admin/cms/$entity/new'
     | '/en/insights/$category/$slug'
     | '/en/projects/$category/$slug'
-    | '/admin/cms/$entity/'
     | '/en/insights/$category/'
     | '/en/projects/$category/'
-    | '/api/public/insights/cover/$'
-    | '/api/public/portfolio/cover/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRouteWithChildren
+  R404Route: typeof R404Route
   ContactRoute: typeof ContactRoute
   PackagesRoute: typeof PackagesRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
@@ -735,9 +329,8 @@ export interface RootRouteChildren {
   EnIndexRoute: typeof EnIndexRoute
   InsightsIndexRoute: typeof InsightsIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
-  ApiPublicContactRoute: typeof ApiPublicContactRoute
+  EnGoSplatRoute: typeof EnGoSplatRoute
   InsightsCategorySlugRoute: typeof InsightsCategorySlugRoute
-  PreviewProjectsIdRoute: typeof PreviewProjectsIdRoute
   ProjectsCategorySlugRoute: typeof ProjectsCategorySlugRoute
   EnInsightsIndexRoute: typeof EnInsightsIndexRoute
   EnProjectsIndexRoute: typeof EnProjectsIndexRoute
@@ -747,8 +340,6 @@ export interface RootRouteChildren {
   EnProjectsCategorySlugRoute: typeof EnProjectsCategorySlugRoute
   EnInsightsCategoryIndexRoute: typeof EnInsightsCategoryIndexRoute
   EnProjectsCategoryIndexRoute: typeof EnProjectsCategoryIndexRoute
-  ApiPublicInsightsCoverSplatRoute: typeof ApiPublicInsightsCoverSplatRoute
-  ApiPublicPortfolioCoverSplatRoute: typeof ApiPublicPortfolioCoverSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -781,11 +372,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -816,13 +407,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/': {
-      id: '/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/go/$': {
       id: '/go/$'
       path: '/go/$'
@@ -850,132 +434,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/en/contact'
       preLoaderRoute: typeof EnContactRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/admin/testimonials': {
-      id: '/admin/testimonials'
-      path: '/testimonials'
-      fullPath: '/admin/testimonials'
-      preLoaderRoute: typeof AdminTestimonialsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/tags': {
-      id: '/admin/tags'
-      path: '/tags'
-      fullPath: '/admin/tags'
-      preLoaderRoute: typeof AdminTagsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/settings': {
-      id: '/admin/settings'
-      path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/services': {
-      id: '/admin/services'
-      path: '/services'
-      fullPath: '/admin/services'
-      preLoaderRoute: typeof AdminServicesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/service-tier-page': {
-      id: '/admin/service-tier-page'
-      path: '/service-tier-page'
-      fullPath: '/admin/service-tier-page'
-      preLoaderRoute: typeof AdminServiceTierPageRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/seo': {
-      id: '/admin/seo'
-      path: '/seo'
-      fullPath: '/admin/seo'
-      preLoaderRoute: typeof AdminSeoRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/sections': {
-      id: '/admin/sections'
-      path: '/sections'
-      fullPath: '/admin/sections'
-      preLoaderRoute: typeof AdminSectionsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/profile': {
-      id: '/admin/profile'
-      path: '/profile'
-      fullPath: '/admin/profile'
-      preLoaderRoute: typeof AdminProfileRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/pages': {
-      id: '/admin/pages'
-      path: '/pages'
-      fullPath: '/admin/pages'
-      preLoaderRoute: typeof AdminPagesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/page-seo': {
-      id: '/admin/page-seo'
-      path: '/page-seo'
-      fullPath: '/admin/page-seo'
-      preLoaderRoute: typeof AdminPageSeoRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/methodology': {
-      id: '/admin/methodology'
-      path: '/methodology'
-      fullPath: '/admin/methodology'
-      preLoaderRoute: typeof AdminMethodologyRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/messages': {
-      id: '/admin/messages'
-      path: '/messages'
-      fullPath: '/admin/messages'
-      preLoaderRoute: typeof AdminMessagesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/menus': {
-      id: '/admin/menus'
-      path: '/menus'
-      fullPath: '/admin/menus'
-      preLoaderRoute: typeof AdminMenusRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/media': {
-      id: '/admin/media'
-      path: '/media'
-      fullPath: '/admin/media'
-      preLoaderRoute: typeof AdminMediaRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/indexing': {
-      id: '/admin/indexing'
-      path: '/indexing'
-      fullPath: '/admin/indexing'
-      preLoaderRoute: typeof AdminIndexingRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/clients': {
-      id: '/admin/clients'
-      path: '/clients'
-      fullPath: '/admin/clients'
-      preLoaderRoute: typeof AdminClientsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/categories': {
-      id: '/admin/categories'
-      path: '/categories'
-      fullPath: '/admin/categories'
-      preLoaderRoute: typeof AdminCategoriesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/audit': {
-      id: '/admin/audit'
-      path: '/audit'
-      fullPath: '/admin/audit'
-      preLoaderRoute: typeof AdminAuditRouteImport
-      parentRoute: typeof AdminRoute
     }
     '/projects/$category/': {
       id: '/projects/$category/'
@@ -1005,39 +463,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnInsightsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/services/': {
-      id: '/admin/services/'
-      path: '/'
-      fullPath: '/admin/services/'
-      preLoaderRoute: typeof AdminServicesIndexRouteImport
-      parentRoute: typeof AdminServicesRoute
-    }
-    '/admin/portfolio/': {
-      id: '/admin/portfolio/'
-      path: '/portfolio'
-      fullPath: '/admin/portfolio/'
-      preLoaderRoute: typeof AdminPortfolioIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/insights/': {
-      id: '/admin/insights/'
-      path: '/insights'
-      fullPath: '/admin/insights/'
-      preLoaderRoute: typeof AdminInsightsIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/projects/$category/$slug': {
       id: '/projects/$category/$slug'
       path: '/projects/$category/$slug'
       fullPath: '/projects/$category/$slug'
       preLoaderRoute: typeof ProjectsCategorySlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/preview/projects/$id': {
-      id: '/preview/projects/$id'
-      path: '/preview/projects/$id'
-      fullPath: '/preview/projects/$id'
-      preLoaderRoute: typeof PreviewProjectsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights/$category/$slug': {
@@ -1047,54 +477,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InsightsCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/contact': {
-      id: '/api/public/contact'
-      path: '/api/public/contact'
-      fullPath: '/api/public/contact'
-      preLoaderRoute: typeof ApiPublicContactRouteImport
+    '/en/go/$': {
+      id: '/en/go/$'
+      path: '/en/go/$'
+      fullPath: '/en/go/$'
+      preLoaderRoute: typeof EnGoSplatRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/admin/services/new': {
-      id: '/admin/services/new'
-      path: '/new'
-      fullPath: '/admin/services/new'
-      preLoaderRoute: typeof AdminServicesNewRouteImport
-      parentRoute: typeof AdminServicesRoute
-    }
-    '/admin/services/$id': {
-      id: '/admin/services/$id'
-      path: '/$id'
-      fullPath: '/admin/services/$id'
-      preLoaderRoute: typeof AdminServicesIdRouteImport
-      parentRoute: typeof AdminServicesRoute
-    }
-    '/admin/portfolio/new': {
-      id: '/admin/portfolio/new'
-      path: '/portfolio/new'
-      fullPath: '/admin/portfolio/new'
-      preLoaderRoute: typeof AdminPortfolioNewRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/portfolio/$id': {
-      id: '/admin/portfolio/$id'
-      path: '/portfolio/$id'
-      fullPath: '/admin/portfolio/$id'
-      preLoaderRoute: typeof AdminPortfolioIdRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/insights/new': {
-      id: '/admin/insights/new'
-      path: '/insights/new'
-      fullPath: '/admin/insights/new'
-      preLoaderRoute: typeof AdminInsightsNewRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/insights/$id': {
-      id: '/admin/insights/$id'
-      path: '/insights/$id'
-      fullPath: '/admin/insights/$id'
-      preLoaderRoute: typeof AdminInsightsIdRouteImport
-      parentRoute: typeof AdminRoute
     }
     '/en/projects/$category/': {
       id: '/en/projects/$category/'
@@ -1110,13 +498,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnInsightsCategoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/cms/$entity/': {
-      id: '/admin/cms/$entity/'
-      path: '/cms/$entity'
-      fullPath: '/admin/cms/$entity/'
-      preLoaderRoute: typeof AdminCmsEntityIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/en/projects/$category/$slug': {
       id: '/en/projects/$category/$slug'
       path: '/en/projects/$category/$slug'
@@ -1131,120 +512,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnInsightsCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/cms/$entity/new': {
-      id: '/admin/cms/$entity/new'
-      path: '/cms/$entity/new'
-      fullPath: '/admin/cms/$entity/new'
-      preLoaderRoute: typeof AdminCmsEntityNewRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/cms/$entity/$id': {
-      id: '/admin/cms/$entity/$id'
-      path: '/cms/$entity/$id'
-      fullPath: '/admin/cms/$entity/$id'
-      preLoaderRoute: typeof AdminCmsEntityIdRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/api/public/portfolio/cover/$': {
-      id: '/api/public/portfolio/cover/$'
-      path: '/api/public/portfolio/cover/$'
-      fullPath: '/api/public/portfolio/cover/$'
-      preLoaderRoute: typeof ApiPublicPortfolioCoverSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/insights/cover/$': {
-      id: '/api/public/insights/cover/$'
-      path: '/api/public/insights/cover/$'
-      fullPath: '/api/public/insights/cover/$'
-      preLoaderRoute: typeof ApiPublicInsightsCoverSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
-interface AdminServicesRouteChildren {
-  AdminServicesIdRoute: typeof AdminServicesIdRoute
-  AdminServicesNewRoute: typeof AdminServicesNewRoute
-  AdminServicesIndexRoute: typeof AdminServicesIndexRoute
-}
-
-const AdminServicesRouteChildren: AdminServicesRouteChildren = {
-  AdminServicesIdRoute: AdminServicesIdRoute,
-  AdminServicesNewRoute: AdminServicesNewRoute,
-  AdminServicesIndexRoute: AdminServicesIndexRoute,
-}
-
-const AdminServicesRouteWithChildren = AdminServicesRoute._addFileChildren(
-  AdminServicesRouteChildren,
-)
-
-interface AdminRouteChildren {
-  AdminAuditRoute: typeof AdminAuditRoute
-  AdminCategoriesRoute: typeof AdminCategoriesRoute
-  AdminClientsRoute: typeof AdminClientsRoute
-  AdminIndexingRoute: typeof AdminIndexingRoute
-  AdminMediaRoute: typeof AdminMediaRoute
-  AdminMenusRoute: typeof AdminMenusRoute
-  AdminMessagesRoute: typeof AdminMessagesRoute
-  AdminMethodologyRoute: typeof AdminMethodologyRoute
-  AdminPageSeoRoute: typeof AdminPageSeoRoute
-  AdminPagesRoute: typeof AdminPagesRoute
-  AdminProfileRoute: typeof AdminProfileRoute
-  AdminSectionsRoute: typeof AdminSectionsRoute
-  AdminSeoRoute: typeof AdminSeoRoute
-  AdminServiceTierPageRoute: typeof AdminServiceTierPageRoute
-  AdminServicesRoute: typeof AdminServicesRouteWithChildren
-  AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminTagsRoute: typeof AdminTagsRoute
-  AdminTestimonialsRoute: typeof AdminTestimonialsRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  AdminInsightsIdRoute: typeof AdminInsightsIdRoute
-  AdminInsightsNewRoute: typeof AdminInsightsNewRoute
-  AdminPortfolioIdRoute: typeof AdminPortfolioIdRoute
-  AdminPortfolioNewRoute: typeof AdminPortfolioNewRoute
-  AdminInsightsIndexRoute: typeof AdminInsightsIndexRoute
-  AdminPortfolioIndexRoute: typeof AdminPortfolioIndexRoute
-  AdminCmsEntityIdRoute: typeof AdminCmsEntityIdRoute
-  AdminCmsEntityNewRoute: typeof AdminCmsEntityNewRoute
-  AdminCmsEntityIndexRoute: typeof AdminCmsEntityIndexRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminAuditRoute: AdminAuditRoute,
-  AdminCategoriesRoute: AdminCategoriesRoute,
-  AdminClientsRoute: AdminClientsRoute,
-  AdminIndexingRoute: AdminIndexingRoute,
-  AdminMediaRoute: AdminMediaRoute,
-  AdminMenusRoute: AdminMenusRoute,
-  AdminMessagesRoute: AdminMessagesRoute,
-  AdminMethodologyRoute: AdminMethodologyRoute,
-  AdminPageSeoRoute: AdminPageSeoRoute,
-  AdminPagesRoute: AdminPagesRoute,
-  AdminProfileRoute: AdminProfileRoute,
-  AdminSectionsRoute: AdminSectionsRoute,
-  AdminSeoRoute: AdminSeoRoute,
-  AdminServiceTierPageRoute: AdminServiceTierPageRoute,
-  AdminServicesRoute: AdminServicesRouteWithChildren,
-  AdminSettingsRoute: AdminSettingsRoute,
-  AdminTagsRoute: AdminTagsRoute,
-  AdminTestimonialsRoute: AdminTestimonialsRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  AdminInsightsIdRoute: AdminInsightsIdRoute,
-  AdminInsightsNewRoute: AdminInsightsNewRoute,
-  AdminPortfolioIdRoute: AdminPortfolioIdRoute,
-  AdminPortfolioNewRoute: AdminPortfolioNewRoute,
-  AdminInsightsIndexRoute: AdminInsightsIndexRoute,
-  AdminPortfolioIndexRoute: AdminPortfolioIndexRoute,
-  AdminCmsEntityIdRoute: AdminCmsEntityIdRoute,
-  AdminCmsEntityNewRoute: AdminCmsEntityNewRoute,
-  AdminCmsEntityIndexRoute: AdminCmsEntityIndexRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRouteWithChildren,
+  R404Route: R404Route,
   ContactRoute: ContactRoute,
   PackagesRoute: PackagesRoute,
   RssDotxmlRoute: RssDotxmlRoute,
@@ -1256,9 +529,8 @@ const rootRouteChildren: RootRouteChildren = {
   EnIndexRoute: EnIndexRoute,
   InsightsIndexRoute: InsightsIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
-  ApiPublicContactRoute: ApiPublicContactRoute,
+  EnGoSplatRoute: EnGoSplatRoute,
   InsightsCategorySlugRoute: InsightsCategorySlugRoute,
-  PreviewProjectsIdRoute: PreviewProjectsIdRoute,
   ProjectsCategorySlugRoute: ProjectsCategorySlugRoute,
   EnInsightsIndexRoute: EnInsightsIndexRoute,
   EnProjectsIndexRoute: EnProjectsIndexRoute,
@@ -1268,8 +540,6 @@ const rootRouteChildren: RootRouteChildren = {
   EnProjectsCategorySlugRoute: EnProjectsCategorySlugRoute,
   EnInsightsCategoryIndexRoute: EnInsightsCategoryIndexRoute,
   EnProjectsCategoryIndexRoute: EnProjectsCategoryIndexRoute,
-  ApiPublicInsightsCoverSplatRoute: ApiPublicInsightsCoverSplatRoute,
-  ApiPublicPortfolioCoverSplatRoute: ApiPublicPortfolioCoverSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

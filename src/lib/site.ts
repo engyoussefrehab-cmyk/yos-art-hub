@@ -10,3 +10,9 @@ export function absUrl(path: string): string {
   if (/^https?:\/\//i.test(path)) return path;
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }
+
+/**
+ * Contact form delivery (Web3Forms — free, sends every message to your email).
+ * Get a key at https://web3forms.com by entering your email, then paste it here.
+ */
+export const WEB3FORMS_ACCESS_KEY = "PASTE_WEB3FORMS_KEY_HERE";

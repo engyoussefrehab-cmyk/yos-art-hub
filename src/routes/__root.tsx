@@ -11,13 +11,12 @@ import {
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 import logoFull from "@/assets/logo-full.png.asset.json";
 import { useLang, detectLang } from "@/i18n/use-lang";
 import { useCmsMenu, useCmsSettings } from "@/hooks/use-cms-data";
 import { Toaster } from "@/components/ui/sonner";
 
-function NotFoundComponent() {
+export function NotFoundComponent() {
   const { t, lang } = useLang();
   const isAr = lang === "ar";
   const home = isAr ? "/" : "/en";
@@ -88,7 +87,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const { t, lang } = useLang();
   const isAr = lang === "ar";
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    console.error(error);
   }, [error]);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4" dir={isAr ? "rtl" : "ltr"}>
@@ -127,8 +126,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "يوسف رحاب — مصمم هوية بصرية في السعودية والإمارات" },
       { name: "twitter:description", content: "مصمم هوية بصرية استراتيجي لعلامات السعودية والإمارات والخليج — 8+ سنوات خبرة و250+ علامة تجارية." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/c7PudvvpxgTNZbNywwP2DRvYmIk2/social-images/social-1783592902412-ChatGPT_Image_Jul_9,_2026,_01_28_06_PM.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/c7PudvvpxgTNZbNywwP2DRvYmIk2/social-images/social-1783592902412-ChatGPT_Image_Jul_9,_2026,_01_28_06_PM.webp" },
+      { property: "og:image", content: "https://yrstudio.art/media/external/social-1783592902412-ChatGPT_Image_Jul_9__2026__01_28_06_PM.webp" },
+      { name: "twitter:image", content: "https://yrstudio.art/media/external/social-1783592902412-ChatGPT_Image_Jul_9__2026__01_28_06_PM.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

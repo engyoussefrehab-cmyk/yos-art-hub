@@ -1,30 +1,25 @@
-# يوسف رحاب: هويتي البصرية
+# yrstudio.art — موقع يوسف رحاب
 
-عايز احول البرتفوليو هذا الي موقع احترافي 
+Static portfolio site for Youssef Rehab (YR Studio), hosted on GitHub Pages at **https://yrstudio.art**.
 
-انا يوسف رحاب مصمم جرافيك و هويات بصرية 
+## How it works
 
-عيد الصياغة و اجعل الموقع بالعربي و ضيف المشاريع و كل شئ
+- Built with React + TanStack Start, **prerendered to plain HTML** — no server, no database.
+- All content (projects, categories, services, packages, methodology, settings…) lives in
+  **`src/data/snapshot/*.json`**. Edit a file there to change the site.
+- Images and files live in **`public/media/`** (portfolio covers, logo, portrait, PDF).
+- `src/lib/static-db/` reads the JSON files with the same queries the pages always used.
+- Contact form messages are sent by email through Web3Forms (key in `src/lib/site.ts`).
 
-This project was built with [Lovable](https://lovable.dev).
+## Publishing
 
-**Live app**: https://yos-art-hub.lovable.app
+Every push to `main` runs `.github/workflows/deploy.yml`, which builds the site and
+publishes `dist/client` to GitHub Pages. Nothing else to do.
 
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/30cd8622-cf1b-4401-a5a8-56d8d4f482e1).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Local development
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+bun install
+bun run dev      # local preview
+bun run build    # static build into dist/client
 ```

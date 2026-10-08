@@ -1,4 +1,5 @@
 import { useId, useRef, useState, type FormEvent } from "react";
+import { WEB3FORMS_ACCESS_KEY } from "@/lib/site";
 import { z } from "zod";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
@@ -122,12 +123,20 @@ function ContactForm() {
     setErrors({});
     setSending(true);
     try {
-      const res = await fetch("/api/public/contact", {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(result.data),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          from_name: "yrstudio.art",
+          ...result.data,
+          subject: `[yrstudio.art] ${result.data.subject}`,
+          replyto: result.data.email,
+          botcheck: (form.elements.namedItem("website") as HTMLInputElement)?.value || "",
+        }),
       });
-      if (!res.ok) throw new Error(String(res.status));
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.success === false) throw new Error(String(res.status));
       setSent(true);
       form.reset();
     } catch {

@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@/lib/static-db/static-fn";
 import { z } from "zod";
 import type {
   InsightArticle,
@@ -10,8 +10,8 @@ import type {
 async function getPublicClient() {
   const { createClient } = await import("@supabase/supabase-js");
   return createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_PUBLISHABLE_KEY!,
+    "static",
+    "static",
     { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
   );
 }

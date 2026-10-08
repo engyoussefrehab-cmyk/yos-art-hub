@@ -1,12 +1,12 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@/lib/static-db/static-fn";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+const requireSupabaseAuth = null; // admin-only (static site)
 
 function publicClient() {
   return createClient<Database>(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_PUBLISHABLE_KEY!,
+    "static",
+    "static",
     { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
   );
 }

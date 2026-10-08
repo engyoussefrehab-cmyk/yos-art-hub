@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 const DESTINATIONS: Record<string, string> = {
   wa: "https://wa.me/201030365405",
@@ -7,15 +8,26 @@ const DESTINATIONS: Record<string, string> = {
   linkedin: "https://www.linkedin.com/in/youssef-rehab/",
 };
 
+// Static short links (/go/wa, /go/li …): a tiny page that forwards the visitor.
 export const Route = createFileRoute("/go/$")({
-  server: {
-    handlers: {
-      GET: async ({ params }) => {
-        const key = (params._splat ?? "").toLowerCase();
-        const dest = DESTINATIONS[key];
-        if (!dest) return new Response("Not found", { status: 404 });
-        return new Response(null, { status: 302, headers: { Location: dest, "Cache-Control": "no-store" } });
-      },
-    },
-  },
+  loader: ({ params }) => ({ dest: DESTINATIONS[(params._splat ?? "").toLowerCase()] ?? "/" }),
+  head: ({ loaderData }) => ({
+    meta: [
+      { httpEquiv: "refresh", content: `0;url=${loaderData?.dest ?? "/"}` },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
+  component: GoRedirect,
 });
+
+function GoRedirect() {
+  const { dest } = Route.useLoaderData();
+  useEffect(() => {
+    window.location.replace(dest);
+  }, [dest]);
+  return (
+    <p style={{ padding: 40, textAlign: "center" }}>
+      <a href={dest}>{dest}</a>
+    </p>
+  );
+}
