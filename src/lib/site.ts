@@ -16,3 +16,14 @@ export function absUrl(path: string): string {
  * Get a key at https://web3forms.com by entering your email, then paste it here.
  */
 export const WEB3FORMS_ACCESS_KEY = "5b2a3b0a-0f52-48bc-80db-bbeeeb5bff27";
+
+/**
+ * Absolute JPEG URL for social-share previews (WhatsApp, LinkedIn, X…).
+ * Site images are WebP; scripts/optimize-images.py writes a JPEG twin of each
+ * one under /media/share/.
+ */
+export function shareImage(url: string | null | undefined): string | undefined {
+  if (!url) return undefined;
+  const m = url.match(/^\/media\/(.+)\.webp$/);
+  return absUrl(m ? `/media/share/${m[1]}.jpg` : url);
+}

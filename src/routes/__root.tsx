@@ -1,3 +1,4 @@
+import { WEB3FORMS_ACCESS_KEY } from "@/lib/site";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -200,7 +201,7 @@ function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="inline-flex h-10 w-10 md:h-8 md:w-8 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       {isDark ? (
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -275,8 +276,6 @@ function RootComponent() {
       >
         {t("skip_to_content")}
       </a>
-      <SiteLoader />
-      <LanguageWelcome />
       <Toaster position="top-center" richColors closeButton />
       <div className="min-h-screen flex flex-col bg-background text-foreground overflow-x-hidden">
         <SiteNav />
@@ -290,206 +289,6 @@ function RootComponent() {
 }
 
 
-function LanguageWelcome() {
-  const [open, setOpen] = useState(false);
-  const dialogRef = useRef<HTMLDivElement | null>(null);
-  const openerRef = useRef<Element | null>(null);
-
-  useEffect(() => {
-    try {
-      // Persist choice across sessions — only show when the visitor has
-      // never made a selection on this device.
-      if (!localStorage.getItem("yr_lang_chosen")) {
-        const id = window.setTimeout(() => setOpen(true), 700);
-        return () => window.clearTimeout(id);
-      }
-    } catch {
-      /* storage unavailable — skip modal rather than nag every load */
-    }
-  }, []);
-
-  const choose = useCallback((lang: "ar" | "en") => {
-    try {
-      localStorage.setItem("yr_lang_chosen", lang);
-    } catch {
-      /* ignore */
-    }
-
-    const path = window.location.pathname;
-    const isOnEn = path === "/en" || path.startsWith("/en/");
-    let target = path;
-    if (lang === "en" && !isOnEn) {
-      target = `/en${path === "/" ? "" : path}`;
-    } else if (lang === "ar" && isOnEn) {
-      target = path.replace(/^\/en/, "") || "/";
-    }
-    setOpen(false);
-    if (target !== path) {
-      window.location.assign(target + window.location.search + window.location.hash);
-    }
-  }, []);
-
-  const dismiss = useCallback(() => {
-    // User dismissed without picking — remember the current URL's language
-    // so we don't nag again, and don't silently navigate them away.
-    try {
-      const path = window.location.pathname;
-      const isOnEn = path === "/en" || path.startsWith("/en/");
-      localStorage.setItem("yr_lang_chosen", isOnEn ? "en" : "ar");
-    } catch {
-      /* ignore */
-    }
-    setOpen(false);
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    openerRef.current = document.activeElement;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const focusables = (): HTMLElement[] => {
-      const nodes = dialogRef.current?.querySelectorAll<HTMLElement>(
-        'button, [href], input, [tabindex]:not([tabindex="-1"])'
-      );
-      return nodes ? Array.from(nodes) : [];
-    };
-    const first = focusables()[0];
-    first?.focus();
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        return;
-      }
-      if (e.key !== "Tab") return;
-      const list = Array.from(focusables());
-      if (list.length === 0) return;
-      const firstEl = list[0];
-      const lastEl = list[list.length - 1];
-      if (e.shiftKey && document.activeElement === firstEl) {
-        e.preventDefault();
-        lastEl.focus();
-      } else if (!e.shiftKey && document.activeElement === lastEl) {
-        e.preventDefault();
-        firstEl.focus();
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      document.removeEventListener("keydown", onKey);
-      (openerRef.current as HTMLElement | null)?.focus?.();
-    };
-  }, [open]);
-
-  if (!open) return null;
-
-  return (
-    <div
-      ref={dialogRef}
-      className="fixed inset-0 z-[100] flex items-center justify-center px-6 animate-in fade-in duration-300 motion-reduce:animate-none"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="lang-welcome-title"
-    >
-      {/* Backdrop */}
-      <button
-        type="button"
-        aria-label="Close"
-        onClick={dismiss}
-        className="absolute inset-0 bg-ink/80 backdrop-blur-md"
-        tabIndex={-1}
-      />
-
-      {/* Card */}
-      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-border/70 bg-card shadow-[0_40px_120px_-30px_rgb(0_0_0/0.5)] animate-in zoom-in-95 slide-in-from-bottom-4 duration-500 motion-reduce:animate-none">
-        {/* Ambient glow */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-70">
-          <div className="absolute -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
-        </div>
-
-        <div className="relative px-8 pb-8 pt-10 text-center sm:px-10 sm:pt-12">
-          {/* Logo */}
-          <div className="mx-auto flex items-center justify-center">
-            <img
-              src={logoFull.url}
-              alt="YR Studio"
-              className="h-10 w-auto [filter:brightness(0)] dark:[filter:brightness(0)_invert(1)]"
-            />
-          </div>
-
-          <div className="mt-6 space-y-1">
-            <p className="font-display text-2xl font-semibold tracking-tight text-foreground" id="lang-welcome-title">
-              أهلًا بك <span className="text-muted-foreground/70">·</span> Welcome
-            </p>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              اختر لغتك المفضّلة للمتابعة
-              <br />
-              <span className="text-foreground/60">Please choose your preferred language</span>
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => choose("ar")}
-              className="group flex flex-col items-center gap-1.5 rounded-2xl border border-border/70 bg-background/60 px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground hover:shadow-lg"
-              dir="rtl"
-            >
-              <span className="font-display text-lg font-semibold">العربيّة</span>
-              <span className="text-xs text-muted-foreground group-hover:text-accent-foreground/80">تصفّح باللغة العربية</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => choose("en")}
-              className="group flex flex-col items-center gap-1.5 rounded-2xl border border-border/70 bg-background/60 px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground hover:shadow-lg"
-              dir="ltr"
-            >
-              <span className="font-display text-lg font-semibold">English</span>
-              <span className="text-xs text-muted-foreground group-hover:text-accent-foreground/80">Browse in English</span>
-            </button>
-          </div>
-
-          <div className="mt-7 flex flex-col items-center gap-2">
-            <button
-              type="button"
-              onClick={dismiss}
-              className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/60 px-5 py-2 text-xs font-medium text-muted-foreground transition-colors hover:border-accent/60 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
-            >
-              <span dir="rtl">لاحقًا</span>
-              <span className="opacity-40">·</span>
-              <span>Not now</span>
-            </button>
-          </div>
-
-          <p className="mt-4 text-[11px] text-muted-foreground/70">
-            <span dir="rtl">يمكنك تغيير اللغة لاحقًا من أعلى الصفحة</span>
-            <span className="mx-2 opacity-40">·</span>
-            <span>You can switch languages anytime from the header</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-
-function SiteLoader() {
-  const [gone, setGone] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setGone(true), 1250);
-    return () => clearTimeout(t);
-  }, []);
-  if (gone) return null;
-  return (
-    <div className="site-loader" aria-hidden="true">
-      <div className="site-loader-ring" />
-    </div>
-  );
-}
 
 function BackToTop() {
   const { t } = useLang();
@@ -505,7 +304,7 @@ function BackToTop() {
       type="button"
       aria-label={t("back_to_top")}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className={`fixed bottom-5 right-5 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-ink text-white shadow-lg ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent hover:text-accent-foreground ${show ? "opacity-100 pointer-events-auto translate-y-0" : "opacity-0 pointer-events-none translate-y-2"}`}
+      className={`fixed bottom-4 right-4 md:bottom-5 md:right-5 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-ink text-white shadow-lg ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent hover:text-accent-foreground ${show ? "opacity-100 pointer-events-auto translate-y-0" : "opacity-0 pointer-events-none translate-y-2"}`}
     >
       <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M12 19V5" />
@@ -523,10 +322,10 @@ function WhatsAppFab() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={t("whatsapp")}
-      className="fixed bottom-5 left-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] shadow-[0_10px_30px_-8px_rgba(37,211,102,0.6)] ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus:outline-none"
+      className="fixed bottom-4 left-4 z-50 flex h-12 w-12 md:bottom-5 md:left-5 md:h-14 md:w-14 items-center justify-center rounded-full bg-[#25D366] shadow-[0_10px_30px_-8px_rgba(37,211,102,0.6)] ring-1 ring-black/5 transition-transform hover:-translate-y-0.5 focus:outline-none"
     >
-      <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-60 animate-ping motion-reduce:hidden" aria-hidden="true" />
-      <svg viewBox="0 0 32 32" className="relative h-8 w-8" aria-hidden="true">
+      <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-60 animate-ping motion-reduce:hidden" style={{ animationIterationCount: 3 }} aria-hidden="true" />
+      <svg viewBox="0 0 32 32" className="relative h-7 w-7 md:h-8 md:w-8" aria-hidden="true">
         <path fill="#ffffff" d="M16.003 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.6 4.46 1.73 6.4L3.2 28.8l6.55-1.71a12.77 12.77 0 0 0 6.25 1.6h.01c7.07 0 12.8-5.73 12.8-12.8 0-3.42-1.33-6.63-3.75-9.05a12.72 12.72 0 0 0-9.06-3.64Zm0 23.36h-.01a10.6 10.6 0 0 1-5.4-1.48l-.39-.23-3.89 1.02 1.04-3.79-.25-.39a10.62 10.62 0 0 1-1.63-5.68c0-5.87 4.78-10.65 10.65-10.65 2.85 0 5.52 1.11 7.53 3.12a10.58 10.58 0 0 1 3.12 7.53c0 5.87-4.78 10.65-10.65 10.65Zm5.84-7.98c-.32-.16-1.9-.94-2.19-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.5.14-.66.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.74-.99-2.38-.26-.62-.53-.54-.72-.55-.19-.01-.4-.01-.61-.01-.21 0-.56.08-.85.4-.29.32-1.11 1.09-1.11 2.66 0 1.57 1.14 3.08 1.29 3.29.16.21 2.24 3.42 5.42 4.79.76.33 1.35.52 1.81.67.76.24 1.45.21 2 .13.61-.09 1.9-.78 2.17-1.53.27-.75.27-1.4.19-1.53-.08-.13-.29-.21-.61-.37Z" />
       </svg>
     </a>
@@ -540,7 +339,7 @@ function LangSwitcher({ onNavigate }: { onNavigate?: () => void }) {
       to={altHref}
       onClick={onNavigate}
       aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
-      className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="inline-flex min-h-10 md:min-h-0 items-center gap-1 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <span className={lang === "ar" ? "text-accent" : "text-muted-foreground"}>AR</span>
       <span className="text-muted-foreground/60">|</span>
@@ -600,7 +399,7 @@ function SiteNav() {
         <div className="md:hidden flex items-center gap-1.5">
           <ThemeToggle />
           <LangSwitcher />
-          <button className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent" onClick={() => setOpen(v => !v)} aria-label={t("menu_label")}>
+          <button className="inline-flex h-10 w-10 md:h-8 md:w-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent" onClick={() => setOpen(v => !v)} aria-label={t("menu_label")}>
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <line x1="4" y1="7" x2="20" y2="7" />
               <line x1="4" y1="12" x2="20" y2="12" />
@@ -731,18 +530,33 @@ function NewsletterForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
   const [hp, setHp] = useState("");
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (hp) return;
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    const value = email.trim();
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     if (!ok) { setStatus("error"); return; }
     try {
-      const list = JSON.parse(localStorage.getItem("nl_subs") || "[]");
-      if (!list.includes(email.trim())) list.push(email.trim());
-      localStorage.setItem("nl_subs", JSON.stringify(list));
-    } catch {}
-    setStatus("ok");
-    setEmail("");
+      // Each new subscriber arrives as an email at the site inbox.
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          from_name: "yrstudio.art",
+          subject: "[yrstudio.art] اشتراك جديد في النشرة البريدية",
+          email: value,
+          replyto: value,
+          message: `اشتراك جديد في النشرة البريدية: ${value} (${lang === "ar" ? "عربي" : "English"})`,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.success === false) throw new Error(String(res.status));
+      setStatus("ok");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
   };
   return (
     <div>

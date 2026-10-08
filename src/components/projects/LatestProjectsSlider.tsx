@@ -150,7 +150,7 @@ export function LatestProjectsSlider({
               type="button"
               aria-label={isPlaying ? t("إيقاف", "Pause") : t("تشغيل", "Play")}
               onClick={() => setIsPlaying((v) => !v)}
-              className={`rounded-full border border-border bg-background text-foreground transition-colors hover:bg-muted ${compact ? "p-1.5" : "p-2"}`}
+              className={`rounded-full border border-border bg-background text-foreground transition-colors hover:bg-muted inline-flex items-center justify-center min-h-10 min-w-10 md:min-h-0 md:min-w-0 ${compact ? "p-1.5" : "p-2"}`}
             >
               {isPlaying ? <Pause className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} /> : <Play className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />}
             </button>
@@ -162,7 +162,7 @@ export function LatestProjectsSlider({
             onMouseLeave={resume}
             onClick={() => scrollBy(-1)}
             disabled={!autoPlay && !canPrev}
-            className={`rounded-full border border-border bg-background text-foreground transition-opacity disabled:opacity-30 hover:bg-muted ${compact ? "p-1.5" : "p-2"}`}
+            className={`rounded-full border border-border bg-background text-foreground transition-opacity disabled:opacity-30 hover:bg-muted inline-flex items-center justify-center min-h-10 min-w-10 md:min-h-0 md:min-w-0 ${compact ? "p-1.5" : "p-2"}`}
           >
             {isAr ? <ChevronRight className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} /> : <ChevronLeft className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />}
           </button>
@@ -173,7 +173,7 @@ export function LatestProjectsSlider({
             onMouseLeave={resume}
             onClick={() => scrollBy(1)}
             disabled={!autoPlay && !canNext}
-            className={`rounded-full border border-border bg-background text-foreground transition-opacity disabled:opacity-30 hover:bg-muted ${compact ? "p-1.5" : "p-2"}`}
+            className={`rounded-full border border-border bg-background text-foreground transition-opacity disabled:opacity-30 hover:bg-muted inline-flex items-center justify-center min-h-10 min-w-10 md:min-h-0 md:min-w-0 ${compact ? "p-1.5" : "p-2"}`}
           >
             {isAr ? <ChevronLeft className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} /> : <ChevronRight className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />}
           </button>

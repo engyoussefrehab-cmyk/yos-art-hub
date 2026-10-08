@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { shareImage } from "@/lib/site";
 import { listPortfolio, getPortfolioBySlug } from "@/lib/portfolio.functions";
 import { ProjectDetailView } from "@/views/ProjectDetailView";
 
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/projects/$category/$slug")({
     const title = p?.seo_title_ar || (p?.industry ? `${name} — ${p.industry}` : `${name} — يوسف رحاب`);
     const description = p?.seo_description_ar || short;
     const path = `/projects/${p?.category_slug ?? "branding"}/${p?.slug ?? ""}`;
-    const ogImage = p?.og_image_url || p?.cover;
+    const ogImage = shareImage(p?.og_image_url || p?.cover);
     return {
       meta: [
         { title },

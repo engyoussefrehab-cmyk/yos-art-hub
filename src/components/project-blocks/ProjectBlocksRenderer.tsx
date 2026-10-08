@@ -370,15 +370,17 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
     case "gallery": {
       const urls = (b.urls ?? []).filter(Boolean);
       if (urls.length === 0) return null;
-      const cols = b.columns ?? 3;
-      const grid =
-        cols === 2 ? "md:grid-cols-2" : cols === 4 ? "md:grid-cols-4" : "md:grid-cols-3";
+      // Show the work uncropped at its natural shape. Never more columns than
+      // images, one column on phones, masonry flow so tall pieces don't leave gaps.
+      const cols = Math.min(b.columns ?? 3, urls.length);
+      const flow =
+        cols <= 1 ? "columns-1" : cols === 2 ? "columns-1 sm:columns-2" : cols === 4 ? "columns-1 sm:columns-2 lg:columns-4" : "columns-1 sm:columns-2 lg:columns-3";
       return (
         <section className="mx-auto max-w-7xl px-6 py-8">
-          <div className={`grid grid-cols-2 gap-4 ${grid}`}>
+          <div className={`${flow} gap-4`}>
             {urls.map((u, i) => (
-              <div key={i} className="overflow-hidden rounded-2xl border border-border bg-cream">
-                <ZoomableImage src={u} alt="" imgClassName="aspect-[4/3] w-full object-cover" />
+              <div key={i} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-border bg-cream">
+                <ZoomableImage src={u} alt={`${context?.projectName ?? ""} — ${i + 1}`} imgClassName="h-auto w-full" />
               </div>
             ))}
           </div>

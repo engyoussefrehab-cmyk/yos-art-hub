@@ -260,37 +260,8 @@ html, body { overflow-x: hidden; }
 
 
 
-/* ============ Initial site loader ============ */
-@keyframes loader-fade {
-  to { opacity: 0; visibility: hidden; }
-}
-@keyframes loader-spin {
-  to { transform: rotate(360deg); }
-}
-.site-loader {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-background);
-  animation: loader-fade 500ms ease 700ms forwards;
-  pointer-events: none;
-}
-.site-loader-ring {
-  width: 38px;
-  height: 38px;
-  border-radius: 9999px;
-  border: 2px solid color-mix(in oklab, var(--color-foreground) 12%, transparent);
-  border-top-color: var(--color-accent);
-  animation: loader-spin 900ms linear infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  main,
-  .site-loader,
-  .site-loader-ring { animation: none !important; }
+  main { animation: none !important; }
 }
 
 
