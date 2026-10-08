@@ -18,6 +18,7 @@ import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import type { MethodologyDataDTO } from "@/lib/methodology.functions";
 
 import { pair } from "@/i18n/dictionary";
+import contact from "@/content/contact.json";
 const SERVICE_FALLBACK_IMAGES = [
   svcVisualIdentity.url,
   svcLogoDesign.url,
@@ -352,10 +353,10 @@ function CTA() {
             {t("cta_button")}
           </Link>
           <a
-            href="mailto:youssefrehab@yrstudio.art"
+            href={`mailto:${contact.cta_email}`}
             className="text-xs text-white/60 underline-offset-4 transition-colors hover:text-accent hover:underline"
           >
-            youssefrehab@yrstudio.art
+            {contact.cta_email}
           </a>
         </div>
       </div>

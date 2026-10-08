@@ -19,6 +19,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { pair } from "@/i18n/dictionary";
 import seo from "@/content/seo.json";
+import contact from "@/content/contact.json";
 export function NotFoundComponent() {
   const { t, lang } = useLang();
   const isAr = lang === "ar";
@@ -150,9 +151,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           alternateName: "يوسف رحاب",
           jobTitle: "Visual Identity Designer",
           description: "Strategic visual identity and logo designer serving Saudi Arabia, UAE and the Gulf.",
-          email: "mailto:info@yrstudio.art",
-          telephone: "+201030365405",
-          sameAs: ["https://www.linkedin.com/in/youssef-rehab/"],
+          email: `mailto:${contact.email}`,
+          telephone: contact.phone_e164,
+          sameAs: [contact.linkedin_url],
           areaServed: [
             { "@type": "Country", name: "Saudi Arabia" },
             { "@type": "Country", name: "United Arab Emirates" },
@@ -434,9 +435,9 @@ function SiteFooter() {
   const year = new Date().getFullYear();
   const cmsMenu = useCmsMenu("footer_primary");
   const settings = useCmsSettings();
-  const phone = settings?.contact_phone || "+20 103 036 5405";
-  const phoneHref = "tel:" + (settings?.contact_phone || "+201030365405").replace(/\s+/g, "");
-  const email = settings?.contact_email || "info@yrstudio.art";
+  const phone = contact.phone_footer;
+  const phoneHref = "tel:" + contact.phone_e164.replace(/\s+/g, "");
+  const email = contact.email;
   const socials = settings?.socials || {};
   const defaults = [
     { to: base || "/", label: t("nav_home"), external: false, newTab: false },

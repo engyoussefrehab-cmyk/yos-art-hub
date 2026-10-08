@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
+import contact from "@/content/contact.json";
 const DESTINATIONS: Record<string, string> = {
-  wa: "https://wa.me/201030365405",
-  whatsapp: "https://wa.me/201030365405",
-  li: "https://www.linkedin.com/in/youssef-rehab/",
-  linkedin: "https://www.linkedin.com/in/youssef-rehab/",
+  wa: contact.whatsapp_url,
+  whatsapp: contact.whatsapp_url,
+  li: contact.linkedin_url,
+  linkedin: contact.linkedin_url,
 };
 
 // Static short links (/go/wa, /go/li …): a tiny page that forwards the visitor.

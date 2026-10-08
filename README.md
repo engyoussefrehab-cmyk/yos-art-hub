@@ -23,3 +23,14 @@ bun install
 bun run dev      # local preview
 bun run build    # static build into dist/client
 ```
+
+## Dashboard (yrstudio.art/admin)
+
+A custom control panel to edit every text, project, image, package, article and
+setting on the site. Sign in with a GitHub fine-grained token (repo `yos-art-hub`,
+Contents: read & write, Actions: read). Edits are kept as drafts in the browser;
+"نشر التعديلات" saves them as one commit, and the site redeploys in ~2 minutes.
+
+- Code: `src/admin/` (schema.ts lists every editable file and field)
+- Uploaded images are converted in the browser to WebP (max 2560px, q0.9) with a
+  JPEG twin under `public/media/share/` for link previews.

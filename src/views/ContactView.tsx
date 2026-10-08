@@ -5,6 +5,7 @@ import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
 
 import { pair } from "@/i18n/dictionary";
+import contact from "@/content/contact.json";
 export function ContactView() {
   const { t, lang } = useLang();
   return (
@@ -18,8 +19,8 @@ export function ContactView() {
             </h1>
             <p className="mt-6 max-w-xl text-white/70 text-lg leading-relaxed">{t("contact_lede")}</p>
             <div className="mt-8 space-y-3">
-              <ContactCard label={t("contact_wa_label")} value="+20 103 036 5405" href="/go/wa" arrow={lang === "ar" ? "←" : "→"} />
-              <ContactCard label={t("contact_email_label")} value="info@yrstudio.art" href="mailto:info@yrstudio.art" arrow={lang === "ar" ? "←" : "→"} />
+              <ContactCard label={t("contact_wa_label")} value={contact.phone_display} href="/go/wa" arrow={lang === "ar" ? "←" : "→"} />
+              <ContactCard label={t("contact_email_label")} value={contact.email} href={`mailto:${contact.email}`} arrow={lang === "ar" ? "←" : "→"} />
             </div>
             <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/10 pt-8">
               <Mini n={lang === "ar" ? pair("ui_contactview_1")[0] : pair("ui_contactview_1")[1]} labelKey="stat_years_short" />
