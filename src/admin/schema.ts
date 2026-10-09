@@ -671,6 +671,7 @@ export const CONTENT_FILES: { path: string }[] = Array.from(
 ).map((path) => ({ path }));
 
 export const NAV_GROUPS: { title: string; items: { id: string; title: string }[] }[] = [
+  { title: "الرئيسية", items: [{ id: "home", title: "نظرة عامة" }] },
   { title: "المحتوى", items: [{ id: "visual", title: "المحرر المرئي ✦" }, { id: "texts", title: "نصوص الموقع" }, { id: "projects", title: "المشاريع" }, { id: "categories", title: "أقسام المشاريع" }, { id: "media", title: "مكتبة الصور" }] },
   {
     title: "الصفحة الرئيسية",

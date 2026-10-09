@@ -145,17 +145,21 @@ function DirtyNote() {
 function ListView({ col, list, write, open }: { col: Collection; list: any[]; write: (v: any[]) => void; open: (i: number) => void }) {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
+  const [visibility, setVisibility] = useState("all");
   const options = useOptions();
   const order = useMemo(() => {
     const idx = list.map((_, i) => i);
     if (col.sortKey) idx.sort((a, b) => (Number(list[a]?.[col.sortKey!]) || 0) - (Number(list[b]?.[col.sortKey!]) || 0));
     return idx;
   }, [list, col.sortKey]);
+  const isVisible = (x: any) => !col.visibility || x[col.visibility.key] === col.visibility.on;
   const shown = order.filter((i) => {
     const x = list[i];
     if (cat && x.category_slug !== cat) return false;
+    if (visibility === "visible" && !isVisible(x)) return false;
+    if (visibility === "hidden" && isVisible(x)) return false;
     if (!q) return true;
-    return JSON.stringify([col.itemTitle?.(x), col.itemSubtitle?.(x), x.slug]).toLowerCase().includes(q.toLowerCase());
+    return JSON.stringify(x).toLocaleLowerCase("ar").includes(q.toLocaleLowerCase("ar"));
   });
 
   const move = (pos: number, d: number) => {
@@ -175,7 +179,6 @@ function ListView({ col, list, write, open }: { col: Collection; list: any[]; wr
       write(next);
     }
   };
-  const isVisible = (x: any) => !col.visibility || x[col.visibility.key] === col.visibility.on;
   const toggleVis = (i: number) => {
     if (!col.visibility) return;
     const x = list[i];
@@ -213,18 +216,23 @@ function ListView({ col, list, write, open }: { col: Collection; list: any[]; wr
           </>
         }
       />
-      {list.length > 6 && (
+      {(list.length > 6 || col.visibility) && (
         <div className="mb-4 flex flex-wrap gap-2">
-          <div className="relative min-w-[220px] flex-1">
+          {list.length > 6 && <div className="relative min-w-[220px] flex-1">
             <Search className="pointer-events-none absolute start-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="بحث…" className={`${inputCls} ps-10`} />
-          </div>
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="بحث في العربي والإنجليزي…" className={`${inputCls} ps-10`} />
+          </div>}
           {col.id === "projects" && (
             <select value={cat} onChange={(e) => setCat(e.target.value)} className={`${inputCls} w-auto`}>
               <option value="">كل الأقسام</option>
               {options.categories.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           )}
+          {col.visibility && <select value={visibility} onChange={(e) => setVisibility(e.target.value)} aria-label="تصفية حسب الظهور" className={`${inputCls} w-auto`}>
+            <option value="all">الكل ({list.length})</option>
+            <option value="visible">ظاهر ({list.filter(isVisible).length})</option>
+            <option value="hidden">مخفي ({list.filter((x) => !isVisible(x)).length})</option>
+          </select>}
         </div>
       )}
       <div className="overflow-hidden rounded-3xl border border-border bg-card">
@@ -235,7 +243,7 @@ function ListView({ col, list, write, open }: { col: Collection; list: any[]; wr
           const vis = isVisible(x);
           return (
             <div key={x.id ?? i} className="flex items-center gap-3 border-b border-border p-3 last:border-0 sm:gap-4 sm:p-4">
-              {!q && !cat && (
+              {!q && !cat && visibility === "all" && (
                 <div className="flex shrink-0 flex-col">
                   <button type="button" disabled={pos === 0} onClick={() => move(pos, -1)} className="rounded-lg p-1 text-muted-foreground hover:bg-muted disabled:opacity-20" aria-label="لفوق"><ArrowUp className="h-4 w-4" /></button>
                   <button type="button" disabled={pos === order.length - 1} onClick={() => move(pos, 1)} className="rounded-lg p-1 text-muted-foreground hover:bg-muted disabled:opacity-20" aria-label="لتحت"><ArrowDown className="h-4 w-4" /></button>

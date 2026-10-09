@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { CheckCircle2, ExternalLink, KeyRound, Loader2, LogOut, Menu, RotateCcw, Send, X, XCircle } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowUpRight, CheckCircle2, CircleAlert, ExternalLink, FileText, FolderKanban, Image, KeyRound, Loader2, LogOut, Menu, Search, Sparkles, Type, RotateCcw, Send, X, XCircle } from "lucide-react";
 import { AdminStoreProvider, useAdmin } from "./store";
 import { getToken, setToken, verifyToken, REPO } from "./github";
 import { COLLECTIONS, NAV_GROUPS } from "./schema";
@@ -41,6 +41,92 @@ export default function AdminApp() {
       <Shell user={user} onLogout={() => { setToken(null); setTok(null); setUser(null); }} />
     </AdminStoreProvider>
   );
+}
+
+function DashboardHome({ go, openItem }: { go: (view: string) => void; openItem: (collection: string, index: number) => void }) {
+  const { get, dirtyPaths } = useAdmin();
+  const [query, setQuery] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+  const rows = useMemo(() => COLLECTIONS.filter((c) => c.kind === "list").flatMap((col) => {
+    const value = get<any>(col.file);
+    const data = col.pointer ? col.pointer.split(".").reduce((v, key) => v?.[key], value) : value;
+    return (Array.isArray(data) ? data : []).map((item: any, index: number) => ({ col, item, index, title: col.itemTitle?.(item) || "عنصر بدون اسم", subtitle: col.itemSubtitle?.(item) || "", searchText: JSON.stringify(item).toLocaleLowerCase("ar") }));
+  }), [get]);
+  const normalized = query.trim().toLocaleLowerCase("ar");
+  const results = normalized ? rows.filter((row) => row.searchText.includes(normalized)).slice(0, 8) : [];
+  const projectCol = COLLECTIONS.find((c) => c.id === "projects")!;
+  const projectData = get<any>(projectCol.file);
+  const projects = Array.isArray(projectData) ? projectData : [];
+  const publishedProjects = projects.filter((p) => p.status === "published").length;
+  const draftProjects = projects.length - publishedProjects;
+  const articleCol = COLLECTIONS.find((c) => c.id === "articles")!;
+  const articleFile = get<any>(articleCol.file);
+  const articleRows = articleCol.pointer ? articleCol.pointer.split(".").reduce((v, key) => v?.[key], articleFile) : articleFile;
+  const articles = Array.isArray(articleRows) ? articleRows : [];
+  const projectIssues = projects.filter((p) => p.status === "published" && (!p.name_ar || !p.thumbnail_url));
+  const articleIssues = articles.filter((a: any) => a.status === "published" && (!a.title_ar || !a.excerpt_ar || !a.content_ar));
+  const issues = projectIssues.length + articleIssues.length;
+  const actions = [
+    { id: "visual", title: "عدّل الموقع مباشرة", detail: "اختار أي نص أو صورة من معاينة الموقع", icon: Sparkles, tone: "bg-amber-50 text-amber-700" },
+    { id: "projects", title: "إدارة المشاريع", detail: `${projects.length} مشروع · ${draftProjects} مسودة`, icon: FolderKanban, tone: "bg-blue-50 text-blue-700" },
+    { id: "media", title: "مكتبة الصور", detail: "ارفع الصور ونظّم ملفات الموقع", icon: Image, tone: "bg-violet-50 text-violet-700" },
+    { id: "texts", title: "نصوص الموقع", detail: "عدّل العربي والإنجليزي من مكان واحد", icon: Type, tone: "bg-emerald-50 text-emerald-700" },
+  ];
+  return (
+    <div className="mx-auto max-w-6xl space-y-7">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div><div className="mb-2 text-sm font-semibold text-accent">مساحة عملك</div><h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">أهلًا بيك 👋</h1><p className="mt-2 text-sm text-muted-foreground">كل اللي محتاجه لإدارة موقعك من مكان واحد.</p></div>
+        <a href="/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-sm font-semibold hover:border-foreground/30"><ExternalLink className="h-4 w-4" /> افتح الموقع</a>
+      </div>
+      <div className="relative">
+        <Search className="pointer-events-none absolute start-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+        <input ref={searchRef} value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => { if (e.key === "Escape") setQuery(""); if (e.key === "Enter" && results[0]) { openItem(results[0].col.id, results[0].index); setQuery(""); } }} placeholder="دوّر في كل المحتوى بالعربي أو الإنجليزي…" className="w-full rounded-2xl border border-border bg-card py-4 pe-20 ps-12 text-sm shadow-sm outline-none transition focus:border-accent" />
+        <span className="pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 rounded-lg border border-border px-2 py-1 text-[10px] text-muted-foreground">Ctrl K</span>
+        {results.length > 0 && <div className="absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-2xl border border-border bg-card shadow-xl">{results.map((r) => <button key={`${r.col.id}-${r.index}`} type="button" onClick={() => { openItem(r.col.id, r.index); setQuery(""); }} className="flex w-full items-center justify-between gap-4 border-b border-border px-4 py-3 text-start last:border-0 hover:bg-muted"><span className="min-w-0"><span className="block truncate text-sm font-semibold">{r.title}</span><span className="mt-0.5 block truncate text-xs text-muted-foreground">{r.col.title} {r.subtitle && `· ${r.subtitle}`}</span></span><ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground" /></button>)}</div>}
+        {normalized && results.length === 0 && <div className="absolute inset-x-0 top-full z-20 mt-2 rounded-2xl border border-border bg-card p-4 text-sm text-muted-foreground shadow-xl">مفيش نتائج مطابقة. جرّب كلمة تانية.</div>}
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <SummaryCard label="المشاريع المنشورة" value={publishedProjects} note={`${draftProjects} مسودة`} icon={FolderKanban} />
+        <SummaryCard label="المقالات" value={articles.length} note="في مكتبة المحتوى" icon={FileText} />
+        <SummaryCard label="تعديلات غير منشورة" value={dirtyPaths.length} note={dirtyPaths.length ? "محفوظة على هذا الجهاز" : "كل شيء محدث"} icon={RotateCcw} />
+        <SummaryCard label="مراجعة المحتوى" value={issues} note={issues ? "عناصر منشورة ينقصها محتوى" : "المحتوى الأساسي مكتمل"} icon={issues ? CircleAlert : CheckCircle2} />
+      </div>
+      <section>
+        <div className="mb-3 flex items-center justify-between"><h2 className="font-display text-xl font-bold">ابدأ من هنا</h2><span className="text-xs text-muted-foreground">اختصارات سريعة</span></div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{actions.map(({ id, title, detail, icon: Icon, tone }) => <button key={id} type="button" onClick={() => go(id)} className="group rounded-3xl border border-border bg-card p-5 text-start shadow-[0_1px_0_rgb(0_0_0/0.02)] transition hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-lg"><span className={`mb-4 grid h-11 w-11 place-items-center rounded-2xl ${tone}`}><Icon className="h-5 w-5" /></span><span className="block font-semibold">{title}</span><span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{detail}</span><span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-accent">افتح <ArrowUpRight className="h-3.5 w-3.5" /></span></button>)}</div>
+      </section>
+      <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <section className="rounded-3xl border border-border bg-card p-5 sm:p-6">
+          <div className="mb-4 flex items-center justify-between gap-3"><div><h2 className="font-display text-lg font-bold">آخر المشاريع</h2><p className="mt-1 text-xs text-muted-foreground">وصول سريع لأحدث أعمالك</p></div><button type="button" onClick={() => go("projects")} className="text-sm font-semibold text-accent">كل المشاريع</button></div>
+          <div className="divide-y divide-border">{projects.slice(0, 4).map((p: any, index: number) => <button key={p.id || p.slug || index} type="button" onClick={() => openItem("projects", index)} className="flex w-full items-center justify-between gap-4 py-3 text-start"><span className="min-w-0"><span className="block truncate text-sm font-semibold">{p.name_ar || p.name_en || "مشروع بدون اسم"}</span><span className="mt-1 block text-xs text-muted-foreground">{p.client || p.industry || "مشروع جديد"}</span></span><span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${p.status === "published" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{p.status === "published" ? "منشور" : "مسودة"}</span></button>)}</div>
+          {projects.length === 0 && <p className="py-5 text-sm text-muted-foreground">لسه مفيش مشاريع. ابدأ بإضافة أول مشروع.</p>}
+        </section>
+        <section className="rounded-3xl border border-border bg-card p-5 sm:p-6">
+          <div className="mb-4"><h2 className="font-display text-lg font-bold">حالة موقعك</h2><p className="mt-1 text-xs text-muted-foreground">ملخص سريع قبل النشر</p></div>
+          <div className="space-y-3"><StatusRow label="المعاينة والتعديل المرئي" value="جاهز" good onClick={() => go("visual")} /><StatusRow label="إعدادات الظهور في جوجل" value="إدارة" onClick={() => go("seo")} /><StatusRow label="سجل النشر والتعديلات" value="عرض السجل" onClick={() => go("history")} /><StatusRow label="عناصر محتوى تحتاج مراجعة" value={issues ? `${issues} عنصر` : "مكتمل"} good={!issues} onClick={() => go(projectIssues.length ? "projects" : "articles")} /></div>
+          {dirtyPaths.length > 0 && <div className="mt-4 rounded-2xl bg-amber-50 p-3 text-xs leading-relaxed text-amber-900">عندك تعديلات محفوظة كمسودة. راجعها ثم استخدم زر «نشر التعديلات» أسفل الشاشة.</div>}
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function SummaryCard({ label, value, note, icon: Icon }: { label: string; value: number; note: string; icon: React.ElementType }) {
+  return <div className="rounded-3xl border border-border bg-card p-5"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">{label}</span><Icon className="h-4 w-4 text-muted-foreground" /></div><div className="mt-3 font-display text-3xl font-bold">{value}</div><div className="mt-1 text-xs text-muted-foreground">{note}</div></div>;
+}
+
+function StatusRow({ label, value, good, onClick }: { label: string; value: string; good?: boolean; onClick: () => void }) {
+  return <button type="button" onClick={onClick} className="flex w-full items-center justify-between gap-3 rounded-xl py-2 text-start hover:bg-muted/70"><span className="text-sm">{label}</span><span className={`shrink-0 text-xs font-semibold ${good ? "text-emerald-700" : "text-accent"}`}>{value}</span></button>;
 }
 
 function FullScreen({ children }: { children: React.ReactNode }) {
@@ -115,9 +201,9 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
   const { ready, loadError, reload } = useAdmin();
   const [view, setView] = useState<string>(() => {
     try {
-      return sessionStorage.getItem("yr_admin_view") || "visual";
+      return sessionStorage.getItem("yr_admin_view_v2") || "home";
     } catch {
-      return "visual";
+      return "home";
     }
   });
   const [openItem, setOpenItem] = useState<number | null>(null);
@@ -127,7 +213,7 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
     setOpenItem(null);
     setMenu(false);
     try {
-      sessionStorage.setItem("yr_admin_view", v);
+      sessionStorage.setItem("yr_admin_view_v2", v);
     } catch {
       /* ignore */
     }
@@ -147,6 +233,8 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
             </div>
           ) : !ready ? (
             <div className="grid place-items-center py-32 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>
+          ) : view === "home" ? (
+            <DashboardHome go={go} openItem={(c, i) => { go(c); setOpenItem(i); }} />
           ) : view === "visual" ? (
             <VisualEditor openInCollection={(c, i) => { go(c); setOpenItem(i); }} />
           ) : view === "texts" ? (
