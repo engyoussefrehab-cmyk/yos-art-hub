@@ -140,7 +140,7 @@ export function CollectionEditor({ id, openItem, setOpenItem }: { id: string; op
       </div>
       {selectedItem !== null && list[selectedItem] && (
         <div hidden={!editorOpen} aria-hidden={!editorOpen}>
-          <ItemEditor key={`${col.id}:${selectedItem}`} col={col} list={list} index={selectedItem} write={write} options={options} back={() => setOpenItem(null)} />
+          <ItemEditor key={`${col.id}:${selectedItem}`} col={col} list={list} index={selectedItem} write={write} options={options} back={() => { setOpenItem(null); setRememberedItem(null); }} />
         </div>
       )}
     </>
