@@ -104,6 +104,10 @@ export function CollectionEditor({ id, openItem, setOpenItem }: { id: string; op
   const col = COLLECTIONS.find((c) => c.id === id)!;
   const { get, set, isDirty } = useAdmin();
   const options = useOptions();
+  const [rememberedItem, setRememberedItem] = useState<number | null>(null);
+  useEffect(() => {
+    if (openItem !== null) setRememberedItem(openItem);
+  }, [openItem]);
   const fileVal = get<any>(col.file);
   const data = getAt(fileVal, col.pointer);
   const write = (v: any) => set(col.file, setAt(fileVal, col.pointer, v));
@@ -127,8 +131,20 @@ export function CollectionEditor({ id, openItem, setOpenItem }: { id: string; op
   }
 
   const list: any[] = Array.isArray(data) ? data : [];
-  if (openItem !== null && list[openItem]) return <ItemEditor col={col} list={list} index={openItem} write={write} options={options} back={() => setOpenItem(null)} />;
-  return <ListView col={col} list={list} write={write} open={setOpenItem} />;
+  const editorOpen = openItem !== null && !!list[openItem];
+  const selectedItem = editorOpen ? openItem : rememberedItem;
+  return (
+    <>
+      <div hidden={editorOpen} aria-hidden={editorOpen}>
+        <ListView col={col} list={list} write={write} open={setOpenItem} />
+      </div>
+      {selectedItem !== null && list[selectedItem] && (
+        <div hidden={!editorOpen} aria-hidden={!editorOpen}>
+          <ItemEditor col={col} list={list} index={selectedItem} write={write} options={options} back={() => setOpenItem(null)} />
+        </div>
+      )}
+    </>
+  );
 }
 
 function SiteLink({ href }: { href: string }) {
