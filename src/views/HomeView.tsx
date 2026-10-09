@@ -32,7 +32,7 @@ export function HomeView({ services = [], projects = [], methodology }: { servic
   return (
     <>
       <Hero />
-      <About />
+      <ClientsMarquee />
       {projects.length > 0 && (
         <section className="mx-auto max-w-7xl px-6 py-16">
           <Reveal>
@@ -40,9 +40,9 @@ export function HomeView({ services = [], projects = [], methodology }: { servic
           </Reveal>
         </section>
       )}
-      <Services items={services} />
+      <About /><Services items={services} />
       <Process methodology={methodology} />
-      <ClientsMarquee />
+      
       <Testimonials />
       <CTA />
     </>
@@ -191,7 +191,7 @@ function About() {
 
 function Services({ items }: { items: ServiceDTO[] }) {
   const { t, lang } = useLang();
-  const fallback: Array<{ title: string; desc: string; image: string }> = ([
+  const fallback: Array<{ title: string; desc: string; image: string; href: string; cta: string }> = ([
     ["svc_1_t", "svc_1_d"],
     ["svc_2_t", "svc_2_d"],
     ["svc_3_t", "svc_3_d"],
@@ -201,14 +201,14 @@ function Services({ items }: { items: ServiceDTO[] }) {
   ] as [DictKey, DictKey][]).map(([tk, dk], i) => ({
     title: t(tk),
     desc: t(dk),
-    image: SERVICE_FALLBACK_IMAGES[i],
+    image: SERVICE_FALLBACK_IMAGES[i], href: lang === "ar" ? "/packages" : "/en/packages", cta: lang === "ar" ? pair("ui_homeview_1")[0] : pair("ui_homeview_1")[1],
   }));
 
   const list = items.length
     ? items.map((s, i) => ({
         title: lang === "ar" ? s.title_ar : s.title_en,
         desc: lang === "ar" ? s.description_ar : s.description_en,
-        image: s.cover_url || SERVICE_FALLBACK_IMAGES[i % SERVICE_FALLBACK_IMAGES.length],
+        image: s.cover_url || SERVICE_FALLBACK_IMAGES[i % SERVICE_FALLBACK_IMAGES.length], href: s.cta_href || (lang === "ar" ? "/contact" : "/en/contact"), cta: (lang === "ar" ? s.cta_label_ar : s.cta_label_en) || (lang === "ar" ? "ابدأ مشروعك" : "Start a project"),
       }))
     : fallback;
 
@@ -224,7 +224,7 @@ function Services({ items }: { items: ServiceDTO[] }) {
       <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((item, i) => (
           <Reveal key={i} delay={i * 60}>
-            <article
+            <Link to={item.href}
               className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-background transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_30px_60px_-30px_rgb(0_0_0/0.25)]"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream">
@@ -248,12 +248,12 @@ function Services({ items }: { items: ServiceDTO[] }) {
                   {item.title}
                 </h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
-                <div className={`mt-5 inline-flex items-center gap-2 text-xs font-semibold text-accent opacity-0 transition-all duration-300 group-hover:opacity-100 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
-                  <span>{lang === "ar" ? pair("ui_homeview_1")[0] : pair("ui_homeview_1")[1]}</span>
+                <div className={`mt-5 inline-flex items-center gap-2 text-xs font-semibold text-accent transition-all duration-300 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
+                  <span>{item.cta}</span>
                   <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
                 </div>
               </div>
-            </article>
+            </Link>
           </Reveal>
         ))}
       </div>
