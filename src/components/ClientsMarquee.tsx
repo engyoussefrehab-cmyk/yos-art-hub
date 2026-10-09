@@ -11,7 +11,7 @@ function LogoTile({ logo }: { logo: Logo }) {
       src={logo.logo_url}
       alt={logo.name}
       loading="lazy"
-      className="h-9 w-auto max-w-[150px] object-contain opacity-60 grayscale brightness-200 contrast-125 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:grayscale-0 group-hover:scale-[1.06] md:h-11"
+      className="h-9 w-auto max-w-[150px] object-contain opacity-60 grayscale brightness-200 contrast-125 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:grayscale-0 group-hover:brightness-100 group-hover:contrast-100 group-hover:scale-[1.06] md:h-11"
     />
   );
   return (
