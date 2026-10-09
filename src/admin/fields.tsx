@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ImagePlus, Images, Loader2, Plus, Trash2, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, ImagePlus, Images, Loader2, Plus, Sparkles, Trash2, X } from "lucide-react";
+import { translateArToEn, useAi } from "./translate";
 import { useAdmin } from "./store";
 import { prepareUpload } from "./images";
 import { listMedia } from "./github";
@@ -62,12 +63,79 @@ export function TextInput({ value, onChange, multiline, dir, lang, mono }: { val
   );
 }
 
-/** Arabic and English side by side. */
-export function BiInput({ ar, en, onAr, onEn, multiline, mono }: { ar: string; en: string; onAr: (v: string) => void; onEn: (v: string) => void; multiline?: boolean; mono?: boolean }) {
+/**
+ * Arabic and English side by side. When AI translation is on, typing Arabic
+ * fills the English automatically (1s after you stop typing). Typing in the
+ * English box yourself locks it until you press «ترجم».
+ */
+export function BiInput({ ar, en, onAr, onEn, multiline, mono, context }: { ar: string; en: string; onAr: (v: string) => void; onEn: (v: string) => void; multiline?: boolean; mono?: boolean; context?: string }) {
+  const { auto, ready } = useAi();
+  const [state, setState] = useState<"idle" | "working" | "done" | "error" | "locked">("idle");
+  const [err, setErr] = useState<string | null>(null);
+  const timer = useRef<number | null>(null);
+  const seq = useRef(0);
+  const locked = useRef(false);
+  const onEnRef = useRef(onEn);
+  onEnRef.current = onEn;
+
+  const run = async (text: string) => {
+    const my = ++seq.current;
+    if (!text.trim()) return;
+    setState("working");
+    setErr(null);
+    try {
+      const out = await translateArToEn(text, context);
+      if (my !== seq.current || locked.current) return;
+      onEnRef.current(out);
+      setState("done");
+    } catch (e: any) {
+      if (my !== seq.current) return;
+      setState("error");
+      setErr(e?.status === 401 ? "مفتاح الذكاء الاصطناعي مش صحيح" : e?.message === "no-key" ? "فعّل الترجمة من الإعدادات" : "الترجمة مش متاحة دلوقتي — اكتب الإنجليزي بنفسك أو جرّب تاني");
+    }
+  };
+  useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
+
+  const changeAr = (v: string) => {
+    onAr(v);
+    if (!auto || locked.current) return;
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => run(v), 1000);
+  };
+  const changeEn = (v: string) => {
+    locked.current = true;
+    seq.current++; // cancel any translation in flight
+    if (timer.current) window.clearTimeout(timer.current);
+    setState("locked");
+    onEn(v);
+  };
+  const retranslate = () => {
+    locked.current = false;
+    run(ar);
+  };
+
   return (
-    <div className="grid gap-2 md:grid-cols-2">
-      <TextInput value={ar} onChange={onAr} multiline={multiline} lang="ar" mono={mono} />
-      <TextInput value={en} onChange={onEn} multiline={multiline} lang="en" mono={mono} />
+    <div>
+      <div className="grid gap-2 md:grid-cols-2">
+        <TextInput value={ar} onChange={changeAr} multiline={multiline} lang="ar" mono={mono} />
+        <div className="relative">
+          <TextInput value={en} onChange={changeEn} multiline={multiline} lang="en" mono={mono} />
+          {state === "working" && <div className="pointer-events-none absolute inset-0 rounded-xl bg-background/60 backdrop-blur-[1px]" />}
+        </div>
+      </div>
+      {ready && (
+        <div className="mt-1 flex min-h-[18px] items-center justify-end gap-2 text-[11px] text-muted-foreground">
+          {state === "working" && <span className="inline-flex items-center gap-1 text-accent"><Loader2 className="h-3 w-3 animate-spin" /> بيترجم…</span>}
+          {state === "done" && <span className="inline-flex items-center gap-1 text-emerald-600"><Sparkles className="h-3 w-3" /> اتترجم تلقائي</span>}
+          {state === "locked" && <span>الإنجليزي بتاعك — مش هيتغيّر تلقائي</span>}
+          {state === "error" && <span className="text-red-600">{err}</span>}
+          {ar.trim() && state !== "working" && (
+            <button type="button" onClick={retranslate} className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-semibold text-foreground/70 hover:bg-muted hover:text-foreground">
+              <Sparkles className="h-3 w-3" /> ترجم
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -331,7 +399,7 @@ export function FieldEditor({ field, record, onChange, options }: { field: Field
       case "url": {
         const multi = f.type !== "text" && f.type !== "url";
         if ("bi" in f && f.bi)
-          return <BiInput multiline={multi} mono={f.type === "html"} ar={r[`${f.key}_ar`] ?? ""} en={r[`${f.key}_en`] ?? ""} onAr={(v) => onChange({ [`${f.key}_ar`]: v })} onEn={(v) => onChange({ [`${f.key}_en`]: v })} />;
+          return <BiInput context={f.label} multiline={multi} mono={f.type === "html"} ar={r[`${f.key}_ar`] ?? ""} en={r[`${f.key}_en`] ?? ""} onAr={(v) => onChange({ [`${f.key}_ar`]: v })} onEn={(v) => onChange({ [`${f.key}_en`]: v })} />;
         return <TextInput multiline={multi} dir={f.type === "url" || ("dir" in f && f.dir) ? "ltr" : undefined} value={r[f.key] == null ? "" : String(r[f.key])} onChange={(v) => onChange({ [f.key]: f.type === "url" ? v || null : v })} />;
       }
       case "number":

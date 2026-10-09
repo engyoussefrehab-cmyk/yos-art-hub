@@ -5,6 +5,8 @@ import { getToken, setToken, verifyToken, REPO } from "./github";
 import { COLLECTIONS, NAV_GROUPS } from "./schema";
 import { CollectionEditor, HistoryPage, MediaLibraryPage, SeoEditor, TextsEditor } from "./editors";
 import { inputCls } from "./fields";
+import { VisualEditor } from "./visual";
+import { AiButton } from "./AiSettings";
 import logo from "@/assets/logo-full.png.asset.json";
 
 export default function AdminApp() {
@@ -113,9 +115,9 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
   const { ready, loadError, reload } = useAdmin();
   const [view, setView] = useState<string>(() => {
     try {
-      return sessionStorage.getItem("yr_admin_view") || "texts";
+      return sessionStorage.getItem("yr_admin_view") || "visual";
     } catch {
-      return "texts";
+      return "visual";
     }
   });
   const [openItem, setOpenItem] = useState<number | null>(null);
@@ -145,6 +147,8 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
             </div>
           ) : !ready ? (
             <div className="grid place-items-center py-32 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>
+          ) : view === "visual" ? (
+            <VisualEditor openInCollection={(c, i) => { go(c); setOpenItem(i); }} />
           ) : view === "texts" ? (
             <TextsEditor />
           ) : view === "seo" ? (
@@ -171,6 +175,7 @@ function TopBar({ user, onLogout, onMenu }: { user: string; onLogout: () => void
         <img src={logo.url} alt="" className="h-7 w-auto" />
         <span className="hidden text-sm font-semibold text-muted-foreground sm:inline">· لوحة التحكم</span>
         <div className="ms-auto flex items-center gap-2">
+          <AiButton />
           <a href="/" target="_blank" rel="noreferrer" className="hidden items-center gap-1.5 rounded-full border border-border px-3.5 py-1.5 text-sm font-semibold sm:inline-flex"><ExternalLink className="h-4 w-4" /> الموقع</a>
           <span className="hidden text-xs text-muted-foreground md:inline" dir="ltr">@{user}</span>
           <button type="button" onClick={onLogout} className="rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground" title="خروج" aria-label="خروج"><LogOut className="h-4 w-4" /></button>

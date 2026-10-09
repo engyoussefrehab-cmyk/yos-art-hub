@@ -352,7 +352,7 @@ export function TextsEditor() {
                   return (
                     <div key={k} className="py-3 first:pt-0 last:pb-0">
                       {changed && <div className="mb-1 text-[11px] font-semibold text-amber-600">● معدّل</div>}
-                      <BiInput multiline={long} ar={v.ar ?? ""} en={v.en ?? ""} onAr={(x) => upd(k, "ar", x)} onEn={(x) => upd(k, "en", x)} />
+                      <BiInput context={s.title} multiline={long} ar={v.ar ?? ""} en={v.en ?? ""} onAr={(x) => upd(k, "ar", x)} onEn={(x) => upd(k, "en", x)} />
                     </div>
                   );
                 })}
