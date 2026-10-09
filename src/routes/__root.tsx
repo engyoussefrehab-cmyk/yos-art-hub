@@ -19,7 +19,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { pair } from "@/i18n/dictionary";
 import seo from "@/content/seo.json";
-import contact from "@/content/contact.json";
+import contact from "@/content/contact.json"; import analytics from "@/content/analytics.json";
 export function NotFoundComponent() {
   const { t, lang } = useLang();
   const isAr = lang === "ar";
@@ -260,6 +260,36 @@ function RootComponent() {
   const { t } = useLang();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+  const previousPage = useRef<string | undefined>(undefined);
+  const measurementId = analytics.google_analytics_id.trim();
+
+  useEffect(() => {
+    if (isAdmin || !/^G-[A-Z0-9]+$/i.test(measurementId)) return;
+    const gaWindow = window as Window & { dataLayer?: unknown[]; gtag?: (...args: any[]) => void };
+    gaWindow.dataLayer = gaWindow.dataLayer || [];
+    gaWindow.gtag = gaWindow.gtag || function (...args: any[]) { gaWindow.dataLayer!.push(args); };
+    gaWindow.gtag("js", new Date());
+    gaWindow.gtag("config", measurementId, { send_page_view: false });
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
+    script.dataset.googleAnalytics = measurementId;
+    document.head.appendChild(script);
+    return () => script.remove();
+  }, [isAdmin, measurementId]);
+
+  useEffect(() => {
+    if (isAdmin || !/^G-[A-Z0-9]+$/i.test(measurementId)) return;
+    const gaWindow = window as Window & { gtag?: (...args: any[]) => void };
+    gaWindow.gtag?.("event", "page_view", {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: pathname,
+      page_referrer: previousPage.current ?? document.referrer,
+    });
+    previousPage.current = window.location.href;
+  }, [isAdmin, measurementId, pathname]);
 
   if (isAdmin) {
     return (
