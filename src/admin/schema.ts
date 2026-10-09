@@ -4,7 +4,7 @@
 
 export type Field =
   | { key: string; label: string; type: "text" | "textarea" | "html" | "url"; bi?: boolean; hint?: string; dir?: "ltr" }
-  | { key: string; label: string; type: "image"; hint?: string }
+  | { key: string; label: string; type: "image"; hint?: string; fit?: "contain" | "cover"; preserveOriginal?: boolean }
   | { key: string; label: string; type: "gallery"; hint?: string } // [{url}] or [url]
   | { key: string; label: string; type: "toggle"; hint?: string; invert?: boolean }
   | { key: string; label: string; type: "number"; hint?: string }
@@ -30,6 +30,7 @@ export type Collection = {
   itemTitle?: (x: any) => string;
   itemSubtitle?: (x: any) => string;
   itemImage?: (x: any) => string | null | undefined;
+  itemImageFit?: "contain" | "cover";
   /** list: field holding display order */
   sortKey?: string;
   /** list: field that hides an item from the site */
@@ -298,13 +299,14 @@ export const COLLECTIONS: Collection[] = [
     visibility: { key: "is_visible", on: true, off: false },
     itemTitle: (x) => x.name,
     itemImage: (x) => x.logo_url,
+    itemImageFit: "contain",
     siteHref: () => "/",
     sections: [
       {
         title: "العميل",
         fields: [
           { key: "name", label: "اسم العميل", type: "text" },
-          { key: "logo_url", label: "اللوجو", type: "image", hint: "يفضّل PNG أو SVG بخلفية شفافة ولون أبيض" },
+          { key: "logo_url", label: "اللوجو", type: "image", fit: "contain", preserveOriginal: true, hint: "ارفع PNG أو SVG بخلفية شفافة — الملف هيفضل بجودته الأصلية من غير ضغط أو قص" },
           { key: "href", label: "رابط (اختياري)", type: "url" },
         ],
       },

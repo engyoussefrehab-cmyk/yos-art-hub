@@ -250,7 +250,7 @@ function ListView({ col, list, write, open }: { col: Collection; list: any[]; wr
                 </div>
               )}
               <button type="button" onClick={() => open(i)} className="flex min-w-0 flex-1 items-center gap-3 text-start sm:gap-4">
-                {hasImages && <Thumb url={col.itemImage!(x)} className="h-14 w-20 shrink-0 rounded-xl border border-border sm:h-16 sm:w-24" />}
+                {hasImages && <Thumb url={col.itemImage!(x)} fit={col.itemImageFit} className="h-14 w-20 shrink-0 rounded-xl border border-border bg-muted p-1 sm:h-16 sm:w-24" />}
                 <div className="min-w-0">
                   <div className={`truncate font-semibold ${vis ? "" : "text-muted-foreground"}`}>{col.itemTitle?.(x) || "—"}</div>
                   {col.itemSubtitle && <div className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{col.itemSubtitle(x)}</div>}

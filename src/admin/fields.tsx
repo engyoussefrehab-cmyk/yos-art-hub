@@ -159,7 +159,7 @@ export function Toggle({ checked, onChange, label }: { checked: boolean; onChang
 
 /* --------------------------------- media -------------------------------- */
 
-function useUploader() {
+function useUploader(preserveOriginal = false) {
   const { addUpload } = useAdmin();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -169,7 +169,7 @@ function useUploader() {
     const urls: string[] = [];
     try {
       for (const f of Array.from(files)) {
-        const u = await prepareUpload(f);
+        const u = await prepareUpload(f, "uploads", { preserveOriginal });
         addUpload(u);
         urls.push(u.url);
       }
@@ -183,12 +183,12 @@ function useUploader() {
   return { upload, busy, err };
 }
 
-export function Thumb({ url, className = "" }: { url?: string | null; className?: string }) {
+export function Thumb({ url, className = "", fit = "cover" }: { url?: string | null; className?: string; fit?: "contain" | "cover" }) {
   const { previewFor } = useAdmin();
   const src = previewFor(url);
   if (!src) return <div className={`grid place-items-center bg-muted text-muted-foreground ${className}`}><Images className="h-5 w-5 opacity-50" /></div>;
   if (/\.pdf$/i.test(src)) return <div className={`grid place-items-center bg-muted text-xs font-bold ${className}`}>PDF</div>;
-  return <img src={src} alt="" loading="lazy" className={`object-cover ${className}`} />;
+  return <img src={src} alt="" loading="lazy" className={`object-${fit} ${className}`} />;
 }
 
 export function MediaPicker({ open, onClose, onPick, multiple }: { open: boolean; onClose: () => void; onPick: (urls: string[]) => void; multiple?: boolean }) {
@@ -241,15 +241,15 @@ export function MediaPicker({ open, onClose, onPick, multiple }: { open: boolean
   );
 }
 
-export function ImageInput({ value, onChange }: { value: string | null; onChange: (v: string | null) => void }) {
-  const { upload, busy, err } = useUploader();
+export function ImageInput({ value, onChange, fit = "cover", preserveOriginal = false }: { value: string | null; onChange: (v: string | null) => void; fit?: "contain" | "cover"; preserveOriginal?: boolean }) {
+  const { upload, busy, err } = useUploader(preserveOriginal);
   const [picker, setPicker] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const isData = value?.startsWith("data:");
   return (
     <div className="flex flex-wrap items-start gap-4">
       <div className="relative h-28 w-40 shrink-0 overflow-hidden rounded-2xl border border-border bg-muted">
-        <Thumb url={value} className="h-full w-full" />
+        <Thumb url={value} className="h-full w-full" fit={fit} />
         {busy && <div className="absolute inset-0 grid place-items-center bg-white/70"><Loader2 className="h-5 w-5 animate-spin" /></div>}
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-2">
@@ -416,7 +416,7 @@ export function FieldEditor({ field, record, onChange, options }: { field: Field
         );
       }
       case "image":
-        return <ImageInput value={r[f.key] ?? null} onChange={(v) => onChange({ [f.key]: v })} />;
+        return <ImageInput value={r[f.key] ?? null} fit={f.fit} preserveOriginal={f.preserveOriginal} onChange={(v) => onChange({ [f.key]: v })} />;
       case "gallery":
         return <GalleryInput value={r[f.key]} onChange={(v) => onChange({ [f.key]: v })} />;
       case "tags":

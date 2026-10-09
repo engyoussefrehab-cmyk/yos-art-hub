@@ -73,12 +73,22 @@ async function encode(src: ImageBitmap | HTMLImageElement, maxW: number, type: s
   return { bytes: new Uint8Array(await blob.arrayBuffer()), w, h, blob };
 }
 
-export async function prepareUpload(file: File, folder = "uploads"): Promise<PreparedUpload> {
+export async function prepareUpload(file: File, folder = "uploads", options?: { preserveOriginal?: boolean }): Promise<PreparedUpload> {
   const name = `${slugify(file.name)}-${rand()}`;
   const dir = `${folder}/${stamp()}`;
   const passthrough = /svg|gif|pdf/.test(file.type) || /\.(svg|gif|pdf)$/i.test(file.name);
   if (passthrough) {
     const ext = (file.name.match(/\.([a-z0-9]+)$/i)?.[1] || "bin").toLowerCase();
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    return {
+      url: `/media/${dir}/${name}.${ext}`,
+      files: [{ path: `public/media/${dir}/${name}.${ext}`, bytes }],
+      previewUrl: URL.createObjectURL(file),
+      bytes: bytes.length,
+    };
+  }
+  if (options?.preserveOriginal && ["image/png", "image/jpeg", "image/webp", "image/avif"].includes(file.type.toLowerCase())) {
+    const ext = file.type.toLowerCase() === "image/jpeg" ? "jpg" : file.type.split("/")[1].toLowerCase();
     const bytes = new Uint8Array(await file.arrayBuffer());
     return {
       url: `/media/${dir}/${name}.${ext}`,
