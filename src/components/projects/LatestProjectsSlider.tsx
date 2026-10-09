@@ -145,7 +145,7 @@ export function LatestProjectsSlider({
             </p>
           )}
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">{compact && <Link to={allProjectsHref} className="hidden items-center gap-1 rounded-full px-2 py-2 text-xs font-semibold text-accent transition-colors hover:text-foreground sm:inline-flex">{t("كل المشاريع", "All projects")}<ArrowUpRight className={`h-3.5 w-3.5 ${isAr ? "-scale-x-100" : ""}`} /></Link>}
           {autoPlay && items.length > 1 && (
             <button
               type="button"
@@ -264,7 +264,7 @@ export function LatestProjectsSlider({
         })}
       </div>
 
-      {/* Progress bar */}
+{compact && <Link to={allProjectsHref} className="mt-2 inline-flex min-h-10 items-center gap-1 text-xs font-semibold text-accent sm:hidden">{t("استكشف كل المشاريع", "Explore all projects")}<ArrowUpRight className={`h-3.5 w-3.5 ${isAr ? "-scale-x-100" : ""}`} /></Link>} {/* Progress bar */}
       {!compact && items.length > 1 && (
         <div className="mt-2 h-0.5 w-full overflow-hidden rounded-full bg-border/60">
           <div
