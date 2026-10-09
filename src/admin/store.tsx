@@ -117,7 +117,7 @@ export function AdminStoreProvider({ children }: { children: ReactNode }) {
     if (!path) setUploads([]);
   }, []);
 
-  const watchDeploy = useCallback((sha: string) => {
+  const watchDeploy = useCallback((sha: string, uploadedUrls: string[] = []) => {
     setDeploy({ sha, state: "queued", startedAt: Date.now() });
     if (pollRef.current) window.clearInterval(pollRef.current);
     pollRef.current = window.setInterval(async () => {
@@ -126,6 +126,11 @@ export function AdminStoreProvider({ children }: { children: ReactNode }) {
       if (state === "done" || state === "failed") {
         window.clearInterval(pollRef.current!);
         pollRef.current = null;
+        // Keep local previews alive while the new media URL is not live yet.
+        // Drop them only after the site has finished deploying successfully.
+        if (state === "done" && uploadedUrls.length) {
+          setUploads((prev) => prev.filter((u) => !uploadedUrls.includes(u.url)));
+        }
       }
     }, 6000);
   }, []);
@@ -162,8 +167,7 @@ export function AdminStoreProvider({ children }: { children: ReactNode }) {
           for (const p of dirtyPaths) next[p] = { base: serialize(prev[p].value), value: prev[p].value };
           return next;
         });
-        setUploads((prev) => prev.filter((u) => !usedUploads.includes(u)));
-        watchDeploy(sha);
+        watchDeploy(sha, usedUploads.map((u) => u.url));
         return sha;
       } finally {
         setPublishing(false);
