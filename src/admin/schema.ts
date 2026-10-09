@@ -644,6 +644,14 @@ export const COLLECTIONS: Collection[] = [
     ],
   },
   {
+    id: "analytics",
+    title: "إحصائيات الزيارات",
+    description: "اربط Google Analytics لمعرفة عدد الزوار والصفحات التي يشاهدونها. أوقف Page changes based on browser history events من إعدادات Enhanced measurement لتجنب تكرار المشاهدات.",
+    file: "src/content/analytics.json",
+    kind: "single",
+    sections: [{ title: "Google Analytics", fields: [{ key: "google_analytics_id", label: "رقم قياس الموقع", type: "text", dir: "ltr", hint: "انسخ الرقم الذي يبدأ بـ G- من Google Analytics ثم الصقه هنا." }] }],
+  },
+  {
     id: "projectStats",
     title: "أرقام صفحة المشاريع",
     file: `${SNAP}/projects_page_stats.json`,
@@ -699,5 +707,5 @@ export const NAV_GROUPS: { title: string; items: { id: string; title: string }[]
     ],
   },
   { title: "المقالات", items: [{ id: "articles", title: "المقالات" }, { id: "articleCategories", title: "أقسام المقالات" }] },
-  { title: "الإعدادات", items: [{ id: "seo", title: "جوجل والمشاركة" }, { id: "settings", title: "بيانات التواصل" }, { id: "projectStats", title: "أرقام صفحة المشاريع" }, { id: "history", title: "سجل التعديلات" }] },
+  { title: "الإعدادات", items: [{ id: "seo", title: "جوجل والمشاركة" }, { id: "analytics", title: "إحصائيات الزيارات" }, { id: "settings", title: "بيانات التواصل" }, { id: "projectStats", title: "أرقام صفحة المشاريع" }, { id: "history", title: "سجل التعديلات" }] },
 ];

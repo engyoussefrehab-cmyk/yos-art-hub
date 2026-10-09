@@ -76,11 +76,14 @@ function DashboardHome({ go, openItem }: { go: (view: string) => void; openItem:
   const projectIssues = projects.filter((p) => p.status === "published" && (!p.name_ar || !p.thumbnail_url));
   const articleIssues = articles.filter((a: any) => a.status === "published" && (!a.title_ar || !a.excerpt_ar || !a.content_ar));
   const issues = projectIssues.length + articleIssues.length;
+  const analyticsSettings = get<any>("src/content/analytics.json");
+  const analyticsConnected = /^G-[A-Z0-9]+$/i.test(analyticsSettings?.google_analytics_id || "");
   const actions = [
     { id: "visual", title: "عدّل الموقع مباشرة", detail: "اختار أي نص أو صورة من معاينة الموقع", icon: Sparkles, tone: "bg-amber-50 text-amber-700" },
     { id: "projects", title: "إدارة المشاريع", detail: `${projects.length} مشروع · ${draftProjects} مسودة`, icon: FolderKanban, tone: "bg-blue-50 text-blue-700" },
     { id: "media", title: "مكتبة الصور", detail: "ارفع الصور ونظّم ملفات الموقع", icon: Image, tone: "bg-violet-50 text-violet-700" },
     { id: "texts", title: "نصوص الموقع", detail: "عدّل العربي والإنجليزي من مكان واحد", icon: Type, tone: "bg-emerald-50 text-emerald-700" },
+    { id: "analytics", title: "إعداد عدّاد الزيارات", detail: "اربط Google Analytics واعرف عدد زوار موقعك", icon: ExternalLink, tone: "bg-rose-50 text-rose-700" },
   ];
   return (
     <div className="mx-auto max-w-6xl space-y-7">
@@ -104,6 +107,17 @@ function DashboardHome({ go, openItem }: { go: (view: string) => void; openItem:
       <section>
         <div className="mb-3 flex items-center justify-between"><h2 className="font-display text-xl font-bold">ابدأ من هنا</h2><span className="text-xs text-muted-foreground">اختصارات سريعة</span></div>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{actions.map(({ id, title, detail, icon: Icon, tone }) => <button key={id} type="button" onClick={() => go(id)} className="group rounded-3xl border border-border bg-card p-5 text-start shadow-[0_1px_0_rgb(0_0_0/0.02)] transition hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-lg"><span className={`mb-4 grid h-11 w-11 place-items-center rounded-2xl ${tone}`}><Icon className="h-5 w-5" /></span><span className="block font-semibold">{title}</span><span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{detail}</span><span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-accent">افتح <ArrowUpRight className="h-3.5 w-3.5" /></span></button>)}</div>
+      </section>
+      <section className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-border bg-card p-5 sm:p-6">
+        <div>
+          <h2 className="font-display text-lg font-bold">زيارات موقعك</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{analyticsConnected ? "القياس متصل. افتح تقارير Google Analytics لمراجعة الزوار والصفحات." : "اربط Google Analytics مرة واحدة لبدء تسجيل الزيارات الجديدة."}</p>
+        </div>
+        {analyticsConnected ? (
+          <a href="https://analytics.google.com/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white"><ExternalLink className="h-4 w-4" /> تقارير الزوار</a>
+        ) : (
+          <button type="button" onClick={() => go("analytics")} className="inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white">إعداد عدّاد الزيارات <ArrowUpRight className="h-4 w-4" /></button>
+        )}
       </section>
       <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
         <section className="rounded-3xl border border-border bg-card p-5 sm:p-6">
