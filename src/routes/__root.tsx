@@ -391,15 +391,18 @@ function SiteNav() {
     { to: `${base}/projects`, label: t("nav_projects"), external: false, newTab: false },
     { to: `${base}/insights`, label: t("nav_insights"), external: false, newTab: false },
     { to: `${base}/packages`, label: t("nav_packages"), external: false, newTab: false },
+    { to: `${base}/tools/color-brief`, label: t("nav_color_brief"), external: false, newTab: false },
     { to: `${base}/contact`, label: t("nav_contact"), external: false, newTab: false },
   ];
-  const links = cmsMenu.length > 0
-    ? cmsMenu.map((m) => ({
+  const cmsLinks = cmsMenu.map((m) => ({
         to: m.url.startsWith("/") && !m.is_external && lang === "en" && !m.url.startsWith("/en") ? `/en${m.url === "/" ? "" : m.url}` : m.url,
         label: (lang === "en" ? m.label_en : m.label_ar) || m.label_ar,
         external: m.is_external,
         newTab: m.open_in_new_tab,
-      }))
+      }));
+  const toolLink = { to: `${base}/tools/color-brief`, label: t("nav_color_brief"), external: false, newTab: false };
+  const links = cmsMenu.length > 0
+    ? (cmsLinks.some((link) => link.to === toolLink.to) ? cmsLinks : [...cmsLinks, toolLink])
     : defaults;
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
@@ -474,15 +477,18 @@ function SiteFooter() {
     { to: `${base}/projects`, label: t("nav_projects"), external: false, newTab: false },
     { to: `${base}/insights`, label: t("nav_insights"), external: false, newTab: false },
     { to: `${base}/packages`, label: t("nav_packages"), external: false, newTab: false },
+    { to: `${base}/tools/color-brief`, label: t("nav_color_brief"), external: false, newTab: false },
     { to: `${base}/contact`, label: t("nav_contact"), external: false, newTab: false },
   ];
-  const footerLinks = cmsMenu.length > 0
-    ? cmsMenu.map((m) => ({
+  const cmsLinks = cmsMenu.map((m) => ({
         to: m.url.startsWith("/") && !m.is_external && lang === "en" && !m.url.startsWith("/en") ? `/en${m.url === "/" ? "" : m.url}` : m.url,
         label: (lang === "en" ? m.label_en : m.label_ar) || m.label_ar,
         external: m.is_external,
         newTab: m.open_in_new_tab,
-      }))
+      }));
+  const toolLink = { to: `${base}/tools/color-brief`, label: t("nav_color_brief"), external: false, newTab: false };
+  const footerLinks = cmsMenu.length > 0
+    ? (cmsLinks.some((link) => link.to === toolLink.to) ? cmsLinks : [...cmsLinks, toolLink])
     : defaults;
 
   return (

@@ -19,6 +19,10 @@
     "ar": "الرؤى",
     "en": "Insights"
   },
+  "nav_color_brief": {
+    "ar": "لون البريف",
+    "en": "Color Brief"
+  },
   "cta_start_project": {
     "ar": "ابدأ مشروعك",
     "en": "Start a project"

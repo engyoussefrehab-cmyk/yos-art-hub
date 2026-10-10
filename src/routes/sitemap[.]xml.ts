@@ -18,6 +18,7 @@ const ARABIC: Entry[] = [
   { path: "/projects/social", changefreq: "weekly", priority: "0.8", hasAlt: false },
   { path: "/packages", changefreq: "monthly", priority: "0.8", hasAlt: true },
   { path: "/contact", changefreq: "monthly", priority: "0.7", hasAlt: true },
+  { path: "/tools/color-brief", changefreq: "monthly", priority: "0.7", hasAlt: true },
   { path: "/insights", changefreq: "weekly", priority: "0.9", hasAlt: true },
   { path: "/insights/brand-strategy", changefreq: "weekly", priority: "0.7", hasAlt: true },
   { path: "/insights/visual-identity", changefreq: "weekly", priority: "0.7", hasAlt: true },
