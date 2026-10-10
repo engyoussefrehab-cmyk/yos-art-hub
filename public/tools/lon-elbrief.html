@@ -97,6 +97,7 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
 .palette-nav{display:none;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 8px}
 .palette-nav button{min-height:40px}
 .palette-nav span{font-size:12px;color:var(--muted);font-weight:600}
+.color-metrics{display:none}
 .app{display:grid;grid-template-columns:350px minmax(0,1fr);gap:20px;align-items:start}
 .app[hidden]{display:none}
 @media (max-width:960px){.app{grid-template-columns:minmax(0,1fr)}}
@@ -333,6 +334,12 @@ footer a{color:var(--ink);font-weight:600}
   .pal-more{display:flex}
   .palette-nav{display:flex}
   .pal[data-palette-item]:not(.mobile-active){display:none}
+  .sw .meta{display:none}
+  .color-metrics{display:flex;flex-direction:column;gap:7px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font-size:11px;color:var(--muted)}
+  .color-metrics h4{margin:0;color:var(--ink);font-size:12px}
+  .color-metrics-list{display:grid;gap:6px}
+  .color-metrics-row{display:flex;justify-content:space-between;gap:8px;direction:rtl}
+  .color-metrics-row span:last-child{direction:ltr;text-align:left;font-family:var(--mono)}
   .pal-extra{display:none}
   .pal.expanded .pal-extra{display:flex}
   .pal.expanded .pal-more span:last-child{transform:rotate(45deg)}
@@ -1101,6 +1108,7 @@ function card(P,i){
      <div class="ratio-l"><span>توزيع مبدئي للمساحات — يتغير حسب الاستخدام</span></div></div>
    <button type="button" class="pal-more" data-card-more="${i}" aria-expanded="false" aria-controls="cardMore-${i}"><span>عرض السبب والمعاينة وفحوص التباين</span><span aria-hidden="true">＋</span></button>
    <div class="pal-extra" id="cardMore-${i}">
+   <div class="color-metrics"><h4>بيانات الألوان للمصمم</h4><div class="color-metrics-list">${P.colors.map(c=>`<div class="color-metrics-row"><b>${esc(c.role)} · ${c.c.hex}</b><span>RGB ${c.c.rgb.join(' ')} · CMYK ${cmyk(c.c.rgb).join(' ')}</span></div>`).join('')}</div></div>
    <div class="body">
      <div class="col">
        <div class="formula"><span class="k">قولها للعميل بدل «أنا حاسس»</span><q>${esc(P.formula)}</q>
