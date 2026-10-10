@@ -655,8 +655,8 @@ function finalize(P,st){
   while(contrast(text,bg)<7&&rgbOklch(text.rgb).L>.02&&rgbOklch(text.rgb).L<.98)text=shiftOklchL(text,dark?.02:-.02);
   P.text=text;
   const darkInk=dark?bg:text;
-  let pr=P.primary,cw=contrast(pr,WHITE),cd=contrast(pr,darkInk);
-  if(Math.max(cw,cd)<4.5){let t=pr;for(let i=0;i<48&&contrast(t,WHITE)<4.5&&rgbOklch(t.rgb).L>.02;i++)t=shiftOklchL(t,-.02);if(contrast(t,WHITE)>=4.5){pr=t;P.adjusted=true}cw=contrast(pr,WHITE);cd=contrast(pr,darkInk)}
+  let pr=P.primary,cw=contrast(pr,WHITE),cd=contrast(pr,darkInk),pbg=contrast(pr,bg);
+  if(Math.max(cw,cd)<4.5||pbg<3){const start=rgbOklch(pr.rgb).L;let found=null;for(let step=1;step<=48&&!found;step++)for(const dir of[-1,1]){const L=start+dir*step*.02;if(L<=.02||L>=.98)continue;const candidate=oklchMk(L,rgbOklch(pr.rgb).C,rgbOklch(pr.rgb).H),fg=Math.max(contrast(candidate,WHITE),contrast(candidate,darkInk));if(contrast(candidate,bg)>=3&&fg>=4.5){found=candidate;break}}if(found){pr=found;P.adjusted=true}cw=contrast(pr,WHITE);cd=contrast(pr,darkInk);pbg=contrast(pr,bg)}
   P.primary=pr;P.onPrimaryName=cw>=cd?'أبيض':'غامق';P.cPrimary=Math.max(cw,cd);
   let a=P.accent,guard=0;
   while(contrast(a,bg)<3&&guard++<45)a=shiftOklchL(a,dark?.02:-.02);
@@ -665,18 +665,35 @@ function finalize(P,st){
   P.checks=[
     {ok:tx>=4.5,t:`النص العادي على الخلفية ${tx.toFixed(1)}:1 ${tx>=7?'AAA':tx>=4.5?'AA':'أقل من AA (4.5:1)'}`},
     {ok:P.cPrimary>=4.5,t:`كتابة ${P.onPrimaryName} على الأساسي ${P.cPrimary.toFixed(1)}:1 ${P.cPrimary>=7?'AAA':P.cPrimary>=4.5?'AA':P.cPrimary>=3?'للنص الكبير فقط (3:1)':'أقل من 3:1'}`},
+    {ok:pbg>=3,t:`الأساسي مقابل الخلفية ${pbg.toFixed(1)}:1 ${pbg>=3?'يجتاز 3:1 كعنصر غير نصي':'أقل من 3:1 كعنصر غير نصي'}`},
     {ok:ac>=3,t:`لون الأكسنت مقابل الخلفية ${ac.toFixed(1)}:1 ${ac>=3?'يجتاز 3:1 للعناصر غير النصية':'أقل من 3:1 للعناصر غير النصية'}`},
     {ok:buttonTextRatio>=4.5,t:`نص الزر المقترح ${buttonInk.hex} على الأكسنت ${buttonTextRatio.toFixed(1)}:1 ${buttonTextRatio>=4.5?'يجتاز AA للنص العادي':buttonTextRatio>=3?'مناسب للنص الكبير فقط':'أقل من حد النص الكبير'}`},
     {note:true,t:`محاكاة تقريبية لنقص تمييز الأحمر والأخضر (ΔE ${cb.toFixed(1)}): لا تمنح اجتيازًا؛ أضف نصًا أو رمزًا بجانب اللون واختبر الواجهة فعليًا.`}];
   if(st.ch==='print'||st.ch==='all')P.checks.push({note:true,t:'قيم CMYK تقريبية من RGB وليست فحصًا لنطاق طابعة بعينها. النتيجة تعتمد على بروفايل ICC والورق والحبر؛ اطلب بروفة.'});
   if(st.ch==='sign'||st.ch==='all'){const r=contrast(pr,bg);P.checks.push(r>=3?{ok:true,t:`تباين الأساسي مع الخلفية ${r.toFixed(1)}:1 (3:1 مرجع للعناصر غير النصية؛ لا يضمن وضوح اليافطة من مسافة)`}:{ok:false,t:`تباين الأساسي ${r.toFixed(1)}:1؛ جرّب إطارًا أو درجة أعلى تباينًا، ثم راجعها بالحجم ومسافة المشاهدة الفعلية`})}
-  if(P.adjusted)P.reasons.push({k:'التباين',t:'عدّلت درجة الأساسي لتحسين التباين، ثم قست نسبة اللون الناتجة مقابل الأبيض.'});
+  if(P.adjusted)P.reasons.push({k:'التباين',t:'عدّلت درجة الأساسي لأقرب موضع ممكن يجتاز تباين النص 4.5:1 والعنصر 3:1؛ راجع النسب المعروضة.'});
   if(CH[st.ch].why&&P.kind!=='c')P.reasons.push({k:'القناة',t:CH[st.ch].why});
   P.colors=[{role:'الخلفية',key:'bg',pct:48,c:bg},{role:'الأساسي',key:'primary',pct:22,c:pr},{role:'التانوي',key:'secondary',pct:8,c:P.secondary},{role:'الأكسنت',key:'accent',pct:10,c:a},{role:'النصوص',key:'text',pct:12,c:text}];
   P.baseMode=dark?'dark':'light';
   P.variants={light:variantOf(P,'light'),dark:variantOf(P,'dark')};
   P.scales={primary:scaleOf(pr),accent:scaleOf(a)};
   return P;
+}
+function deltaOklab(a,b){const x=rgbOklch(a.rgb),y=rgbOklch(b.rgb),ax=x.C*Math.cos(x.H*Math.PI/180),ay=x.C*Math.sin(x.H*Math.PI/180),bx=y.C*Math.cos(y.H*Math.PI/180),by=y.C*Math.sin(y.H*Math.PI/180);return Math.hypot((x.L-y.L)*100,(ax-bx)*100,(ay-by)*100)}
+function paletteScore(P){
+  const buttonInk=fromHex(onFor(P.accent,{bg:P.bg,text:P.text}));
+  const fit=(ratio,target)=>Math.min(ratio/target,1);
+  let score=5*fit(contrast(P.text,P.bg),4.5)+4*fit(P.cPrimary,4.5)+3*fit(contrast(P.primary,P.bg),3)+3*fit(contrast(P.accent,P.bg),3)+4*fit(contrast(P.accent,buttonInk),4.5);
+  if(P.harmonyName!=='أحادي')score+=2*fit(deltaOklab(P.primary,P.accent),18);
+  return score;
+}
+function bestPalette(make,st,index){
+  let best=null,bestScore=-Infinity;
+  for(let attempt=0;attempt<18;attempt++){
+    const candidateSt={...st,seed:(st.seed*97+index*31+attempt+1)>>>0},R=rng(candidateSt.seed+1),candidate=make(candidateSt,R),score=paletteScore(candidate);
+    if(score>bestScore){best=candidate;bestScore=score}
+  }
+  return best;
 }
 function harmonize(p,harm,st,spec,co,R){
   const H=p.h,sg=R()<.5?1:-1,accS={economy:88,mid:78,premium:58,luxury:48}[st.tier];let sec,acc;
@@ -799,13 +816,13 @@ function buildClient(st,ind,co,R,cmps,an){
 function generate(st){
   const ind=IND[st.ind],co=CO[st.co],R=rng(st.seed+1),norms=orderNorms(ind,st),n=norms.length,o=st.seed%n;
   const cmps=(st.comps||[]).slice(0,st.compN||0).map(fromHex);
-  const h1=st.age==='kids'||st.ind==='kids'?'triad':st.bold>=1?'comp':st.bold<=-1?'analog':'split';
+  const h1=st.bold>=1?'comp':st.bold<=-1?'analog':'split';
   const P=[
-    build({kind:'m',title:'قلب السوق',sub:'أقرب حاجة لعُرف '+ind.label,base:norms[o],alt:norms[(o+1)%n],harmony:h1,showMarket:true},st,ind,co,R,cmps),
-    build({kind:'m',title:co.acc?'السوق + لمسة من '+co.name:'السوق بنبرة تانية',sub:co.acc?'نفس العرف، بدلالة محلية':'نفس العرف، بلون تاني من المجال',base:norms[(o+1)%n],alt:norms[(o+2)%n],harmony:'split',accent:co.acc,accentWhy:co.accWhy},st,ind,co,R,cmps),
-    build({kind:'m',title:st.tier==='luxury'?'أحادي على خلفية غامقة':'أحادي ومركّز',sub:'لون واحد بدرجاته، سهل يتطبق',base:norms[(o+2)%n],alt:norms[o],harmony:'mono',darkLead:st.tier==='luxury'},st,ind,co,R,cmps),
-    build({kind:'b',title:'عكس عُرف المجال',sub:'لون محدش في المجال بيستخدمه',base:ind.brk[st.seed%2],alt:norms[o],harmony:st.seed%2?'analog':'comp'},st,ind,co,R,cmps),
-    buildMinimal(st,ind,co,R,cmps)];
+    bestPalette((cs,r)=>build({kind:'m',title:'قلب السوق',sub:'أقرب حاجة لعُرف '+ind.label,base:norms[o],alt:norms[(o+1)%n],harmony:h1,showMarket:true},cs,ind,co,r,cmps),st,0),
+    bestPalette((cs,r)=>build({kind:'m',title:co.acc?'السوق + لمسة من '+co.name:'السوق بنبرة تانية',sub:co.acc?'نفس العرف، بدلالة محلية':'نفس العرف، بلون تاني من المجال',base:norms[(o+1)%n],alt:norms[(o+2)%n],harmony:'split',accent:co.acc,accentWhy:co.accWhy},cs,ind,co,r,cmps),st,1),
+    bestPalette((cs,r)=>build({kind:'m',title:cs.tier==='luxury'?'أحادي على خلفية غامقة':'أحادي ومركّز',sub:'لون واحد بدرجاته، سهل يتطبق',base:norms[(o+2)%n],alt:norms[o],harmony:'mono',darkLead:cs.tier==='luxury'},cs,ind,co,r,cmps),st,2),
+    bestPalette((cs,r)=>build({kind:'b',title:'عكس عُرف المجال',sub:'لون محدش في المجال بيستخدمه',base:ind.brk[cs.seed%2],alt:norms[o],harmony:cs.seed%2?'analog':'comp'},cs,ind,co,r,cmps),st,3),
+    bestPalette((cs,r)=>buildMinimal(cs,ind,co,r,cmps),st,4)];
   let an=null;
   if(st.clientOn){an=analyzeClient(st,ind,co,cmps);P.push(buildClient(st,ind,co,R,cmps,an))}
   return{P,an};
@@ -983,9 +1000,9 @@ function render(){
   $('#results').innerHTML=`${favBlock()}
    <div class="summary"><span class="chip">${esc(brandName())}</span><span class="chip">${esc(ind.label)}</span><span class="chip">${esc(co.name)}</span><span class="chip">${esc(audDesc(st))}</span><span class="chip">${TIER[st.tier].name}</span>
      ${st.vals.length?`<span class="chip">${st.vals.map(k=>VAL[k].n).join(' · ')}</span>`:''}${comps.length?`<span class="chip">المنافسين ${comps.map(c=>`<span class="dot" style="background:${c}"></span>`).join('')}</span>`:''}${st.seed?`<span class="chip">تنويعة ${st.seed+1}</span>`:''}</div>
-   <div class="group-h"><h2>٣ اقتراحات قريبة من الشائع</h2><p>بداية مألوفة للاختبار، وليست ضمانًا لفهم الجمهور أو تفضيله.</p></div>
+   <div class="group-h"><h2>٣ اقتراحات قريبة من الشائع</h2><p>من بين تنويعات لكل اتجاه، رتّبناها لتحسين تباين النص والأزرار ووضوح الألوان. اختبر الأنسب مع جمهورك.</p></div>
    ${PALS.slice(0,3).map((p,i)=>card(p,i)).join('')}
-   <div class="group-h break"><h2>٢ اقتراح مختلف عن الشائع</h2><p>اختبر وضوحه وتميّزه مع جمهورك قبل اعتماد الهوية.</p></div>
+   <div class="group-h break"><h2>٢ اقتراح مختلف عن الشائع</h2><p>ترتيب التباين يساعد على القراءة، لكنه لا يثبت أن الاتجاه مناسب لجمهورك؛ اختبره قبل اعتماد الهوية.</p></div>
    ${PALS.slice(3,5).map((p,i)=>card(p,i+3)).join('')}
    ${clientBlock()}`;
 }
