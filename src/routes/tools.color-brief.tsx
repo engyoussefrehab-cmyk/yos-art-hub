@@ -4,8 +4,8 @@ import { ColorBriefEmbed } from "@/components/tools/ColorBriefEmbed";
 export const Route = createFileRoute("/tools/color-brief")({
   head: () => ({
     meta: [
-      { title: "لون البريف — أداة اختيار الألوان للمصممين | يوسف رحاب" },
-      { name: "description", content: "أداة تساعد المصممين على استكشاف اتجاهات لونية مبدئية من البريف ومراجعة تناغم الألوان والتباين." },
+      { title: "مختبر الألوان — اختيار ألوان الهوية البصرية | يوسف رحاب" },
+      { name: "description", content: "استكشف اتجاهات لونية مبدئية للهوية البصرية وراجع تناغم الألوان والتباين." },
     ],
   }),
   component: ColorBriefEmbed,

@@ -23,10 +23,12 @@ import { Route as EnRssDotxmlRouteImport } from './routes/en.rss[.]xml'
 import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as ToolsColorBriefRouteImport } from './routes/tools.color-brief'
 import { Route as EnGoSplatRouteImport } from './routes/en.go.$'
 import { Route as EnInsightsIndexRouteImport } from './routes/en.insights.index'
 import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
+import { Route as EnToolsIndexRouteImport } from './routes/en.tools.index'
 import { Route as EnToolsColorBriefRouteImport } from './routes/en.tools.color-brief'
 import { Route as InsightsCategoryIndexRouteImport } from './routes/insights.$category.index'
 import { Route as InsightsCategorySlugRouteImport } from './routes/insights.$category.$slug'
@@ -107,6 +109,11 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsIndexRoute = ToolsIndexRouteImport.update({
+  id: '/tools/',
+  path: '/tools/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsColorBriefRoute = ToolsColorBriefRouteImport.update({
   id: '/tools/color-brief',
   path: '/tools/color-brief',
@@ -125,6 +132,11 @@ const EnInsightsIndexRoute = EnInsightsIndexRouteImport.update({
 const EnProjectsIndexRoute = EnProjectsIndexRouteImport.update({
   id: '/en/projects/',
   path: '/en/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnToolsIndexRoute = EnToolsIndexRouteImport.update({
+  id: '/en/tools/',
+  path: '/en/tools/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnToolsColorBriefRoute = EnToolsColorBriefRouteImport.update({
@@ -189,12 +201,14 @@ export interface FileRoutesByFullPath {
   '/en/': typeof EnIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/tools/': typeof ToolsIndexRoute
   '/en/go/$': typeof EnGoSplatRoute
   '/en/tools/color-brief': typeof EnToolsColorBriefRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/en/insights/': typeof EnInsightsIndexRoute
   '/en/projects/': typeof EnProjectsIndexRoute
+  '/en/tools/': typeof EnToolsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
@@ -218,12 +232,14 @@ export interface FileRoutesByTo {
   '/en': typeof EnIndexRoute
   '/insights': typeof InsightsIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/tools': typeof ToolsIndexRoute
   '/en/go/$': typeof EnGoSplatRoute
   '/en/tools/color-brief': typeof EnToolsColorBriefRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/en/insights': typeof EnInsightsIndexRoute
   '/en/projects': typeof EnProjectsIndexRoute
+  '/en/tools': typeof EnToolsIndexRoute
   '/insights/$category': typeof InsightsCategoryIndexRoute
   '/projects/$category': typeof ProjectsCategoryIndexRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
@@ -248,12 +264,14 @@ export interface FileRoutesById {
   '/en/': typeof EnIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/tools/': typeof ToolsIndexRoute
   '/en/go/$': typeof EnGoSplatRoute
   '/en/tools/color-brief': typeof EnToolsColorBriefRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
   '/en/insights/': typeof EnInsightsIndexRoute
   '/en/projects/': typeof EnProjectsIndexRoute
+  '/en/tools/': typeof EnToolsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
   '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
@@ -279,12 +297,14 @@ export interface FileRouteTypes {
     | '/en/'
     | '/insights/'
     | '/projects/'
+    | '/tools/'
     | '/en/go/$'
     | '/en/tools/color-brief'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
     | '/en/insights/'
     | '/en/projects/'
+    | '/en/tools/'
     | '/insights/$category/'
     | '/projects/$category/'
     | '/en/insights/$category/$slug'
@@ -308,12 +328,14 @@ export interface FileRouteTypes {
     | '/en'
     | '/insights'
     | '/projects'
+    | '/tools'
     | '/en/go/$'
     | '/en/tools/color-brief'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
     | '/en/insights'
     | '/en/projects'
+    | '/en/tools'
     | '/insights/$category'
     | '/projects/$category'
     | '/en/insights/$category/$slug'
@@ -337,12 +359,14 @@ export interface FileRouteTypes {
     | '/en/'
     | '/insights/'
     | '/projects/'
+    | '/tools/'
     | '/en/go/$'
     | '/en/tools/color-brief'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
     | '/en/insights/'
     | '/en/projects/'
+    | '/en/tools/'
     | '/insights/$category/'
     | '/projects/$category/'
     | '/en/insights/$category/$slug'
@@ -367,12 +391,14 @@ export interface RootRouteChildren {
   EnIndexRoute: typeof EnIndexRoute
   InsightsIndexRoute: typeof InsightsIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
+  ToolsIndexRoute: typeof ToolsIndexRoute
   EnGoSplatRoute: typeof EnGoSplatRoute
   EnToolsColorBriefRoute: typeof EnToolsColorBriefRoute
   InsightsCategorySlugRoute: typeof InsightsCategorySlugRoute
   ProjectsCategorySlugRoute: typeof ProjectsCategorySlugRoute
   EnInsightsIndexRoute: typeof EnInsightsIndexRoute
   EnProjectsIndexRoute: typeof EnProjectsIndexRoute
+  EnToolsIndexRoute: typeof EnToolsIndexRoute
   InsightsCategoryIndexRoute: typeof InsightsCategoryIndexRoute
   ProjectsCategoryIndexRoute: typeof ProjectsCategoryIndexRoute
   EnInsightsCategorySlugRoute: typeof EnInsightsCategorySlugRoute
@@ -481,6 +507,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/': {
+      id: '/tools/'
+      path: '/tools'
+      fullPath: '/tools/'
+      preLoaderRoute: typeof ToolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/color-brief': {
       id: '/tools/color-brief'
       path: '/tools/color-brief'
@@ -507,6 +540,13 @@ declare module '@tanstack/react-router' {
       path: '/en/projects'
       fullPath: '/en/projects/'
       preLoaderRoute: typeof EnProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/tools/': {
+      id: '/en/tools/'
+      path: '/en/tools'
+      fullPath: '/en/tools/'
+      preLoaderRoute: typeof EnToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/tools/color-brief': {
@@ -591,12 +631,14 @@ const rootRouteChildren: RootRouteChildren = {
   EnIndexRoute: EnIndexRoute,
   InsightsIndexRoute: InsightsIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
+  ToolsIndexRoute: ToolsIndexRoute,
   EnGoSplatRoute: EnGoSplatRoute,
   EnToolsColorBriefRoute: EnToolsColorBriefRoute,
   InsightsCategorySlugRoute: InsightsCategorySlugRoute,
   ProjectsCategorySlugRoute: ProjectsCategorySlugRoute,
   EnInsightsIndexRoute: EnInsightsIndexRoute,
   EnProjectsIndexRoute: EnProjectsIndexRoute,
+  EnToolsIndexRoute: EnToolsIndexRoute,
   InsightsCategoryIndexRoute: InsightsCategoryIndexRoute,
   ProjectsCategoryIndexRoute: ProjectsCategoryIndexRoute,
   EnInsightsCategorySlugRoute: EnInsightsCategorySlugRoute,

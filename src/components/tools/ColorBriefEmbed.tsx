@@ -10,19 +10,41 @@ export function ColorBriefEmbed() {
     const frame = frameRef.current;
     if (!frame) return;
 
+    let contentObserver: ResizeObserver | undefined;
     const syncTheme = () => {
       const frameDocument = frame.contentDocument;
       if (!frameDocument?.documentElement) return;
       frameDocument.documentElement.dataset.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
     };
+    const resizeFrame = () => {
+      const frameDocument = frame.contentDocument;
+      const frameBody = frameDocument?.body;
+      const frameRoot = frameDocument?.documentElement;
+      if (!frameRoot || !frameBody) return;
+      frame.style.height = `${Math.max(frameRoot.scrollHeight, frameBody.scrollHeight)}px`;
+    };
+    const handleFrameLoad = () => {
+      syncTheme();
+      resizeFrame();
+      const frameDocument = frame.contentDocument;
+      if (!frameDocument?.body || !frameDocument.documentElement) return;
+      contentObserver?.disconnect();
+      contentObserver = new ResizeObserver(resizeFrame);
+      contentObserver.observe(frameDocument.body);
+      contentObserver.observe(frameDocument.documentElement);
+      frame.contentWindow?.addEventListener("resize", resizeFrame);
+    };
 
-    frame.addEventListener("load", syncTheme);
+    frame.addEventListener("load", handleFrameLoad);
     const observer = new MutationObserver(syncTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     syncTheme();
+    resizeFrame();
 
     return () => {
-      frame.removeEventListener("load", syncTheme);
+      frame.removeEventListener("load", handleFrameLoad);
+      frame.contentWindow?.removeEventListener("resize", resizeFrame);
+      contentObserver?.disconnect();
       observer.disconnect();
     };
   }, []);
@@ -34,12 +56,12 @@ export function ColorBriefEmbed() {
           {isAr ? "أداة تصميم من YR Studio" : "A design tool by YR Studio"}
         </p>
         <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          {isAr ? "لون البريف" : "Color Brief"}
+          {isAr ? "مختبر الألوان" : "Color Palette Studio"}
         </h1>
         <p className="max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
           {isAr
-            ? "حوّل وصف المشروع إلى اتجاهات لونية مبدئية، ووازن بين طبيعة المجال والسوق والجمهور قبل اعتماد الهوية النهائية."
-            : "Turn a project brief into early color directions, and explore how industry, market, and audience shape a palette before finalizing the identity."}
+            ? "استكشف اتجاهات لونية مبدئية، ووازن بين طبيعة المجال والسوق والجمهور قبل اعتماد الهوية النهائية."
+            : "Explore early color directions and see how industry, market, and audience shape a palette before finalizing the identity."}
         </p>
       </div>
 
@@ -47,8 +69,9 @@ export function ColorBriefEmbed() {
         <iframe
           ref={frameRef}
           src="/tools/lon-elbrief.html"
-          title={isAr ? "أداة لون البريف لاختيار الألوان" : "Color Brief palette tool"}
-          className="block h-[calc(100svh-11rem)] min-h-[650px] w-full border-0"
+          title={isAr ? "مختبر الألوان لاختيار لوحات لونية" : "Color Palette Studio"}
+          className="block min-h-[calc(100svh-8rem)] w-full border-0"
+          style={{ height: "1200px" }}
           loading="eager"
         />
       </div>

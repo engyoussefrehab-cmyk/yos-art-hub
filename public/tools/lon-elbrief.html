@@ -1,4 +1,4 @@
-<title>لون البريف</title>
+<title>مختبر الألوان</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -44,8 +44,7 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
 @media (max-width:960px){.app{grid-template-columns:minmax(0,1fr)}}
 
 /* brief */
-.brief{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);max-height:calc(100vh - 24px);overflow:auto}
-@media (max-width:960px){.brief{position:static;max-height:none}}
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;position:static;max-height:none;overflow:visible}
 .brief h2{font-size:18px}
 .presets{display:flex;flex-wrap:wrap;gap:6px}
 .presets button{font-size:12px;font-weight:500;padding:5px 9px;border-radius:999px}
@@ -253,7 +252,7 @@ footer a{color:var(--ink);font-weight:600}
 <div class="wrap" dir="rtl" lang="ar">
   <header class="top">
     <div class="brandline">
-      <h1>لون <span>البريف</span></h1>
+      <h1>مختبر <span>الألوان</span></h1>
       <p>اكتب البريف وخُد ٥ باليتات: ٣ ماشيين مع السوق و٢ بيكسروا القاعدة. كل باليتة معاها السبب، والجملة اللي تقولها للعميل بدل «أنا حاسس».</p>
     </div>
     <details class="how"><summary>إزاي بتشتغل؟</summary>
@@ -1029,7 +1028,7 @@ async function makePNG(P){
     x.direction='ltr';x.textAlign='right';x.font='500 24px "IBM Plex Mono", monospace';x.fillText(c.c.hex,X+cw,top+bh+170);x.direction='rtl'});
   x.fillStyle=V.primary.hex;x.fillRect(W-80,940,-8,250);
   x.fillStyle=V.text.hex;x.font='500 33px Alexandria, sans-serif';x.textAlign='right';wrap(x,'«'+P.formula+'»',W-104,976,W-200,54,5);
-  x.font='500 22px "IBM Plex Sans Arabic", sans-serif';x.globalAlpha=.6;x.fillText('لون البريف · yrstudio.art',W-80,H-60);x.globalAlpha=1;
+  x.font='500 22px "IBM Plex Sans Arabic", sans-serif';x.globalAlpha=.6;x.fillText('مختبر الألوان · yrstudio.art',W-80,H-60);x.globalAlpha=1;
   return cv.toDataURL('image/png');
 }
 function wrap(x,t,X,Y,w,lh,max){const ws=t.split(' '),lines=[];let line='';

@@ -19,9 +19,41 @@
     "ar": "الرؤى",
     "en": "Insights"
   },
-  "nav_color_brief": {
-    "ar": "لون البريف",
-    "en": "Color Brief"
+  "nav_tools": {
+    "ar": "أدوات",
+    "en": "Tools"
+  },
+  "tools_kicker": {
+    "ar": "أدوات YR Studio",
+    "en": "YR Studio Tools"
+  },
+  "tools_title": {
+    "ar": "أدوات صغيرة، أفكار أوضح",
+    "en": "Small tools. Clearer ideas."
+  },
+  "tools_intro": {
+    "ar": "أدوات عملية تساعدك على حلّ تفاصيل التصميم اليومية بسهولة وسرعة.",
+    "en": "Practical tools to make everyday design decisions easier and faster."
+  },
+  "tools_palette_title": {
+    "ar": "مختبر الألوان",
+    "en": "Color Palette Studio"
+  },
+  "tools_palette_desc": {
+    "ar": "استكشف اتجاهات لونية متناسقة تناسب شخصية العلامة وجمهورها، وابدأ كل مشروع باختيار أوضح.",
+    "en": "Explore coordinated color directions for a brand’s personality and audience, and start each project with more clarity."
+  },
+  "tools_palette_cta": {
+    "ar": "جرّب الأداة",
+    "en": "Open tool"
+  },
+  "tools_palette_tag": {
+    "ar": "اختيار الألوان",
+    "en": "Color selection"
+  },
+  "tools_coming_soon": {
+    "ar": "المزيد من الأدوات قريبًا",
+    "en": "More tools coming soon"
   },
   "cta_start_project": {
     "ar": "ابدأ مشروعك",

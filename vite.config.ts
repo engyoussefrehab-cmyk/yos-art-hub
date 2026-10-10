@@ -13,7 +13,7 @@ const snap = (name: string): any[] =>
 
 // Every dynamic page, so nothing depends on link crawling alone.
 function staticPages() {
-  const pages = new Set<string>(["/", "/en", "/404", "/admin", "/rss.xml", "/en/rss.xml", "/sitemap.xml", "/tools/color-brief", "/en/tools/color-brief"]);
+  const pages = new Set<string>(["/", "/en", "/404", "/admin", "/rss.xml", "/en/rss.xml", "/sitemap.xml", "/tools", "/en/tools", "/tools/color-brief", "/en/tools/color-brief"]);
   for (const p of snap("portfolio_projects")) {
     if (p.status !== "published" || !p.category_slug) continue;
     pages.add(`/projects/${p.category_slug}/${p.slug}`);
