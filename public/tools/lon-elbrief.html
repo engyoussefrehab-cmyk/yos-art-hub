@@ -1,4 +1,1092 @@
-Y��x-���jם��i��+��j[h��ܢ����y�:-jZ.����)޳S�F�F�S�]�튭����}�M�=�M���}�c��F�F�S��Ɩ�&V��'&V6���V7B"�&Vc�&�GG3���f��G2�v��v�V�2�6��#��Ɩ�&V��'&V6���V7B"�&Vc�&�GG3���f��G2�w7FF���m�G����ƭy�ttribute('aria-pressed',UI[i].mode==='dark');m.textContent=UI[i].mode==='dark'?'دارك':'لايت'}
+<title>مختبر الألوان</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky brief panel on the start side, palette "proposals" stacked beside it on a neutral grey surround so colors are judged honestly. Studio identity: ink black, paper white, one red. */
+:root{
+  --bg:#ECEDEF; --surface:#FFFFFF; --surface-2:#F4F5F6; --ink:#0C0C0C; --muted:#5B6068; --line:#D9DBDF;
+  --red:#E03B3B; --red-ink:#FFFFFF; --ok:#1E7A4C; --warn:#9A5B00; --bad:#B42318;
+  --display:'Alexandria','IBM Plex Sans Arabic',system-ui,sans-serif;
+  --body:'IBM Plex Sans Arabic',system-ui,'Segoe UI',Tahoma,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E0F11; --surface:#17181B; --surface-2:#202226; --ink:#F2F2F2; --muted:#9CA0A8; --line:#2B2D32;
+  --red:#FF4848; --red-ink:#0C0C0C; --ok:#5FCB93; --warn:#F2B45C; --bad:#FF7A6E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E0F11; --surface:#17181B; --surface-2:#202226; --ink:#F2F2F2; --muted:#9CA0A8; --line:#2B2D32;
+  --red:#FF4848; --red-ink:#0C0C0C; --ok:#5FCB93; --warn:#F2B45C; --bad:#FF7A6E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;padding-inline:16px;padding-block:20px 40px}
+.wrap{max-width:1260px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.25;text-wrap:balance;margin:0}
+.hex,.mono{font-family:var(--mono);direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:8px 13px;font-weight:600;font-size:14px;line-height:1.3}
+button:hover{border-color:var(--muted)}
+button.primary{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+button.small{padding:6px 10px;font-size:12.5px;font-weight:500}
+button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+/* header */
+header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;align-items:end;padding-block:6px 0}
+@media (max-width:760px){header.top{grid-template-columns:minmax(0,1fr)}}
+.brandline h1{font-size:clamp(34px,6vw,58px);font-weight:800;letter-spacing:-.5px}
+.brandline h1 span{color:var(--red)}
+.brandline p{margin:6px 0 0;color:var(--muted);max-width:62ch;font-size:15.5px}
+.how{font-size:13.5px;color:var(--muted);max-width:420px}
+.how summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.how ol{margin:8px 0 0;padding-inline-start:20px;display:flex;flex-direction:column;gap:4px}
+
+.app{display:grid;grid-template-columns:350px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:960px){.app{grid-template-columns:minmax(0,1fr)}}
+
+/* brief */
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;position:static;max-height:none;overflow:visible}
+.brief h2{font-size:18px}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{font-size:12px;font-weight:500;padding:5px 9px;border-radius:999px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>label,.field .lbl{font-size:13px;font-weight:600}
+.field .lbl small{font-weight:400;color:var(--muted)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+select,input[type=text]{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 10px;min-width:0}
+.slider{display:grid;grid-template-columns:52px 1fr 52px;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.slider span:last-child{text-align:left}
+input[type=range]{width:100%;accent-color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips label{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer;background:var(--surface-2);user-select:none}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label:has(input:checked){background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chips label:has(input:disabled){opacity:.45;cursor:not-allowed}
+.chips label:has(input:focus-visible){outline:2px solid var(--red);outline-offset:2px}
+.colors{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input[type=color]{width:44px;height:36px;border:1px solid var(--line);border-radius:9px;padding:2px;background:var(--surface-2);cursor:pointer}
+.check{font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.hint{font-size:12.5px;color:var(--muted);margin:0}
+
+/* results */
+.results{display:flex;flex-direction:column;gap:18px;min-width:0}
+.summary{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 11px;font-size:12.5px}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block;border:1px solid rgba(127,127,127,.35)}
+.group-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-top:8px}
+.group-h h2{font-size:21px}
+.group-h p{margin:0;color:var(--muted);font-size:13.5px}
+.group-h.break h2{color:var(--red)}
+
+.pal{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.pal.isbreak{border-color:color-mix(in srgb,var(--red) 45%,var(--line))}
+.pal.locked{box-shadow:0 0 0 2px var(--ink)}
+.pal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.pal-head h3{font-size:19px;font-weight:700}
+.pal-head .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.head-r{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;border:1px solid var(--line);white-space:nowrap}
+.tag.m{background:var(--surface-2)} .tag.b{background:var(--red);color:var(--red-ink);border-color:var(--red)} .tag.c{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+
+.swatches{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.sw{display:flex;flex-direction:column;gap:5px;min-width:0;text-align:start;background:none;border:0;padding:0;font-weight:400;color:var(--ink);border-radius:10px}
+.sw .blk{height:84px;border-radius:10px;border:1px solid rgba(127,127,127,.25);position:relative}
+.sw .blk em{position:absolute;inset-inline-start:7px;bottom:5px;font-style:normal;font-size:10.5px;font-family:var(--mono);opacity:.85}
+.sw .role{font-size:11.5px;color:var(--muted);font-weight:600}
+.sw .nm{font-size:13px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.sw .hex{font-size:12.5px}
+.sw .meta{font-size:10.5px;color:var(--muted);font-family:var(--mono);direction:ltr;text-align:right;line-height:1.5}
+@media (max-width:560px){.sw .blk{height:58px}.sw .meta{display:none}.sw .nm{font-size:11.5px}.sw .hex{font-size:11px}}
+.ratio{display:flex;height:12px;border-radius:6px;overflow:hidden;border:1px solid rgba(127,127,127,.25)}
+.ratio-l{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:4px;gap:6px}
+
+.body{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px}
+@media (max-width:820px){.body{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.formula{background:var(--surface-2);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.formula .k{font-size:12px;font-weight:600;color:var(--muted)}
+.formula q{font-family:var(--display);font-weight:500;font-size:15.5px;line-height:1.75;quotes:"«" "»"}
+.reasons{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.reasons li{display:grid;grid-template-columns:84px 1fr;gap:10px;font-size:13.8px}
+.reasons li b{font-size:12.5px;color:var(--muted);font-weight:600;padding-top:1px}
+@media (max-width:420px){.reasons li{grid-template-columns:1fr;gap:0}}
+.risk{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.risk{grid-template-columns:1fr}}
+.risk div{border-radius:10px;padding:10px 12px;font-size:13.5px;border:1px dashed var(--line)}
+.risk b{display:block;font-size:12px;margin-bottom:2px}
+.risk .r b{color:var(--warn)} .risk .f b{color:var(--ok)}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.ck{font-size:12px;border-radius:8px;padding:4px 9px;background:var(--surface-2);display:inline-flex;gap:6px;align-items:baseline}
+.ck i{font-style:normal;font-weight:700}
+.ck.ok i{color:var(--ok)} .ck.bad i{color:var(--warn)} .ck.note i{color:var(--muted)}
+
+/* mock tabs */
+.mtabs{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.mtabs button{padding:5px 9px;font-size:12px;font-weight:500}
+.mtabs .sep{flex:1}
+.stage{border-radius:12px;background:var(--surface-2);padding:14px;display:flex;justify-content:center;align-items:center;min-height:330px;overflow:hidden}
+.mk{border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;flex:none}
+.cards{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px}
+.bcard{aspect-ratio:1.75/1;width:100%;border-radius:8px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,.14);overflow:hidden}
+.bcard .mk{width:34px;height:34px;font-size:16px}
+.bcard .nmx{font-family:var(--display);font-weight:700;font-size:15px}
+.bcard .ln{height:3px;width:38%;border-radius:2px}
+.bcard .tiny{font-size:10px;opacity:.75}
+.phone{width:168px;max-width:100%;aspect-ratio:9/17.5;border-radius:22px;border:6px solid #111;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.ph-top{padding:13px 10px 10px;display:flex;align-items:center;gap:7px;font-family:var(--display);font-weight:700;font-size:12.5px}
+.ph-top .mk{width:22px;height:22px;font-size:11px}
+.ph-body{padding:10px;display:flex;flex-direction:column;gap:7px;flex:1}
+.ph-h{font-family:var(--display);font-weight:700;font-size:13.5px;line-height:1.3}
+.ph-ln{height:6px;border-radius:3px}
+.ph-img{height:58px;border-radius:8px}
+.ph-chips{display:flex;gap:5px;flex-wrap:wrap}
+.ph-chips span{font-size:9.5px;border-radius:999px;padding:2px 8px}
+.ph-btn{margin-top:auto;text-align:center;font-size:11.5px;font-weight:600;border-radius:9px;padding:9px}
+.post{width:240px;max-width:100%;aspect-ratio:4/5;border-radius:6px;position:relative;overflow:hidden;padding:18px;display:flex;flex-direction:column;gap:8px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.post-top{display:flex;gap:8px;align-items:center;font-family:var(--display);font-weight:700;font-size:13px}
+.post-top .mk{width:26px;height:26px;font-size:12px}
+.post-h{font-family:var(--display);font-weight:800;font-size:27px;line-height:1.2;margin-top:auto;position:relative;z-index:1}
+.post-sub{font-size:12px;opacity:.8;position:relative;z-index:1}
+.post-shape{position:absolute;width:190px;height:190px;border-radius:50%;top:-50px;left:-60px}
+.sticker{position:absolute;top:58px;left:22px;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;transform:rotate(-12deg);z-index:1}
+.sign{width:300px;max-width:100%;display:flex;flex-direction:column;box-shadow:0 4px 14px rgba(0,0,0,.18);border-radius:4px;overflow:hidden}
+.awning{height:22px}
+.sign-board{padding:12px 14px;display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:20px}
+.sign-board .mk{width:34px;height:34px;font-size:16px}
+.front{display:grid;grid-template-columns:1fr .6fr 1fr;gap:10px;padding:12px;height:120px}
+.front .win{border-radius:3px;opacity:.9}
+.front .door{border-radius:3px 3px 0 0}
+.stripe{height:8px}
+.packs{display:flex;gap:18px;align-items:flex-end;justify-content:center;flex-wrap:wrap}
+.box{width:150px;height:170px;border-radius:6px;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.2);overflow:hidden}
+.box .lid{height:26px;opacity:.9}
+.box .label{position:absolute;inset-inline:16px;top:52px;bottom:30px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-family:var(--display);font-weight:700;font-size:13px;text-align:center;padding:6px}
+.box .label .mk{width:30px;height:30px;font-size:14px}
+.box .label i{height:3px;width:40%;border-radius:2px}
+.cup{width:92px;display:flex;flex-direction:column;align-items:center}
+.cup-lid{width:100px;height:12px;border-radius:6px 6px 2px 2px}
+.cup-body{width:92px;height:128px;clip-path:polygon(0 0,100% 0,86% 100%,14% 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.cup-body .band{width:100%;height:30px;display:grid;place-items:center}
+.cup-body .mk{width:26px;height:26px;font-size:12px}
+
+/* designer details */
+details.det{border-top:1px solid var(--line);padding-top:12px}
+details.det>summary{cursor:pointer;font-weight:600;font-size:14px}
+.det-in{display:flex;flex-direction:column;gap:16px;margin-top:14px}
+.det-in h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.scale{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.scale button{padding:0;border:0;background:none;display:flex;flex-direction:column;gap:3px;font-weight:400}
+.scale .t{height:40px;border-radius:6px;border:1px solid rgba(127,127,127,.2);display:grid;place-items:center;font-size:11px;font-weight:700}
+.scale small{font-size:10px;color:var(--muted);font-family:var(--mono);text-align:center;direction:ltr;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:560px){.scale small{display:none}}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.tbl table{border-collapse:collapse;font-size:12px;min-width:560px;width:100%}
+.tbl th,.tbl td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.tbl th{font-weight:600;color:var(--muted);font-size:11.5px}
+.tbl td.rh{text-align:start;font-weight:600}
+.cell{display:inline-flex;flex-direction:column;align-items:center;gap:1px;border-radius:6px;padding:4px 6px;min-width:58px}
+.cell b{font-family:var(--display);font-size:14px}
+.cell span{font-family:var(--mono);font-size:10px}
+.grade{font-size:10px;font-weight:700}
+.grad{height:64px;border-radius:10px;border:1px solid rgba(127,127,127,.2)}
+.exports{display:flex;gap:6px;flex-wrap:wrap}
+.actions{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+
+/* client analysis */
+.client{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.client-top{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.cmp{display:flex;gap:10px;align-items:center}
+.cmp .big{width:64px;height:64px;border-radius:12px;border:1px solid rgba(127,127,127,.25)}
+.cmp .arrow{color:var(--muted);font-size:18px}
+.cmp .lab{font-size:12px;color:var(--muted)}
+.verdict{font-family:var(--display);font-weight:700;font-size:15px;border-radius:999px;padding:5px 14px}
+.verdict.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.verdict.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.verdict.bad{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.items li{display:grid;grid-template-columns:18px 70px 1fr;gap:8px;font-size:13.8px;align-items:baseline}
+.items li i{font-style:normal;font-weight:800}
+.items li.ok i{color:var(--ok)} .items li.warn i{color:var(--warn)} .items li.bad i{color:var(--bad)}
+.items li b{font-size:12.5px;color:var(--muted)}
+
+/* favorites */
+.favs{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.favs summary{cursor:pointer;font-weight:700;font-family:var(--display)}
+.fav-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.fav{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:12px;align-items:center}
+@media (max-width:560px){.fav{grid-template-columns:minmax(0,1fr)}}
+.fav .strip{display:flex;height:34px;border-radius:7px;overflow:hidden;border:1px solid rgba(127,127,127,.25)}
+.fav .strip span{flex:1}
+.fav .t{font-size:13.5px;font-weight:600}
+.fav .t small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px)}
+.modal-in{background:var(--surface);color:var(--ink);border-radius:16px;max-width:560px;width:100%;max-height:100%;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
+.modal-in img{width:100%;border-radius:8px;border:1px solid var(--line)}
+.modal-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal-h h3{font-size:17px}
+/* presentation */
+.pres{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 20px) clamp(16px,5vw,64px) calc(env(safe-area-inset-bottom,0px) + 20px);overflow:auto;gap:22px}
+.pres-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}
+.pres-bar .ctl{display:flex;gap:6px}
+.pres-bar button{background:transparent;color:inherit;border-color:currentColor;opacity:.85}
+.pres h2{font-size:clamp(28px,4.5vw,50px);font-weight:800}
+.pres .psub{opacity:.75;margin-top:6px;font-size:16px}
+.pres-sw{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.pres-sw div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.pres-sw span.b{height:clamp(90px,18vh,190px);border-radius:14px;border:1px solid rgba(127,127,127,.3)}
+.pres-sw b{font-family:var(--display);font-size:15px}
+.pres-sw small{font-family:var(--mono);direction:ltr;text-align:right;opacity:.8}
+.pres q{font-family:var(--display);font-size:clamp(18px,2.4vw,27px);font-weight:500;line-height:1.7;quotes:"«" "»";max-width:44ch}
+.pres-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:820px){.pres-grid{grid-template-columns:minmax(0,1fr)}}
+.pres ul{margin:14px 0 0;padding-inline-start:18px;display:flex;flex-direction:column;gap:6px;font-size:15px;opacity:.9}
+
+footer{display:flex;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer a{color:var(--ink);font-weight:600}
+.toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:10px;font-size:14px;z-index:40;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion:no-preference){.pal{animation:rise .3s ease both}@keyframes rise{from{transform:translateY(5px)}to{transform:none}}}
+</style>
+
+<div class="wrap" dir="rtl" lang="ar">
+  <header class="top">
+    <div class="brandline">
+      <h1>مختبر <span>الألوان</span></h1>
+      <p>اكتب البريف وخُد ٥ اتجاهات لونية: ٣ قريبة من الشائع و٢ مختلفة عنه. كل اتجاه معاه سبب مقترح وجملة تساعدك تعرضه على العميل.</p>
+    </div>
+    <details class="how"><summary>إزاي بتشتغل؟</summary>
+      <ol>
+        <li>اقتراحات المجال ومعاني الألوان ومستوى السعر افتراضات إرشادية داخل الأداة، وليست إحصاءات سوق أو قواعد علمية ثابتة؛ المعنى يتغير حسب الثقافة والسياق.</li>
+        <li>بتقترح علاقات من عجلة HSL وتدرّجات OKLCH. عجلة HSL لا توزع الألوان بالتساوي حسب إدراك العين، فالعلاقات نقطة بداية بصرية لا ضمان للانسجام. توزيع المساحات المقترح قابل للتغيير حسب التطبيق.</li>
+        <li>بتحسب تباين النص وفق WCAG، وتعرض محاكاة تقريبية لنقص تمييز الأحمر والأخضر. محاكاة الشاشة لا تغني عن اختبار الاستخدام الفعلي.</li>
+        <li>بتكتبلك سبب كل اختيار، والجملة الجاهزة للعميل.</li>
+      </ol>
+    </details>
+  </header>
+
+  <div class="app">
+    <form class="brief" id="brief" autocomplete="off">
+      <h2>البريف</h2>
+      <div class="field"><span class="lbl">ابدأ من مثال</span><div class="presets" id="presets"></div></div>
+      <div class="field"><label for="brand">اسم البراند</label><input type="text" id="brand" maxlength="24"></div>
+      <div class="row2">
+        <div class="field"><label for="co">البلد / السوق</label><select id="co"></select></div>
+        <div class="field"><label for="ind">المجال</label><select id="ind"></select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="age">سن الجمهور</label><select id="age">
+          <option value="kids">أطفال (القرار للأهل)</option><option value="youth">15–25</option><option value="adults">25–45</option><option value="mature">45+</option></select></div>
+        <div class="field"><label for="dec">مين بيشتري؟</label><select id="dec">
+          <option value="all">الكل</option><option value="women">ستات</option><option value="men">رجالة</option><option value="b2b">شركات (B2B)</option></select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="tier">مستوى السعر</label><select id="tier">
+          <option value="economy">اقتصادي</option><option value="mid">متوسط</option><option value="premium">بريميوم</option><option value="luxury">فاخر</option></select></div>
+        <div class="field"><label for="ch">هيظهر أكتر فين؟</label><select id="ch"></select></div>
+      </div>
+      <div class="field"><span class="lbl">قيم البراند <small>(لحد ٣)</small></span><div class="chips" id="vals"></div></div>
+      <div class="field"><span class="lbl">شخصية البراند</span>
+        <div class="slider"><span>هادي</span><input type="range" id="bold" min="-2" max="2" step="1" aria-label="هادي أو جريء"><span>جريء</span></div>
+        <div class="slider"><span>كلاسيك</span><input type="range" id="modern" min="-2" max="2" step="1" aria-label="كلاسيك أو مودرن"><span>مودرن</span></div>
+        <div class="slider"><span>دافي</span><input type="range" id="cool" min="-2" max="2" step="1" aria-label="دافي أو بارد"><span>بارد</span></div>
+        <div class="slider"><span>رسمي</span><input type="range" id="friendly" min="-2" max="2" step="1" aria-label="رسمي أو ودود"><span>ودود</span></div>
+      </div>
+      <div class="field"><label for="compN">ألوان المنافسين</label>
+        <div class="colors"><select id="compN" style="width:auto"><option value="0">مفيش</option><option value="1">منافس واحد</option><option value="2">٢ منافسين</option><option value="3">٣ منافسين</option></select>
+          <input type="color" id="c0" aria-label="لون المنافس الأول"><input type="color" id="c1" aria-label="لون المنافس التاني"><input type="color" id="c2" aria-label="لون المنافس التالت"></div>
+      </div>
+      <div class="field"><span class="lbl">العميل عايز لون معيّن؟</span>
+        <div class="colors"><label class="check"><input type="checkbox" id="clientOn"> آه، حلّله</label><input type="color" id="client" aria-label="لون العميل"></div>
+      </div>
+      <div class="btns">
+        <button type="button" class="primary" id="shuffle">تنويعة تانية</button>
+        <button type="button" id="unlock">فك التثبيت</button>
+      </div>
+      <p class="hint">النتايج بتتغير مع كل تعديل. «تنويعة تانية» بتطلّع درجات مختلفة لنفس البريف، والباليتات المثبّتة بتفضل زي ما هي.</p>
+    </form>
+    <main class="results" id="results" aria-live="polite"></main>
+  </div>
+
+  <footer>
+    <span>الأداة بتديك نقطة بداية للتجربة، مش «اللون الصح» النهائي. اجتياز التباين لا يثبت انسجام palette أو نجاحها مع الجمهور. قيم CMYK تقريب رياضي من RGB، والنتيجة الفعلية تعتمد على بروفايل الطابعة والورق والحبر؛ اطلب بروفة مطبوعة.</span>
+    <span>عملها <a href="https://yrstudio.art" target="_blank" rel="noopener">يوسف رحاب · yrstudio.art</a></span>
+  </footer>
+</div>
+<div class="toast" id="toast" hidden></div>
+<div id="layer"></div>
+
+<script>
+/* ================= color math ================= */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const nh=h=>((h%360)+360)%360;
+const hd=(a,b)=>Math.abs(((a-b+540)%360)-180);
+function hslRgb(h,s,l){h=nh(h);s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return[f(0),f(8),f(4)].map(x=>Math.round(x*255))}
+function hexRgb(x){x=String(x).replace('#','');return[0,2,4].map(i=>parseInt(x.substr(i,2),16)||0)}
+function rgbHsl([r,g,b]){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;const l=(mx+mn)/2;if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);h=mx===r?((g-b)/d+(g<b?6:0)):mx===g?((b-r)/d+2):((r-g)/d+4);h*=60}return{h,s:s*100,l:l*100}}
+const hex=rgb=>'#'+rgb.map(v=>v.toString(16).padStart(2,'0')).join('').toUpperCase();
+function mk(h,s,l){h=nh(h);s=clamp(s,0,100);l=clamp(l,3,98);const rgb=hslRgb(h,s,l);return{h,s,l,rgb,hex:hex(rgb)}}
+function fromHex(x){const rgb=hexRgb(x),q=rgbHsl(rgb);return{h:q.h,s:q.s,l:q.l,rgb,hex:hex(rgb)}}
+const toLin=c=>{c/=255;return c<=.04045?c/12.92:Math.pow((c+.055)/1.055,2.4)};
+const toGam=x=>x<=.0031308?12.92*x:1.055*Math.pow(x,1/2.4)-.055;
+const lum=([r,g,b])=>.2126*toLin(r)+.7152*toLin(g)+.0722*toLin(b);
+const contrast=(a,b)=>{const x=lum(a.rgb||a),y=lum(b.rgb||b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+function labLin([R,G,B]){const X=(.4124*R+.3576*G+.1805*B)/.95047,Y=.2126*R+.7152*G+.0722*B,Z=(.0193*R+.1192*G+.9505*B)/1.08883,f=t=>t>.008856?Math.cbrt(t):7.787*t+16/116;const fx=f(X),fy=f(Y),fz=f(Z);return[116*fy-16,500*(fx-fy),200*(fy-fz)]}
+function deutan(rgb){const[R,G,B]=rgb.map(toLin);return[clamp(.367322*R+.860646*G-.227968*B,0,1),clamp(.280085*R+.672501*G+.047413*B,0,1),clamp(-.01182*R+.04294*G+.968881*B,0,1)]}
+const dE=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
+const dEc=(a,b)=>dE(labLin(a.rgb.map(toLin)),labLin(b.rgb.map(toLin)));
+function cmyk([r,g,b]){r/=255;g/=255;b/=255;const k=1-Math.max(r,g,b);if(k>=1)return[0,0,0,100];return[(1-r-k)/(1-k),(1-g-k)/(1-k),(1-b-k)/(1-k),k].map(v=>Math.round(v*100))}
+const WHITE={rgb:[255,255,255],hex:'#FFFFFF'};
+function rng(seed){let a=(seed*2654435761)>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function shiftToward(h,t,amt){const d=((t-h+540)%360)-180;return h+Math.sign(d)*Math.min(Math.abs(d),amt)}
+/* OKLCH for tint scales */
+function rgbOklch(rgb){const[r,g,b]=rgb.map(toLin);let l=.4122214708*r+.5363325363*g+.0514459929*b,m=.2119034982*r+.6806995451*g+.1073969566*b,s=.0883024619*r+.2817188376*g+.6299787005*b;l=Math.cbrt(l);m=Math.cbrt(m);s=Math.cbrt(s);const L=.2104542553*l+.793617785*m-.0040720468*s,A=1.9779984951*l-2.428592205*m+.4505937099*s,B=.0259040371*l+.7827717662*m-.808675766*s;return{L,C:Math.hypot(A,B),H:(Math.atan2(B,A)*180/Math.PI+360)%360}}
+function oklchRaw(L,C,H){const a=C*Math.cos(H*Math.PI/180),b=C*Math.sin(H*Math.PI/180);let l=L+.3963377774*a+.2158037573*b,m=L-.1055613458*a-.0638541728*b,s=L-.0894841775*a-1.291485548*b;l=l**3;m=m**3;s=s**3;return[4.0767416621*l-3.3077115913*m+.2309699292*s,-1.2684380046*l+2.6097574011*m-.3413193965*s,-.0041960863*l-.7034186147*m+1.707614701*s]}
+function oklchMk(L,C,H){const inG=v=>v.every(x=>x>=-.0005&&x<=1.0005);let rgb=oklchRaw(L,C,H);if(!inG(rgb)){let lo=0,hi=C;for(let i=0;i<22;i++){const mid=(lo+hi)/2;if(inG(oklchRaw(L,mid,H)))lo=mid;else hi=mid}rgb=oklchRaw(L,lo,H)}const r=rgb.map(x=>Math.round(clamp(toGam(clamp(x,0,1)),0,1)*255));const q=rgbHsl(r);return{h:q.h,s:q.s,l:q.l,rgb:r,hex:hex(r)}}
+function shiftOklchL(c,delta){const{L,C,H}=rgbOklch(c.rgb);return oklchMk(clamp(L+delta,.02,.98),C,H)}
+const STEPS=[50,100,200,300,400,500,600,700,800,900],STEP_L=[.975,.94,.88,.80,.71,.62,.53,.45,.37,.28];
+function scaleOf(c){const{L,C,H}=rgbOklch(c.rgb);const bi=STEP_L.reduce((b,x,i)=>Math.abs(x-L)<Math.abs(STEP_L[b]-L)?i:b,0);
+  return STEPS.map((st,i)=>({step:st,base:i===bi,c:i===bi?c:oklchMk(STEP_L[i],C*clamp(1.15-Math.abs(STEP_L[i]-.6)*1.5,.2,1),H)}))}
+// RGB-to-CMYK is only a rough arithmetic conversion. Gamut depends on the printer/paper ICC profile.
+
+/* ================= Arabic names & meanings ================= */
+function nameOf(c){const{h,s,l}=c;
+  if(l<15||(s<25&&l<20))return'أسود فحمي';
+  if(l>=95)return(h>=20&&h<=60&&s>=12)?'عاجي':'أوف وايت';
+  if(s<12){if(l<32)return'رمادي غامق';if(l<62)return'رمادي';if(l<90)return'رمادي فاتح';return'أوف وايت'}
+  if(s<22){const w=(h<70||h>330)?'رمادي دافي':'رمادي بارد';return l<35?w+' غامق':l>72?w+' فاتح':w}
+  if(l>=90)return(h>=20&&h<=60)?'عاجي':baseName(h,s,60)+' فاتح جدًا';
+  if(h>=24&&h<=55&&s<55&&l>=62)return'رملي';
+  if(h>=18&&h<=42&&l<34)return'بني';
+  if(h>=34&&h<=55&&s>=25&&s<=85&&l>=30&&l<=62)return'دهبي';
+  if(h>=12&&h<=30&&s<70&&l>=34&&l<55)return'تيراكوتا';
+  if((h>=335||h<10)&&l<36)return'عنابي';
+  if(h>=205&&h<=245&&l<32)return'كحلي';
+  if(h>=55&&h<=95&&s<55&&l<55)return'زيتوني';
+  if(h>=168&&h<=200&&l<32)return'بترولي';
+  if(h>=5&&h<=20&&l>=56)return'مرجاني';
+  const b=baseName(h,s,l);return l<30?b+' غامق':l>72?b+' فاتح':b}
+function baseName(h,s,l){
+  if(h<12||h>=350)return'أحمر';if(h<38)return'برتقالي';if(h<56)return'أصفر';if(h<72)return'ليموني';if(h<95)return'أخضر ليموني';
+  if(h<158)return l>62?'نعناعي':'أخضر';if(h<186)return'تركواز';if(h<205)return'سماوي';if(h<242)return'أزرق';if(h<265)return'نيلي';
+  if(h<292)return l>62?'ليلكي':'بنفسجي';if(h<322)return'فوشيا';return'وردي'}
+const defName=n=>n.split(' ').map(w=>/^(ال|جدًا)/.test(w)?w:'ال'+w).join(' ');
+const MEAN={'أسود':'الأسود بيدي قوة وفخامة وغموض','أوف':'الأوف وايت بيدي نضافة ومساحة','عاجي':'العاجي بيدي دفا ونعومة وإحساس راقي','رمادي':'الرمادي بيدي حياد ورصانة',
+ 'رملي':'الرملي بيفكّر بالصحرا والدفا والأصالة','بني':'البني بيدي أصالة ودفا وثبات','دهبي':'الدهبي بيدي قيمة ومكانة','تيراكوتا':'التيراكوتا دافية وترابية وقريبة من الناس',
+ 'عنابي':'العنابي بيدي عراقة ودفا ومكانة','كحلي':'الكحلي بيدي ثبات وثقة ورسمية','زيتوني':'الزيتوني بيدي إحساس طبيعي وحِرفي','بترولي':'البترولي بيدي هدوء وعمق وفخامة هادية',
+ 'مرجاني':'المرجاني دافي وإنساني ومرحّب','أحمر':'الأحمر بيدي طاقة وحماس وإحساس بالاستعجال','برتقالي':'البرتقالي ودود وحيوي وقريب من الناس','أصفر':'الأصفر بيدي تفاؤل وبيلفت العين بسرعة',
+ 'ليموني':'الليموني بيدي طاقة وإحساس جديد وشبابي','أخضر':'الأخضر بيدي نمو وطبيعة وصحة، وليه دلالة إيجابية في ثقافتنا','نعناعي':'النعناعي هادي ومنعش','تركواز':'التركواز بيدي نضافة وهدوء وحداثة',
+ 'سماوي':'السماوي بيدي انتعاش وصفا','أزرق':'الأزرق بيدي ثقة وأمان واحترافية','نيلي':'النيلي بيدي عمق وتميّز','بنفسجي':'البنفسجي بيدي ابتكار وتميّز','ليلكي':'الليلكي بيدي هدوء ورفاهية',
+ 'فوشيا':'الفوشيا بيدي جرأة وإبداع','وردي':'الوردي بيدي رقة واهتمام'};
+const fam=c=>nameOf(c).split(' ')[0];
+const meaningOf=c=>`ارتباط بصري محتمل: ${MEAN[fam(c)]||'اللون ده بيدي شخصية مميزة'}؛ وقد يختلف حسب الثقافة والسياق، فاختبره مع الجمهور.`;
+
+/* ================= knowledge base ================= */
+const IND={
+ food:{label:'مطاعم وأكل',cta:'اطلب دلوقتي',norm:[
+  {h:4,s:80,l:48,why:'الأحمر بيرفع الإحساس بالطاقة والجوع، وبيتشاف من بعيد على اليافطة وتطبيقات الدليفري'},
+  {h:26,s:92,l:52,why:'البرتقالي ودود ومفتّح للنفس، وبيدي إحساس إن السعر في المتناول'},
+  {h:44,s:95,l:52,why:'الأصفر أسرع لون بتلقطه العين، فبيخلّي البراند يتفتكر من أول مرة'}],
+  brk:[{h:172,s:60,l:36,why:'التركواز نادر في الأكل، فهيخلّي البراند يبان وسط بحر الأحمر والأصفر',risk:'الألوان الباردة ممكن تحسّس إن الأكل مش طازة لو غطّت على الصور',fix:'خلّي الهوية تركواز، وسيب صور الأكل نفسها هي اللي تجيب الدفا'},
+  {h:228,s:70,l:42,why:'الأزرق في الأكل غريب، وده بالظبط اللي هيخلّي اللوجو يتفتكر',risk:'الأزرق معروف إنه بيهدّي الشهية لو بقى مسيطر على الأكل نفسه',fix:'استخدمه في التغليف والهوية، وماتحطّوش كخلفية لصور الأكل'}]},
+ cafe:{label:'كافيهات وحلويات',cta:'شوف المنيو',norm:[
+  {h:24,s:45,l:32,why:'البني بيفكّر بالقهوة والكاكاو، وبيدي دفا وأُلفة'},
+  {h:16,s:55,l:48,why:'التيراكوتا دافية وترابية، وبتحسّس إن المكان مريح تقعد فيه'},
+  {h:85,s:25,l:40,why:'الزيتوني الهادي بيدي إحساس طبيعي وحِرفي'}],
+  brk:[{h:335,s:65,l:60,why:'الوردي الجريء بيطلّع الكافيه من صورة البني المتكررة، ويخلّيه مكان الناس تتصور فيه',risk:'ممكن يتقري إنه موجّه للبنات بس',fix:'وازنه بأسود أو أخضر غامق عشان يبقى للكل'},
+  {h:205,s:70,l:52,why:'السماوي بيدي إحساس انتعاش ومودرن، بعيد عن الكلاسيك',risk:'بيبعد عن دفا القهوة',fix:'خلّي التانوي بني دافي يربطه بالمنتج'}]},
+ health:{label:'طبي وعيادات',cta:'احجز موعد',norm:[
+  {h:205,s:75,l:40,why:'الأزرق أكتر لون بيرتبط بالثقة والأمان والاحترافية'},
+  {h:178,s:60,l:35,why:'التركواز بيدي نضافة وحداثة، ومستخدم كتير في الطب الحديث'},
+  {h:150,s:45,l:38,why:'الأخضر بيرتبط بالشفا والصحة والهدوء'}],
+  brk:[{h:12,s:75,l:58,why:'المرجاني دافي وإنساني، بيكسر برودة الطب ويطمّن المريض',risk:'لو زاد ممكن يحسّس بالاستعجال أو الإنذار',fix:'خلّيه في مساحات محسوبة، والخلفيات فاتحة وهادية'},
+  {h:268,s:40,l:52,why:'البنفسجي الهادي بيدي رعاية وتميّز، ونادر في السوق الطبي',risk:'ممكن يتقري تجميل أكتر منه علاج',fix:'استخدمه مع أزرق غامق أو رمادي عشان يفضل جاد'}]},
+ kids:{label:'أطفال وألعاب',cta:'اكتشف الألعاب',norm:[
+  {h:48,s:95,l:55,why:'الأصفر بيدي فرحة وطاقة، وبيلفت انتباه الأطفال بسرعة'},
+  {h:205,s:80,l:52,why:'الأزرق الفاتح بيطمّن الأهل، وفي نفس الوقت مبهج'},
+  {h:6,s:80,l:55,why:'الأحمر الفاتح بيدي حماس ولعب'}],
+  brk:[{h:30,s:30,l:52,why:'الألوان الترابية الهادية (ستايل مونتيسوري) بتكلّم الأهل اللي زهقوا من الصريخ',risk:'ممكن يبان باهت على الرف جنب الألوان الصريحة',fix:'زوّد التباين بلون غامق واحد وأشكال واضحة'},
+  {h:160,s:45,l:48,why:'النعناعي هادي ومنعش، وبيبان مختلف عن ألوان الأطفال المعتادة',risk:'أقل لفتًا للطفل نفسه',fix:'خلّي الأكسنت لون مشبع زي الأصفر'}]},
+ realestate:{label:'عقارات ومقاولات',cta:'شوف المشاريع',norm:[
+  {h:215,s:60,l:25,why:'الكحلي بيدي ثبات وثقة طويلة المدى، وده اللي العميل محتاجه قبل ما يدفع'},
+  {h:40,s:55,l:48,why:'الدهبي بيدي قيمة واستثمار ومكانة'},
+  {h:28,s:30,l:42,why:'الألوان الترابية بتفكّر بالأرض والبناء والخامات الحقيقية'}],
+  brk:[{h:12,s:70,l:45,why:'التيراكوتا الجريئة بتطلّع الشركة من الكحلي والدهبي اللي الكل بيستخدمه',risk:'ممكن تتقري أقل رسمية',fix:'استخدم خط تقيل ومساحات بيضا كبيرة عشان تفضل جادة'},
+  {h:172,s:55,l:30,why:'البترولي الغامق هادي وفخم، ومختلف عن الكحلي المعتاد',risk:'قريب من ألوان الطب والتكنولوجيا',fix:'اربطه بصور مشاريع وخامات حقيقية'}]},
+ tech:{label:'تكنولوجيا وSaaS',cta:'جرّب مجانًا',norm:[
+  {h:222,s:85,l:52,why:'الأزرق هو لغة الثقة في التكنولوجيا، والمستخدم متعود عليه'},
+  {h:262,s:70,l:55,why:'البنفسجي بيدي ابتكار وذكاء، ومنتشر في براندات الـ AI'},
+  {h:182,s:75,l:40,why:'التركواز بيدي سرعة وحداثة'}],
+  brk:[{h:24,s:95,l:54,why:'البرتقالي وسط بحر الأزرق والبنفسجي هيخلّي المنتج يبان في أي لستة',risk:'ممكن يتقري أقل جدية للشركات الكبيرة',fix:'وازنه بنيوترال غامق وخط نضيف'},
+  {h:78,s:85,l:48,why:'الليموني بيدي طاقة وجرأة وإحساس شباب',risk:'صعب في التباين على الأبيض',fix:'استخدمه على خلفية غامقة أو كأكسنت بس'}]},
+ finance:{label:'بنوك واستثمار',cta:'افتح حساب',norm:[
+  {h:215,s:65,l:28,why:'الكحلي بيقول أمان وثبات، وده أهم حاجة لما الموضوع فلوس'},
+  {h:152,s:60,l:30,why:'الأخضر بيرتبط بالنمو والربح والبركة'},
+  {h:42,s:60,l:48,why:'الدهبي بيدي قيمة وثروة'}],
+  brk:[{h:275,s:55,l:45,why:'البنفسجي بيدي إحساس فينتك مودرن، بعيد عن البنوك التقليدية',risk:'الجمهور الأكبر سنًا ممكن مايثقش فيه بسرعة',fix:'خلّي الخط والتصميم رسمي وواضح'},
+  {h:14,s:80,l:56,why:'المرجاني بيكسر جمود الفلوس، ويدي إحساس قرب وبساطة',risk:'ممكن يحسّس بعدم جدية',fix:'اربطه بكحلي غامق كتانوي'}]},
+ ecommerce:{label:'تجارة إلكترونية',cta:'تسوّق دلوقتي',norm:[
+  {h:25,s:92,l:52,why:'البرتقالي بيشجّع على الشراء السريع، وبيبان في زراير السلة'},
+  {h:220,s:80,l:48,why:'الأزرق بيطمّن في الدفع والشحن'},
+  {h:340,s:75,l:55,why:'الوردي الحيوي بيدي إحساس تسوّق ممتع'}],
+  brk:[{h:160,s:65,l:35,why:'الأخضر الزمردي بيبعد عن ألوان المتاجر الصارخة، ويدي ثقة وهدوء',risk:'أقل إثارة للشراء',fix:'خلّي زرار الشراء أكسنت دافي'},
+  {h:55,s:95,l:52,why:'الأصفر الحامضي جريء، وبيخلّي الإعلانات توقّف الإسكرول',risk:'صعب في القراءة على الأبيض',fix:'استخدمه كخلفية مع كتابة سودا'}]},
+ fashion:{label:'أزياء وموضة',cta:'تسوّق الكولكشن',norm:[
+  {h:0,s:0,l:10,why:'الأسود هو لغة الموضة والأناقة اللي مابتقدمش'},
+  {h:24,s:35,l:70,why:'النيود بيدي نعومة وفخامة هادية'},
+  {h:345,s:45,l:68,why:'البلَش الوردي بيدي رقة وأنوثة'}],
+  brk:[{h:55,s:95,l:52,why:'الأصفر الحامضي جريء ومختلف، بيخلّي البراند يتعرف من غير لوجو',risk:'ممكن يرخّص الإحساس لو الخامة مش بنفس المستوى',fix:'استخدمه بمساحات صغيرة ومع أسود'},
+  {h:150,s:55,l:28,why:'الأخضر الزمردي بيدي فخامة غير متوقعة',risk:'أقل انتشارًا، فمحتاج اتساق',fix:'كرّره في كل نقطة تواصل'}]},
+ beauty:{label:'تجميل وعناية بالبشرة',cta:'اكتشفي المنتجات',norm:[
+  {h:340,s:55,l:66,why:'الوردي بيرتبط بالعناية والنعومة'},
+  {h:22,s:40,l:68,why:'النيود بيعكس لون البشرة، ويدي إحساس طبيعي'},
+  {h:285,s:35,l:70,why:'الليلكي بيدي هدوء ورفاهية'}],
+  brk:[{h:215,s:65,l:30,why:'الأزرق الغامق بيدي إحساس علمي (Skincare) مختلف عن الوردي المعتاد',risk:'ممكن يتقري بارد',fix:'زوّد لمسة دافية في الأكسنت'},
+  {h:75,s:35,l:40,why:'الزيتوني بيدي إحساس طبيعي ونباتي',risk:'ممكن يبان باهت',fix:'تباين عالي مع الأبيض'}]},
+ perfume:{label:'عطور وبخور',cta:'اكتشف العطور',norm:[
+  {h:0,s:0,l:8,why:'الأسود بيدي غموض وفخامة، وده جوهر العطر'},
+  {h:42,s:55,l:50,why:'الدهبي مرتبط بالمكانة والهدايا، خصوصًا في الخليج'},
+  {h:345,s:55,l:28,why:'العنابي الغامق بيدي دفا وعمق'}],
+  brk:[{h:176,s:45,l:40,why:'التركواز الهادي بيكسر الأسود والدهبي، ويدي إحساس عطر منعش ومودرن',risk:'ممكن يقلل إحساس الفخامة',fix:'استخدم خامات تغليف تقيلة وتفاصيل معدنية'},
+  {h:20,s:85,l:52,why:'البرتقالي المحروق جريء، وبيبان على الرف وسط العلب السودا',risk:'ممكن يتقري أرخص',fix:'خلّيه غامق شوية ومع أسود'}]},
+ jewelry:{label:'مجوهرات ودهب',cta:'اكتشف المجموعة',norm:[
+  {h:42,s:60,l:48,why:'الدهبي هو المنتج نفسه، وبيدي قيمة ومناسبة'},
+  {h:0,s:0,l:8,why:'الأسود بيبرز لمعة الدهب والألماس'},
+  {h:350,s:55,l:30,why:'العنابي بيدي دفا ومناسبات'}],
+  brk:[{h:160,s:45,l:30,why:'الأخضر الزمردي بيقدّم الدهب بشكل مختلف وفخم',risk:'ممكن يتقري إنه خاص بحجر كريم معين',fix:'خلّيه للتغليف والعلب'},
+  {h:330,s:40,l:80,why:'الوردي الباودري ناعم ومودرن، وبيكلّم جيل جديد',risk:'أقل إحساس بالقيمة',fix:'تفاصيل دهبي في الطباعة'}]},
+ education:{label:'تعليم وكورسات',cta:'سجّل دلوقتي',norm:[
+  {h:212,s:75,l:42,why:'الأزرق بيدي تركيز وثقة، والأهل بيرتاحوله'},
+  {h:140,s:55,l:40,why:'الأخضر بيرتبط بالنمو والتقدم'},
+  {h:32,s:90,l:55,why:'البرتقالي بيدي حماس وطاقة للتعلم'}],
+  brk:[{h:322,s:70,l:48,why:'الماجنتا مختلفة تمامًا عن ألوان التعليم التقليدية، وبتشد الشباب',risk:'الأهل ممكن يحسّوها مش جادة',fix:'وازنها بكحلي ونصوص واضحة'},
+  {h:50,s:95,l:54,why:'الأصفر مع الأسود جريء وبيتفتكر زي علامات التنبيه',risk:'ممكن يبقى صارخ',fix:'خلّي الأبيض هو المسيطر'}]},
+ fitness:{label:'رياضة وجيم',cta:'ابدأ اشتراكك',norm:[
+  {h:0,s:85,l:48,why:'الأحمر بيرفع الحماس والطاقة'},
+  {h:0,s:0,l:10,why:'الأسود بيدي قوة وجدية'},
+  {h:82,s:90,l:50,why:'النيون الليموني بيدي سرعة وطاقة'}],
+  brk:[{h:220,s:45,l:45,why:'الأزرق الهادي بيقدّم الرياضة كصحة وهدوء، مش ضغط وعرق',risk:'أقل طاقة',fix:'حركة وتصوير ديناميكي في المحتوى'},
+  {h:330,s:75,l:56,why:'الوردي القوي بيكسر صورة الجيم الذكوري، وبيكلّم جمهور أوسع',risk:'ممكن يخلّي البراند يتقري موجّه للستات بس',fix:'وازنه بأسود'}]},
+ logistics:{label:'شحن ولوجيستيك',cta:'تتبّع شحنتك',norm:[
+  {h:26,s:95,l:52,why:'البرتقالي بيتشاف من بعيد على العربيات والمخازن، ويدي سرعة'},
+  {h:218,s:75,l:35,why:'الأزرق بيدي التزام ودقة في المواعيد'},
+  {h:48,s:95,l:52,why:'الأصفر لون التنبيه والسرعة في الطريق'}],
+  brk:[{h:150,s:60,l:35,why:'الأخضر بيقدّم الشحن كاستدامة وراحة بال',risk:'ممكن يتقري بطيء',fix:'استخدم أشكال وأسهم بتوحي بالحركة'},
+  {h:275,s:60,l:45,why:'البنفسجي نادر جدًا في المجال، وهيخلّي العربية تتفتكر في الشارع',risk:'ممكن يبان مش عملي',fix:'خلّي التطبيق والخطوط واضحة جدًا'}]},
+ hospitality:{label:'فنادق وسياحة',cta:'احجز إقامتك',norm:[
+  {h:40,s:50,l:50,why:'الدهبي بيدي ضيافة وكرم وفخامة'},
+  {h:188,s:50,l:28,why:'البترولي الغامق بيدي هدوء البحر والراحة'},
+  {h:32,s:35,l:70,why:'الرملي بيفكّر بالصحرا والشواطئ والدفا'}],
+  brk:[{h:352,s:70,l:40,why:'الأحمر الغامق جريء ومرحّب، وبيكسر الدهبي المتكرر',risk:'ممكن يبقى تقيل في المساحات الكبيرة',fix:'خلّيه في التفاصيل والعناصر الصغيرة'},
+  {h:250,s:45,l:30,why:'النيلي الليلي بيدي إحساس فخامة مسائية ومختلفة',risk:'ممكن يبقى بارد',fix:'زوّد دهبي دافي كأكسنت'}]},
+ events:{label:'فعاليات وإيفنتات',cta:'احجز تذكرتك',norm:[
+  {h:275,s:70,l:48,why:'البنفسجي بيدي إبهار وسهرة وتجربة'},
+  {h:330,s:80,l:52,why:'الماجنتا بتدي طاقة وحماس'},
+  {h:0,s:0,l:8,why:'الأسود بيخلّي الإضاءة والألوان تبان'}],
+  brk:[{h:85,s:90,l:50,why:'الليموني بيدي طاقة فستيفال مختلفة',risk:'ممكن يرخّص الفعاليات الرسمية',fix:'استخدمه في الفعاليات الشبابية بس'},
+  {h:35,s:40,l:68,why:'الرملي الهادي بيقدّم الفعالية كتجربة راقية مش صخب',risk:'أقل لفتًا',fix:'تايبوجرافي جريء'}]},
+ interior:{label:'ديكور وتصميم داخلي',cta:'شوف أعمالنا',norm:[
+  {h:30,s:25,l:55,why:'الترابي الدافي بيعكس الخشب والخامات والراحة'},
+  {h:0,s:0,l:12,why:'الأسود بيدي فخامة ودقة'},
+  {h:90,s:20,l:45,why:'الزيتوني الهادي بيفكّر بالنبات والطبيعة جوه البيت'}],
+  brk:[{h:15,s:80,l:52,why:'البرتقالي المحروق جريء، وبيقول إن المكتب عنده رأي',risk:'ممكن يحسّس إن عندكم ذوق واحد',fix:'وازنه بنيوترال كتير في البورتفوليو'},
+  {h:225,s:60,l:35,why:'أزرق الكوبالت بيدي إحساس معاصر وفني',risk:'بارد',fix:'خامات دافية في الصور'}]},
+ heritage:{label:'تمور وعسل ومنتجات تراثية',cta:'اطلب الآن',norm:[
+  {h:28,s:55,l:30,why:'البني الدافي بيفكّر بالتمر والأرض والأصالة'},
+  {h:42,s:70,l:50,why:'الدهبي العسلي بيفكّر بالعسل والكرم'},
+  {h:150,s:45,l:28,why:'الأخضر الغامق بيفكّر بالنخل والطبيعة'}],
+  brk:[{h:200,s:60,l:40,why:'الأزرق بيقدّم المنتج التراثي بشكل معاصر ومختلف على الرف',risk:'بعيد عن دفا المنتج',fix:'صور منتج قريبة ودافية'},
+  {h:345,s:60,l:35,why:'العنابي بيدي إحساس هدية فخمة',risk:'ممكن يتقري للمناسبات بس',fix:'خلّيه للتغليف المميز'}]},
+ agri:{label:'زراعة وأورجانيك',cta:'شوف المنتجات',norm:[
+  {h:110,s:50,l:35,why:'الأخضر هو الطبيعة والزرع والصحة'},
+  {h:32,s:45,l:36,why:'البني الترابي بيفكّر بالأرض والأصل'},
+  {h:48,s:85,l:55,why:'الأصفر بيدي شمس وحصاد'}],
+  brk:[{h:300,s:35,l:35,why:'البرقوقي غير متوقع في الزراعة، ويدي إحساس بريميوم أورجانيك',risk:'بعيد عن فكرة الطبيعة',fix:'استخدم صور منتج حقيقية'},
+  {h:212,s:60,l:45,why:'الأزرق بيقدّم الزراعة كتكنولوجيا وميّه ونضافة',risk:'ممكن يتقري صناعي',fix:'زوّد أخضر في التانوي'}]},
+ nonprofit:{label:'جمعيات خيرية',cta:'اتبرّع دلوقتي',norm:[
+  {h:145,s:55,l:38,why:'الأخضر بيرتبط بالخير والعطاء، وليه دلالة إيجابية قوية في ثقافتنا'},
+  {h:28,s:85,l:55,why:'البرتقالي الدافي بيدي إنسانية وقرب'},
+  {h:200,s:65,l:42,why:'الأزرق بيدي شفافية وثقة في التبرع'}],
+  brk:[{h:328,s:65,l:48,why:'الماجنتا بتخلّي الجمعية تبان شبابية وحيوية، بعيد عن الشكل التقليدي',risk:'ممكن تتقري تجارية',fix:'خلّي الصور والقصص حقيقية'},
+  {h:50,s:95,l:54,why:'الأصفر الصريح بيدي أمل وتفاؤل، وبيتشاف من بعيد',risk:'صعب في القراءة على الأبيض',fix:'استخدمه كخلفية مع كتابة غامقة'}]},
+ government:{label:'جهات حكومية وشبه حكومية',cta:'ابدأ الخدمة',norm:[
+  {h:150,s:55,l:28,why:'الأخضر العميق بيدي استقرار وانتماء'},
+  {h:215,s:60,l:28,why:'الكحلي بيدي رسمية وثقة'},
+  {h:40,s:50,l:48,why:'الدهبي بيدي مكانة'}],
+  brk:[{h:175,s:55,l:35,why:'التركواز بيقدّم الجهة كخدمة رقمية حديثة قريبة من الناس',risk:'أقل رسمية',fix:'شعار ونظام صارم'},
+  {h:20,s:70,l:52,why:'البرتقالي الدافي بيكسر برود الخدمات الحكومية',risk:'ممكن يتقري تجاري',fix:'خلّيه للتفاعل والأزرار بس'}]},
+ legal:{label:'محاماة واستشارات',cta:'احجز استشارة',norm:[
+  {h:218,s:55,l:24,why:'الكحلي بيدي جدية وثقة وسرية'},
+  {h:350,s:55,l:28,why:'العنابي بيدي عراقة وسلطة'},
+  {h:220,s:10,l:20,why:'الفحمي بيدي حياد ورصانة'}],
+  brk:[{h:170,s:50,l:32,why:'البترولي بيدي إحساس استشاري مودرن مش تقليدي',risk:'ممكن يتقري أقل عراقة',fix:'خط كلاسيكي في اللوجو'},
+  {h:24,s:55,l:45,why:'النحاسي الدافي بيدي قرب وإنسانية في مجال بارد',risk:'ممكن يبان أقل رسمية',fix:'مساحات بيضا واسعة ونظام صارم'}]},
+ automotive:{label:'سيارات وصيانة',cta:'احجز صيانة',norm:[
+  {h:0,s:0,l:10,why:'الأسود بيدي قوة وفخامة'},
+  {h:356,s:85,l:45,why:'الأحمر بيدي سرعة وأداء'},
+  {h:210,s:10,l:62,why:'الفضي بيفكّر بالمعدن والتكنولوجيا'}],
+  brk:[{h:75,s:90,l:48,why:'الليموني بيدي طاقة كهربا وإحساس عربيات المستقبل',risk:'صعب على الأبيض',fix:'استخدمه على أسود'},
+  {h:190,s:80,l:42,why:'السماوي القوي بيدي نضافة وحداثة',risk:'قريب من التكنولوجيا',fix:'اربطه بصور عربيات حقيقية'}]},
+ cleaning:{label:'منظفات وخدمات تنظيف',cta:'اطلب الخدمة',norm:[
+  {h:202,s:85,l:45,why:'الأزرق بيرتبط بالميّه والنضافة'},
+  {h:182,s:70,l:42,why:'الأكوا بيدي انتعاش'},
+  {h:125,s:60,l:42,why:'الأخضر بيدي أمان وطبيعة'}],
+  brk:[{h:28,s:90,l:54,why:'البرتقالي بيدي طاقة وقوة تنضيف، مختلف عن الأزرق المعتاد',risk:'ممكن ميتقريش نضافة',fix:'خلّي الأبيض مسيطر'},
+  {h:275,s:55,l:52,why:'البنفسجي بيفكّر بالروايح والانتعاش الفخم',risk:'ممكن يتقري معطّر بس',fix:'كلام واضح على الفايدة'}]}
+};
+const GULF=['sa','ae','qa','kw','bh','om'];
+const CO={
+ eg:{name:'مصر',sat:5,note:'السوق المصري الشعبي متعود على ألوان مشبعة وجريئة في اليفط والتغليف، والبريميوم بيميل للكحلي والأسود والدهبي.',acc:{h:176,s:62,l:38},accWhy:'الفيروزي لون الفيانس المصري القديم، وبيدي إحساس مصري أصيل من غير ما يبقى كليشيه'},
+ sa:{name:'السعودية',sat:-4,note:'البراندات السعودية الجديدة ومشاريع الرؤية مالت للترابي والرملي والأخضر العميق، مع جرأة أكبر عند جمهور الشباب.',acc:{h:32,s:48,l:46},accWhy:'الدرجات الرملية والترابية بتفكّر بالصحرا والأصالة، وبقت من أكتر الدرجات حضورًا في الهوية السعودية الحديثة',caution:{h:147,r:18,minS:40,t:'الأخضر ده قريب من أخضر العلم، وليه رمزية وطنية ودينية. لو البراند تجاري، غيّر الدرجة شوية وماتحطّش أي كتابة أو شعار يقلّد العلم.'}},
+ ae:{name:'الإمارات',sat:-3,note:'سوق متعدد الجنسيات ومتعود على الفخامة الهادية: الرملي والشامبين والدهبي والأسود، والتكنولوجيا بتاخد تركواز وأزرق.',acc:{h:40,s:50,l:50},accWhy:'الشامبين الدهبي بيكلّم ذوق الفخامة الهادية المنتشر في الإمارات'},
+ qa:{name:'قطر',sat:0,note:'العنابي هو لون قطر الوطني، وحاضر جدًا في الهوية العامة والرياضية. لمسة منه بتدي إحساس قطري فوري.',acc:{h:343,s:73,l:31},accWhy:'العنابي القطري بيدي انتماء محلي مباشر',caution:{h:343,r:15,minS:45,t:'العنابي مرتبط بالهوية الوطنية والجهات الرسمية. لو البراند تجاري، خلّيه أكسنت مش أساسي.'}},
+ kw:{name:'الكويت',sat:2,note:'الأزرق (البحر والخليج) حاضر بقوة، والسوق الكويتي بيحب البراندات الجريئة على السوشيال.',acc:{h:200,s:75,l:40},accWhy:'أزرق الخليج بيدي إحساس كويتي وبحري مألوف'},
+ bh:{name:'البحرين',sat:0,note:'الأحمر والأبيض ألوان العلم، والسوق متأثر بالذوق الخليجي العام مع لمسة لؤلؤ وتراث بحري.',acc:{h:355,s:78,l:42},accWhy:'الأحمر البحريني بيدي انتماء محلي واضح'},
+ om:{name:'عُمان',sat:-5,note:'السوق العماني بيميل للهادي والأصيل أكتر من الصارخ: تراث اللبان والفضة والأحمر العماني.',acc:{h:6,s:66,l:40},accWhy:'الأحمر العماني الأصيل بيدي دفا وانتماء'},
+ jo:{name:'الأردن',sat:-3,note:'الألوان الترابية ووردي صخر البتراء بيدّوا إحساس أردني محلي من غير كليشيه.',acc:{h:10,s:45,l:48},accWhy:'وردي البتراء الصخري بيربط البراند بالمكان'},
+ iq:{name:'العراق',sat:3,note:'السوق العراقي بيحب الألوان الدافية والجريئة، والفيروزي والأزرق الكاشاني من رموز العمارة العراقية.',acc:{h:190,s:65,l:38},accWhy:'الفيروزي الكاشاني بيربط البراند بالعمارة والتراث العراقي'},
+ lb:{name:'لبنان',sat:0,note:'السوق اللبناني متأثر بالذوق الأوروبي والموضة، وبيحب الأناقة والجرأة في نفس الوقت.',acc:{h:140,s:55,l:32},accWhy:'أخضر الأرز بيدي إحساس لبناني مباشر'},
+ ma:{name:'المغرب',sat:3,note:'أزرق ماجوريل والتيراكوتا والزعفران من أشهر الدلالات البصرية المغربية.',acc:{h:246,s:66,l:52},accWhy:'أزرق ماجوريل بيدي إحساس مغربي فني ومميز'},
+ tn:{name:'تونس',sat:2,note:'الأزرق والأبيض (سيدي بوسعيد) والأحمر من أشهر الدلالات التونسية.',acc:{h:212,s:80,l:42},accWhy:'أزرق سيدي بوسعيد بيدي إحساس تونسي متوسطي'},
+ dz:{name:'الجزائر',sat:2,note:'الأخضر والأبيض والأحمر ألوان العلم، والسوق بيحب الألوان الواضحة والمباشرة.',acc:{h:150,s:65,l:32},accWhy:'الأخضر الجزائري بيدي انتماء محلي'},
+ ly:{name:'ليبيا',sat:0,note:'الأحمر والأسود والأخضر ألوان العلم، والسوق محافظ نسبيًا في اختيار الألوان.',acc:{h:145,s:60,l:30},accWhy:'الأخضر العميق بيدي إحساس محلي ومستقر'},
+ global:{name:'عالمي',inName:'السوق العالمي',sat:0,note:'من غير دلالة محلية، فالأولوية لعُرف المجال وإنك تتميز عن المنافسين.',acc:null}
+};
+const AGE={
+ kids:{s:10,l:5,why:'جمهور أطفال: زوّدت التشبع والإضاءة شوية، لأن الأطفال بينجذبوا للألوان الصريحة، وخلّيت التباين عالي عشان الأهل كمان.'},
+ youth:{s:6,l:0,why:'جمهور شباب: زوّدت الجرأة والتشبع عشان يبان على السوشيال وسط الزحمة.'},
+ adults:{s:0,l:0,why:'جمهور 25–45: التشبع متوازن، مش باهت ومش صارخ.'},
+ mature:{s:-6,l:-3,why:'جمهور فوق 45: هدّيت التشبع وزوّدت التباين عشان القراءة تبقى أسهل.'}};
+const TIER={
+ economy:{s:8,l:3,name:'اقتصادي',why:'سعر اقتصادي: ألوان مشبعة وواضحة، عشان الإحساس يبقى قريب ومتاح.'},
+ mid:{s:0,l:0,name:'متوسط',why:'سعر متوسط: توازن بين الوضوح والرُّقي.'},
+ premium:{s:-14,l:-7,name:'بريميوم',why:'بريميوم: قللت التشبع وغمّقت الأساسي، لأن الفخامة بتتقري هادية مش صارخة.'},
+ luxury:{s:-24,l:-10,name:'فاخر',why:'فاخر: النيوترال هو المسيطر واللون بقى لمسة، لأن الفخامة في المساحة والهدوء.'}};
+const VAL={
+ trust:{n:'ثقة',hues:[210,225],s:-3,l:-2,why:'«الثقة» بتشد ناحية الأزرق والكحلي والدرجات الثابتة'},
+ lux:{n:'فخامة',hues:[42,345,275],s:-10,l:-6,why:'«الفخامة» بتهدّي التشبع وبتعمّق الدرجات'},
+ fun:{n:'مرح',hues:[45,25,330],s:8,l:5,why:'«المرح» بيرفع التشبع والإضاءة'},
+ safe:{n:'أمان',hues:[200,150],s:-4,l:0,why:'«الأمان» بيشد ناحية الأزرق والأخضر الهادي'},
+ speed:{n:'سرعة',hues:[8,25],s:6,l:0,why:'«السرعة» بتشد ناحية الأحمر والبرتقالي'},
+ nature:{n:'طبيعي',hues:[100,35],s:-8,l:-2,why:'«الطبيعي» بيشد ناحية الأخضر والترابي ويهدّي التشبع'},
+ innov:{n:'ابتكار',hues:[265,180],s:4,l:2,why:'«الابتكار» بيشد ناحية البنفسجي والتركواز'},
+ heritage:{n:'أصالة',hues:[28,350,42],s:-6,l:-4,why:'«الأصالة» بتشد ناحية الترابي والعنابي والدهبي'},
+ care:{n:'رعاية',hues:[340,15,170],s:-2,l:4,why:'«الرعاية» بتفتّح الدرجات وبتشد ناحية الدافي الناعم'},
+ power:{n:'قوة',hues:[0,220],s:4,l:-6,why:'«القوة» بتغمّق الدرجات وبتزوّد التباين'},
+ simple:{n:'بساطة',hues:[],s:-6,l:0,why:'«البساطة» بتقلل التشبع وعدد الألوان اللي بتلفت'},
+ young:{n:'شبابي',hues:[80,320],s:8,l:2,why:'«الشبابي» بيرفع الجرأة والتشبع'}};
+const CH={
+ all:{n:'كل حاجة',why:''},
+ digital:{n:'سوشيال وديجيتال',why:'نسختا لايت ودارك مقترحتان؛ راجع تباين كل نص وزر بعد تطبيق الألوان على الواجهة الفعلية.'},
+ print:{n:'تغليف وطباعة',why:'للطباعة: قيم CMYK هنا تقريبية فقط؛ اطلب بروفة على الورق والخامة الفعلية.'},
+ sign:{n:'يافطة ومحل',why:'لليافطة: راجع اللون بالحجم والمسافة والإضاءة والخامة الفعلية؛ نسبة التباين وحدها لا تتنبأ بوضوحها من بعيد.'}};
+const HSHORT={split:'درجات متقابلة جزئيًا على عجلة اللون؛ افحص التباين منفصلًا',comp:'لون مقابل على عجلة اللون؛ افحص تباين النص والعنصر منفصلًا',analog:'ألوان متجاورة على عجلة اللون',mono:'لون واحد بدرجات مختلفة',triad:'ثلاث درجات متباعدة على عجلة اللون',neutral:'نيوترال مع لون مميز'};
+const HARM={
+ analog:['متجانس','ألوان متجاورة على عجلة HSL؛ ده وصف لعلاقة درجات اللون وليس قياسًا للتباين أو ضمانًا لانسجامها بصريًا'],
+ comp:['متكامل','الأكسنت مقابل الأساسي على عجلة HSL؛ تقابل الدرجات لا يعني تلقائيًا تباينًا كافيًا للنص أو الزر'],
+ split:['متكامل منقسم','الأكسنت قرب الجهة المقابلة على عجلة HSL؛ افحص التباين والانسجام في التطبيق'],
+ mono:['أحادي','لون واحد بدرجات مختلفة؛ افحص التباين بين كل نص وخلفية'],
+ triad:['ثلاثي','ثلاث درجات متباعدة على عجلة HSL؛ علاقتها لا تضمن التباين أو ملاءمة الجمهور'],
+ neutral:['نيوترال + لون واحد','اقتراح نيوترال مع لون مميز؛ اختبر توزيع المساحات والتباين في التطبيق']};
+
+/* ================= engine ================= */
+const vals=st=>(st.vals||[]).map(k=>VAL[k]).filter(Boolean);
+function tune(b,st,co){
+  let{h,s,l}=b;const vs=vals(st),k=vs.length>2?.7:1;let vS=0,vL=0;vs.forEach(v=>{vS+=v.s*k;vL+=v.l*k});
+  if(b.s<12)return{h,s:b.s,l:clamp(l+(st.friendly>0?2:0)+Math.min(vL,0)/2,5,70)};
+  s+=TIER[st.tier].s+AGE[st.age].s+co.sat+st.bold*7+st.modern*3+(st.dec==='b2b'?-6:0)+(st.friendly>0?3:0)+vS;
+  l+=TIER[st.tier].l+AGE[st.age].l+st.friendly*3+st.modern*2+vL;
+  if(st.cool!==0)h=shiftToward(h,st.cool<0?30:215,Math.abs(st.cool)*7);
+  const vh=vs.flatMap(v=>v.hues);
+  if(vh.length){const best=vh.reduce((a,x)=>hd(h,x)<hd(h,a)?x:a);if(hd(h,best)<40)h=shiftToward(h,best,6)}
+  if(st.ch==='sign')s=Math.max(s,32);
+  if(b.h>=34&&b.h<=55&&b.s>=45){s=Math.max(s,40);l=Math.max(l,38)}
+  return{h:nh(h),s:clamp(s,22,86),l:clamp(l,16,66)};
+}
+function audDesc(st){
+  if(st.dec==='b2b')return'شركات وأصحاب قرار';
+  if(st.age==='kids')return'أطفال والقرار في إيد الأهل';
+  const r={youth:'بين 15 و25',adults:'بين 25 و45',mature:'فوق 45'}[st.age];
+  const who=st.dec==='women'?(st.age==='youth'?'بنات':'ستات'):st.dec==='men'?(st.age==='youth'?'شباب':'رجالة'):(st.age==='youth'?'شباب':'ناس');
+  return who+' '+r;
+}
+const coIn=co=>co.inName||co.name;
+function personality(st){
+  const p=[];
+  if(st.bold>0)p.push('جريء: تشبع أعلى وتباين أقوى');if(st.bold<0)p.push('هادي: تشبع أقل');
+  if(st.modern>0)p.push('مودرن: درجات أنضف وأفتح');if(st.modern<0)p.push('كلاسيك: درجات أعمق');
+  if(st.cool<0)p.push('دافي: سحبت الدرجات ناحية البرتقالي');if(st.cool>0)p.push('بارد: سحبت الدرجات ناحية الأزرق');
+  if(st.friendly>0)p.push('ودود: إضاءة أعلى شوية');if(st.friendly<0)p.push('رسمي: إضاءة أقل');
+  return p.length?p.join('، ')+'.':'';
+}
+function orderNorms(ind,st){
+  const vh=vals(st).flatMap(v=>v.hues);if(!vh.length)return ind.norm;
+  const dark=st.vals.includes('lux')||st.vals.includes('power');
+  return ind.norm.map((n,i)=>({n,i,sc:n.s<12?(dark?0:60):Math.min(...vh.map(x=>hd(n.h,x)))})).sort((a,b)=>a.sc-b.sc||a.i-b.i).map(x=>x.n);
+}
+function compCheck(p,cmps){
+  const ch=cmps.filter(c=>c.s>15);let rot=false;
+  for(let it=0;it<4&&p.s>=25;it++){const hit=ch.find(c=>hd(p.h,c.h)<25);if(!hit)break;const d=((p.h-hit.h+540)%360)-180;p={...p,h:nh(hit.h+(d>=0?1:-1)*34)};rot=true}
+  if(!cmps.length)return{p,rot,note:null};
+  if(p.s>=12&&ch.length){const m=Math.round(Math.min(...ch.map(c=>hd(p.h,c.h))));
+    return{p,rot,note:rot?`حرّكت الأساسي على عجلة HSL بعيدًا عن ${ch.length>1?'ألوان المنافسين':'لون المنافس'} (أقرب درجة الآن ${m}°). دي مقارنة لونية تقريبية؛ اختبر تميّز الهوية في تطبيقها الفعلي.`:`أقرب لون منافس يبعد ${m}° على عجلة HSL. المسافة لا تكفي وحدها للتنبؤ بالتباس الجمهور.`}}
+  if(p.s<12&&cmps.some(c=>c.s<=15))return{p,rot,note:'فيه منافس بيعتمد على الأسود/الرمادي برضه، فالأكسنت هنا هو اللي هيفرّقك. خلّيه ثابت في كل حاجة.'};
+  return{p,rot,note:null};
+}
+const darkInkOf=V=>V.bg.l<V.text.l?V.bg:V.text;
+function onFor(c,V){const dk=darkInkOf(V);return contrast(c,WHITE)>=contrast(c,dk)?WHITE.hex:dk.hex}
+function variantOf(P,mode){
+  const base=P.darkLead?'dark':'light';
+  if(mode===base)return{bg:P.bg,text:P.text,primary:P.primary,secondary:P.secondary,accent:P.accent};
+  const h=P.primary.h,chrom=P.primary.s>=12;let g;
+  if(mode==='dark'){
+    const bg=mk(h,chrom?Math.min(P.primary.s,14):4,9),text=mk(h,chrom?10:4,93);
+    let pr=P.primary;g=0;while(contrast(pr,bg)<3&&g++<45)pr=shiftOklchL(pr,.02);
+    let ac=P.accent;g=0;while(contrast(ac,bg)<4.5&&g++<45)ac=shiftOklchL(ac,.02);
+    return{bg,text,primary:pr,secondary:mk(P.secondary.h,Math.min(P.secondary.s,35),20),accent:ac};
+  }
+  const bg=mk(h,chrom?16:4,97),text=mk(h,chrom?22:6,12);
+  let pr=P.primary;g=0;while(contrast(pr,bg)<3&&g++<45)pr=shiftOklchL(pr,-.02);
+  let ac=P.accent;g=0;while(contrast(ac,bg)<3&&g++<45)ac=shiftOklchL(ac,-.02);
+  return{bg,text,primary:pr,secondary:mk(P.secondary.h,P.secondary.s*.6,86),accent:ac};
+}
+function finalize(P,st){
+  let{bg,text}=P;const dark=P.darkLead;
+  while(contrast(text,bg)<7&&rgbOklch(text.rgb).L>.02&&rgbOklch(text.rgb).L<.98)text=shiftOklchL(text,dark?.02:-.02);
+  P.text=text;
+  const darkInk=dark?bg:text;
+  let pr=P.primary,cw=contrast(pr,WHITE),cd=contrast(pr,darkInk);
+  if(Math.max(cw,cd)<4.5){let t=pr;for(let i=0;i<48&&contrast(t,WHITE)<4.5&&rgbOklch(t.rgb).L>.02;i++)t=shiftOklchL(t,-.02);if(contrast(t,WHITE)>=4.5){pr=t;P.adjusted=true}cw=contrast(pr,WHITE);cd=contrast(pr,darkInk)}
+  P.primary=pr;P.onPrimaryName=cw>=cd?'أبيض':'غامق';P.cPrimary=Math.max(cw,cd);
+  let a=P.accent,guard=0;
+  while(contrast(a,bg)<3&&guard++<45)a=shiftOklchL(a,dark?.02:-.02);
+  P.accent=a;
+  const tx=contrast(text,bg),ac=contrast(a,bg),buttonInk=fromHex(onFor(a,{bg,text})),buttonTextRatio=contrast(a,buttonInk),cb=dE(labLin(deutan(pr.rgb)),labLin(deutan(a.rgb)));
+  P.checks=[
+    {ok:tx>=4.5,t:`النص العادي على الخلفية ${tx.toFixed(1)}:1 ${tx>=7?'AAA':tx>=4.5?'AA':'أقل من AA (4.5:1)'}`},
+    {ok:P.cPrimary>=4.5,t:`كتابة ${P.onPrimaryName} على الأساسي ${P.cPrimary.toFixed(1)}:1 ${P.cPrimary>=7?'AAA':P.cPrimary>=4.5?'AA':P.cPrimary>=3?'للنص الكبير فقط (3:1)':'أقل من 3:1'}`},
+    {ok:ac>=3,t:`لون الأكسنت مقابل الخلفية ${ac.toFixed(1)}:1 ${ac>=3?'يجتاز 3:1 للعناصر غير النصية':'أقل من 3:1 للعناصر غير النصية'}`},
+    {ok:buttonTextRatio>=4.5,t:`نص الزر المقترح ${buttonInk.hex} على الأكسنت ${buttonTextRatio.toFixed(1)}:1 ${buttonTextRatio>=4.5?'يجتاز AA للنص العادي':buttonTextRatio>=3?'مناسب للنص الكبير فقط':'أقل من حد النص الكبير'}`},
+    {note:true,t:`محاكاة تقريبية لنقص تمييز الأحمر والأخضر (ΔE ${cb.toFixed(1)}): لا تمنح اجتيازًا؛ أضف نصًا أو رمزًا بجانب اللون واختبر الواجهة فعليًا.`}];
+  if(st.ch==='print'||st.ch==='all')P.checks.push({note:true,t:'قيم CMYK تقريبية من RGB وليست فحصًا لنطاق طابعة بعينها. النتيجة تعتمد على بروفايل ICC والورق والحبر؛ اطلب بروفة.'});
+  if(st.ch==='sign'||st.ch==='all'){const r=contrast(pr,bg);P.checks.push(r>=3?{ok:true,t:`تباين الأساسي مع الخلفية ${r.toFixed(1)}:1 (3:1 مرجع للعناصر غير النصية؛ لا يضمن وضوح اليافطة من مسافة)`}:{ok:false,t:`تباين الأساسي ${r.toFixed(1)}:1؛ جرّب إطارًا أو درجة أعلى تباينًا، ثم راجعها بالحجم ومسافة المشاهدة الفعلية`})}
+  if(P.adjusted)P.reasons.push({k:'التباين',t:'عدّلت درجة الأساسي لتحسين التباين، ثم قست نسبة اللون الناتجة مقابل الأبيض.'});
+  if(CH[st.ch].why&&P.kind!=='c')P.reasons.push({k:'القناة',t:CH[st.ch].why});
+  P.colors=[{role:'الخلفية',key:'bg',pct:48,c:bg},{role:'الأساسي',key:'primary',pct:22,c:pr},{role:'التانوي',key:'secondary',pct:8,c:P.secondary},{role:'الأكسنت',key:'accent',pct:10,c:a},{role:'النصوص',key:'text',pct:12,c:text}];
+  P.baseMode=dark?'dark':'light';
+  P.variants={light:variantOf(P,'light'),dark:variantOf(P,'dark')};
+  P.scales={primary:scaleOf(pr),accent:scaleOf(a)};
+  return P;
+}
+function harmonize(p,harm,st,spec,co,R){
+  const H=p.h,sg=R()<.5?1:-1,accS={economy:88,mid:78,premium:58,luxury:48}[st.tier];let sec,acc;
+  if(p.s<12){const alt=tune(spec.alt&&spec.alt.s>=12?spec.alt:{h:42,s:55,l:50},st,co);return{sec:mk(alt.h,10,86),acc:mk(alt.h,Math.max(alt.s,40),clamp(alt.l,40,58)),harm:'neutral'}}
+  if(harm==='analog'){sec=mk(H+30*sg,p.s*.8,p.l<45?p.l+22:p.l-16);acc=mk(H+62*sg,accS,52)}
+  else if(harm==='comp'){sec=mk(H+20*sg,p.s*.45,Math.min(p.l+32,86));acc=mk(H+180,accS,52)}
+  else if(harm==='split'){sec=mk(H+30*sg,p.s*.6,Math.min(p.l+28,84));acc=mk(H+180+30*sg,accS,52)}
+  else if(harm==='mono'){sec=mk(H,Math.max(p.s-20,8),Math.min(p.l+36,88));acc=(st.tier==='premium'||st.tier==='luxury')&&hd(H,42)>25?mk(42,55,50):mk(H+180,accS,50)}
+  else{sec=mk(H+120,p.s*.85,clamp(p.l+5,40,65));acc=mk(H+240,accS,55)}
+  return{sec,acc,harm};
+}
+function build(spec,st,ind,co,R,cmps){
+  let b={...spec.base};
+  if(!spec.raw&&st.seed>0&&b.s>=12)b.h=nh(b.h+(R()-.5)*22);
+  let p=spec.raw?{h:b.h,s:b.s,l:b.l}:tune(b,st,co);
+  if(spec.darkLead&&p.s>=12)p={...p,l:Math.max(p.l,34),s:Math.max(p.s,32)};
+  const cc=spec.raw?{p,rot:false,note:null}:compCheck(p,cmps);p=cc.p;
+  const primary=mk(p.h,p.s,p.l);
+  let why=b.why,pN=defName(nameOf(primary));
+  if(cc.rot)why=meaningOf(primary)+'، وفي نفس الوقت بعيد عن المنافسين';
+  else if(!spec.raw){const bf=fam(mk(b.h,b.s,b.l)),tf=fam(primary);
+    if(bf!==tf)pN+=' (درجة '+(st.tier==='premium'||st.tier==='luxury'?'أهدى وأعمق':'مظبوطة على جمهورك')+' من '+defName(bf)+')'}
+  let{sec,acc,harm}=harmonize(p,spec.harmony,st,spec,co,R);
+  let accentLocal=false;
+  if(spec.accent){acc=mk(spec.accent.h,spec.accent.s,spec.accent.l);accentLocal=true}
+  if(hd(acc.h,p.h)<20&&Math.abs(acc.l-primary.l)<15&&p.s>=12)acc=mk(acc.h+45,acc.s,acc.l);
+  const dark=!!spec.darkLead,H=p.h,warm=(H<70||H>330);
+  const bg=dark?mk(H,Math.min(p.s,14),8):mk(H,p.s<12?4:(warm?24:14),97);
+  const text=dark?mk(H,10,93):mk(H,p.s<12?6:22,12);
+  const reasons=[{k:'الأساسي',t:`${pN.replace(/^ال/,'')}: ${why}.`},{k:'التناغم',t:`${HARM[harm][0]}: ${HARM[harm][1]}.`}];
+  if(accentLocal)reasons.push({k:'لمسة محلية',t:`الأكسنت ${nameOf(acc)}: ${spec.accentWhy}.`});
+  if(harm==='mono'&&(st.tier==='premium'||st.tier==='luxury')&&!accentLocal)reasons.push({k:'الأكسنت',t:'الدهبي كأكسنت عشان يرفع الإحساس بمستوى السعر من غير ما يزاحم الأساسي.'});
+  if(spec.showMarket)reasons.push({k:'السوق',t:co.note});
+  if(spec.showMarket&&GULF.includes(st.co)&&(st.tier==='premium'||st.tier==='luxury'))reasons.push({k:'الخليج',t:'في الخليج، الأسود والأبيض والدهبي بيرتبطوا بالمكانة والفخامة، فالمساحات النيوترال هنا شغالة لصالحك.'});
+  if(spec.kind!=='c'){
+    const vs=vals(st);if(vs.length)reasons.push({k:'القيم',t:vs.map(v=>v.why).join('، و')+'.'});
+    reasons.push({k:'الجمهور',t:AGE[st.age].why},{k:'السعر',t:TIER[st.tier].why});
+    const pers=personality(st);if(pers)reasons.push({k:'الشخصية',t:pers});
+  }
+  if(cc.note)reasons.push({k:'المنافس',t:cc.note});
+  if(co.caution&&p.s>=co.caution.minS&&hd(H,co.caution.h)<co.caution.r)reasons.push({k:'خد بالك',t:co.caution.t});
+  if(dark)reasons.push({k:'الخلفية',t:'الخلفية غامقة والنور جاي من اللون، وده أسلوب منتشر في الفخامة لأنه بيحسّس بالعمق والغموض.'});
+  let formula;
+  if(spec.kind==='m')formula=`بما إن جمهورنا ${audDesc(st)} في ${coIn(co)}، اخترت ${pN} عشان ${why}.`;
+  else if(spec.kind==='b')formula=`بما إن أغلب المنافسين في ${ind.label} بيستخدموا ${normNames(ind)}، اخترت ${pN} عشان ${why}.`;
+  else formula=`بما إن جمهورنا ${audDesc(st)} في ${coIn(co)}، خلّينا ${pN} أساسي عشان ${meaningOf(primary)}، وحطّينا جنبه ${defName(nameOf(acc))} عشان ${HSHORT[harm]}.`;
+  return finalize({kind:spec.kind,title:spec.title,sub:spec.sub,harmonyName:HARM[harm][0],primary,secondary:sec,accent:acc,bg,text,darkLead:dark,reasons,formula,risk:b.risk,fix:b.fix},st);
+}
+function normNames(ind){const u=[];ind.norm.forEach(n=>{const x=defName(nameOf(mk(n.h,n.s,n.l)).split(' ')[0]);if(!u.includes(x))u.push(x)});return u.join(' و')}
+function buildMinimal(st,ind,co,R,cmps){
+  const darkNorm=ind.norm.some(n=>n.s<12);
+  let accH=nh(ind.brk[(st.seed+1)%2].h+(st.seed>0?(R()-.5)*20:0));
+  for(let i=0;i<4;i++){const hit=cmps.find(c=>c.s>15&&hd(accH,c.h)<25);if(!hit)break;accH=nh(accH+40)}
+  let P;
+  if(!darkNorm){
+    const h=ind.norm[0].h,accent=mk(accH,94,54);
+    P={kind:'b',title:'أبيض وأسود + لون صادم',sub:'التميّز بالهدوء مش بالزحمة',harmonyName:HARM.neutral[0],
+      bg:mk(h,5,97),text:mk(h,10,8),primary:mk(h,8,11),secondary:mk(h,5,86),accent,
+      formula:`بما إن أغلب المنافسين في ${ind.label} بيتنافسوا بالألوان، اخترت أبيض وأسود ولمسة ${nameOf(accent)} عشان اللي هيلفت إن مفيش زحمة ألوان، واللون الواحد يبقى توقيعك.`,
+      risk:st.tier==='economy'?'ممكن يتقري غالي أو بارد على جمهور سعره اقتصادي':'ممكن يتقري بارد لو اللون الصادم اختفى',
+      fix:'خلّي اللون الصادم ثابت في كل مكان (الزرار، الشنطة، الستيكر، اليونيفورم) عشان يبقى هو البراند'};
+  }else{
+    const p=tune({h:accH,s:55,l:70},st,co),primary=mk(p.h,Math.max(p.s,40),clamp(p.l+6,62,76));
+    P={kind:'b',title:'فاتح وناعم في مجال غامق',sub:'المجال كله غامق، فالفاتح هو اللي هيبان',harmonyName:'باستيل + أكسنت متكامل',
+      bg:mk(accH,40,96),text:mk(accH,30,13),primary,secondary:mk(accH+40,40,86),accent:mk(accH+180,62,42),
+      formula:`بما إن أغلب المنافسين في ${ind.label} بيستخدموا الأسود والدهبي والألوان الغامقة، اخترت ${defName(nameOf(primary))} الناعم عشان هيبان على الرف والسوشيال وسط العلب الغامقة.`,
+      risk:'ممكن يقلل إحساس الفخامة لو التنفيذ خفيف',fix:'خامات تقيلة، تايبوجرافي رفيع، ومساحات فاضية كتير'};
+  }
+  P.reasons=[{k:'الفكرة',t:darkNorm?'لما المجال كله غامق، الدرجات الفاتحة الناعمة بتعمل عكس المتوقع وبتتفتكر.':'تأثير العزل (Von Restorff): الحاجة المختلفة وسط المتشابه هي اللي بتتفتكر. هنا المختلف هو قلة الألوان نفسها.'},
+    {k:'التوزيع',t:'النيوترال واخد أغلب المساحة، والأكسنت لمسة صغيرة بس في كل حاجة.'},
+    {k:'السعر',t:TIER[st.tier].why}];
+  const chc=cmps.filter(c=>c.s>15);
+  if(chc.length)P.reasons.push({k:'المنافس',t:`الأكسنت بعيد عن ${chc.length>1?'ألوان المنافسين':'لون المنافس'} بـ ${Math.round(Math.min(...chc.map(c=>hd(P.accent.h,c.h))))}° على الأقل على العجلة.`});
+  return finalize(P,st);
+}
+
+/* ===== client color analysis ===== */
+function analyzeClient(st,ind,co,cmps){
+  const c=fromHex(st.client),chrom=c.s>=12,items=[];let fixes=[];
+  let t={...c};
+  if(chrom){
+    const nm=ind.norm.filter(n=>n.s>=12),mn=nm.length?Math.min(...nm.map(n=>hd(c.h,n.h))):999,mb=Math.min(...ind.brk.map(n=>hd(c.h,n.h)));
+    if(mn<25)items.push({lvl:'ok',k:'المجال',t:`قريب من اتجاهات إرشادية مسجلة داخل الأداة لمجال ${ind.label}؛ مش إحصاء سوق ولا دليلًا على فهم الجمهور أو تفضيله.`});
+    else if(mb<25){const br=ind.brk.reduce((a,x)=>hd(c.h,x.h)<hd(c.h,a.h)?x:a);items.push({lvl:'warn',k:'المجال',t:`من الألوان اللي بتكسر القاعدة في ${ind.label}. ينفع، بس ${br.risk}.`,fix:br.fix})}
+    else items.push({lvl:'warn',k:'المجال',t:`مش من ألوان ${ind.label} المعتادة. ممكن يبقى تميّز لو العرض مقنع، أو لخبطة لو الجمهور مستني حاجة تانية.`});
+  }else items.push({lvl:ind.norm.some(n=>n.s<12)?'ok':'warn',k:'المجال',t:ind.norm.some(n=>n.s<12)?'اللون محايد؛ قارنه بأمثلة فعلية من منافسيك وسياق الاستخدام.':'لون محايد؛ اختبر وضوحه وتميّزه مع الجمهور بدل افتراض أنه آمن أو سهل التذكر.'});
+  const hit=chrom?cmps.find(x=>x.s>15&&hd(c.h,x.h)<25):null;
+  if(hit){items.push({lvl:'warn',k:'المنافس',t:`درجة اللون قريبة على عجلة HSL من لون المنافس ${hit.hex}؛ هذه مقارنة تقريبية لا تتنبأ وحدها بالتباس الجمهور.`});const d=((c.h-hit.h+540)%360)-180;t.h=nh(hit.h+(d>=0?1:-1)*30);fixes.push('comp')}
+  else if(cmps.length&&chrom)items.push({lvl:'ok',k:'المنافس',t:'لا توجد درجة قريبة على عجلة HSL ضمن العتبة المستخدمة؛ راجع التشابه في الشعار والتطبيق الفعلي أيضًا.'});
+  if(co.caution&&chrom&&c.s>=co.caution.minS&&hd(c.h,co.caution.h)<co.caution.r)items.push({lvl:'warn',k:'البلد',t:co.caution.t});
+  const rng={economy:[50,100],mid:[30,90],premium:[0,65],luxury:[0,45]}[st.tier];
+  if(chrom&&(c.s<rng[0]||c.s>rng[1])){const hi=c.s>rng[1];items.push({lvl:'warn',k:'التشبع',t:hi?`تشبّعه أعلى من النطاق الإرشادي الداخلي لهذه الأداة. لا يحدد التشبع وحده إحساس السعر؛ راجع الخامة والصور والخط.`:`تشبّعه أقل من النطاق الإرشادي الداخلي لهذه الأداة. قيّم وضوحه على الشاشة والخامة الفعلية.`});t.s=clamp(c.s,rng[0]+4,rng[1]-4);if(hi&&(st.tier==='premium'||st.tier==='luxury'))t.l=Math.min(t.l,48);fixes.push(hi?'tierHi':'tierLo')}
+  else if(chrom)items.push({lvl:'ok',k:'التشبع',t:'يقع ضمن النطاق الإرشادي الداخلي لهذه الأداة؛ هذا لا يثبت ملاءمته لمستوى السعر.'});
+  const best=Math.max(contrast(c,WHITE),contrast(c,{rgb:[12,12,12]}));
+  if(best<4.5){items.push({lvl:'warn',k:'القراءة',t:`أفضل تباين بين الأبيض والغامق ${best.toFixed(1)}:1، أقل من 4.5:1 للنص العادي. جرّب درجة أفتح أو أغمق ثم أعد القياس.`});fixes.push('read')}
+  else items.push({lvl:'ok',k:'القراءة',t:`الكتابة ${contrast(c,WHITE)>=contrast(c,{rgb:[12,12,12]})?'الأبيض':'الغامقة'} عليه مقروءة (${best.toFixed(1)}:1).`});
+  if(st.ch==='print'||st.ch==='all')items.push({lvl:'warn',k:'الطباعة',t:'قيمة CMYK تقريبية ولا تحدد نطاق مطبعة بعينها؛ اطلب بروفة على الخامة وبروفايل الطابعة.'});
+  const vh=vals(st).filter(v=>v.hues.length);
+  if(chrom&&vh.length){const near=vh.filter(v=>v.hues.some(h=>hd(c.h,h)<35));items.push(near.length?{lvl:'ok',k:'القيم',t:`بيعبّر عن ${near.map(v=>'«'+v.n+'»').join(' و')}.`}:{lvl:'warn',k:'القيم',t:`مش قريب من القيم اللي اخترتها (${vh.map(v=>v.n).join('، ')})، فهتحتاج الأكسنت والخط يكمّلوا الرسالة.`})}
+  let improved=mk(t.h,t.s,t.l);
+  if(fixes.includes('read')){let g=0;while(Math.max(contrast(improved,WHITE),contrast(improved,{rgb:[12,12,12]}))<4.5&&g++<40){const direction=contrast(improved,WHITE)>=contrast(improved,{rgb:[12,12,12]})?-.025:.025;improved=shiftOklchL(improved,direction)}}
+  const changed=dEc(c,improved)>4;
+  const bad=items.filter(i=>i.lvl==='bad').length,warn=items.filter(i=>i.lvl==='warn').length;
+  const verdict=bad?{lvl:'bad',t:'محتاج نقاش مع العميل'}:warn>=2?{lvl:'warn',t:'يمشي بتعديل'}:{lvl:'ok',t:'يمشي'};
+  const cN=defName(nameOf(c)),iN=defName(nameOf(improved));
+  let say;
+  if(fixes.includes('comp'))say=`درجة اللون قريبة على عجلة HSL من لون منافس؛ ده لا يثبت إن الجمهور هيلخبط بينكم. ممكن نجرب تحريكها إلى ${iN.replace(/^ال/,'ل')} ونقارن شكل الهويتين جنب بعض.`;
+  else if(fixes.includes('tierHi'))say=`تشبّع ${cN} أعلى من النطاق الإرشادي لهذه الأداة. نقدر نقارن نسخة أهدأ، لكن إحساس السعر يعتمد كمان على الخط والخامات والصور.`;
+  else if(fixes.includes('tierLo'))say=`تشبّع ${cN} أقل من النطاق الإرشادي لهذه الأداة. نقدر نقارن نسخة أوضح على الشاشة والخامة، ثم نختبرها مع الجمهور.`;
+  else if(fixes.includes('read'))say=`أفضل تباين لهذا اللون أقل من 4.5:1 للنص العادي؛ هنقارن درجة بديلة ونقيس النص والزر بعد تطبيقه على الواجهة.`;
+  else if(verdict.lvl!=='ok'){const f=items.find(i=>i.fix);say=`${cN} مش المعتاد في ${ind.label}، وده ممكن يبقى ميزة. بس عشان ينجح محتاجين ${f?f.fix:'نثبّته في كل نقطة تواصل ونوازنه بنيوترال كتير'}.`}
+  else say=`${cN} اللي اخترته ماشي مع جمهورنا (${audDesc(st)})، و${meaningOf(c)}، فهنبني الهوية حواليه.`;
+  return{c,improved,changed,items,verdict,say};
+}
+function buildClient(st,ind,co,R,cmps,an){
+  const b={...(an.changed?an.improved:an.c),why:meaningOf(an.changed?an.improved:an.c)};
+  return build({kind:'c',title:'باليتة حوالين لون العميل',sub:an.changed?'بالدرجة المقترحة بعد التظبيط':'بلون العميل زي ما هو',base:b,alt:ind.norm[0],harmony:st.bold>=1?'comp':'split',raw:true},st,ind,co,R,[]);
+}
+
+function generate(st){
+  const ind=IND[st.ind],co=CO[st.co],R=rng(st.seed+1),norms=orderNorms(ind,st),n=norms.length,o=st.seed%n;
+  const cmps=(st.comps||[]).slice(0,st.compN||0).map(fromHex);
+  const h1=st.age==='kids'||st.ind==='kids'?'triad':st.bold>=1?'comp':st.bold<=-1?'analog':'split';
+  const P=[
+    build({kind:'m',title:'قلب السوق',sub:'أقرب حاجة لعُرف '+ind.label,base:norms[o],alt:norms[(o+1)%n],harmony:h1,showMarket:true},st,ind,co,R,cmps),
+    build({kind:'m',title:co.acc?'السوق + لمسة من '+co.name:'السوق بنبرة تانية',sub:co.acc?'نفس العرف، بدلالة محلية':'نفس العرف، بلون تاني من المجال',base:norms[(o+1)%n],alt:norms[(o+2)%n],harmony:'split',accent:co.acc,accentWhy:co.accWhy},st,ind,co,R,cmps),
+    build({kind:'m',title:st.tier==='luxury'?'أحادي على خلفية غامقة':'أحادي ومركّز',sub:'لون واحد بدرجاته، سهل يتطبق',base:norms[(o+2)%n],alt:norms[o],harmony:'mono',darkLead:st.tier==='luxury'},st,ind,co,R,cmps),
+    build({kind:'b',title:'عكس عُرف المجال',sub:'لون محدش في المجال بيستخدمه',base:ind.brk[st.seed%2],alt:norms[o],harmony:st.seed%2?'analog':'comp'},st,ind,co,R,cmps),
+    buildMinimal(st,ind,co,R,cmps)];
+  let an=null;
+  if(st.clientOn){an=analyzeClient(st,ind,co,cmps);P.push(buildClient(st,ind,co,R,cmps,an))}
+  return{P,an};
+}
+
+
+/* ================= UI ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PRESETS=[
+ {n:'عيادة أطفال · السعودية',s:{brand:'عيادة بسمة',co:'sa',ind:'health',age:'kids',dec:'women',tier:'mid',vals:['care','safe'],ch:'all',friendly:1,compN:1,comps:['#1E73BE','#E53935','#2E7D32']}},
+ {n:'شاورما · مصر',s:{brand:'شاورما الريّس',co:'eg',ind:'food',age:'youth',dec:'all',tier:'economy',vals:['speed','fun'],ch:'sign',bold:1,compN:2,comps:['#D32F2F','#F9A825','#2E7D32']}},
+ {n:'عطور · قطر',s:{brand:'دار العود',co:'qa',ind:'perfume',age:'adults',dec:'all',tier:'luxury',vals:['lux','heritage'],ch:'print',compN:1,comps:['#B8963E','#111111','#2E7D32']}},
+ {n:'SaaS · الإمارات',s:{brand:'Flowly',co:'ae',ind:'tech',age:'adults',dec:'b2b',tier:'premium',vals:['innov','trust'],ch:'digital',modern:2,compN:2,comps:['#2563EB','#7C3AED','#2E7D32']}},
+ {n:'كافيه · الكويت',s:{brand:'بُن الديرة',co:'kw',ind:'cafe',age:'youth',dec:'all',tier:'mid',vals:['heritage','young'],ch:'all',compN:1,comps:['#5D4037','#E53935','#2E7D32']}},
+ {n:'تمور · السعودية',s:{brand:'نخلة',co:'sa',ind:'heritage',age:'adults',dec:'all',tier:'premium',vals:['heritage','nature'],ch:'print',compN:1,comps:['#6D4C41','#E53935','#2E7D32']}}];
+const BASE={brand:'',co:'sa',ind:'health',age:'adults',dec:'all',tier:'mid',ch:'all',vals:[],bold:0,modern:0,cool:0,friendly:0,compN:0,comps:['#1E73BE','#E53935','#2E7D32'],clientOn:false,client:'#7B4BB7',seed:0};
+let st={...BASE,...PRESETS[0].s};
+let PALS=[],AN=null,LOCKS={},UI={};
+const KEY='lonbrief-v2',FKEY='lonbrief-favs';
+
+function setup(){
+  $('#co').innerHTML=Object.entries(CO).map(([k,v])=>`<option value="${k}">${v.name}</option>`).join('');
+  $('#ind').innerHTML=Object.entries(IND).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
+  $('#ch').innerHTML=Object.entries(CH).map(([k,v])=>`<option value="${k}">${v.n}</option>`).join('');
+  $('#vals').innerHTML=Object.entries(VAL).map(([k,v])=>`<label><input type="checkbox" id="v-${k}" value="${k}">${v.n}</label>`).join('');
+  $('#presets').innerHTML=PRESETS.map((p,i)=>`<button type="button" data-preset="${i}">${p.n}</button>`).join('');
+}
+function toForm(){
+  ['brand','co','ind','age','dec','tier','ch','bold','modern','cool','friendly'].forEach(k=>$('#'+k).value=st[k]);
+  $('#compN').value=st.compN;[0,1,2].forEach(i=>{const el=$('#c'+i);el.value=st.comps[i];el.hidden=i>=st.compN});
+  $('#clientOn').checked=st.clientOn;$('#client').value=st.client;$('#client').disabled=!st.clientOn;
+  Object.keys(VAL).forEach(k=>$('#v-'+k).checked=st.vals.includes(k));limitVals();
+}
+function limitVals(){const n=st.vals.length;Object.keys(VAL).forEach(k=>{const el=$('#v-'+k);el.disabled=n>=3&&!el.checked})}
+function fromForm(){
+  st.brand=$('#brand').value;
+  ['co','ind','age','dec','tier','ch'].forEach(k=>st[k]=$('#'+k).value);
+  ['bold','modern','cool','friendly','compN'].forEach(k=>st[k]=+$('#'+k).value);
+  st.comps=[0,1,2].map(i=>$('#c'+i).value);[0,1,2].forEach(i=>$('#c'+i).hidden=i>=st.compN);
+  st.clientOn=$('#clientOn').checked;st.client=$('#client').value;$('#client').disabled=!st.clientOn;
+  st.vals=Object.keys(VAL).filter(k=>$('#v-'+k).checked).slice(0,3);limitVals();
+}
+const brandName=()=>(st.brand||'').trim()||'براندك';
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&IND[x.ind]&&CO[x.co])st={...BASE,...x}}catch(e){}}
+function getFavs(){try{return JSON.parse(localStorage.getItem(FKEY))||[]}catch(e){return[]}}
+function setFavs(f){try{localStorage.setItem(FKEY,JSON.stringify(f));return true}catch(e){return false}}
+
+/* ---------- mockups ---------- */
+function mockHTML(P,i){
+  const u=UI[i]||(UI[i]={mock:'phone',mode:P.baseMode});
+  const V=P.variants[u.mode],B=esc(brandName()),L=esc(brandName().charAt(0)),ind=IND[st.ind];
+  const pr=V.primary.hex,bg=V.bg.hex,tx=V.text.hex,ac=V.accent.hex,sc=V.secondary.hex;
+  const onP=onFor(V.primary,V),onA=onFor(V.accent,V),onS=onFor(V.secondary,V);
+  let h='';
+  if(u.mock==='card')h=`<div class="cards">
+    <div class="bcard" style="background:${pr};color:${onP}"><span class="mk" style="background:${ac};color:${onA}">${L}</span><div><div class="nmx">${B}</div><div class="tiny">${esc(ind.label)}</div></div></div>
+    <div class="bcard" style="background:${bg};color:${tx}"><div style="display:flex;gap:8px;align-items:center"><span class="mk" style="background:${pr};color:${onP}">${L}</span><span class="nmx">${B}</span></div>
+      <div style="display:flex;flex-direction:column;gap:5px"><span class="ln" style="background:${ac}"></span><span class="tiny" dir="ltr" style="text-align:right">+000 000 0000 · hello@brand.com</span></div></div></div>`;
+  else if(u.mock==='phone')h=`<div class="phone" style="background:${bg}">
+    <div class="ph-top" style="background:${pr};color:${onP}"><span class="mk" style="background:${bg};color:${pr}">${L}</span>${B}</div>
+    <div class="ph-body"><div class="ph-img" style="background:${sc}"></div><div class="ph-h" style="color:${tx}">${esc(ind.cta)}</div>
+      <div class="ph-ln" style="background:${tx};opacity:.16;width:92%"></div><div class="ph-ln" style="background:${tx};opacity:.16;width:68%"></div>
+      <div class="ph-chips"><span style="background:${sc};color:${onS}">جديد</span><span style="color:${tx};border:1px solid ${tx}40">الأكثر طلبًا</span></div>
+      <div class="ph-btn" style="background:${ac};color:${onA}">${esc(ind.cta)}</div></div></div>`;
+  else if(u.mock==='social')h=`<div class="post" style="background:${pr};color:${onP}">
+    <span class="post-shape" style="background:${sc};opacity:.55"></span>
+    <div class="post-top" style="position:relative;z-index:1"><span class="mk" style="background:${bg};color:${pr}">${L}</span>${B}</div>
+    <span class="sticker" style="background:${ac};color:${onA}">جديد</span>
+    <div class="post-h">${esc(ind.cta)}</div><div class="post-sub">${esc(ind.label)} · ${esc(CO[st.co].name)}</div></div>`;
+  else if(u.mock==='sign')h=`<div class="sign" style="background:${bg}">
+    <div class="awning" style="background:repeating-linear-gradient(90deg,${pr} 0 22px,${bg} 22px 44px)"></div>
+    <div class="sign-board" style="background:${pr};color:${onP}"><span class="mk" style="background:${ac};color:${onA}">${L}</span>${B}</div>
+    <div class="front" style="background:${sc}"><span class="win" style="background:${bg}"></span><span class="door" style="background:${tx}"></span><span class="win" style="background:${bg}"></span></div>
+    <div class="stripe" style="background:${ac}"></div></div>`;
+  else h=`<div class="packs">
+    <div class="box" style="background:${pr}"><div class="lid" style="background:${tx}"></div><div class="label" style="background:${bg};color:${tx}"><span class="mk" style="background:${pr};color:${onP}">${L}</span>${B}<i style="background:${ac}"></i></div></div>
+    <div class="cup"><div class="cup-lid" style="background:${tx}"></div><div class="cup-body" style="background:${bg}"><div class="band" style="background:${pr}"><span class="mk" style="background:${ac};color:${onA}">${L}</span></div><span style="font-size:10px;font-weight:700;color:${tx}">${B}</span></div></div></div>`;
+  return`<div class="stage" style="background:${u.mode==='dark'?'#1b1c1f':'#e6e7ea'}" aria-hidden="true">${h}</div>`;
+}
+const MOCKS=[['phone','موبايل'],['card','كارت'],['social','بوست'],['sign','يافطة'],['pack','تغليف']];
+function mockBlock(P,i){
+  const u=UI[i]||(UI[i]={mock:'phone',mode:P.baseMode});
+  return`<div class="mtabs" role="group" aria-label="نوع الموكاب">${MOCKS.map(([k,n])=>`<button type="button" data-mock="${k}" data-i="${i}" aria-pressed="${u.mock===k}">${n}</button>`).join('')}
+    <span class="sep"></span><button type="button" data-mode="${i}" aria-pressed="${u.mode==='dark'}">${u.mode==='dark'?'دارك':'لايت'}</button></div>
+    <div id="stage-${i}">${mockHTML(P,i)}</div>`;
+}
+
+/* ---------- designer details ---------- */
+function grade(r){return r>=7?'AAA':r>=4.5?'AA':r>=3?'كبير / غير نصي':'✗'}
+function contrastTable(P){
+  const cols=[{n:'أبيض',c:WHITE},{n:'أسود',c:{rgb:[12,12,12],hex:'#0C0C0C'}},...P.colors.map(c=>({n:c.role,c:c.c}))];
+  return`<div class="tbl"><table><thead><tr><th>الخلفية ↓ / الكتابة ←</th>${cols.map(c=>`<th>${c.n}</th>`).join('')}</tr></thead><tbody>
+    ${P.colors.map(r=>`<tr><td class="rh">${r.role}</td>${cols.map(c=>{if(c.c.hex===r.c.hex)return'<td>—</td>';const x=contrast(r.c,c.c);
+      return`<td><span class="cell" style="background:${r.c.hex};color:${c.c.hex}"><b>أب</b><span>${x.toFixed(1)}</span><span class="grade">${grade(x)}</span></span></td>`}).join('')}</tr>`).join('')}
+  </tbody></table></div>`;
+}
+function scaleRow(sc){return`<div class="scale">${sc.map(s=>`<button type="button" class="tint" data-hex="${s.c.hex}" aria-label="انسخ ${s.step} ${s.c.hex}"><span class="t" style="background:${s.c.hex};color:${contrast(s.c,WHITE)>contrast(s.c,{rgb:[12,12,12]})?'#fff':'#0C0C0C'}">${s.base?'●':s.step}</span><small>${s.c.hex}</small></button>`).join('')}</div>`}
+function details(P,i){
+  return`<details class="det" data-det="${i}"><summary>تفاصيل للمصمم: درجات، تباين، تدرّج، تصدير</summary><div class="det-in">
+   <div><h4>درجات الأساسي (50–900)</h4>${scaleRow(P.scales.primary)}</div>
+   <div><h4>درجات الأكسنت</h4>${scaleRow(P.scales.accent)}</div>
+   <div><h4>مين ينفع يتكتب على مين</h4>${contrastTable(P)}<p class="hint" style="margin-top:6px">WCAG AA للنص العادي يحتاج 4.5:1، وAAA يحتاج 7:1. نسبة 3:1 تكفي للنص الكبير فقط (24px عادي أو 18.66px عريض تقريبًا) وللعناصر غير النصية مقابل الألوان المجاورة؛ لا تعني أن النص العادي مقروء.</p></div>
+   <div><h4>تدرّج مقترح</h4><div class="grad" style="background:linear-gradient(135deg,${P.primary.hex},${P.accent.hex})"></div>
+     <div class="exports" style="margin-top:8px"><button type="button" class="small" data-exp="grad" data-i="${i}">انسخ التدرّج CSS</button></div></div>
+   <div><h4>تصدير</h4><div class="exports">
+     <button type="button" class="small" data-exp="css" data-i="${i}">CSS (لايت + دارك)</button>
+     <button type="button" class="small" data-exp="tw" data-i="${i}">Tailwind</button>
+     <button type="button" class="small" data-exp="scss" data-i="${i}">SCSS</button>
+     <button type="button" class="small" data-exp="json" data-i="${i}">JSON</button>
+     <button type="button" class="small" data-exp="text" data-i="${i}">نص للبريزنتيشن</button></div></div>
+  </div></details>`;
+}
+
+/* ---------- palette card ---------- */
+function swatch(c){const cm=cmyk(c.c.rgb);
+  return`<button type="button" class="sw" data-hex="${c.c.hex}" aria-label="انسخ ${c.role} ${c.c.hex}">
+   <span class="role">${c.role}</span><span class="blk" style="background:${c.c.hex}"><em style="color:${contrast(c.c,WHITE)>contrast(c.c,{rgb:[12,12,12]})?'#fff':'#0C0C0C'}">${c.pct}٪</em></span>
+   <span class="nm">${nameOf(c.c)}</span><span class="hex">${c.c.hex}</span>
+   <span class="meta">RGB ${c.c.rgb.join(' ')}<br>CMYK تقريبي ${cm.join(' ')}</span></button>`}
+function tagOf(P){return P.kind==='m'?'<span class="tag m">قريب من الشائع</span>':P.kind==='b'?'<span class="tag b">مختلف عن الشائع</span>':'<span class="tag c">لون العميل</span>'}
+function card(P,i){
+  const locked=!!LOCKS[i];
+  return`<article class="pal ${P.kind==='b'?'isbreak':''} ${locked?'locked':''}" id="pal-${i}" aria-label="${esc(P.title)}">
+   <div class="pal-head"><div><h3>${esc(P.title)}</h3><div class="sub">${esc(P.sub)} · تناغم ${esc(P.harmonyName)}</div></div>
+     <div class="head-r">${tagOf(P)}${i<5?`<button type="button" class="small" data-lock="${i}" aria-pressed="${locked}">${locked?'مثبّتة':'ثبّت'}</button>`:''}</div></div>
+   <div class="swatches">${P.colors.map(swatch).join('')}</div>
+   <div><div class="ratio">${P.colors.map(c=>`<span style="background:${c.c.hex};width:${c.pct}%"></span>`).join('')}</div>
+     <div class="ratio-l"><span>توزيع مبدئي للمساحات — يتغير حسب الاستخدام</span></div></div>
+   <div class="body">
+     <div class="col">
+       <div class="formula"><span class="k">قولها للعميل بدل «أنا حاسس»</span><q>${esc(P.formula)}</q>
+         <div><button type="button" class="small" data-copytext="${i}">انسخ الجملة</button></div></div>
+       <ul class="reasons">${P.reasons.map(r=>`<li><b>${esc(r.k)}</b><span>${esc(r.t)}</span></li>`).join('')}</ul>
+       ${P.kind==='b'?`<div class="risk"><div class="r"><b>المخاطرة</b>${esc(P.risk)}</div><div class="f"><b>إزاي تنجّحه</b>${esc(P.fix)}</div></div>`:''}
+     </div>
+     <div class="col">${mockBlock(P,i)}
+       <div class="checks">${P.checks.map(c=>`<span class="ck ${c.note?'note':c.ok?'ok':'bad'}"><i>${c.note?'i':c.ok?'✓':'!'}</i>${esc(c.t)}</span>`).join('')}</div></div>
+   </div>
+   ${details(P,i)}
+   <div class="actions">
+     <button type="button" class="small" data-present="${i}">اعرضها على العميل</button>
+     <button type="button" class="small" data-png="${i}">صورة PNG</button>
+     <button type="button" class="small" data-fav="${i}">احفظ في المفضلة</button>
+     <button type="button" class="small" data-copyhex="${i}">انسخ الـ HEX</button></div>
+  </article>`}
+
+function clientBlock(){
+  const a=AN;if(!a)return'';
+  return`<div class="group-h"><h2>لون العميل</h2><p>هل اللون اللي العميل عايزه يمشي مع البريف؟</p></div>
+   <section class="client" aria-label="تحليل لون العميل">
+    <div class="client-top">
+      <div class="cmp"><div><span class="big" style="display:block;background:${a.c.hex}"></span><div class="lab">لون العميل<br><span class="hex">${a.c.hex}</span></div></div>
+      ${a.changed?`<span class="arrow">←</span><div><span class="big" style="display:block;background:${a.improved.hex}"></span><div class="lab">المقترح<br><span class="hex">${a.improved.hex}</span></div></div>`:''}</div>
+      <span class="verdict ${a.verdict.lvl}">${a.verdict.t}</span>
+    </div>
+    <ul class="items">${a.items.map(x=>`<li class="${x.lvl}"><i>${x.lvl==='ok'?'✓':x.lvl==='warn'?'!':'✗'}</i><b>${esc(x.k)}</b><span>${esc(x.t)}</span></li>`).join('')}</ul>
+    <div class="formula"><span class="k">الجملة اللي تقولها للعميل</span><q>${esc(a.say)}</q><div><button type="button" class="small" data-copysay="1">انسخ الجملة</button></div></div>
+   </section>
+   ${card(PALS[5],5)}`;
+}
+function favBlock(){
+  const f=getFavs();if(!f.length)return'';
+  return`<details class="favs" open><summary>المفضلة (${f.length})</summary><div class="fav-list">${f.map(x=>`<div class="fav">
+    <div class="strip">${x.colors.map(c=>`<span style="background:${c.hex}"></span>`).join('')}</div>
+    <div class="t">${esc(x.title)}<small>${esc(x.brief)}</small></div>
+    <div class="btns"><button type="button" class="small" data-favcopy="${x.id}">انسخ الـ HEX</button><button type="button" class="small" data-favdel="${x.id}">شيل</button></div></div>`).join('')}</div></details>`;
+}
+function render(){
+  const out=generate(st);AN=out.an;
+  PALS=out.P.map((p,i)=>i<5&&LOCKS[i]?LOCKS[i]:p);
+  const ind=IND[st.ind],co=CO[st.co];
+  const comps=st.comps.slice(0,st.compN);
+  $('#results').innerHTML=`${favBlock()}
+   <div class="summary"><span class="chip">${esc(brandName())}</span><span class="chip">${esc(ind.label)}</span><span class="chip">${esc(co.name)}</span><span class="chip">${esc(audDesc(st))}</span><span class="chip">${TIER[st.tier].name}</span>
+     ${st.vals.length?`<span class="chip">${st.vals.map(k=>VAL[k].n).join(' · ')}</span>`:''}${comps.length?`<span class="chip">المنافسين ${comps.map(c=>`<span class="dot" style="background:${c}"></span>`).join('')}</span>`:''}${st.seed?`<span class="chip">تنويعة ${st.seed+1}</span>`:''}</div>
+   <div class="group-h"><h2>٣ اقتراحات قريبة من الشائع</h2><p>بداية مألوفة للاختبار، وليست ضمانًا لفهم الجمهور أو تفضيله.</p></div>
+   ${PALS.slice(0,3).map((p,i)=>card(p,i)).join('')}
+   <div class="group-h break"><h2>٢ اقتراح مختلف عن الشائع</h2><p>اختبر وضوحه وتميّزه مع جمهورك قبل اعتماد الهوية.</p></div>
+   ${PALS.slice(3,5).map((p,i)=>card(p,i+3)).join('')}
+   ${clientBlock()}`;
+}
+
+/* ---------- copy & toast ---------- */
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,1800)}
+function copy(text,msg){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>toast(msg)).catch(()=>showText(text))}else showText(text);
+}
+function showText(text){openModal(`<div class="modal-h"><h3>انسخ من هنا</h3><button type="button" class="small" data-close>اقفل</button></div>
+  <textarea id="cbx" style="width:100%;min-height:200px;font-family:var(--mono);font-size:12px;direction:ltr;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);padding:10px">${esc(text)}</textarea>`);
+  const t=$('#cbx');t.focus();t.select()}
+const ROLE_EN=['bg','primary','secondary','accent','text'];
+function exportText(P,kind){
+  const L=P.variants.light,D=P.variants.dark,k=['bg','primary','secondary','accent','text'];
+  const sc=(name,arr)=>arr.map(s=>`  --brand-${name}-${s.step}: ${s.c.hex};`).join('\n');
+  if(kind==='css')return`:root{\n${k.map(x=>`  --brand-${x}: ${L[x].hex};`).join('\n')}\n${sc('primary',P.scales.primary)}\n${sc('accent',P.scales.accent)}\n}\n@media (prefers-color-scheme: dark){\n  :root{\n${k.map(x=>`    --brand-${x}: ${D[x].hex};`).join('\n')}\n  }\n}`;
+  if(kind==='scss')return k.map(x=>`$brand-${x}: ${L[x].hex};`).join('\n')+'\n'+k.map(x=>`$brand-${x}-dark: ${D[x].hex};`).join('\n');
+  if(kind==='tw'){const s=a=>'{ '+a.map(x=>`${x.step}: '${x.c.hex}'`).join(', ')+` , DEFAULT: '${a.find(x=>x.base).c.hex}' }`;
+    return`// tailwind.config.js\nmodule.exports = {\n  theme: { extend: { colors: { brand: {\n    bg: '${L.bg.hex}',\n    primary: ${s(P.scales.primary)},\n    secondary: '${L.secondary.hex}',\n    accent: ${s(P.scales.accent)},\n    text: '${L.text.hex}',\n  } } } }\n}`}
+  if(kind==='json')return JSON.stringify({brand:brandName(),palette:P.title,formula:P.formula,light:Object.fromEntries(k.map(x=>[x,L[x].hex])),dark:Object.fromEntries(k.map(x=>[x,D[x].hex])),primaryScale:Object.fromEntries(P.scales.primary.map(s=>[s.step,s.c.hex])),accentScale:Object.fromEntries(P.scales.accent.map(s=>[s.step,s.c.hex]))},null,2);
+  if(kind==='grad')return`background: linear-gradient(135deg, ${P.primary.hex}, ${P.accent.hex});`;
+  if(kind==='text')return`${P.title}\n${P.colors.map(c=>`${c.role}: ${nameOf(c.c)} ${c.c.hex}`).join('\n')}\n\n${P.formula}\n\n${P.reasons.slice(0,4).map(r=>`• ${r.t}`).join('\n')}`;
+  return P.colors.map(c=>`${c.role}: ${c.c.hex}`).join('\n');
+}
+
+/* ---------- modals ---------- */
+function openModal(html){const l=$('#layer');l.innerHTML=`<div class="modal" data-backdrop><div class="modal-in" role="dialog" aria-modal="true">${html}</div></div>`;const b=l.querySelector('[data-close]');if(b)b.focus()}
+function closeLayer(){$('#layer').innerHTML='';PRES=null}
+async function makePNG(P){
+  try{await Promise.all([document.fonts.load('800 60px Alexandria'),document.fonts.load('500 30px "IBM Plex Sans Arabic"'),document.fonts.load('500 24px "IBM Plex Mono"')])}catch(e){}
+  const W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  const V=P.variants[P.baseMode];x.fillStyle=V.bg.hex;x.fillRect(0,0,W,H);
+  x.direction='rtl';x.textAlign='right';x.fillStyle=V.text.hex;
+  x.font='800 66px Alexandria, sans-serif';x.fillText(brandName(),W-80,150);
+  x.font='500 32px "IBM Plex Sans Arabic", sans-serif';x.globalAlpha=.7;x.fillText(P.title+' · '+IND[st.ind].label+' · '+CO[st.co].name,W-80,206);x.globalAlpha=1;
+  const n=P.colors.length,gap=16,cw=(W-160-gap*(n-1))/n,top=260,bh=480;
+  P.colors.forEach((c,i)=>{const X=W-80-cw-(cw+gap)*i;x.fillStyle=c.c.hex;x.beginPath();x.roundRect?x.roundRect(X,top,cw,bh,22):x.rect(X,top,cw,bh);x.fill();
+    x.strokeStyle='rgba(127,127,127,.3)';x.lineWidth=2;x.stroke();
+    x.fillStyle=V.text.hex;x.textAlign='right';x.font='600 24px "IBM Plex Sans Arabic", sans-serif';x.globalAlpha=.65;x.fillText(c.role,X+cw,top+bh+44);x.globalAlpha=1;
+    x.font='700 28px Alexandria, sans-serif';wrap(x,nameOf(c.c),X+cw,top+bh+86,cw,36,2);
+    x.direction='ltr';x.textAlign='right';x.font='500 24px "IBM Plex Mono", monospace';x.fillText(c.c.hex,X+cw,top+bh+170);x.direction='rtl'});
+  x.fillStyle=V.primary.hex;x.fillRect(W-80,940,-8,250);
+  x.fillStyle=V.text.hex;x.font='500 33px Alexandria, sans-serif';x.textAlign='right';wrap(x,'«'+P.formula+'»',W-104,976,W-200,54,5);
+  x.font='500 22px "IBM Plex Sans Arabic", sans-serif';x.globalAlpha=.6;x.fillText('مختبر الألوان · yrstudio.art',W-80,H-60);x.globalAlpha=1;
+  return cv.toDataURL('image/png');
+}
+function wrap(x,t,X,Y,w,lh,max){const ws=t.split(' '),lines=[];let line='';
+  for(const wd of ws){const test=line?line+' '+wd:wd;if(x.measureText(test).width>w&&line){lines.push(line);line=wd}else line=test}
+  if(line)lines.push(line);
+  lines.slice(0,max).forEach((ln,i)=>{if(i===max-1&&lines.length>max){while(x.measureText(ln+'…').width>w&&ln.length>3)ln=ln.slice(0,-1);ln+='…'}x.fillText(ln,X,Y+i*lh)})}
+let PRES=null;
+function present(i){
+  PRES=i;const P=PALS[i],V=P.variants[P.baseMode],ok=PALS.length;
+  UI['p'+i]={mock:'social',mode:P.baseMode};
+  $('#layer').innerHTML=`<div class="pres" role="dialog" aria-modal="true" aria-label="عرض للعميل" style="background:${V.bg.hex};color:${V.text.hex}" dir="rtl">
+   <div class="pres-bar"><span>${esc(brandName())} · ${i+1} من ${ok}</span><div class="ctl">
+     <button type="button" data-pnav="-1">اللي قبلها</button><button type="button" data-pnav="1">اللي بعدها</button><button type="button" data-fs>شاشة كاملة</button><button type="button" data-close>اقفل</button></div></div>
+   <div><h2>${esc(P.title)}</h2><div class="psub">${esc(P.sub)}</div></div>
+   <div class="pres-sw">${P.colors.map(c=>`<div><span class="b" style="background:${c.c.hex}"></span><b>${nameOf(c.c)}</b><small>${c.c.hex}</small></div>`).join('')}</div>
+   <div class="pres-grid"><div><q>${esc(P.formula)}</q><ul>${P.reasons.filter(r=>['الأساسي','التناغم','لمسة محلية','السوق','القيم','المنافس','الفكرة'].includes(r.k)).slice(0,4).map(r=>`<li>${esc(r.t)}</li>`).join('')}</ul></div>
+     <div>${mockHTML(P,'p'+i)}</div></div></div>`;
+  $('#layer').querySelector('[data-close]').focus();
+}
+function favSnapshot(P){return{id:Date.now(),title:`${brandName()} · ${P.title}`,brief:`${IND[st.ind].label} · ${CO[st.co].name} · ${TIER[st.tier].name}`,colors:P.colors.map(c=>({role:c.role,hex:c.c.hex,name:nameOf(c.c)})),formula:P.formula}}
+
+/* ---------- events ---------- */
+let raf;const schedule=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{save();render()})};
+$('#brief').addEventListener('input',()=>{fromForm();schedule()});
+$('#brief').addEventListener('submit',e=>e.preventDefault());
+document.addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.matches('[data-backdrop]')||t.closest('[data-close]')){closeLayer();return}
+  const pre=t.closest('[data-preset]');if(pre){st={...BASE,...PRESETS[+pre.dataset.preset].s};LOCKS={};UI={};toForm();save();render();return}
+  if(t.closest('#shuffle')){st.seed++;save();render();toast(Object.keys(LOCKS).length?'تنويعة جديدة، والمثبّت فضل زي ما هو':'تنويعة جديدة');return}
+  if(t.closest('#unlock')){LOCKS={};render();toast('اتفك التثبيت');return}
+  const sw=t.closest('.sw,.tint');if(sw){copy(sw.dataset.hex,'اتنسخ '+sw.dataset.hex);return}
+  const mo=t.closest('[data-mock]');if(mo){const i=+mo.dataset.i;UI[i].mock=mo.dataset.mock;rerenderMock(i);return}
+  const md=t.closest('[data-mode]');if(md){const i=+md.dataset.mode;UI[i].mode=UI[i].mode==='dark'?'light':'dark';rerenderMock(i);return}
+  const lk=t.closest('[data-lock]');if(lk){const i=+lk.dataset.lock;if(LOCKS[i])delete LOCKS[i];else LOCKS[i]=PALS[i];render();toast(LOCKS[i]?'اتثبّتت: مش هتتغير مع التنويعات':'اتفك تثبيتها');return}
+  const h=t.closest('[data-copyhex]');if(h){copy(exportText(PALS[+h.dataset.copyhex],'hex'),'اتنسخت ألوان الباليتة');return}
+  const ex=t.closest('[data-exp]');if(ex){copy(exportText(PALS[+ex.dataset.i],ex.dataset.exp),'اتنسخ');return}
+  const ct=t.closest('[data-copytext]');if(ct){copy(PALS[+ct.dataset.copytext].formula,'اتنسخت الجملة');return}
+  if(t.closest('[data-copysay]')){copy(AN.say,'اتنسخت الجملة');return}
+  const fv=t.closest('[data-fav]');if(fv){const f=getFavs();f.unshift(favSnapshot(PALS[+fv.dataset.fav]));if(setFavs(f.slice(0,30))){render();toast('اتحفظت في المفضلة')}else toast('المتصفح ده مش بيسمح بالحفظ');return}
+  const fd=t.closest('[data-favdel]');if(fd){setFavs(getFavs().filter(x=>String(x.id)!==fd.dataset.favdel));render();return}
+  const fc=t.closest('[data-favcopy]');if(fc){const x=getFavs().find(x=>String(x.id)===fc.dataset.favcopy);if(x)copy(x.colors.map(c=>`${c.role}: ${c.hex}`).join('\n'),'اتنسخت');return}
+  const pg=t.closest('[data-png]');if(pg){openModal(`<div class="modal-h"><h3>صورة الباليتة</h3><button type="button" class="small" data-close>اقفل</button></div><p class="hint">بنجهّز الصورة…</p>`);
+    const url=await makePNG(PALS[+pg.dataset.png]);const m=$('#layer .modal-in');if(m)m.innerHTML=`<div class="modal-h"><h3>صورة الباليتة 1080×1350</h3><button type="button" class="small" data-close>اقفل</button></div><img src="${url}" alt="صورة الباليتة"><p class="hint">على الموبايل: اضغط مطوّل على الصورة واختار «حفظ». على الكمبيوتر: كليك يمين ← Save image. مقاسها مناسب لبوست إنستجرام أو سلايد في البريزنتيشن.</p>`;return}
+  const pr=t.closest('[data-present]');if(pr){present(+pr.dataset.present);return}
+  const pn=t.closest('[data-pnav]');if(pn&&PRES!==null){present((PRES+ +pn.dataset.pnav+PALS.length)%PALS.length);return}
+  if(t.closest('[data-fs]')){const el=document.documentElement;if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});else if(el.requestFullscreen)el.requestFullscreen().catch(()=>toast('الشاشة الكاملة مش متاحة هنا'));return}
+});
+document.addEventListener('keydown',e=>{
+  if(!$('#layer').innerHTML)return;
+  if(e.key==='Escape')closeLayer();
+  if(PRES!==null&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))present((PRES+(e.key==='ArrowLeft'?1:-1)+PALS.length)%PALS.length);
+});
+function rerenderMock(i){const P=PALS[i],el=$('#stage-'+i);if(!el)return;el.innerHTML=mockHTML(P,i);
+  const tabs=el.previousElementSibling;tabs.querySelectorAll('[data-mock]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mock===UI[i].mock));
+  const m=tabs.querySelector('[data-mode]');m.setAttribute('aria-pressed',UI[i].mode==='dark');m.textContent=UI[i].mode==='dark'?'دارك':'لايت'}
 
 setup();load();toForm();render();
 
