@@ -85,6 +85,15 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
   .feedback-actions{align-items:flex-start;flex-direction:column;gap:8px}
 }
 
+/* Compact mobile palette browsing: keep the brief and deep rationale one tap away. */
+.brief-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brief-top h2{font-size:18px}
+.brief-toggle{display:none;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:7px 12px;border-radius:999px;font-size:12.5px}
+.brief-summary{display:none}
+.brief-fields{display:flex;flex-direction:column;gap:14px}
+.pal-extra{display:flex;flex-direction:column;gap:16px}
+.pal-more{display:none;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;padding:10px 12px;text-align:start;border-radius:10px}
+.pal-more span:last-child{font-size:18px;color:var(--red);line-height:1}
 .app{display:grid;grid-template-columns:350px minmax(0,1fr);gap:20px;align-items:start}
 .app[hidden]{display:none}
 @media (max-width:960px){.app{grid-template-columns:minmax(0,1fr)}}
@@ -292,6 +301,37 @@ details.det>summary{cursor:pointer;font-weight:600;font-size:14px}
 footer{display:flex;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
 footer a{color:var(--ink);font-weight:600}
 .toast{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:10px;font-size:14px;z-index:40;max-width:calc(100% - 32px)}
+@media(max-width:600px){
+  .app{gap:14px}
+  .brief{padding:13px;gap:12px}
+  .brief-toggle{display:inline-flex}
+  .brief-summary{display:block;color:var(--muted);font-size:11px;font-weight:500;max-width:45vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .brief-fields[hidden]{display:none}
+  .results{gap:12px}
+  .summary{gap:5px}
+  .chip{font-size:11px;padding:3px 8px}
+  .group-h{gap:4px;margin-top:4px}
+  .group-h h2{font-size:18px}
+  .group-h p{font-size:12px;line-height:1.65}
+  .pal{padding:12px;gap:11px;border-radius:13px}
+  .pal-head{gap:7px}
+  .pal-head h3{font-size:16px}
+  .pal-head .sub{font-size:11px;line-height:1.5}
+  .head-r{gap:4px}
+  .tag{font-size:10px;padding:3px 7px}
+  .head-r button{font-size:11px;padding:5px 8px}
+  .swatches{gap:5px}
+  .sw .blk{height:48px;border-radius:7px}
+  .sw .role{font-size:10px}
+  .sw .nm{font-size:10.5px}
+  .sw .hex{font-size:10px}
+  .ratio{height:8px}
+  .ratio-l{font-size:10.5px;line-height:1.5}
+  .pal-more{display:flex}
+  .pal-extra{display:none}
+  .pal.expanded .pal-extra{display:flex}
+  .pal.expanded .pal-more span:last-child{transform:rotate(45deg)}
+}
 @media (prefers-reduced-motion:no-preference){.pal{animation:rise .3s ease both}@keyframes rise{from{transform:translateY(5px)}to{transform:none}}}
 </style>
 
@@ -318,7 +358,10 @@ footer a{color:var(--ink);font-weight:600}
 
   <div class="app" id="palettePanel" role="tabpanel" aria-labelledby="paletteTab">
     <form class="brief" id="brief" autocomplete="off">
-      <h2>البريف</h2>
+      <div class="brief-top"><div><h2>البريف</h2><span class="brief-summary" id="briefSummary"></span></div>
+        <button type="button" class="brief-toggle small" id="briefToggle" aria-expanded="true" aria-controls="briefFields"><span>تعديل البريف</span><span aria-hidden="true">⌄</span></button>
+      </div>
+      <div class="brief-fields" id="briefFields">
       <div class="field"><span class="lbl">ابدأ من مثال</span><div class="presets" id="presets"></div></div>
       <div class="field"><label for="brand">اسم البراند</label><input type="text" id="brand" maxlength="24"></div>
       <div class="row2">
@@ -355,6 +398,7 @@ footer a{color:var(--ink);font-weight:600}
         <button type="button" id="unlock">فك التثبيت</button>
       </div>
       <p class="hint">النتايج بتتغير مع كل تعديل. «تنويعة تانية» بتطلّع درجات مختلفة لنفس البريف، والباليتات المثبّتة بتفضل زي ما هي.</p>
+      </div>
     </form>
     <main class="results" id="results" aria-live="polite"></main>
   </div>
@@ -1049,6 +1093,8 @@ function card(P,i){
    <div class="swatches">${P.colors.map(swatch).join('')}</div>
    <div><div class="ratio">${P.colors.map(c=>`<span style="background:${c.c.hex};width:${c.pct}%"></span>`).join('')}</div>
      <div class="ratio-l"><span>توزيع مبدئي للمساحات — يتغير حسب الاستخدام</span></div></div>
+   <button type="button" class="pal-more" data-card-more="${i}" aria-expanded="false" aria-controls="cardMore-${i}"><span>عرض السبب والمعاينة وفحوص التباين</span><span aria-hidden="true">＋</span></button>
+   <div class="pal-extra" id="cardMore-${i}">
    <div class="body">
      <div class="col">
        <div class="formula"><span class="k">قولها للعميل بدل «أنا حاسس»</span><q>${esc(P.formula)}</q>
@@ -1065,6 +1111,7 @@ function card(P,i){
      <button type="button" class="small" data-png="${i}">صورة PNG</button>
      <button type="button" class="small" data-fav="${i}">احفظ في المفضلة</button>
      <button type="button" class="small" data-copyhex="${i}">انسخ الـ HEX</button></div>
+   </div>
   </article>`}
 
 function clientBlock(){
@@ -1092,6 +1139,7 @@ function render(){
   const out=generate(st);AN=out.an;
   PALS=out.P.map((p,i)=>i<5&&LOCKS[i]?LOCKS[i]:p);
   const ind=IND[st.ind],co=CO[st.co];
+  const briefSummary=$('#briefSummary');if(briefSummary)briefSummary.textContent=`${brandName()} · ${ind.label} · ${co.name}`;
   const comps=st.comps.slice(0,st.compN);
   $('#results').innerHTML=`${favBlock()}
    <div class="summary"><span class="chip">${esc(brandName())}</span><span class="chip">${esc(ind.label)}</span><span class="chip">${esc(co.name)}</span><span class="chip">${esc(audDesc(st))}</span><span class="chip">${TIER[st.tier].name}</span>
@@ -1218,6 +1266,13 @@ $('#brief').addEventListener('input',()=>{fromForm();schedule()});
 $('#brief').addEventListener('submit',e=>e.preventDefault());
 document.addEventListener('click',async e=>{
   const t=e.target;
+  const cardMore=t.closest('[data-card-more]');if(cardMore){
+    const current=cardMore.closest('.pal'),opening=!current.classList.contains('expanded');
+    document.querySelectorAll('.pal.expanded').forEach(p=>{p.classList.remove('expanded');const b=p.querySelector('[data-card-more]');if(b){b.setAttribute('aria-expanded','false');b.firstElementChild.textContent='عرض السبب والمعاينة وفحوص التباين'}});
+    if(opening){current.classList.add('expanded');cardMore.setAttribute('aria-expanded','true');cardMore.firstElementChild.textContent='إخفاء التفاصيل'}
+    return;
+  }
+  if(t.closest('#briefToggle')){const fields=$('#briefFields'),button=$('#briefToggle'),collapsed=!fields.hidden;fields.hidden=collapsed;button.setAttribute('aria-expanded',String(!collapsed));button.firstElementChild.textContent=collapsed?'تعديل البريف':'إخفاء البريف';return}
   if(t.matches('[data-backdrop]')||t.closest('[data-close]')){closeLayer();return}
   const pre=t.closest('[data-preset]');if(pre){st={...BASE,...PRESETS[+pre.dataset.preset].s};LOCKS={};UI={};toForm();save();render();return}
   if(t.closest('#shuffle')){st.seed++;save();render();toast(Object.keys(LOCKS).length?'تنويعة جديدة، والمثبّت فضل زي ما هو':'تنويعة جديدة');return}
@@ -1249,6 +1304,7 @@ function rerenderMock(i){const P=PALS[i],el=$('#stage-'+i);if(!el)return;el.inne
   const m=tabs.querySelector('[data-mode]');m.setAttribute('aria-pressed',UI[i].mode==='dark');m.textContent=UI[i].mode==='dark'?'دارك':'لايت'}
 
 setup();load();toForm();render();
+if(window.matchMedia('(max-width:600px)').matches){$('#briefFields').hidden=true;$('#briefToggle').setAttribute('aria-expanded','false')}
 
 </script>
 
