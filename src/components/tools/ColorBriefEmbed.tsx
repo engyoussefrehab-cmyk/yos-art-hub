@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLang } from "@/i18n/use-lang";
 
-const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261010-mobile-palette";
+const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261010-mobile-carousel";
 
 export function ColorBriefEmbed() {
   const { lang } = useLang();

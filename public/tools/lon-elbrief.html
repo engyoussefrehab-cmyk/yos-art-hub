@@ -94,6 +94,9 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
 .pal-extra{display:flex;flex-direction:column;gap:16px}
 .pal-more{display:none;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;padding:10px 12px;text-align:start;border-radius:10px}
 .pal-more span:last-child{font-size:18px;color:var(--red);line-height:1}
+.palette-nav{display:none;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 8px}
+.palette-nav button{min-height:40px}
+.palette-nav span{font-size:12px;color:var(--muted);font-weight:600}
 .app{display:grid;grid-template-columns:350px minmax(0,1fr);gap:20px;align-items:start}
 .app[hidden]{display:none}
 @media (max-width:960px){.app{grid-template-columns:minmax(0,1fr)}}
@@ -328,6 +331,8 @@ footer a{color:var(--ink);font-weight:600}
   .ratio{height:8px}
   .ratio-l{font-size:10.5px;line-height:1.5}
   .pal-more{display:flex}
+  .palette-nav{display:flex}
+  .pal[data-palette-item]:not(.mobile-active){display:none}
   .pal-extra{display:none}
   .pal.expanded .pal-extra{display:flex}
   .pal.expanded .pal-more span:last-child{transform:rotate(45deg)}
@@ -1087,7 +1092,8 @@ function swatch(c){const cm=cmyk(c.c.rgb);
 function tagOf(P){return P.kind==='m'?'<span class="tag m">قريب من الشائع</span>':P.kind==='b'?'<span class="tag b">مختلف عن الشائع</span>':'<span class="tag c">لون العميل</span>'}
 function card(P,i){
   const locked=!!LOCKS[i];
-  return`<article class="pal ${P.kind==='b'?'isbreak':''} ${locked?'locked':''}" id="pal-${i}" aria-label="${esc(P.title)}">
+  const set=i<3?'common':'different',active=i===0||i===3;
+  return`<article class="pal ${P.kind==='b'?'isbreak':''} ${locked?'locked':''} ${active?'mobile-active':''}" data-palette-item="${set}" id="pal-${i}" aria-label="${esc(P.title)}">
    <div class="pal-head"><div><h3>${esc(P.title)}</h3><div class="sub">${esc(P.sub)} · تناغم ${esc(P.harmonyName)}</div></div>
      <div class="head-r">${tagOf(P)}${i<5?`<button type="button" class="small" data-lock="${i}" aria-pressed="${locked}">${locked?'مثبّتة':'ثبّت'}</button>`:''}</div></div>
    <div class="swatches">${P.colors.map(swatch).join('')}</div>
@@ -1145,11 +1151,18 @@ function render(){
    <div class="summary"><span class="chip">${esc(brandName())}</span><span class="chip">${esc(ind.label)}</span><span class="chip">${esc(co.name)}</span><span class="chip">${esc(audDesc(st))}</span><span class="chip">${TIER[st.tier].name}</span>
      ${st.vals.length?`<span class="chip">${st.vals.map(k=>VAL[k].n).join(' · ')}</span>`:''}${comps.length?`<span class="chip">المنافسين ${comps.map(c=>`<span class="dot" style="background:${c}"></span>`).join('')}</span>`:''}${st.seed?`<span class="chip">تنويعة ${st.seed+1}</span>`:''}</div>
    <div class="group-h"><h2>٣ اقتراحات قريبة من الشائع</h2><p>من بين تنويعات لكل اتجاه، رتّبناها لتحسين تباين النص والأزرار ووضوح الألوان. اختبر الأنسب مع جمهورك.</p></div>
+   ${paletteNav('common',3)}
    ${PALS.slice(0,3).map((p,i)=>card(p,i)).join('')}
    <div class="group-h break"><h2>٢ اقتراح مختلف عن الشائع</h2><p>ترتيب التباين يساعد على القراءة، لكنه لا يثبت أن الاتجاه مناسب لجمهورك؛ اختبره قبل اعتماد الهوية.</p></div>
+   ${paletteNav('different',2)}
    ${PALS.slice(3,5).map((p,i)=>card(p,i+3)).join('')}
    ${clientBlock()}`;
 }
+function paletteNav(set,total){return`<div class="palette-nav" data-palette-nav="${set}" aria-label="التنقل بين الاقتراحات">
+  <button type="button" class="small" data-palette-step="-1" data-set="${set}" disabled>السابق</button>
+  <span data-slide-position aria-live="polite">اقتراح ١ من ${total}</span>
+  <button type="button" class="small" data-palette-step="1" data-set="${set}">التالي</button>
+ </div>`}
 
 /* ---------- copy & toast ---------- */
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,1800)}
@@ -1273,6 +1286,14 @@ document.addEventListener('click',async e=>{
     return;
   }
   if(t.closest('#briefToggle')){const fields=$('#briefFields'),button=$('#briefToggle'),collapsed=!fields.hidden;fields.hidden=collapsed;button.setAttribute('aria-expanded',String(!collapsed));button.firstElementChild.textContent=collapsed?'تعديل البريف':'إخفاء البريف';return}
+  const slide=t.closest('[data-palette-step]');if(slide){
+    const set=slide.dataset.set,nav=document.querySelector(`[data-palette-nav="${set}"]`),cards=[...document.querySelectorAll(`.pal[data-palette-item="${set}"]`)];
+    const current=cards.findIndex(p=>p.classList.contains('mobile-active')),next=Math.max(0,Math.min(cards.length-1,current+Number(slide.dataset.paletteStep)));
+    if(next!==current){cards[current]?.classList.remove('mobile-active','expanded');const oldMore=cards[current]?.querySelector('[data-card-more]');if(oldMore){oldMore.setAttribute('aria-expanded','false');oldMore.firstElementChild.textContent='عرض السبب والمعاينة وفحوص التباين'}cards[next]?.classList.add('mobile-active');}
+    nav.querySelector('[data-slide-position]').textContent=`اقتراح ${['١','٢','٣'][next]||'١'} من ${cards.length}`;
+    nav.querySelector('[data-palette-step="-1"]').disabled=next===0;nav.querySelector('[data-palette-step="1"]').disabled=next===cards.length-1;
+    return;
+  }
   if(t.matches('[data-backdrop]')||t.closest('[data-close]')){closeLayer();return}
   const pre=t.closest('[data-preset]');if(pre){st={...BASE,...PRESETS[+pre.dataset.preset].s};LOCKS={};UI={};toForm();save();render();return}
   if(t.closest('#shuffle')){st.seed++;save();render();toast(Object.keys(LOCKS).length?'تنويعة جديدة، والمثبّت فضل زي ما هو':'تنويعة جديدة');return}
