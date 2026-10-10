@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useLang } from "@/i18n/use-lang";
 
+const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261010-contrast";
+
 export function ColorBriefEmbed() {
   const { lang } = useLang();
   const frameRef = useRef<HTMLIFrameElement>(null);
@@ -68,7 +70,7 @@ export function ColorBriefEmbed() {
       <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-[0_20px_80px_-48px_rgba(0,0,0,.45)]">
         <iframe
           ref={frameRef}
-          src="/tools/lon-elbrief.html"
+          src={COLOR_TOOL_SRC}
           title={isAr ? "مختبر الألوان لاختيار لوحات لونية" : "Color Palette Studio"}
           className="block min-h-[calc(100svh-8rem)] w-full border-0"
           style={{ height: "1200px" }}
