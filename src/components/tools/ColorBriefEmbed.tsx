@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLang } from "@/i18n/use-lang";
 
-const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261010-feedback2";
+const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261010-feedback3";
 
 export function ColorBriefEmbed() {
   const { lang } = useLang();
@@ -13,6 +13,9 @@ export function ColorBriefEmbed() {
     if (!frame) return;
 
     let contentObserver: ResizeObserver | undefined;
+    let contentMutations: MutationObserver | undefined;
+    let resizeFrameRequest = 0;
+    let frameWindow: Window | null = null;
     const syncTheme = () => {
       const frameDocument = frame.contentDocument;
       if (!frameDocument?.documentElement) return;
@@ -21,32 +24,53 @@ export function ColorBriefEmbed() {
     const resizeFrame = () => {
       const frameDocument = frame.contentDocument;
       const frameBody = frameDocument?.body;
-      const frameRoot = frameDocument?.documentElement;
-      if (!frameRoot || !frameBody) return;
-      frame.style.height = `${Math.max(frameRoot.scrollHeight, frameBody.scrollHeight)}px`;
+      const content = frameDocument?.querySelector<HTMLElement>(".wrap");
+      if (!frameDocument?.documentElement || !frameBody || !content) return;
+
+      // Measure the tool's content wrapper instead of document.scrollHeight.
+      // The latter gets stuck at the old iframe height after switching from
+      // the long palette results to the much shorter feedback form.
+      const bodyStyle = frameDocument.defaultView?.getComputedStyle(frameBody);
+      const bottomPadding = Number.parseFloat(bodyStyle?.paddingBottom || "0") || 0;
+      const contentBottom = content.getBoundingClientRect().bottom + (frameDocument.defaultView?.scrollY || 0);
+      const nextHeight = Math.ceil(contentBottom + bottomPadding);
+      if (frame.style.height !== `${nextHeight}px`) frame.style.height = `${nextHeight}px`;
+    };
+    const scheduleResize = () => {
+      cancelAnimationFrame(resizeFrameRequest);
+      resizeFrameRequest = requestAnimationFrame(resizeFrame);
     };
     const handleFrameLoad = () => {
       syncTheme();
-      resizeFrame();
       const frameDocument = frame.contentDocument;
-      if (!frameDocument?.body || !frameDocument.documentElement) return;
+      if (!frameDocument?.body || !frameDocument.documentElement || !frameDocument.defaultView) return;
       contentObserver?.disconnect();
+      contentMutations?.disconnect();
+      frameWindow?.removeEventListener("resize", scheduleResize);
+      frameWindow = frameDocument.defaultView;
       contentObserver = new ResizeObserver(resizeFrame);
-      contentObserver.observe(frameDocument.body);
-      contentObserver.observe(frameDocument.documentElement);
-      frame.contentWindow?.addEventListener("resize", resizeFrame);
+      const content = frameDocument.querySelector<HTMLElement>(".wrap");
+      if (content) {
+        contentObserver.observe(content);
+        contentMutations = new MutationObserver(scheduleResize);
+        contentMutations.observe(content, { attributes: true, childList: true, subtree: true, attributeFilter: ["hidden"] });
+      }
+      frameWindow.addEventListener("resize", scheduleResize);
+      scheduleResize();
     };
 
     frame.addEventListener("load", handleFrameLoad);
     const observer = new MutationObserver(syncTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     syncTheme();
-    resizeFrame();
+    scheduleResize();
 
     return () => {
       frame.removeEventListener("load", handleFrameLoad);
-      frame.contentWindow?.removeEventListener("resize", resizeFrame);
+      frameWindow?.removeEventListener("resize", scheduleResize);
       contentObserver?.disconnect();
+      contentMutations?.disconnect();
+      cancelAnimationFrame(resizeFrameRequest);
       observer.disconnect();
     };
   }, []);
