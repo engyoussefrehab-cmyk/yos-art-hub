@@ -1197,16 +1197,16 @@ function exportText(P,kind){
 }
 function makeSVG(P){
   const W=1600,H=1000,pad=88,gap=22,cardW=(W-pad*2-gap*4)/5,cardY=212,cardH=570;
-  const V=P.variants[P.baseMode],rtlText=(x,y,value,size,weight,color=V.text.hex,opacity=1)=>`<text x="${x}" y="${y}" text-anchor="end" direction="rtl" font-family="Alexandria, 'IBM Plex Sans Arabic', Arial, sans-serif" font-size="${size}" font-weight="${weight}" fill="${color}" opacity="${opacity}">${esc(value)}</text>`;
+  const V=P.variants[P.baseMode],rtlText=(x,y,value,size,weight,color=V.text.hex,opacity=1)=>`<text x="${x}" y="${y}" text-anchor="end" direction="rtl" font-family="Alexandria, 'IBM Plex Sans Arabic', Arial, sans-serif" font-size="${size}" font-weight="${weight}" fill="${color}" opacity="${opacity}">${esc(value)}</text>`,rtlCentered=(x,y,value,size,weight,color=V.text.hex,opacity=1)=>`<text x="${x}" y="${y}" text-anchor="middle" direction="rtl" font-family="Alexandria, 'IBM Plex Sans Arabic', Arial, sans-serif" font-size="${size}" font-weight="${weight}" fill="${color}" opacity="${opacity}">${esc(value)}</text>`;
   const cards=P.colors.map((c,i)=>{
-    const x=W-pad-cardW-i*(cardW+gap),colorY=cardY+28,colorH=300;
+    const x=W-pad-cardW-i*(cardW+gap),center=x+cardW/2,colorY=cardY+28,colorH=300;
     return`<g id="color-${i+1}" aria-label="${esc(c.role)} ${esc(c.c.hex)}">
       <rect x="${x}" y="${cardY}" width="${cardW}" height="${cardH}" rx="20" fill="${V.bg.hex}" stroke="${V.text.hex}" stroke-opacity=".18" stroke-width="2"/>
       <rect x="${x+20}" y="${colorY}" width="${cardW-40}" height="${colorH}" rx="14" fill="${c.c.hex}"/>
-      ${rtlText(x+cardW-24,cardY+colorH+80,c.role,22,700,V.text.hex,.7)}
-      ${rtlText(x+cardW-24,cardY+colorH+126,nameOf(c.c),27,700)}
-      <text x="${x+cardW-24}" y="${cardY+colorH+174}" text-anchor="end" direction="ltr" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="25" fill="${V.text.hex}">${esc(c.c.hex)}</text>
-      ${rtlText(x+cardW-24,cardY+colorH+224,`نسبة مقترحة ${c.pct}٪`,18,500,V.text.hex,.7)}
+      ${rtlCentered(center,cardY+colorH+80,c.role,22,700,V.text.hex,.7)}
+      ${rtlCentered(center,cardY+colorH+126,nameOf(c.c),25,700)}
+      <text x="${center}" y="${cardY+colorH+174}" text-anchor="middle" direction="ltr" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="23" fill="${V.text.hex}">${esc(c.c.hex)}</text>
+      ${rtlCentered(center,cardY+colorH+224,`نسبة مقترحة ${c.pct}٪`,17,500,V.text.hex,.7)}
     </g>`;
   }).join('');
   let barX=pad;const barY=832,barW=W-pad*2,barH=18;
