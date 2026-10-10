@@ -98,6 +98,7 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
 .palette-nav button{min-height:40px}
 .palette-nav span{font-size:12px;color:var(--muted);font-weight:600}
 .color-metrics{display:none}
+.pal-download{width:100%;min-height:42px;margin-top:4px}
 .app{display:grid;grid-template-columns:350px minmax(0,1fr);gap:20px;align-items:start}
 .app[hidden]{display:none}
 @media (max-width:960px){.app{grid-template-columns:minmax(0,1fr)}}
@@ -1106,6 +1107,7 @@ function card(P,i){
    <div class="swatches">${P.colors.map(swatch).join('')}</div>
    <div><div class="ratio">${P.colors.map(c=>`<span style="background:${c.c.hex};width:${c.pct}%"></span>`).join('')}</div>
      <div class="ratio-l"><span>توزيع مبدئي للمساحات — يتغير حسب الاستخدام</span></div></div>
+   <button type="button" class="small pal-download" data-svg="${i}" aria-label="تحميل لوحة الألوان SVG لـ Illustrator">تحميل SVG لـ Illustrator</button>
    <button type="button" class="pal-more" data-card-more="${i}" aria-expanded="false" aria-controls="cardMore-${i}"><span>عرض السبب والمعاينة وفحوص التباين</span><span aria-hidden="true">＋</span></button>
    <div class="pal-extra" id="cardMore-${i}">
    <div class="color-metrics"><h4>بيانات الألوان للمصمم</h4><div class="color-metrics-list">${P.colors.map(c=>`<div class="color-metrics-row"><b>${esc(c.role)} · ${c.c.hex}</b><span>RGB ${c.c.rgb.join(' ')} · CMYK ${cmyk(c.c.rgb).join(' ')}</span></div>`).join('')}</div></div>
@@ -1192,6 +1194,41 @@ function exportText(P,kind){
   if(kind==='grad')return`background: linear-gradient(135deg, ${P.primary.hex}, ${P.accent.hex});`;
   if(kind==='text')return`${P.title}\n${P.colors.map(c=>`${c.role}: ${nameOf(c.c)} ${c.c.hex}`).join('\n')}\n\n${P.formula}\n\n${P.reasons.slice(0,4).map(r=>`• ${r.t}`).join('\n')}`;
   return P.colors.map(c=>`${c.role}: ${c.c.hex}`).join('\n');
+}
+function makeSVG(P){
+  const W=1600,H=1000,pad=88,gap=22,cardW=(W-pad*2-gap*4)/5,cardY=212,cardH=570;
+  const V=P.variants[P.baseMode],rtlText=(x,y,value,size,weight,color=V.text.hex,opacity=1)=>`<text x="${x}" y="${y}" text-anchor="end" direction="rtl" font-family="Alexandria, 'IBM Plex Sans Arabic', Arial, sans-serif" font-size="${size}" font-weight="${weight}" fill="${color}" opacity="${opacity}">${esc(value)}</text>`;
+  const cards=P.colors.map((c,i)=>{
+    const x=W-pad-cardW-i*(cardW+gap),colorY=cardY+28,colorH=300;
+    return`<g id="color-${i+1}" aria-label="${esc(c.role)} ${esc(c.c.hex)}">
+      <rect x="${x}" y="${cardY}" width="${cardW}" height="${cardH}" rx="20" fill="${V.bg.hex}" stroke="${V.text.hex}" stroke-opacity=".18" stroke-width="2"/>
+      <rect x="${x+20}" y="${colorY}" width="${cardW-40}" height="${colorH}" rx="14" fill="${c.c.hex}"/>
+      ${rtlText(x+cardW-24,cardY+colorH+80,c.role,22,700,V.text.hex,.7)}
+      ${rtlText(x+cardW-24,cardY+colorH+126,nameOf(c.c),27,700)}
+      <text x="${x+cardW-24}" y="${cardY+colorH+174}" text-anchor="end" direction="ltr" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="25" fill="${V.text.hex}">${esc(c.c.hex)}</text>
+      ${rtlText(x+cardW-24,cardY+colorH+224,`نسبة مقترحة ${c.pct}٪`,18,500,V.text.hex,.7)}
+    </g>`;
+  }).join('');
+  let barX=pad;const barY=832,barW=W-pad*2,barH=18;
+  const bar=P.colors.map(c=>{const width=barW*c.pct/100,part=`<rect x="${barX}" y="${barY}" width="${width}" height="${barH}" fill="${c.c.hex}"/>`;barX+=width;return part}).join('');
+  return`<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+  <title id="title">${esc(brandName())} — ${esc(P.title)}</title>
+  <desc id="description">لوحة ألوان قابلة للتحرير في Adobe Illustrator. تتضمن أدوار الألوان وأسمائها وأكواد HEX ونسب الاستخدام المقترحة.</desc>
+  <rect width="1600" height="1000" fill="${V.bg.hex}"/>
+  ${rtlText(W-pad,94,brandName(),28,600,V.text.hex,.7)}
+  ${rtlText(W-pad,160,P.title,48,800)}
+  ${rtlText(pad+500,158,`${IND[st.ind].label} · ${CO[st.co].name}`,21,500,V.text.hex,.7)}
+  ${cards}
+  <rect x="${pad}" y="${barY}" width="${barW}" height="${barH}" rx="${barH/2}" fill="${V.bg.hex}" stroke="${V.text.hex}" stroke-opacity=".18" stroke-width="1"/>
+  ${bar}
+  ${rtlText(W-pad,908,'مختبر الألوان · yrstudio.art',20,500,V.text.hex,.7)}
+</svg>`;
+}
+function downloadSVG(P){
+  const blob=new Blob([makeSVG(P)],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+  const safe=`${brandName()}-${P.title}`.replace(/[^\w\u0600-\u06FF-]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+  link.href=url;link.download=`${safe||'color-palette'}.svg`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 /* ---------- modals ---------- */
@@ -1319,6 +1356,7 @@ document.addEventListener('click',async e=>{
   const fc=t.closest('[data-favcopy]');if(fc){const x=getFavs().find(x=>String(x.id)===fc.dataset.favcopy);if(x)copy(x.colors.map(c=>`${c.role}: ${c.hex}`).join('\n'),'اتنسخت');return}
   const pg=t.closest('[data-png]');if(pg){openModal(`<div class="modal-h"><h3>صورة الباليتة</h3><button type="button" class="small" data-close>اقفل</button></div><p class="hint">بنجهّز الصورة…</p>`);
     const url=await makePNG(PALS[+pg.dataset.png]);const m=$('#layer .modal-in');if(m)m.innerHTML=`<div class="modal-h"><h3>صورة الباليتة 1080×1350</h3><button type="button" class="small" data-close>اقفل</button></div><img src="${url}" alt="صورة الباليتة"><p class="hint">على الموبايل: اضغط مطوّل على الصورة واختار «حفظ». على الكمبيوتر: كليك يمين ← Save image. مقاسها مناسب لبوست إنستجرام أو سلايد في البريزنتيشن.</p>`;return}
+  const svg=t.closest('[data-svg]');if(svg){downloadSVG(PALS[+svg.dataset.svg]);toast('اتحمّلت لوحة الألوان كملف SVG قابل للتحرير');return}
   const pr=t.closest('[data-present]');if(pr){present(+pr.dataset.present);return}
   const pn=t.closest('[data-pnav]');if(pn&&PRES!==null){present((PRES+ +pn.dataset.pnav+PALS.length)%PALS.length);return}
   if(t.closest('[data-fs]')){const el=document.documentElement;if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});else if(el.requestFullscreen)el.requestFullscreen().catch(()=>toast('الشاشة الكاملة مش متاحة هنا'));return}
