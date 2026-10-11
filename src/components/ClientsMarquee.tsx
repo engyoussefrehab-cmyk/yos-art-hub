@@ -10,13 +10,15 @@ function LogoTile({ logo }: { logo: Logo }) {
     <img
       src={logo.logo_url}
       alt={logo.name}
-      loading="lazy"
-      className="h-9 w-auto max-w-[150px] object-contain opacity-60 grayscale brightness-200 contrast-125 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:grayscale-0 group-hover:brightness-100 group-hover:contrast-100 group-hover:scale-[1.06] md:h-11"
+      loading="eager"
+      decoding="async"
+      draggable={false}
+      className="h-14 w-auto max-w-[200px] object-contain opacity-60 grayscale brightness-200 contrast-125 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:grayscale-0 group-hover:brightness-100 group-hover:contrast-100 group-hover:scale-[1.06] md:h-[72px] md:max-w-[250px]"
     />
   );
   return (
     <span
-      className="group relative inline-flex h-20 shrink-0 items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.02] px-8 backdrop-blur-sm transition-all duration-500 hover:border-accent/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_-8px_hsl(var(--accent)/0.35)] md:h-24 md:px-10"
+      className="group relative inline-flex h-24 shrink-0 items-center justify-center rounded-2xl border border-white/[0.06] bg-white/[0.02] px-8 transition-all duration-500 hover:border-accent/40 hover:bg-white/[0.05] hover:shadow-[0_0_40px_-8px_hsl(var(--accent)/0.35)] md:h-28 md:px-8"
       dir="ltr"
       title={logo.name}
     >
@@ -36,10 +38,18 @@ function LogoTile({ logo }: { logo: Logo }) {
 }
 
 function Row({ logos, reverse = false, duration = 50 }: { logos: Logo[]; reverse?: boolean; duration?: number }) {
-  const items = useMemo(() => [...logos, ...logos], [logos]);
+  // One "group" = the logo list repeated enough times to always be wider than
+  // the screen. The track holds two identical groups and slides exactly one
+  // group width, so the loop is seamless with no start, end, or empty gap.
+  const group = useMemo(() => {
+    const reps = Math.max(1, Math.ceil(9 / Math.max(1, logos.length)));
+    return Array.from({ length: reps }, () => logos).flat();
+  }, [logos]);
+  const groupDuration = duration * (group.length / Math.max(1, logos.length));
   return (
     <div
-      className="clients-marquee relative"
+      className="clients-marquee relative overflow-hidden"
+      dir="ltr"
       style={{
         maskImage:
           "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
@@ -48,15 +58,23 @@ function Row({ logos, reverse = false, duration = 50 }: { logos: Logo[]; reverse
       }}
     >
       <div
-        className="clients-marquee-track flex w-max items-center gap-3 md:gap-4"
+        className="clients-marquee-track flex w-max"
         dir="ltr"
         style={{
-          animationDuration: `${duration}s`,
+          animationDuration: `${groupDuration}s`,
           animationDirection: reverse ? "reverse" : "normal",
         }}
       >
-        {items.map((c, i) => (
-          <LogoTile key={`${c.id}-${i}`} logo={c} />
+        {[0, 1].map((copy) => (
+          <div
+            key={copy}
+            className="flex shrink-0 items-center gap-3 pr-3 md:gap-4 md:pr-4"
+            aria-hidden={copy === 1 ? true : undefined}
+          >
+            {group.map((c, i) => (
+              <LogoTile key={`${copy}-${c.id}-${i}`} logo={c} />
+            ))}
+          </div>
         ))}
       </div>
     </div>
@@ -85,7 +103,7 @@ export function ClientsMarquee() {
   if (!logos || logos.length === 0) return null;
 
   const count = logos.length;
-  const twoRows = count >= 8;
+  const twoRows = count >= 2;
   const half = Math.ceil(count / 2);
   const rowA = twoRows ? logos.slice(0, half) : logos;
   const rowB = twoRows ? logos.slice(half) : [];
@@ -166,8 +184,8 @@ export function ClientsMarquee() {
 
       {/* Marquee rows */}
       <div className="relative mt-14 space-y-4 md:space-y-5">
-        <Row logos={rowA} duration={twoRows ? 55 : 50} />
-        {twoRows && rowB.length > 0 && <Row logos={rowB} reverse duration={65} />}
+        <Row logos={rowA} duration={60} />
+        {twoRows && rowB.length > 0 && <Row logos={rowB} reverse duration={60} />}
       </div>
 
       {/* eslint-disable-next-line react/no-unknown-property */}
