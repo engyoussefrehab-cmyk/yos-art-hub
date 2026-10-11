@@ -1,82 +1,212 @@
 [
   {
-    "id": "d5138995-2d63-424e-9bd7-8408b7ca537d",
-    "name": "LiftEX",
-    "logo_url": "/media/uploads/2026/10/download-01-xc01v.webp",
+    "id": "cf0cdd97-b123-4901-87ca-c051bb176ec8",
+    "name": "Ministry of Environment, Water & Agriculture",
+    "logo_url": "/media/uploads/2026/10/clients/mewa.svg",
     "href": null,
     "sort_order": 10,
     "is_visible": true,
-    "created_at": "2026-07-21T12:31:21.774854+00:00",
-    "updated_at": "2026-10-09T20:06:56.648Z"
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
   },
   {
-    "id": "b87268a4-e428-4952-bd14-e0954c78ed8f",
-    "name": "AMN",
-    "logo_url": "/media/uploads/2026/10/logo-02-so6ff.svg",
+    "id": "cae86f00-b83c-479b-a335-92e1b733a12f",
+    "name": "LiftEX",
+    "logo_url": "/media/uploads/2026/10/clients/logo-01.svg",
     "href": null,
     "sort_order": 20,
     "is_visible": true,
-    "created_at": "2026-07-21T12:31:21.774854+00:00",
-    "updated_at": "2026-10-09T21:22:58.066Z"
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
   },
   {
-    "id": "9aef3f44-fe8a-4f28-9162-61af4e7848f9",
-    "name": "Rasayil Medical Center",
-    "logo_url": "/media/uploads/2026/10/download-03-u04qu.png",
+    "id": "e23b1c49-1286-4bb6-b5e2-4d476c36c836",
+    "name": "AMN Global Law Firm",
+    "logo_url": "/media/uploads/2026/10/clients/logo-02.svg",
     "href": null,
     "sort_order": 30,
     "is_visible": true,
-    "created_at": "2026-07-21T12:31:21.774854+00:00",
-    "updated_at": "2026-10-09T21:29:58.243Z"
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
   },
   {
-    "id": "7e80c735-6320-4a22-8c6c-cda1c47af344",
-    "name": "ROSHN",
-    "logo_url": "/media/uploads/2026/10/logo-01-cu3qu.svg",
+    "id": "5b087fbe-4d95-4ba8-81b0-dbba9f95c67c",
+    "name": "Rasayil Medical Center",
+    "logo_url": "/media/uploads/2026/10/clients/logo-03.svg",
     "href": null,
     "sort_order": 40,
     "is_visible": true,
-    "created_at": "2026-07-21T12:31:21.774854+00:00",
-    "updated_at": "2026-07-21T12:31:21.774854+00:00"
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
   },
   {
-    "id": "8082fc76-7511-47c9-9dd7-d0b6c177a8c0",
-    "name": "SABIC",
-    "logo_url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%2060%22%3E%3Ctext%20x%3D%22100%22%20y%3D%2238%22%20text-anchor%3D%22middle%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2226%22%20letter-spacing%3D%224%22%20fill%3D%22white%22%3ESABIC%3C/text%3E%3C/svg%3E",
+    "id": "c815051f-2215-4cee-a923-f6552c5b75be",
+    "name": "Whiff",
+    "logo_url": "/media/uploads/2026/10/clients/logo-04.svg",
     "href": null,
     "sort_order": 50,
     "is_visible": true,
-    "created_at": "2026-07-21T12:31:21.774854+00:00",
-    "updated_at": "2026-07-21T12:31:21.774854+00:00"
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
   },
   {
-    "id": "d9642742-8be2-4723-aa89-fe1ea6f3d3fc",
-    "name": "TABBY",
-    "logo_url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%2060%22%3E%3Ctext%20x%3D%22100%22%20y%3D%2238%22%20text-anchor%3D%22middle%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2226%22%20letter-spacing%3D%224%22%20fill%3D%22white%22%3ETABBY%3C/text%3E%3C/svg%3E",
+    "id": "76307719-5bb9-476b-bd68-ad0cb52d24a3",
+    "name": "Ruwaad Altawseel",
+    "logo_url": "/media/uploads/2026/10/clients/logo-05.svg",
     "href": null,
     "sort_order": 60,
     "is_visible": true,
-    "created_at": "2026-07-21T12:31:21.774854+00:00",
-    "updated_at": "2026-07-21T12:31:21.774854+00:00"
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
   },
   {
-    "id": "0cf8e76a-5336-497a-9b1f-8a685b4c2661",
-    "name": "TAMARA",
-    "logo_url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%2060%22%3E%3Ctext%20x%3D%22100%22%20y%3D%2238%22%20text-anchor%3D%22middle%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2226%22%20letter-spacing%3D%224%22%20fill%3D%22white%22%3ETAMARA%3C/text%3E%3C/svg%3E",
+    "id": "ba81664a-e3ef-4b57-b0df-6d15f9959246",
+    "name": "EventX",
+    "logo_url": "/media/uploads/2026/10/clients/logo-06.svg",
     "href": null,
     "sort_order": 70,
     "is_visible": true,
-    "created_at": "2026-07-21T12:31:21.774854+00:00",
-    "updated_at": "2026-07-21T12:31:21.774854+00:00"
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
   },
   {
-    "id": "c36d934b-486e-4a87-9205-7dda7ae845cf",
-    "name": "NOON",
-    "logo_url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%2060%22%3E%3Ctext%20x%3D%22100%22%20y%3D%2238%22%20text-anchor%3D%22middle%22%20font-family%3D%22Inter%2CArial%2Csans-serif%22%20font-weight%3D%22800%22%20font-size%3D%2226%22%20letter-spacing%3D%224%22%20fill%3D%22white%22%3ENOON%3C/text%3E%3C/svg%3E",
+    "id": "1afbe951-9b0c-42c4-9c2f-d989a33af21b",
+    "name": "OREVL",
+    "logo_url": "/media/uploads/2026/10/clients/logo-07.svg",
     "href": null,
     "sort_order": 80,
     "is_visible": true,
-    "created_at": "2026-07-21T12:31:21.774854+00:00",
-    "updated_at": "2026-07-21T12:31:21.774854+00:00"
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "afb0aa1a-55a1-4435-bb0a-04da9ae641bf",
+    "name": "Details Consults",
+    "logo_url": "/media/uploads/2026/10/clients/logo-08.svg",
+    "href": null,
+    "sort_order": 90,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "94f8e7d7-c23c-49b8-aa1a-9fcf30ad13c4",
+    "name": "Wujha",
+    "logo_url": "/media/uploads/2026/10/clients/logo-09.svg",
+    "href": null,
+    "sort_order": 100,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "2f02ea38-1ae8-40f2-9885-1bbd44fc41ec",
+    "name": "Rabeh",
+    "logo_url": "/media/uploads/2026/10/clients/logo-10.svg",
+    "href": null,
+    "sort_order": 110,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "73c1df84-e420-429a-b8da-a1fa0aaabcb8",
+    "name": "HZH Online Academy",
+    "logo_url": "/media/uploads/2026/10/clients/logo-11.svg",
+    "href": null,
+    "sort_order": 120,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "2edd86e2-a928-4cf0-941a-13fb9dbf18c2",
+    "name": "Ethbat",
+    "logo_url": "/media/uploads/2026/10/clients/logo-12.svg",
+    "href": null,
+    "sort_order": 130,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "040c68b4-b0ad-470d-b12d-08023879e64b",
+    "name": "Umm Al Qura",
+    "logo_url": "/media/uploads/2026/10/clients/logo-13.svg",
+    "href": null,
+    "sort_order": 140,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "49b9ef0a-ed55-4eb3-bd47-b83eb0e144c1",
+    "name": "Kayan Najd",
+    "logo_url": "/media/uploads/2026/10/clients/logo-14.svg",
+    "href": null,
+    "sort_order": 150,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "e7510f1e-6a7f-422f-b1e8-f5a1c7480fed",
+    "name": "Karmah",
+    "logo_url": "/media/uploads/2026/10/clients/logo-15.svg",
+    "href": null,
+    "sort_order": 160,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "db6aff3b-ad54-4593-9cac-03c9ec269594",
+    "name": "Interkey",
+    "logo_url": "/media/uploads/2026/10/clients/logo-16.svg",
+    "href": null,
+    "sort_order": 170,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "e7109823-d704-4311-9e44-267e3644dbd8",
+    "name": "Kuwait Transport Museum",
+    "logo_url": "/media/uploads/2026/10/clients/logo-17.svg",
+    "href": null,
+    "sort_order": 180,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "d3295267-add3-4f68-a8ec-c93f94b2140f",
+    "name": "Anas Abdulrahman Khayat Company",
+    "logo_url": "/media/uploads/2026/10/clients/logo-18.svg",
+    "href": null,
+    "sort_order": 190,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "05565820-22a3-4ccf-a5fc-a6f5d8757cea",
+    "name": "Inspire Travel",
+    "logo_url": "/media/uploads/2026/10/clients/logo-19.svg",
+    "href": null,
+    "sort_order": 200,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
+  },
+  {
+    "id": "292309f8-1355-4845-a195-815c8ea72692",
+    "name": "OGG Al-Abdaa",
+    "logo_url": "/media/uploads/2026/10/clients/logo-20.svg",
+    "href": null,
+    "sort_order": 210,
+    "is_visible": true,
+    "created_at": "2026-10-11T12:08:03.008136Z",
+    "updated_at": "2026-10-11T12:08:03.008136Z"
   }
 ]
