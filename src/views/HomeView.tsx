@@ -195,7 +195,7 @@ function Services({ items }: { items: ServiceDTO[] }) {
   const targets: Array<{ href: string; cta: string }> = [
     { href: work("branding"), cta: viewWork }, // Visual identity
     { href: contactHref, cta: startProject }, // Logo design (no published logos yet)
-    { href: contactHref, cta: startProject }, // Company profiles (no published profiles yet)
+    { href: work("profiles"), cta: viewWork }, // Company profiles
     { href: work("social"), cta: viewWork }, // Social media
     { href: work("branding"), cta: viewWork }, // Design systems (shown inside identity work)
     { href: contactHref, cta: startProject }, // Creative direction
