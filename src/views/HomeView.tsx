@@ -214,12 +214,12 @@ function Services({ items }: { items: ServiceDTO[] }) {
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-24">
-      <div className="flex items-end justify-between gap-6 border-b border-border pb-8">
+      <div className="flex flex-col gap-4 border-b border-border pb-8 md:flex-row md:items-end md:justify-between md:gap-6">
         <div>
           <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("services_kicker")}</span>
           <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold">{t("services_title")}</h2>
         </div>
-        <p className="hidden md:block max-w-md text-muted-foreground">{t("services_lede")}</p>
+        <p className="max-w-md text-muted-foreground">{t("services_lede")}</p>
       </div>
       <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((item, i) => (
@@ -248,9 +248,9 @@ function Services({ items }: { items: ServiceDTO[] }) {
                   {item.title}
                 </h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
-                <div className={`mt-5 inline-flex items-center gap-2 text-xs font-semibold text-accent transition-all duration-300 ${lang === "ar" ? "flex-row-reverse" : ""}`}>
+                <div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-accent transition-all duration-300">
                   <span>{item.cta}</span>
-                  <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
+                  <span aria-hidden className={`transition-transform duration-300 ${lang === "ar" ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"}`}>{lang === "ar" ? "←" : "→"}</span>
                 </div>
               </div>
             </Link>
