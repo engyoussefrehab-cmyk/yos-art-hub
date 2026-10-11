@@ -413,7 +413,9 @@
   {
     "title": "الصفحة الرئيسية",
     "keys": [
-      "ui_homeview_1"
+      "ui_homeview_1",
+      "ui_homeview_2",
+      "ui_homeview_3"
     ]
   },
   {

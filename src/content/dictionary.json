@@ -1278,5 +1278,13 @@
   "ui_projectdetailview_2": {
     "ar": "التغليف",
     "en": "Packaging"
+  },
+  "ui_homeview_2": {
+    "ar": "شوف الأعمال",
+    "en": "View work"
+  },
+  "ui_homeview_3": {
+    "ar": "ابدأ مشروعك",
+    "en": "Start a project"
   }
 }

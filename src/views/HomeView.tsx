@@ -186,7 +186,21 @@ function About() {
 
 function Services({ items }: { items: ServiceDTO[] }) {
   const { t, lang } = useLang();
-  const fallback: Array<{ title: string; desc: string; image: string; href: string; cta: string }> = ([
+  // Each card points to proof of that service: its projects category when it
+  // has published work, otherwise the contact page (never an empty page).
+  const work = (cat: string) => (lang === "ar" ? `/projects/${cat}` : `/en/projects/${cat}`);
+  const contactHref = lang === "ar" ? "/contact" : "/en/contact";
+  const viewWork = lang === "ar" ? pair("ui_homeview_2")[0] : pair("ui_homeview_2")[1];
+  const startProject = lang === "ar" ? pair("ui_homeview_3")[0] : pair("ui_homeview_3")[1];
+  const targets: Array<{ href: string; cta: string }> = [
+    { href: work("branding"), cta: viewWork }, // Visual identity
+    { href: contactHref, cta: startProject }, // Logo design (no published logos yet)
+    { href: contactHref, cta: startProject }, // Company profiles (no published profiles yet)
+    { href: work("social"), cta: viewWork }, // Social media
+    { href: work("branding"), cta: viewWork }, // Design systems (shown inside identity work)
+    { href: contactHref, cta: startProject }, // Creative direction
+  ];
+  const list = ([
     ["svc_1_t", "svc_1_d"],
     ["svc_2_t", "svc_2_d"],
     ["svc_3_t", "svc_3_d"],
@@ -196,11 +210,10 @@ function Services({ items }: { items: ServiceDTO[] }) {
   ] as [DictKey, DictKey][]).map(([tk, dk], i) => ({
     title: t(tk),
     desc: t(dk),
-    image: SERVICE_IMAGES[i], href: lang === "ar" ? "/packages" : "/en/packages", cta: lang === "ar" ? pair("ui_homeview_1")[0] : pair("ui_homeview_1")[1],
+    image: SERVICE_IMAGES[i],
+    href: targets[i].href,
+    cta: targets[i].cta,
   }));
-
-  // Always show the six offered services; each card has its own matching thumbnail.
-  const list = fallback;
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-24">
