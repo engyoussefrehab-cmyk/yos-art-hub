@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLang } from "@/i18n/use-lang";
 
-const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261011-single-scroll";
+const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261011-mobile-bar";
 
 export function ColorBriefEmbed() {
   const { lang } = useLang();
@@ -77,6 +77,7 @@ export function ColorBriefEmbed() {
       contentMutations?.disconnect();
       cancelAnimationFrame(resizeFrameRequest);
       observer.disconnect();
+      delete document.documentElement.dataset.toolBar;
     };
   }, []);
 

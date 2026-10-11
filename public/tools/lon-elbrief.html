@@ -209,6 +209,32 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
   .results-actions .hint{font-size:11.5px}
 }
 
+/* Bars that stay on screen on mobile, and overlays placed in the visible part of the page (the tool lives in a full-height iframe). */
+.floating{position:relative;z-index:6;background:var(--surface);box-shadow:0 -10px 26px -20px rgba(0,0,0,.55)}
+.mob-nav{display:none}
+html.embedded .modal,html.embedded .pres{position:absolute;inset:auto 0 auto 0;top:var(--vt,0px);height:var(--vh,100vh)}
+html.embedded .toast{position:absolute;bottom:auto;top:calc(var(--vt,0px) + var(--vh,100vh) - 76px)}
+html.embedded #layer{position:absolute;inset:0 0 auto 0;height:0}
+@media(max-width:600px){
+  .app:not(.has-results) .brief,.app.has-results .brief{padding:16px}
+  .wizard-nav{margin-inline:-16px;padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 12px)}
+  .wizard-nav.floating{border-top-color:var(--line)}
+  .results-actions{order:2}
+  .results-actions .hint{display:none}
+  .results-actions.floating{border-radius:14px 14px 0 0}
+  .results .group-h:not(.cur){display:none}
+  .results .palette-nav[data-palette-nav]{display:none!important}
+  .mob-nav{display:flex;flex-direction:column;gap:8px}
+  .mob-filter{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px}
+  .mob-filter button{border-radius:999px;min-height:40px;padding:6px 10px;font-size:12px;font-weight:600;background:var(--surface-2)}
+  .mob-filter button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+  .mob-pager{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .mob-pager button{min-height:40px;border-radius:999px;padding:6px 14px}
+  .mob-pager button:disabled{opacity:.4}
+  .mob-pager span{font-size:12.5px;font-weight:700}
+  .mob-hint{margin:0;font-size:11px;color:var(--muted);text-align:center}
+}
+
 /* brief */
 .brief{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;position:static;max-height:none;overflow:visible}
 .brief h2{font-size:18px}
@@ -1335,13 +1361,15 @@ function render(){
   $('#results').innerHTML=`${favBlock()}
    <div class="summary"><span class="chip">${esc(brandName())}</span><span class="chip">${esc(ind.label)}</span><span class="chip">${esc(co.name)}</span><span class="chip">${esc(audDesc(st))}</span><span class="chip">${TIER[st.tier].name}</span>
      ${st.vals.length?`<span class="chip">${st.vals.map(k=>VAL[k].n).join(' · ')}</span>`:''}${comps.length?`<span class="chip">المنافسين ${comps.map(c=>`<span class="dot" style="background:${c}"></span>`).join('')}</span>`:''}${st.seed?`<span class="chip">تنويعة ${st.seed+1}</span>`:''}</div>
-   <div class="group-h"><h2>٣ اقتراحات قريبة من الشائع</h2><p>من بين تنويعات لكل اتجاه، رتّبناها لتحسين تباين النص والأزرار ووضوح الألوان. اختبر الأنسب مع جمهورك.</p></div>
+   ${mobNav()}
+   <div class="group-h" data-group="common"><h2>٣ اقتراحات قريبة من الشائع</h2><p>من بين تنويعات لكل اتجاه، رتّبناها لتحسين تباين النص والأزرار ووضوح الألوان. اختبر الأنسب مع جمهورك.</p></div>
    ${paletteNav('common',3)}
    ${PALS.slice(0,3).map((p,i)=>card(p,i)).join('')}
-   <div class="group-h break"><h2>٢ اقتراح مختلف عن الشائع</h2><p>ترتيب التباين يساعد على القراءة، لكنه لا يثبت أن الاتجاه مناسب لجمهورك؛ اختبره قبل اعتماد الهوية.</p></div>
+   <div class="group-h break" data-group="different"><h2>٢ اقتراح مختلف عن الشائع</h2><p>ترتيب التباين يساعد على القراءة، لكنه لا يثبت أن الاتجاه مناسب لجمهورك؛ اختبره قبل اعتماد الهوية.</p></div>
    ${paletteNav('different',2)}
    ${PALS.slice(3,5).map((p,i)=>card(p,i+3)).join('')}
    ${clientBlock()}`;
+  applyMobile();floatBars();
 }
 function paletteNav(set,total){return`<div class="palette-nav" data-palette-nav="${set}" aria-label="التنقل بين الاقتراحات">
   <button type="button" class="small" data-palette-step="-1" data-set="${set}" disabled>السابق</button>
@@ -1350,7 +1378,7 @@ function paletteNav(set,total){return`<div class="palette-nav" data-palette-nav=
  </div>`}
 
 /* ---------- copy & toast ---------- */
-let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,1800)}
+let tt;function toast(m){if(typeof floatBars==='function')floatBars();const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,1800)}
 function copy(text,msg){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>toast(msg)).catch(()=>showText(text))}else showText(text);
 }
@@ -1407,7 +1435,7 @@ function downloadSVG(P){
 }
 
 /* ---------- modals ---------- */
-function openModal(html){const l=$('#layer');l.innerHTML=`<div class="modal" data-backdrop><div class="modal-in" role="dialog" aria-modal="true">${html}</div></div>`;const b=l.querySelector('[data-close]');if(b)b.focus()}
+function openModal(html){if(typeof floatBars==='function')floatBars();const l=$('#layer');l.innerHTML=`<div class="modal" data-backdrop><div class="modal-in" role="dialog" aria-modal="true">${html}</div></div>`;const b=l.querySelector('[data-close]');if(b)b.focus()}
 function closeLayer(){$('#layer').innerHTML='';PRES=null}
 async function makePNG(P){
   try{await Promise.all([document.fonts.load('800 60px Alexandria'),document.fonts.load('500 30px "IBM Plex Sans Arabic"'),document.fonts.load('500 24px "IBM Plex Mono"')])}catch(e){}
@@ -1433,7 +1461,7 @@ function wrap(x,t,X,Y,w,lh,max){const ws=t.split(' '),lines=[];let line='';
   lines.slice(0,max).forEach((ln,i)=>{if(i===max-1&&lines.length>max){while(x.measureText(ln+'…').width>w&&ln.length>3)ln=ln.slice(0,-1);ln+='…'}x.fillText(ln,X,Y+i*lh)})}
 let PRES=null;
 function present(i){
-  PRES=i;const P=PALS[i],V=P.variants[P.baseMode],ok=PALS.length;
+  if(typeof floatBars==='function')floatBars();PRES=i;const P=PALS[i],V=P.variants[P.baseMode],ok=PALS.length;
   UI['p'+i]={mock:'social',mode:P.baseMode};
   $('#layer').innerHTML=`<div class="pres" role="dialog" aria-modal="true" aria-label="عرض للعميل" style="background:${V.bg.hex};color:${V.text.hex}" dir="rtl">
    <div class="pres-bar"><span>${esc(brandName())} · ${i+1} من ${ok}</span><div class="ctl">
@@ -1498,6 +1526,65 @@ let raf;const schedule=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(
 $('#brief').addEventListener('input',()=>{fromForm();schedule()});
 $('#brief').addEventListener('change',()=>{fromForm();schedule()});
 
+
+/* ---------- mobile results: one pager for the 5 palettes ---------- */
+let MOB={filter:'all',idx:0};
+const MOB_SETS={all:[0,1,2,3,4],m:[0,1,2],b:[3,4]};
+const arN=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+function mobNav(){return`<div class="mob-nav" id="mobNav">
+  <div class="mob-filter" role="group" aria-label="فلترة الاقتراحات"><button type="button" data-mfilter="all">الكل (٥)</button><button type="button" data-mfilter="m">قريبة من الشائع (٣)</button><button type="button" data-mfilter="b">مختلفة (٢)</button></div>
+  <div class="mob-pager"><button type="button" class="small" data-mstep="-1">السابق</button><span id="mobPos" aria-live="polite"></span><button type="button" class="small" data-mstep="1">التالي</button></div>
+  <p class="mob-hint">اسحب الكارت يمين وشمال عشان تقلّب بين الاقتراحات</p>
+ </div>`}
+function applyMobile(){
+  const cards=[...document.querySelectorAll('#results .pal[data-palette-item]')];if(!cards.length)return;
+  const list=MOB_SETS[MOB.filter].filter(i=>cards[i]);MOB.idx=Math.max(0,Math.min(list.length-1,MOB.idx));
+  const on=cards[list[MOB.idx]];
+  cards.forEach(c=>{if(c===on){c.classList.add('mobile-active');return}
+    c.classList.remove('mobile-active');if(c.classList.contains('expanded')){c.classList.remove('expanded');const b=c.querySelector('[data-card-more]');if(b){b.setAttribute('aria-expanded','false');b.firstElementChild.textContent='عرض السبب والمعاينة وفحوص التباين'}}});
+  const grp=on.dataset.paletteItem;document.querySelectorAll('#results .group-h[data-group]').forEach(g=>g.classList.toggle('cur',g.dataset.group===grp));
+  const pos=$('#mobPos');if(pos)pos.textContent=`اقتراح ${arN(MOB.idx+1)} من ${arN(list.length)}`;
+  document.querySelectorAll('[data-mfilter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mfilter===MOB.filter)));
+  const pv=document.querySelector('[data-mstep="-1"]'),nx=document.querySelector('[data-mstep="1"]');if(pv)pv.disabled=MOB.idx===0;if(nx)nx.disabled=MOB.idx>=list.length-1;
+}
+function mobStep(d){const n=MOB_SETS[MOB.filter].length;const next=Math.max(0,Math.min(n-1,MOB.idx+d));if(next===MOB.idx)return;MOB.idx=next;applyMobile();
+  const nav=$('#mobNav');if(nav){const r=nav.getBoundingClientRect(),v=viewBox();const top=r.top+window.scrollY;if(top<v.top||top>v.bottom-120)nav.scrollIntoView({block:'start',behavior:'smooth'})}}
+document.addEventListener('click',e=>{
+  const f=e.target.closest('[data-mfilter]');if(f){MOB={filter:f.dataset.mfilter,idx:0};applyMobile();return}
+  const m=e.target.closest('[data-mstep]');if(m)mobStep(+m.dataset.mstep);
+});
+let tx=0,ty=0,tOK=false;
+$('#results').addEventListener('touchstart',e=>{const t=e.touches[0];tOK=!!e.target.closest('.pal')&&!e.target.closest('.mtabs,.stage,input,select,.tbl');tx=t.clientX;ty=t.clientY},{passive:true});
+$('#results').addEventListener('touchend',e=>{if(!tOK||!window.matchMedia('(max-width:600px)').matches)return;const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)mobStep(dx<0?1:-1)},{passive:true});
+
+/* ---------- visible area of the page (the tool is embedded in a full-height iframe) ---------- */
+const EMBED=(()=>{try{return !!(window.frameElement&&window.parent!==window&&window.parent.document)}catch(e){return false}})();
+if(EMBED)document.documentElement.classList.add('embedded');
+function viewBox(){
+  if(EMBED){try{const r=window.frameElement.getBoundingClientRect(),ph=window.parent.innerHeight;return{top:Math.max(0,-r.top),bottom:Math.max(0,ph-r.top)}}catch(e){}}
+  return{top:window.scrollY,bottom:window.scrollY+window.innerHeight};
+}
+function floatOne(el,box){
+  if(!el)return;el.style.transform='';el.classList.remove('floating');
+  if(!box||el.offsetParent===null)return;
+  const v=viewBox(),sy=window.scrollY,r=el.getBoundingClientRect(),b=box.getBoundingClientRect();
+  const nat=r.top+sy,h=r.height,minTop=b.top+sy+90;
+  const want=Math.max(minTop,Math.min(nat,v.bottom-h));
+  if(want<nat-1){el.style.transform=`translateY(${Math.round(want-nat)}px)`;el.classList.add('floating')}
+}
+function floatBars(){
+  const mobile=window.matchMedia('(max-width:600px)').matches;
+  floatOne($('.wizard-nav'),mobile&&!$('#briefFields').hidden?$('#brief'):null);
+  floatOne($('.results-actions'),mobile&&!$('#resultsShell').hidden?$('#resultsShell'):null);
+  if(EMBED){try{const pd=window.parent.document.documentElement;if(document.querySelector('.floating'))pd.dataset.toolBar='1';else delete pd.dataset.toolBar}catch(e){}}
+  if(EMBED){const v=viewBox(),root=document.documentElement.style;root.setProperty('--vt',v.top+'px');root.setProperty('--vh',Math.max(200,v.bottom-v.top)+'px')}
+}
+let fRaf=0;const scheduleFloat=()=>{cancelAnimationFrame(fRaf);fRaf=requestAnimationFrame(floatBars)};
+window.addEventListener('scroll',scheduleFloat,{passive:true});window.addEventListener('resize',scheduleFloat);
+if(EMBED){try{window.parent.addEventListener('scroll',scheduleFloat,{passive:true});window.parent.addEventListener('resize',scheduleFloat)}catch(e){}}
+if(window.ResizeObserver)new ResizeObserver(scheduleFloat).observe(document.body);
+
 /* ---------- step-by-step brief ---------- */
 const STEP_NAMES=['السوق والمجال','الجمهور والسعر','شخصية البراند','المنافسين ولون العميل'];
 const AR_N=['٠','١','٢','٣','٤'];
@@ -1514,13 +1601,14 @@ function showStep(n,focus){
   if(GENERATED){next.textContent=last?'اقفل البريف':'التالي ←';next.classList.remove('final');quick.hidden=true;hint.textContent='التعديلات بتتطبّق على الألوان على طول.'}
   else{next.textContent=last?'طلّع الألوان':'التالي ←';next.classList.toggle('final',last);quick.hidden=last||(STEP<2&&!PRESET_USED);
     hint.textContent=STEP<2&&!PRESET_USED?'تقدر تطلّع الألوان بعد الخطوة ٢، أو تكمّل للآخر عشان نتيجة أدق.':last?'الخطوة دي اختيارية: ضيف ألوان المنافسين أو لون العميل لو عندك.':'كمّل للآخر عشان نتيجة أدق، أو طلّع الألوان دلوقتي.'}
+  scheduleFloat();
   if(focus){const t=document.querySelector(`#brief .step[data-step="${STEP}"] .step-title`);if(t)t.focus({preventScroll:true});$('#brief').scrollIntoView({block:'nearest',behavior:'smooth'})}
 }
 function setBriefOpen(open){
   const fields=$('#briefFields'),button=$('#briefToggle');fields.hidden=!open;button.setAttribute('aria-expanded',String(open));button.firstElementChild.textContent=open?'اقفل البريف':'عدّل البريف';
 }
 function generateNow(){
-  fromForm();save();GENERATED=true;
+  fromForm();save();GENERATED=true;MOB={filter:'all',idx:0};
   $('#palettePanel').classList.add('has-results');$('#teaser').hidden=true;$('#resultsShell').hidden=false;
   closePresets();render();setBriefOpen(false);showStep(STEP);
   requestAnimationFrame(()=>$('#resultsShell').scrollIntoView({block:'start',behavior:'smooth'}));
@@ -1553,7 +1641,7 @@ document.addEventListener('click',async e=>{
     return;
   }
   if(t.matches('[data-backdrop]')||t.closest('[data-close]')){closeLayer();return}
-  const pre=t.closest('[data-preset]');if(pre){const i=+pre.dataset.preset;st={...BASE,...PRESETS[i].s};LOCKS={};UI={};toForm();save();PRESET_USED=true;
+  const pre=t.closest('[data-preset]');if(pre){const i=+pre.dataset.preset;st={...BASE,...PRESETS[i].s};LOCKS={};UI={};MOB={filter:'all',idx:0};toForm();save();PRESET_USED=true;
     $('#presetChosen').textContent=PRESETS[i].n;document.querySelectorAll('#presetMenu [data-preset]').forEach(b=>b.setAttribute('aria-current',String(b===pre)));
     closePresets();if(GENERATED)render();showStep(STEP);toast('اتملا البريف من المثال. راجع الخطوات أو طلّع الألوان');return}
   if(t.closest('#shuffle')){st.seed++;save();render();toast(Object.keys(LOCKS).length?'تنويعة جديدة، والمثبّت فضل زي ما هو':'تنويعة جديدة');return}

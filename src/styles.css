@@ -325,3 +325,6 @@ html, body { overflow-x: hidden; }
 .insights-content pre code { background: transparent; padding: 0; color: inherit; }
 .insights-content hr { border: none; border-top: 1px solid var(--color-border); margin: 2.5rem 0; }
 .insights-content strong { color: var(--color-foreground); font-weight: 600; }
+
+/* While the color tool's bottom action bar is on screen (mobile), hide the floating WhatsApp / back-to-top buttons so they don't cover it. */
+html[data-tool-bar="1"] .fixed.bottom-4 { opacity: 0 !important; pointer-events: none !important; }
