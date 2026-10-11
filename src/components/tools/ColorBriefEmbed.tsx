@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLang } from "@/i18n/use-lang";
 
-const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261011-step-brief";
+const COLOR_TOOL_SRC = "/tools/lon-elbrief.html?v=20261011-single-scroll";
 
 export function ColorBriefEmbed() {
   const { lang } = useLang();

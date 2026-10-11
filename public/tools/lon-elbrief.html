@@ -141,7 +141,7 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
 .preset-btn .chev{font-size:18px;color:var(--red);transition:transform .15s}
 .preset-btn[aria-expanded="true"]{border-color:var(--ink)}
 .preset-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
-.preset-menu{margin-top:8px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:6px 6px 10px;max-height:440px;overflow:auto;overscroll-behavior:contain;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+.preset-menu{margin-top:8px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:6px 6px 10px;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
 .preset-menu[hidden]{display:none}
 .preset-group{display:flex;flex-direction:column;min-width:0}
 .preset-group h4{font-family:var(--body);font-size:11.5px;font-weight:700;color:var(--muted);margin:8px 8px 2px;display:flex;align-items:center;gap:6px}
@@ -185,8 +185,12 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
   .step .row2{grid-template-columns:1fr}
   select,input[type=text]{min-height:48px}
   .preset-btn{min-height:52px}
-  .preset-menu{grid-template-columns:1fr;max-height:420px}
-  .preset-group button{min-height:46px}
+  .preset-menu{grid-template-columns:1fr;padding:4px 8px 12px}
+  .preset-group{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .preset-group h4{flex-basis:100%;margin:10px 0 2px}
+  .preset-group button{width:auto;min-height:40px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);padding:6px 12px;font-size:13px}
+  .preset-group button small{display:none}
+  .preset-group button[aria-current="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink);box-shadow:none}
   .chips.grid2{grid-template-columns:1fr 1fr}
   .chips.seg{grid-template-columns:1fr 1fr}
   .step .chips label{min-height:44px;display:flex;align-items:center;justify-content:center;padding:8px 10px}
