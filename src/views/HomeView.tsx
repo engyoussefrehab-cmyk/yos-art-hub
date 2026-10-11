@@ -1,12 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import youssefPortrait from "@/assets/youssef-portrait.jpg.asset.json";
 import portfolioPdf from "@/assets/portfolio.pdf.asset.json";
-import svcVisualIdentity from "@/assets/services/visual-identity.jpg.asset.json";
-import svcLogoDesign from "@/assets/services/logo-design.jpg.asset.json";
-import svcCompanyProfile from "@/assets/services/company-profile.jpg.asset.json";
-import svcSocialMedia from "@/assets/services/social-media.jpg.asset.json";
-import svcDesignSystem from "@/assets/services/design-system.jpg.asset.json";
-import svcCreativeDirection from "@/assets/services/creative-direction.jpg.asset.json";
 import { Testimonials } from "@/components/Testimonials";
 import { ClientsMarquee } from "@/components/ClientsMarquee";
 import { LatestProjectsSlider } from "@/components/projects/LatestProjectsSlider";
@@ -19,13 +13,14 @@ import type { MethodologyDataDTO } from "@/lib/methodology.functions";
 
 import { pair } from "@/i18n/dictionary";
 import contact from "@/content/contact.json";
-const SERVICE_FALLBACK_IMAGES = [
-  svcVisualIdentity.url,
-  svcLogoDesign.url,
-  svcCompanyProfile.url,
-  svcSocialMedia.url,
-  svcDesignSystem.url,
-  svcCreativeDirection.url,
+// Thumbnails for the six "What I offer" cards (black studio renders, brand red #FF4848).
+const SERVICE_IMAGES = [
+  "/media/services/visual-identity.webp",
+  "/media/services/logo-design.webp",
+  "/media/services/company-profile.webp",
+  "/media/services/social-media.webp",
+  "/media/services/design-system.webp",
+  "/media/services/creative-direction.webp",
 ];
 
 export function HomeView({ services = [], projects = [], methodology }: { services?: ServiceDTO[]; projects?: PortfolioDTO[]; methodology?: MethodologyDataDTO }) {
@@ -201,16 +196,11 @@ function Services({ items }: { items: ServiceDTO[] }) {
   ] as [DictKey, DictKey][]).map(([tk, dk], i) => ({
     title: t(tk),
     desc: t(dk),
-    image: SERVICE_FALLBACK_IMAGES[i], href: lang === "ar" ? "/packages" : "/en/packages", cta: lang === "ar" ? pair("ui_homeview_1")[0] : pair("ui_homeview_1")[1],
+    image: SERVICE_IMAGES[i], href: lang === "ar" ? "/packages" : "/en/packages", cta: lang === "ar" ? pair("ui_homeview_1")[0] : pair("ui_homeview_1")[1],
   }));
 
-  const list = items.length
-    ? items.map((s, i) => ({
-        title: lang === "ar" ? s.title_ar : s.title_en,
-        desc: lang === "ar" ? s.description_ar : s.description_en,
-        image: s.cover_url || SERVICE_FALLBACK_IMAGES[i % SERVICE_FALLBACK_IMAGES.length], href: s.cta_href || (lang === "ar" ? "/contact" : "/en/contact"), cta: (lang === "ar" ? s.cta_label_ar : s.cta_label_en) || (lang === "ar" ? "ابدأ مشروعك" : "Start a project"),
-      }))
-    : fallback;
+  // Always show the six offered services; each card has its own matching thumbnail.
+  const list = fallback;
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-24">
