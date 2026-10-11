@@ -62,6 +62,9 @@ export function ColorBriefEmbed() {
     };
 
     frame.addEventListener("load", handleFrameLoad);
+    // The iframe can finish loading before hydration attaches the listener;
+    // wire the observers up right away in that case so the height keeps tracking.
+    if (frame.contentDocument?.readyState === "complete" && frame.contentDocument.querySelector(".wrap")) handleFrameLoad();
     const observer = new MutationObserver(syncTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     syncTheme();
