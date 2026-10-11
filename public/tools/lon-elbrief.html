@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>مختبر الألوان</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,9 +101,109 @@ header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;a
 .palette-nav span{font-size:12px;color:var(--muted);font-weight:600}
 .color-metrics{display:none}
 .pal-download{width:100%;min-height:42px;margin-top:4px}
-.app{display:grid;grid-template-columns:350px minmax(0,1fr);gap:20px;align-items:start}
+.app{display:grid;grid-template-columns:minmax(0,760px);justify-content:center;gap:20px;align-items:start}
+.app.has-results{grid-template-columns:350px minmax(0,1fr);justify-content:stretch}
 .app[hidden]{display:none}
-@media (max-width:960px){.app{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:960px){.app,.app.has-results{grid-template-columns:minmax(0,1fr)}}
+
+
+/* Step-by-step brief: results stay hidden until the visitor asks for them. */
+.brief-toggle{display:none}
+.app.has-results .brief-toggle{display:inline-flex}
+.app.has-results .brief-summary{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-top:2px}
+.app:not(.has-results) .brief{padding:clamp(16px,3vw,26px)}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.steps button{width:100%;display:flex;align-items:center;gap:6px;border-radius:999px;padding:7px 8px;background:transparent;color:var(--muted);font-size:12.5px;font-weight:600;text-align:start}
+.steps b{display:grid;place-items:center;flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);font-size:12px;background:var(--surface-2);color:var(--ink)}
+.steps span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.steps small{font-weight:400}
+.steps button.done b{background:var(--surface);border-color:var(--ink)}
+.steps button[aria-current="step"]{border-color:var(--ink);color:var(--ink)}
+.steps button[aria-current="step"] b{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.app.has-results .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+.step-mobile{display:none}
+.step{border:0;margin:0;padding:0;min-width:0;display:flex;flex-direction:column;gap:14px}
+.step[hidden]{display:none}
+.brief-fields[hidden]{display:none}
+.step-title{font-family:var(--display);font-size:17px;font-weight:700;padding:0;margin-bottom:2px}
+.step-title small{font-family:var(--body);font-size:12.5px;font-weight:400;color:var(--muted)}
+.step-title:focus{outline:none}
+.more-note{border-top:1px dashed var(--line);padding-top:12px}
+.chips.grid2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.chips.seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.chips.grid2 label,.chips.seg label{text-align:center}
+.step .chips label{padding:8px 12px;font-size:13px}
+.count{color:var(--red)!important;font-weight:600!important}
+.preset-pick{position:relative}
+.preset-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:12px;padding:10px 14px;background:var(--surface-2);text-align:start}
+.preset-btn b{display:block;font-size:14px}
+.preset-btn small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.preset-btn .chev{font-size:18px;color:var(--red);transition:transform .15s}
+.preset-btn[aria-expanded="true"]{border-color:var(--ink)}
+.preset-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.preset-menu{margin-top:8px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:6px 6px 10px;max-height:440px;overflow:auto;overscroll-behavior:contain;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+.preset-menu[hidden]{display:none}
+.preset-group{display:flex;flex-direction:column;min-width:0}
+.preset-group h4{font-family:var(--body);font-size:11.5px;font-weight:700;color:var(--muted);margin:8px 8px 2px;display:flex;align-items:center;gap:6px}
+.preset-group h4:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red)}
+.preset-group button{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;min-height:40px;border:0;background:transparent;border-radius:8px;padding:6px 8px;font-weight:500;font-size:13.5px;text-align:start}
+.preset-group button small{color:var(--muted);font-size:11.5px;font-weight:400;white-space:nowrap}
+.preset-group button:hover,.preset-group button[aria-current="true"]{background:var(--surface-2)}
+.preset-group button[aria-current="true"]{box-shadow:inset 3px 0 0 var(--red)}
+.wizard-nav{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.wizard-nav .hint{order:0}
+.wizard-btns{display:flex;justify-content:space-between;gap:8px}
+.wizard-btns button{border-radius:999px;min-height:44px;padding:10px 20px}
+.wizard-btns .primary{flex:0 1 auto;min-width:160px}
+.wizard-btns button:disabled{opacity:.4;cursor:not-allowed}
+#nextStep.final{background:var(--red);border-color:var(--red);color:var(--red-ink)}
+.quick-gen{align-self:flex-start;background:none;border:0;padding:2px 0;color:var(--ink);font-size:13px;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--red)}
+.quick-gen[hidden]{display:none}
+.teaser{border:1px dashed var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.teaser[hidden]{display:none}
+.teaser-h h2{font-size:18px}
+.teaser-h p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.teaser-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.ghost{border:1px dashed var(--line);border-radius:12px;padding:10px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.ghost i{height:44px;border-radius:6px;background:var(--surface-2)}
+.ghost.break{border-color:color-mix(in srgb,var(--red) 40%,var(--line))}
+.teaser-dots{display:none;gap:8px}
+.teaser-dots i{width:22px;height:22px;border-radius:50%;border:1.5px dashed var(--muted);opacity:.6}
+.results-shell{display:flex;flex-direction:column;gap:14px;min-width:0}
+.results-shell[hidden]{display:none}
+.results-actions{display:flex;align-items:center;justify-content:space-between;gap:8px 14px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.results-actions .btns button{border-radius:999px}
+.results-actions .hint{flex:1 1 260px}
+@media(max-width:600px){
+  .steps{display:none}
+  .step-mobile{display:flex;flex-direction:column;gap:8px}
+  .step-mobile p{margin:0;font-size:13px;font-weight:600}
+  .step-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+  .step-bar i{height:4px;border-radius:4px;background:var(--line)}
+  .step-bar i.on{background:var(--ink)}
+  .step-bar i.now{background:var(--red)}
+  .step .row2{grid-template-columns:1fr}
+  select,input[type=text]{min-height:48px}
+  .preset-btn{min-height:52px}
+  .preset-menu{grid-template-columns:1fr;max-height:420px}
+  .preset-group button{min-height:46px}
+  .chips.grid2{grid-template-columns:1fr 1fr}
+  .chips.seg{grid-template-columns:1fr 1fr}
+  .step .chips label{min-height:44px;display:flex;align-items:center;justify-content:center;padding:8px 10px}
+  .slider{grid-template-columns:44px 1fr 44px}
+  input[type=range]{height:32px}
+  input[type=color]{width:48px;height:44px}
+  .wizard-btns #prevStep{flex:0 0 auto}
+  .wizard-btns .primary{flex:1 1 auto;min-width:0}
+  .teaser{padding:14px;gap:10px}
+  .teaser-h h2{font-size:15px}
+  .teaser-cards{display:none}
+  .teaser-dots{display:flex}
+  .results-actions{padding:10px}
+  .results-actions .btns{width:100%;display:grid;grid-template-columns:1fr 1fr}
+  .results-actions .btns button{min-height:44px}
+  .results-actions .hint{font-size:11.5px}
+}
 
 /* brief */
 .brief{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;position:static;max-height:none;overflow:visible}
@@ -309,8 +411,7 @@ footer a{color:var(--ink);font-weight:600}
 @media(max-width:600px){
   .app{gap:14px}
   .brief{padding:13px;gap:12px}
-  .brief-toggle{display:inline-flex}
-  .brief-summary{display:block;color:var(--muted);font-size:11px;font-weight:500;max-width:45vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .app.has-results .brief-summary{font-size:11px;max-width:52vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .brief-fields[hidden]{display:none}
   .results{gap:12px}
   .summary{gap:5px}
@@ -370,50 +471,97 @@ footer a{color:var(--ink);font-weight:600}
   </nav>
 
   <div class="app" id="palettePanel" role="tabpanel" aria-labelledby="paletteTab">
-    <form class="brief" id="brief" autocomplete="off">
+    <form class="brief" id="brief" autocomplete="off" novalidate>
       <div class="brief-top"><div><h2>البريف</h2><span class="brief-summary" id="briefSummary"></span></div>
-        <button type="button" class="brief-toggle small" id="briefToggle" aria-expanded="true" aria-controls="briefFields"><span>تعديل البريف</span><span aria-hidden="true">⌄</span></button>
+        <button type="button" class="brief-toggle small" id="briefToggle" aria-expanded="true" aria-controls="briefFields"><span>عدّل البريف</span><span aria-hidden="true">⌄</span></button>
       </div>
       <div class="brief-fields" id="briefFields">
-      <div class="field"><span class="lbl">ابدأ من مثال</span><div class="presets" id="presets"></div></div>
-      <div class="field"><label for="brand">اسم البراند</label><input type="text" id="brand" maxlength="24"></div>
-      <div class="row2">
-        <div class="field"><label for="co">البلد / السوق</label><select id="co"></select></div>
-        <div class="field"><label for="ind">المجال</label><select id="ind"></select></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label for="age">سن الجمهور</label><select id="age">
-          <option value="kids">أطفال (القرار للأهل)</option><option value="youth">15–25</option><option value="adults">25–45</option><option value="mature">45+</option></select></div>
-        <div class="field"><label for="dec">مين بيشتري؟</label><select id="dec">
-          <option value="all">الكل</option><option value="women">ستات</option><option value="men">رجالة</option><option value="b2b">شركات (B2B)</option></select></div>
-      </div>
-      <div class="row2">
-        <div class="field"><label for="tier">مستوى السعر</label><select id="tier">
-          <option value="economy">اقتصادي</option><option value="mid">متوسط</option><option value="premium">بريميوم</option><option value="luxury">فاخر</option></select></div>
-        <div class="field"><label for="ch">هيظهر أكتر فين؟</label><select id="ch"></select></div>
-      </div>
-      <div class="field"><span class="lbl">قيم البراند <small>(لحد ٣)</small></span><div class="chips" id="vals"></div></div>
-      <div class="field"><span class="lbl">شخصية البراند</span>
-        <div class="slider"><span>هادي</span><input type="range" id="bold" min="-2" max="2" step="1" aria-label="هادي أو جريء"><span>جريء</span></div>
-        <div class="slider"><span>كلاسيك</span><input type="range" id="modern" min="-2" max="2" step="1" aria-label="كلاسيك أو مودرن"><span>مودرن</span></div>
-        <div class="slider"><span>دافي</span><input type="range" id="cool" min="-2" max="2" step="1" aria-label="دافي أو بارد"><span>بارد</span></div>
-        <div class="slider"><span>رسمي</span><input type="range" id="friendly" min="-2" max="2" step="1" aria-label="رسمي أو ودود"><span>ودود</span></div>
-      </div>
-      <div class="field"><label for="compN">ألوان المنافسين</label>
-        <div class="colors"><select id="compN" style="width:auto"><option value="0">مفيش</option><option value="1">منافس واحد</option><option value="2">٢ منافسين</option><option value="3">٣ منافسين</option></select>
-          <input type="color" id="c0" aria-label="لون المنافس الأول"><input type="color" id="c1" aria-label="لون المنافس التاني"><input type="color" id="c2" aria-label="لون المنافس التالت"></div>
-      </div>
-      <div class="field"><span class="lbl">العميل عايز لون معيّن؟</span>
-        <div class="colors"><label class="check"><input type="checkbox" id="clientOn"> آه، حلّله</label><input type="color" id="client" aria-label="لون العميل"></div>
-      </div>
-      <div class="btns">
-        <button type="button" class="primary" id="shuffle">تنويعة تانية</button>
-        <button type="button" id="unlock">فك التثبيت</button>
-      </div>
-      <p class="hint">النتايج بتتغير مع كل تعديل. «تنويعة تانية» بتطلّع درجات مختلفة لنفس البريف، والباليتات المثبّتة بتفضل زي ما هي.</p>
+        <ol class="steps" id="steps" aria-label="خطوات البريف">
+          <li><button type="button" data-goto="1" aria-current="step"><b>١</b><span>السوق والمجال</span></button></li>
+          <li><button type="button" data-goto="2"><b>٢</b><span>الجمهور والسعر</span></button></li>
+          <li><button type="button" data-goto="3"><b>٣</b><span>شخصية البراند</span></button></li>
+          <li><button type="button" data-goto="4"><b>٤</b><span>المنافسين ولون العميل</span></button></li>
+        </ol>
+        <div class="step-mobile" aria-hidden="true"><p id="stepNow">خطوة ١ من ٤ · السوق والمجال</p><div class="step-bar"><i class="on"></i><i></i><i></i><i></i></div></div>
+
+        <div class="step" data-step="1" role="group" aria-labelledby="stepT1">
+          <h3 class="step-title" id="stepT1" tabindex="-1">السوق والمجال</h3>
+          <div class="field"><span class="lbl">ابدأ من مثال <small>(اختياري)</small></span>
+            <div class="preset-pick">
+              <button type="button" class="preset-btn" id="presetBtn" aria-expanded="false" aria-controls="presetMenu"><span><b id="presetChosen">اختار مثال جاهز</b><small>٢٥ مثال يغطّوا كل المجالات</small></span><span class="chev" aria-hidden="true">⌄</span></button>
+              <div class="preset-menu" id="presetMenu" hidden></div>
+            </div>
+          </div>
+          <div class="field"><label for="brand">اسم البراند</label><input type="text" id="brand" maxlength="24"></div>
+          <div class="row2">
+            <div class="field"><label for="co">البلد / السوق</label><select id="co"></select></div>
+            <div class="field"><label for="ind">المجال</label><select id="ind"></select></div>
+          </div>
+          <p class="hint more-note">الشخصية والمنافسين ولون العميل في الخطوات الجاية.</p>
+        </div>
+
+        <div class="step" data-step="2" role="group" aria-labelledby="stepT2" hidden>
+          <h3 class="step-title" id="stepT2" tabindex="-1">الجمهور والسعر</h3>
+          <div class="field"><span class="lbl">سن الجمهور</span><div class="chips grid2" role="radiogroup" aria-label="سن الجمهور">
+            <label><input type="radio" name="age" value="kids">أطفال (القرار للأهل)</label><label><input type="radio" name="age" value="youth"><bdi dir="ltr">15–25</bdi></label><label><input type="radio" name="age" value="adults"><bdi dir="ltr">25–45</bdi></label><label><input type="radio" name="age" value="mature"><bdi dir="ltr">45+</bdi></label></div></div>
+          <div class="field"><span class="lbl">مين بيشتري؟</span><div class="chips" role="radiogroup" aria-label="مين بيشتري؟">
+            <label><input type="radio" name="dec" value="all">الكل</label><label><input type="radio" name="dec" value="women">ستات</label><label><input type="radio" name="dec" value="men">رجالة</label><label><input type="radio" name="dec" value="b2b">شركات (B2B)</label></div></div>
+          <div class="field"><span class="lbl">مستوى السعر</span><div class="chips seg" role="radiogroup" aria-label="مستوى السعر">
+            <label><input type="radio" name="tier" value="economy">اقتصادي</label><label><input type="radio" name="tier" value="mid">متوسط</label><label><input type="radio" name="tier" value="premium">بريميوم</label><label><input type="radio" name="tier" value="luxury">فاخر</label></div></div>
+          <div class="field"><span class="lbl">هيظهر أكتر فين؟</span><div class="chips" id="ch" role="radiogroup" aria-label="هيظهر أكتر فين؟"></div></div>
+        </div>
+
+        <div class="step" data-step="3" role="group" aria-labelledby="stepT3" hidden>
+          <h3 class="step-title" id="stepT3" tabindex="-1">شخصية البراند</h3>
+          <div class="field"><span class="lbl">قيم البراند <small>(لحد ٣)</small> <small class="count" id="valsCount"></small></span><div class="chips" id="vals"></div></div>
+          <div class="field"><span class="lbl">شخصية البراند</span>
+            <div class="slider"><span>هادي</span><input type="range" id="bold" min="-2" max="2" step="1" aria-label="هادي أو جريء"><span>جريء</span></div>
+            <div class="slider"><span>كلاسيك</span><input type="range" id="modern" min="-2" max="2" step="1" aria-label="كلاسيك أو مودرن"><span>مودرن</span></div>
+            <div class="slider"><span>دافي</span><input type="range" id="cool" min="-2" max="2" step="1" aria-label="دافي أو بارد"><span>بارد</span></div>
+            <div class="slider"><span>رسمي</span><input type="range" id="friendly" min="-2" max="2" step="1" aria-label="رسمي أو ودود"><span>ودود</span></div>
+          </div>
+        </div>
+
+        <div class="step" data-step="4" role="group" aria-labelledby="stepT4" hidden>
+          <h3 class="step-title" id="stepT4" tabindex="-1">المنافسين ولون العميل <small>(اختياري)</small></h3>
+          <div class="field"><span class="lbl">ألوان المنافسين</span>
+            <div class="chips seg" role="radiogroup" aria-label="عدد المنافسين"><label><input type="radio" name="compN" value="0">مفيش</label><label><input type="radio" name="compN" value="1">منافس واحد</label><label><input type="radio" name="compN" value="2">٢ منافسين</label><label><input type="radio" name="compN" value="3">٣ منافسين</label></div>
+            <div class="colors"><input type="color" id="c0" aria-label="لون المنافس الأول"><input type="color" id="c1" aria-label="لون المنافس التاني"><input type="color" id="c2" aria-label="لون المنافس التالت"></div>
+          </div>
+          <div class="field"><span class="lbl">العميل عايز لون معيّن؟</span>
+            <div class="colors"><label class="check"><input type="checkbox" id="clientOn"> آه، حلّله</label><input type="color" id="client" aria-label="لون العميل"></div>
+          </div>
+        </div>
+
+        <div class="wizard-nav">
+          <p class="hint" id="wizHint"></p>
+          <div class="wizard-btns">
+            <button type="button" id="prevStep">رجوع</button>
+            <button type="button" class="primary" id="nextStep">التالي ←</button>
+          </div>
+          <button type="button" class="quick-gen" id="quickGen" hidden>طلّع الألوان دلوقتي</button>
+        </div>
       </div>
     </form>
-    <main class="results" id="results" aria-live="polite"></main>
+
+    <section class="teaser" id="teaser" aria-label="النتايج">
+      <div class="teaser-h"><h2>٥ اتجاهات لونية مستنيّاك</h2><p>٣ قريبة من الشائع · ٢ مختلفة عنه. بتظهر بعد ما تضغط «طلّع الألوان».</p></div>
+      <div class="teaser-cards" aria-hidden="true">
+        <div class="ghost"><i></i><i></i><i></i><i></i><i></i></div><div class="ghost"><i></i><i></i><i></i><i></i><i></i></div><div class="ghost"><i></i><i></i><i></i><i></i><i></i></div><div class="ghost break"><i></i><i></i><i></i><i></i><i></i></div><div class="ghost break"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="teaser-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    </section>
+
+    <div class="results-shell" id="resultsShell" hidden>
+      <div class="results-actions">
+        <div class="btns">
+          <button type="button" class="primary" id="shuffle">تنويعة تانية</button>
+          <button type="button" id="unlock">فك التثبيت</button>
+        </div>
+        <p class="hint">النتايج بتتغير مع كل تعديل. «تنويعة تانية» بتطلّع درجات مختلفة لنفس البريف، والباليتات المثبّتة بتفضل زي ما هي.</p>
+      </div>
+      <main class="results" id="results" aria-live="polite"></main>
+    </div>
   </div>
 
   <section class="feedback-shell" id="feedbackPanel" role="tabpanel" aria-labelledby="feedbackTab" hidden>
@@ -985,36 +1133,59 @@ function generate(st){
 /* ================= UI ================= */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PRESET_GROUPS=['أكل وضيافة','صحة وجمال','تسوّق وموضة','أعمال وتقنية','بيت ومشاريع','مجتمع ومؤسسات','تراث وطبيعة'];
 const PRESETS=[
- {n:'عيادة أطفال · السعودية',s:{brand:'عيادة بسمة',co:'sa',ind:'health',age:'kids',dec:'women',tier:'mid',vals:['care','safe'],ch:'all',friendly:1,compN:1,comps:['#1E73BE','#E53935','#2E7D32']}},
- {n:'شاورما · مصر',s:{brand:'شاورما الريّس',co:'eg',ind:'food',age:'youth',dec:'all',tier:'economy',vals:['speed','fun'],ch:'sign',bold:1,compN:2,comps:['#D32F2F','#F9A825','#2E7D32']}},
- {n:'عطور · قطر',s:{brand:'دار العود',co:'qa',ind:'perfume',age:'adults',dec:'all',tier:'luxury',vals:['lux','heritage'],ch:'print',compN:1,comps:['#B8963E','#111111','#2E7D32']}},
- {n:'SaaS · الإمارات',s:{brand:'Flowly',co:'ae',ind:'tech',age:'adults',dec:'b2b',tier:'premium',vals:['innov','trust'],ch:'digital',modern:2,compN:2,comps:['#2563EB','#7C3AED','#2E7D32']}},
- {n:'كافيه · الكويت',s:{brand:'بُن الديرة',co:'kw',ind:'cafe',age:'youth',dec:'all',tier:'mid',vals:['heritage','young'],ch:'all',compN:1,comps:['#5D4037','#E53935','#2E7D32']}},
- {n:'تمور · السعودية',s:{brand:'نخلة',co:'sa',ind:'heritage',age:'adults',dec:'all',tier:'premium',vals:['heritage','nature'],ch:'print',compN:1,comps:['#6D4C41','#E53935','#2E7D32']}}];
+ {g:0,n:'شاورما · مصر',s:{brand:'شاورما الريّس',co:'eg',ind:'food',age:'youth',dec:'all',tier:'economy',vals:['speed','fun'],ch:'sign',bold:1,compN:2,comps:['#D32F2F','#F9A825','#2E7D32']}},
+ {g:0,n:'كافيه · الكويت',s:{brand:'بُن الديرة',co:'kw',ind:'cafe',age:'youth',dec:'all',tier:'mid',vals:['heritage','young'],ch:'all',compN:1,comps:['#5D4037','#E53935','#2E7D32']}},
+ {g:0,n:'فندق بوتيك · عُمان',s:{brand:'نُزل الجبل',co:'om',ind:'hospitality',age:'adults',dec:'all',tier:'premium',vals:['heritage','nature'],ch:'digital',cool:-1,compN:1,comps:['#8D6E63','#1E73BE','#2E7D32']}},
+ {g:0,n:'تنظيم إيفنتات · الإمارات',s:{brand:'Lumen Events',co:'ae',ind:'events',age:'adults',dec:'b2b',tier:'premium',vals:['innov','lux'],ch:'digital',bold:1,modern:1,compN:1,comps:['#111111','#E53935','#2E7D32']}},
+ {g:1,n:'عيادة أطفال · السعودية',s:{brand:'عيادة بسمة',co:'sa',ind:'health',age:'kids',dec:'women',tier:'mid',vals:['care','safe'],ch:'all',friendly:1,compN:1,comps:['#1E73BE','#E53935','#2E7D32']}},
+ {g:1,n:'سكين كير · الإمارات',s:{brand:'Dewy',co:'ae',ind:'beauty',age:'youth',dec:'women',tier:'premium',vals:['care','simple'],ch:'digital',modern:1,friendly:1,compN:2,comps:['#F4C2C2','#2E7D32','#1E73BE']}},
+ {g:1,n:'جيم · مصر',s:{brand:'باور فيت',co:'eg',ind:'fitness',age:'youth',dec:'all',tier:'mid',vals:['power','speed'],ch:'sign',bold:2,compN:1,comps:['#E53935','#1E73BE','#2E7D32']}},
+ {g:1,n:'عطور · قطر',s:{brand:'دار العود',co:'qa',ind:'perfume',age:'adults',dec:'all',tier:'luxury',vals:['lux','heritage'],ch:'print',compN:1,comps:['#B8963E','#111111','#2E7D32']}},
+ {g:2,n:'عباءات · السعودية',s:{brand:'رِداء',co:'sa',ind:'fashion',age:'adults',dec:'women',tier:'premium',vals:['lux','heritage'],ch:'digital',bold:-1,compN:1,comps:['#111111','#E53935','#2E7D32']}},
+ {g:2,n:'مجوهرات · الكويت',s:{brand:'لؤلؤة',co:'kw',ind:'jewelry',age:'adults',dec:'women',tier:'luxury',vals:['lux','heritage'],ch:'print',bold:-1,compN:1,comps:['#C9A227','#111111','#2E7D32']}},
+ {g:2,n:'متجر أونلاين · مصر',s:{brand:'سلّة',co:'eg',ind:'ecommerce',age:'youth',dec:'all',tier:'economy',vals:['speed','trust'],ch:'digital',bold:1,friendly:1,compN:2,comps:['#F57C00','#1565C0','#2E7D32']}},
+ {g:2,n:'ألعاب أطفال · الأردن',s:{brand:'فرفشة',co:'jo',ind:'kids',age:'kids',dec:'women',tier:'mid',vals:['fun','safe'],ch:'print',bold:1,friendly:2,compN:1,comps:['#FBC02D','#E53935','#2E7D32']}},
+ {g:3,n:'SaaS · الإمارات',s:{brand:'Flowly',co:'ae',ind:'tech',age:'adults',dec:'b2b',tier:'premium',vals:['innov','trust'],ch:'digital',modern:2,compN:2,comps:['#2563EB','#7C3AED','#2E7D32']}},
+ {g:3,n:'فينتك · السعودية',s:{brand:'وفرة',co:'sa',ind:'finance',age:'adults',dec:'all',tier:'mid',vals:['trust','innov'],ch:'digital',modern:2,compN:2,comps:['#00695C','#1A237E','#2E7D32']}},
+ {g:3,n:'مكتب محاماة · قطر',s:{brand:'الميزان',co:'qa',ind:'legal',age:'mature',dec:'b2b',tier:'premium',vals:['trust','heritage'],ch:'print',bold:-1,modern:-1,friendly:-1,compN:1,comps:['#1B2A49','#E53935','#2E7D32']}},
+ {g:3,n:'شركة شحن · مصر',s:{brand:'وصّل',co:'eg',ind:'logistics',age:'adults',dec:'b2b',tier:'mid',vals:['speed','trust'],ch:'sign',bold:1,compN:2,comps:['#FFC107','#D32F2F','#2E7D32']}},
+ {g:4,n:'عقارات · السعودية',s:{brand:'أفق',co:'sa',ind:'realestate',age:'mature',dec:'all',tier:'premium',vals:['trust','lux'],ch:'print',compN:1,comps:['#1F3A5F','#E53935','#2E7D32']}},
+ {g:4,n:'ديكور · لبنان',s:{brand:'Atelier Cèdre',co:'lb',ind:'interior',age:'adults',dec:'women',tier:'premium',vals:['simple','nature'],ch:'digital',modern:1,cool:-1,compN:1,comps:['#BCAAA4','#E53935','#2E7D32']}},
+ {g:4,n:'منظفات · مصر',s:{brand:'نضيف',co:'eg',ind:'cleaning',age:'adults',dec:'women',tier:'economy',vals:['safe','power'],ch:'print',bold:1,compN:2,comps:['#1E88E5','#43A047','#2E7D32']}},
+ {g:4,n:'مركز صيانة سيارات · العراق',s:{brand:'كراج الرافدين',co:'iq',ind:'automotive',age:'adults',dec:'men',tier:'mid',vals:['power','trust'],ch:'sign',bold:1,compN:1,comps:['#D32F2F','#1E73BE','#2E7D32']}},
+ {g:5,n:'أكاديمية كورسات · المغرب',s:{brand:'تعلّم',co:'ma',ind:'education',age:'youth',dec:'all',tier:'economy',vals:['innov','young'],ch:'digital',friendly:1,compN:1,comps:['#3949AB','#E53935','#2E7D32']}},
+ {g:5,n:'جمعية خيرية · الكويت',s:{brand:'عطاء',co:'kw',ind:'nonprofit',age:'adults',dec:'all',tier:'mid',vals:['care','trust'],ch:'all',friendly:2,compN:1,comps:['#2E7D32','#1E73BE','#E53935']}},
+ {g:5,n:'جهة حكومية · السعودية',s:{brand:'منصة خدمات',co:'sa',ind:'government',age:'adults',dec:'all',tier:'mid',vals:['trust','simple'],ch:'digital',bold:-1,friendly:-1,compN:0,comps:['#1E73BE','#E53935','#2E7D32']}},
+ {g:6,n:'تمور · السعودية',s:{brand:'نخلة',co:'sa',ind:'heritage',age:'adults',dec:'all',tier:'premium',vals:['heritage','nature'],ch:'print',compN:1,comps:['#6D4C41','#E53935','#2E7D32']}},
+ {g:6,n:'منتجات أورجانيك · تونس',s:{brand:'زيتونة',co:'tn',ind:'agri',age:'adults',dec:'all',tier:'premium',vals:['nature','heritage'],ch:'print',cool:-1,compN:1,comps:['#689F38','#E53935','#1E73BE']}}];
 const BASE={brand:'',co:'sa',ind:'health',age:'adults',dec:'all',tier:'mid',ch:'all',vals:[],bold:0,modern:0,cool:0,friendly:0,compN:0,comps:['#1E73BE','#E53935','#2E7D32'],clientOn:false,client:'#7B4BB7',seed:0};
-let st={...BASE,...PRESETS[0].s};
+let st={...BASE,...PRESETS[4].s};
 let PALS=[],AN=null,LOCKS={},UI={};
 const KEY='lonbrief-v2',FKEY='lonbrief-favs';
 
 function setup(){
   $('#co').innerHTML=Object.entries(CO).map(([k,v])=>`<option value="${k}">${v.name}</option>`).join('');
   $('#ind').innerHTML=Object.entries(IND).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
-  $('#ch').innerHTML=Object.entries(CH).map(([k,v])=>`<option value="${k}">${v.n}</option>`).join('');
+  $('#ch').innerHTML=Object.entries(CH).map(([k,v])=>`<label><input type="radio" name="ch" value="${k}">${v.n}</label>`).join('');
   $('#vals').innerHTML=Object.entries(VAL).map(([k,v])=>`<label><input type="checkbox" id="v-${k}" value="${k}">${v.n}</label>`).join('');
-  $('#presets').innerHTML=PRESETS.map((p,i)=>`<button type="button" data-preset="${i}">${p.n}</button>`).join('');
+  $('#presetMenu').innerHTML=PRESET_GROUPS.map((g,gi)=>`<div class="preset-group" role="group" aria-label="${g}"><h4>${g}</h4>${PRESETS.map((p,i)=>p.g===gi?`<button type="button" data-preset="${i}"><span>${p.n}</span><small>${IND[p.s.ind].label}</small></button>`:'').join('')}</div>`).join('');
 }
 function toForm(){
-  ['brand','co','ind','age','dec','tier','ch','bold','modern','cool','friendly'].forEach(k=>$('#'+k).value=st[k]);
-  $('#compN').value=st.compN;[0,1,2].forEach(i=>{const el=$('#c'+i);el.value=st.comps[i];el.hidden=i>=st.compN});
+  ['brand','co','ind','bold','modern','cool','friendly'].forEach(k=>$('#'+k).value=st[k]);
+  ['age','dec','tier','ch','compN'].forEach(k=>setRadio(k,st[k]));[0,1,2].forEach(i=>{const el=$('#c'+i);el.value=st.comps[i];el.hidden=i>=st.compN});
   $('#clientOn').checked=st.clientOn;$('#client').value=st.client;$('#client').disabled=!st.clientOn;
   Object.keys(VAL).forEach(k=>$('#v-'+k).checked=st.vals.includes(k));limitVals();
 }
-function limitVals(){const n=st.vals.length;Object.keys(VAL).forEach(k=>{const el=$('#v-'+k);el.disabled=n>=3&&!el.checked})}
+function limitVals(){const n=st.vals.length;Object.keys(VAL).forEach(k=>{const el=$('#v-'+k);el.disabled=n>=3&&!el.checked});const c=$('#valsCount');if(c)c.textContent=n?`${['','١','٢','٣'][n]} من ٣`:''}
+function setRadio(name,v){const el=document.querySelector(`#brief input[name="${name}"][value="${v}"]`);if(el)el.checked=true}
+function getRadio(name,fallback){const el=document.querySelector(`#brief input[name="${name}"]:checked`);return el?el.value:fallback}
 function fromForm(){
   st.brand=$('#brand').value;
-  ['co','ind','age','dec','tier','ch'].forEach(k=>st[k]=$('#'+k).value);
-  ['bold','modern','cool','friendly','compN'].forEach(k=>st[k]=+$('#'+k).value);
+  ['co','ind'].forEach(k=>st[k]=$('#'+k).value);
+  ['age','dec','tier','ch'].forEach(k=>st[k]=getRadio(k,st[k]));
+  ['bold','modern','cool','friendly'].forEach(k=>st[k]=+$('#'+k).value);st.compN=+getRadio('compN',st.compN);
   st.comps=[0,1,2].map(i=>$('#c'+i).value);[0,1,2].forEach(i=>$('#c'+i).hidden=i>=st.compN);
   st.clientOn=$('#clientOn').checked;st.client=$('#client').value;$('#client').disabled=!st.clientOn;
   st.vals=Object.keys(VAL).filter(k=>$('#v-'+k).checked).slice(0,3);limitVals();
@@ -1319,8 +1490,46 @@ $('#feedbackForm').addEventListener('submit',async e=>{
     submit.disabled=false;submit.innerHTML='إرسال الملاحظة <span aria-hidden="true">←</span>';
   }
 });
-let raf;const schedule=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{save();render()})};
+let raf;const schedule=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{save();if(GENERATED)render()})};
 $('#brief').addEventListener('input',()=>{fromForm();schedule()});
+$('#brief').addEventListener('change',()=>{fromForm();schedule()});
+
+/* ---------- step-by-step brief ---------- */
+const STEP_NAMES=['السوق والمجال','الجمهور والسعر','شخصية البراند','المنافسين ولون العميل'];
+const AR_N=['٠','١','٢','٣','٤'];
+let STEP=1,GENERATED=false,PRESET_USED=false;
+function showStep(n,focus){
+  STEP=Math.max(1,Math.min(4,n));
+  document.querySelectorAll('#brief .step').forEach(f=>f.hidden=+f.dataset.step!==STEP);
+  document.querySelectorAll('#steps [data-goto]').forEach(b=>{const k=+b.dataset.goto;if(k===STEP)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');b.classList.toggle('done',k<STEP)});
+  $('#stepNow').textContent=`خطوة ${AR_N[STEP]} من ٤ · ${STEP_NAMES[STEP-1]}`;
+  document.querySelectorAll('.step-bar i').forEach((x,i)=>{x.classList.toggle('on',i<STEP-1);x.classList.toggle('now',i===STEP-1)});
+  const prev=$('#prevStep'),next=$('#nextStep'),quick=$('#quickGen'),hint=$('#wizHint');
+  prev.disabled=STEP===1;
+  const last=STEP===4;
+  if(GENERATED){next.textContent=last?'اقفل البريف':'التالي ←';next.classList.remove('final');quick.hidden=true;hint.textContent='التعديلات بتتطبّق على الألوان على طول.'}
+  else{next.textContent=last?'طلّع الألوان':'التالي ←';next.classList.toggle('final',last);quick.hidden=last||(STEP<2&&!PRESET_USED);
+    hint.textContent=STEP<2&&!PRESET_USED?'تقدر تطلّع الألوان بعد الخطوة ٢، أو تكمّل للآخر عشان نتيجة أدق.':last?'الخطوة دي اختيارية: ضيف ألوان المنافسين أو لون العميل لو عندك.':'كمّل للآخر عشان نتيجة أدق، أو طلّع الألوان دلوقتي.'}
+  if(focus){const t=document.querySelector(`#brief .step[data-step="${STEP}"] .step-title`);if(t)t.focus({preventScroll:true});$('#brief').scrollIntoView({block:'nearest',behavior:'smooth'})}
+}
+function setBriefOpen(open){
+  const fields=$('#briefFields'),button=$('#briefToggle');fields.hidden=!open;button.setAttribute('aria-expanded',String(open));button.firstElementChild.textContent=open?'اقفل البريف':'عدّل البريف';
+}
+function generateNow(){
+  fromForm();save();GENERATED=true;
+  $('#palettePanel').classList.add('has-results');$('#teaser').hidden=true;$('#resultsShell').hidden=false;
+  closePresets();render();setBriefOpen(false);showStep(STEP);
+  requestAnimationFrame(()=>$('#resultsShell').scrollIntoView({block:'start',behavior:'smooth'}));
+}
+function openPresets(){$('#presetMenu').hidden=false;$('#presetBtn').setAttribute('aria-expanded','true')}
+function closePresets(){$('#presetMenu').hidden=true;$('#presetBtn').setAttribute('aria-expanded','false')}
+$('#presetBtn').addEventListener('click',()=>$('#presetMenu').hidden?openPresets():closePresets());
+document.addEventListener('click',e=>{if(!$('#presetMenu').hidden&&!e.target.closest('.preset-pick'))closePresets()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#presetMenu').hidden){closePresets();$('#presetBtn').focus()}});
+$('#steps').addEventListener('click',e=>{const b=e.target.closest('[data-goto]');if(b)showStep(+b.dataset.goto,true)});
+$('#prevStep').addEventListener('click',()=>showStep(STEP-1,true));
+$('#nextStep').addEventListener('click',()=>{if(STEP<4){showStep(STEP+1,true);return}if(GENERATED){setBriefOpen(false);$('#resultsShell').scrollIntoView({block:'start',behavior:'smooth'})}else generateNow()});
+$('#quickGen').addEventListener('click',generateNow);
 $('#brief').addEventListener('submit',e=>e.preventDefault());
 document.addEventListener('click',async e=>{
   const t=e.target;
@@ -1330,7 +1539,7 @@ document.addEventListener('click',async e=>{
     if(opening){current.classList.add('expanded');cardMore.setAttribute('aria-expanded','true');cardMore.firstElementChild.textContent='إخفاء التفاصيل'}
     return;
   }
-  if(t.closest('#briefToggle')){const fields=$('#briefFields'),button=$('#briefToggle'),collapsed=!fields.hidden;fields.hidden=collapsed;button.setAttribute('aria-expanded',String(!collapsed));button.firstElementChild.textContent=collapsed?'تعديل البريف':'إخفاء البريف';return}
+  if(t.closest('#briefToggle')){const open=$('#briefFields').hidden;setBriefOpen(open);if(open)showStep(1,true);return}
   const slide=t.closest('[data-palette-step]');if(slide){
     const set=slide.dataset.set,nav=document.querySelector(`[data-palette-nav="${set}"]`),cards=[...document.querySelectorAll(`.pal[data-palette-item="${set}"]`)];
     const current=cards.findIndex(p=>p.classList.contains('mobile-active')),next=Math.max(0,Math.min(cards.length-1,current+Number(slide.dataset.paletteStep)));
@@ -1340,7 +1549,9 @@ document.addEventListener('click',async e=>{
     return;
   }
   if(t.matches('[data-backdrop]')||t.closest('[data-close]')){closeLayer();return}
-  const pre=t.closest('[data-preset]');if(pre){st={...BASE,...PRESETS[+pre.dataset.preset].s};LOCKS={};UI={};toForm();save();render();return}
+  const pre=t.closest('[data-preset]');if(pre){const i=+pre.dataset.preset;st={...BASE,...PRESETS[i].s};LOCKS={};UI={};toForm();save();PRESET_USED=true;
+    $('#presetChosen').textContent=PRESETS[i].n;document.querySelectorAll('#presetMenu [data-preset]').forEach(b=>b.setAttribute('aria-current',String(b===pre)));
+    closePresets();if(GENERATED)render();showStep(STEP);toast('اتملا البريف من المثال. راجع الخطوات أو طلّع الألوان');return}
   if(t.closest('#shuffle')){st.seed++;save();render();toast(Object.keys(LOCKS).length?'تنويعة جديدة، والمثبّت فضل زي ما هو':'تنويعة جديدة');return}
   if(t.closest('#unlock')){LOCKS={};render();toast('اتفك التثبيت');return}
   const sw=t.closest('.sw,.tint');if(sw){copy(sw.dataset.hex,'اتنسخ '+sw.dataset.hex);return}
@@ -1370,8 +1581,7 @@ function rerenderMock(i){const P=PALS[i],el=$('#stage-'+i);if(!el)return;el.inne
   const tabs=el.previousElementSibling;tabs.querySelectorAll('[data-mock]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mock===UI[i].mock));
   const m=tabs.querySelector('[data-mode]');m.setAttribute('aria-pressed',UI[i].mode==='dark');m.textContent=UI[i].mode==='dark'?'دارك':'لايت'}
 
-setup();load();toForm();render();
-if(window.matchMedia('(max-width:600px)').matches){$('#briefFields').hidden=true;$('#briefToggle').setAttribute('aria-expanded','false')}
+setup();load();toForm();showStep(1);
 
 </script>
 
