@@ -441,7 +441,7 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
                 />
               </div>
             ) : (
-              <video src={b.url} controls className="w-full" preload="metadata" />
+              <video src={b.url} poster={b.poster || undefined} controls playsInline className="w-full" preload="metadata" />
             )}
           </div>
           {caption && <p className="mt-3 text-center text-sm text-muted-foreground">{caption}</p>}

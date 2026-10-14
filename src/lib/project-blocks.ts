@@ -163,6 +163,7 @@ export type PaletteBlock = BlockBase & {
 export type VideoBlock = BlockBase & {
   type: "video";
   url: string;
+  poster?: string;
   caption_ar?: string;
   caption_en?: string;
 };
