@@ -7,6 +7,8 @@ const DESTINATIONS: Record<string, string> = {
   whatsapp: contact.whatsapp_url,
   li: contact.linkedin_url,
   linkedin: contact.linkedin_url,
+  adobe: "https://github.com/adobe/skills/tree/main/plugins/creative-cloud/adobe-for-creativity/skills",
+  "adobe-zip": "https://github.com/adobe/skills/archive/refs/heads/main.zip",
 };
 
 // Static short links (/go/wa, /go/li …): a tiny page that forwards the visitor.

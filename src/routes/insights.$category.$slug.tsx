@@ -20,7 +20,8 @@ export const Route = createFileRoute("/insights/$category/$slug")({
     const seoTitle = a.seo_title_ar || a.title_ar;
     const seoDesc = a.seo_description_ar || a.excerpt_ar;
     const catLabel = a.category.label_ar;
-    const coverAbs = a.cover_url ? absUrl(a.cover_url) : null;
+    const shareImg = a.featured_image_url || a.cover_url;
+    const coverAbs = shareImg ? absUrl(shareImg) : null;
     const schema = {
       "@context": "https://schema.org",
       "@type": "Article",

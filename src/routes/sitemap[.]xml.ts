@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SITE_URL } from "@/lib/site";
+import insightArticles from "@/data/snapshot/insight_articles.json";
+import insightCategories from "@/data/snapshot/insight_categories.json";
 
 type Entry = {
   path: string;
@@ -31,6 +33,14 @@ const ARABIC: Entry[] = [
   { path: "/insights/case-studies", changefreq: "weekly", priority: "0.7", hasAlt: true },
   { path: "/insights/resources", changefreq: "weekly", priority: "0.7", hasAlt: true },
 ];
+
+// Published insight articles (only those whose category exists).
+const catSlug = new Map((insightCategories as any[]).map((c) => [c.id, c.slug]));
+for (const a of insightArticles as any[]) {
+  const cat = catSlug.get(a.category_id);
+  if (a.status !== "published" || !cat) continue;
+  ARABIC.push({ path: `/insights/${cat}/${a.slug}`, changefreq: "monthly", priority: "0.8", hasAlt: true });
+}
 
 function toEn(arPath: string): string {
   if (arPath === "/") return "/en";

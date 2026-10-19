@@ -21,7 +21,8 @@ export const Route = createFileRoute("/en/insights/$category/$slug")({
     const seoDesc = a.seo_description_en || a.excerpt_en || a.excerpt_ar;
     const catLabel = a.category.label_en;
     const title = a.title_en || a.title_ar;
-    const coverAbs = a.cover_url ? absUrl(a.cover_url) : null;
+    const shareImg = a.featured_image_url || a.cover_url;
+    const coverAbs = shareImg ? absUrl(shareImg) : null;
     const schema = {
       "@context": "https://schema.org",
       "@type": "Article",
