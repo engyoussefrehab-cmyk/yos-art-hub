@@ -9,6 +9,8 @@ const DESTINATIONS: Record<string, string> = {
   linkedin: contact.linkedin_url,
   adobe: "https://github.com/adobe/skills/tree/main/plugins/creative-cloud/adobe-for-creativity/skills",
   "adobe-zip": "https://github.com/adobe/skills/archive/refs/heads/main.zip",
+  client: "/insights/resources/client-replies-guide",
+  stock: "/insights/resources/stock-prompts-guide",
 };
 
 // Static short links (/go/wa, /go/li …): a tiny page that forwards the visitor.

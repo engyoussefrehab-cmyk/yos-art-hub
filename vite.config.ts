@@ -23,7 +23,7 @@ function staticPages() {
     pages.add(`/projects/${c.slug}`);
     pages.add(`/en/projects/${c.slug}`);
   }
-  for (const k of ["wa", "whatsapp", "li", "linkedin", "adobe", "adobe-zip"]) pages.add(`/go/${k}`);
+  for (const k of ["wa", "whatsapp", "li", "linkedin", "adobe", "adobe-zip", "client", "stock"]) pages.add(`/go/${k}`);
   const insightCats = new Map(snap("insight_categories").map((c: any) => [c.id, c.slug]));
   if (insightCats.size) ["/insights", "/en/insights"].forEach((p) => pages.add(p));
   for (const a of snap("insight_articles")) {
