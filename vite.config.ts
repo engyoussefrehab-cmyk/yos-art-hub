@@ -53,7 +53,12 @@ export default defineConfig({
         autoSubfolderIndex: true,
         failOnError: true,
         // the 404 page's language-switch link points at /en/404, which isn't a real page
-        filter: (page) => page.path !== "/en/404",
+        // and never prerender static files (PDFs, images): the crawler would overwrite
+        // them with a text-decoded copy and corrupt them
+        filter: (page) =>
+          page.path !== "/en/404" &&
+          !page.path.startsWith("/media/") &&
+          !/\.(pdf|png|jpe?g|webp|gif|svg|mp4|zip|woff2?)$/i.test(page.path),
       },
     }),
     viteReact(),
