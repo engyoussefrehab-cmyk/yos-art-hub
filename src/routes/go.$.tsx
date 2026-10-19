@@ -11,6 +11,9 @@ const DESTINATIONS: Record<string, string> = {
   "adobe-zip": "https://github.com/adobe/skills/archive/refs/heads/main.zip",
   client: "/insights/resources/client-replies-guide",
   stock: "/insights/resources/stock-prompts-guide",
+  folder: "/insights/resources/folder-organization-system",
+  "logo-files": "/insights/resources/logo-delivery-files-guide",
+  guideline: "/insights/resources/logo-guideline-guide",
 };
 
 // Static short links (/go/wa, /go/li …): a tiny page that forwards the visitor.
