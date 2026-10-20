@@ -9,6 +9,7 @@ export const Route = createFileRoute("/admin")({
     meta: [
       { title: "لوحة التحكم — YR Studio" },
       { name: "robots", content: "noindex, nofollow" },
+      { name: "googlebot", content: "noindex, nofollow" },
     ],
   }),
   component: AdminRoute,
