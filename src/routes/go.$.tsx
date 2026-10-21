@@ -14,6 +14,7 @@ const DESTINATIONS: Record<string, string> = {
   folder: "/insights/resources/folder-organization-system",
   "logo-files": "/insights/resources/logo-delivery-files-guide",
   guideline: "/insights/resources/logo-guideline-guide",
+  upscale: "/insights/resources/upscale-same-face-guide",
 };
 
 // Static short links (/go/wa, /go/li …): a tiny page that forwards the visitor.

@@ -327,6 +327,8 @@ html, body { overflow-x: hidden; }
 .insights-content strong { color: var(--color-foreground); font-weight: 600; }
 .insights-content pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .insights-content pre.prompt, .insights-content pre.prompt code { font-family: var(--font-sans); font-size: 0.95em; line-height: 1.9; }
+.insights-content pre.prompt-en { text-align: left; line-height: 1.5; }
+.insights-content pre.prompt-en code { font-size: 0.74em; line-height: 1.5; display: block; }
 .insights-content .gh-cta-wrap { margin: 2rem 0 0.5rem; }
 .insights-content a.gh-cta {
   display: inline-flex; align-items: center; gap: 0.6rem;
