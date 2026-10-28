@@ -23,7 +23,7 @@ function staticPages() {
     pages.add(`/projects/${c.slug}`);
     pages.add(`/en/projects/${c.slug}`);
   }
-  for (const k of ["wa", "whatsapp", "li", "linkedin", "adobe", "adobe-zip", "client", "stock", "folder", "logo-files", "guideline", "upscale"]) pages.add(`/go/${k}`);
+  for (const k of ["wa", "whatsapp", "li", "linkedin", "adobe", "adobe-zip", "client", "stock", "folder", "logo-files", "guideline", "upscale", "script"]) pages.add(`/go/${k}`);
   const insightCats = new Map(snap("insight_categories").map((c: any) => [c.id, c.slug]));
   if (insightCats.size) ["/insights", "/en/insights"].forEach((p) => pages.add(p));
   for (const a of snap("insight_articles")) {
@@ -58,7 +58,7 @@ export default defineConfig({
         filter: (page) =>
           page.path !== "/en/404" &&
           !page.path.startsWith("/media/") &&
-          !/\.(pdf|png|jpe?g|webp|gif|svg|mp4|zip|woff2?)$/i.test(page.path),
+          !/\.(pdf|png|jpe?g|webp|gif|svg|mp4|zip|rar|woff2?)$/i.test(page.path),
       },
     }),
     viteReact(),
