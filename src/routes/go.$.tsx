@@ -16,6 +16,8 @@ const DESTINATIONS: Record<string, string> = {
   guideline: "/insights/resources/logo-guideline-guide",
   upscale: "/insights/resources/upscale-same-face-guide",
   script: "/insights/resources/logo-export-pack-script",
+  font: "/insights/resources/font-families",
+  fonts: "/insights/resources/font-families",
 };
 
 // Static short links (/go/wa, /go/li …): a tiny page that forwards the visitor.
