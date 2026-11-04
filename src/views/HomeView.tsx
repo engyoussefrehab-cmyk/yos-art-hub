@@ -27,20 +27,54 @@ export function HomeView({ services = [], projects = [], methodology }: { servic
   return (
     <>
       <Hero />
-      <ClientsMarquee />
-      {projects.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 py-16">
-          <Reveal>
-            <LatestProjectsSlider projects={projects} compact limit={10} />
-          </Reveal>
-        </section>
-      )}
-      <About /><Services items={services} />
+      <About />
+      <Services items={services} />
       <Process methodology={methodology} />
-      
+      {projects.length > 0 && <FeaturedWork projects={projects} />}
+      <ClientsMarquee />
       <Testimonials />
       <CTA />
     </>
+  );
+}
+
+function SectionHead({ kicker, title, lede, action }: { kicker: string; title: string; lede?: string; action?: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-accent">
+          <span className="h-px w-8 bg-accent" />
+          {kicker}
+        </span>
+        <h2 className="mt-4 font-display text-4xl font-bold leading-[1.2] md:text-6xl">{title}</h2>
+        {lede && <p className="mt-4 max-w-xl text-muted-foreground">{lede}</p>}
+      </div>
+      {action}
+    </div>
+  );
+}
+
+function FeaturedWork({ projects }: { projects: PortfolioDTO[] }) {
+  const { t, lang } = useLang();
+  const href = lang === "ar" ? "/projects" : "/en/projects";
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-24">
+      <Reveal>
+        <SectionHead
+          kicker={t("work_kicker")}
+          title={t("work_title")}
+          action={
+            <Link to={href} className="group inline-flex items-center gap-2 rounded-full border border-foreground/15 px-6 py-3 text-sm font-semibold hover:border-accent hover:text-accent">
+              {t("work_all")}
+              <span aria-hidden className="transition-transform group-hover:-translate-x-0.5 rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1">{lang === "ar" ? "←" : "→"}</span>
+            </Link>
+          }
+        />
+      </Reveal>
+      <Reveal delay={100} className="mt-12">
+        <LatestProjectsSlider projects={projects} compact limit={10} />
+      </Reveal>
+    </section>
   );
 }
 
@@ -48,84 +82,75 @@ function Hero() {
   const { t, lang } = useLang();
   const projectsHref = lang === "ar" ? "/projects" : "/en/projects";
   const contactHref = lang === "ar" ? "/contact" : "/en/contact";
+  const cats: DictKey[] = ["hero_cat_1", "hero_cat_2", "hero_cat_3"];
   return (
     <section className="relative overflow-hidden">
-      {/* Ambient background accents */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
-        <div className="absolute top-1/3 -left-32 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
+        <div className="absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,var(--color-border)_1px,transparent_0)] [background-size:28px_28px] opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]" />
       </div>
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12 md:py-28">
-        <div className="md:col-span-7 flex flex-col justify-center">
-          <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-cream px-4 py-1.5 text-xs font-medium text-muted-foreground">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-            </span>
-            {t("hero_badge")}
-          </span>
-          <h1 className="font-display text-[2rem] font-semibold leading-[1.45] text-balance sm:text-4xl md:text-5xl lg:text-6xl md:leading-[1.3]">
-            {t("hero_title_a")} <span className="text-accent">{t("hero_title_b")}</span>
-            <span className="block mt-2 text-muted-foreground/90 font-normal text-[0.72em]">
-              {t("hero_subtitle")}
-            </span>
-          </h1>
-          <p className="mt-6 max-w-xl text-base leading-[1.9] text-muted-foreground md:text-lg">
-            {t("hero_intro")}
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            <Link to={projectsHref} className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.5)] transition-all hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-14px_hsl(var(--primary)/0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto">
-              {t("hero_cta_projects")}
-              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-                {lang === "ar" ? "←" : "→"}
+      <div className="mx-auto max-w-7xl px-6 pt-16 pb-12 md:pt-24">
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-12">
+          <div className="md:col-span-8">
+            <span className="mb-8 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-xs font-medium text-muted-foreground">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
               </span>
-            </Link>
-            <Link to={contactHref} className="inline-flex w-full items-center justify-center rounded-full border border-foreground/15 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto">
-              {t("cta_start_project")}
-            </Link>
-            <a
-              href={portfolioPdf.url}
-              download="Youssef-Rehab-Portfolio.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full px-3 py-3 text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
-            >
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              {t("hero_cta_download")}
-            </a>
+              {t("hero_badge")}
+            </span>
+            <h1 className="font-display text-5xl font-bold leading-[1.15] text-balance sm:text-6xl md:text-7xl lg:text-8xl">
+              {t("hero_title_a")}
+              <span className="block text-accent">{t("hero_title_b")}</span>
+            </h1>
+            <p className="mt-4 font-display text-lg font-medium text-muted-foreground md:text-2xl">{t("hero_subtitle")}</p>
+            <p className="mt-6 max-w-xl text-base leading-[1.9] text-muted-foreground md:text-lg">{t("hero_intro")}</p>
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <Link to={contactHref} className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-bold text-accent-foreground shadow-[0_14px_40px_-14px_var(--color-accent)] transition-all hover:-translate-y-0.5 sm:w-auto">
+                {t("cta_start_project")}
+                <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
+              </Link>
+              <Link to={projectsHref} className="inline-flex w-full items-center justify-center rounded-full border border-foreground/20 px-8 py-4 text-sm font-semibold hover:border-accent hover:text-accent sm:w-auto">
+                {t("hero_cta_projects")}
+              </Link>
+              <a href={portfolioPdf.url} download="Youssef-Rehab-Portfolio.pdf" target="_blank" rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 px-3 py-3 text-sm font-medium text-muted-foreground underline-offset-4 hover:text-accent hover:underline sm:w-auto">
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                {t("hero_cta_download")}
+              </a>
+            </div>
           </div>
-          <div className="mt-12 grid grid-cols-3 gap-6 border-t border-border pt-8">
-            <Stat n={lang === "ar" ? pair("ui_contactview_1")[0] : pair("ui_contactview_1")[1]} labelKey="stat_years" />
-            <Stat n={lang === "ar" ? pair("ui_contactview_2")[0] : pair("ui_contactview_2")[1]} labelKey="stat_brands" />
-            <Stat n={lang === "ar" ? pair("ui_contactview_3")[0] : pair("ui_contactview_3")[1]} labelKey="stat_sectors" />
-          </div>
-        </div>
-        <div className="md:col-span-5 relative flex items-center justify-center">
-          <div className={`absolute inset-0 hidden md:block rounded-3xl border border-accent/30 ${lang === "ar" ? "-translate-x-4 translate-y-4" : "translate-x-4 translate-y-4"}`} aria-hidden />
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-ink shadow-2xl">
-            <img src={youssefPortrait.url} alt={t("brand_alt")} className="h-full w-full object-cover object-center transition-transform duration-[1200ms] hover:scale-[1.03]" />
-          </div>
-          <div className={`absolute -bottom-5 hidden md:flex items-center gap-3 rounded-full bg-accent px-5 py-3 text-primary shadow-xl ${lang === "ar" ? "right-6" : "left-6"}`}>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 font-display text-sm font-bold">YR</span>
-            <div className="leading-tight">
-              <div className="font-display text-[10px] font-semibold uppercase tracking-widest opacity-70">{t("strategic_brand")}</div>
-              <div className="font-display text-base font-bold">{t("identity_designer")}</div>
+
+          <div className="relative md:col-span-4">
+            <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-[2rem] bg-ink shadow-2xl md:max-w-none">
+              <img src={youssefPortrait.url} alt={t("brand_alt")} className="h-full w-full object-cover object-center transition-transform duration-[1200ms] hover:scale-[1.04]" />
+            </div>
+            <div className={`absolute -bottom-4 flex items-center gap-3 rounded-full bg-accent px-5 py-3 text-accent-foreground shadow-xl ${lang === "ar" ? "right-4" : "left-4"}`}>
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black/10 font-display text-sm font-bold">YR</span>
+              <div className="leading-tight">
+                <div className="font-display text-[10px] font-semibold uppercase tracking-widest opacity-70">{t("strategic_brand")}</div>
+                <div className="font-display text-sm font-bold">{t("identity_designer")}</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Scroll cue */}
-      <div className="pointer-events-none mx-auto hidden max-w-7xl px-6 pb-6 md:block">
-        <div className="flex items-center gap-3 text-xs text-muted-foreground/70">
-          <span className="h-px w-10 bg-border" />
-          <span className="tracking-wide">{t("home_scroll_cue")}</span>
-          <span aria-hidden className="inline-block animate-bounce">↓</span>
+        <ul className="mt-16 grid grid-cols-1 divide-y divide-border border-y border-border sm:grid-cols-3 sm:divide-x sm:divide-y-0 rtl:sm:divide-x-reverse">
+          {cats.map((k, i) => (
+            <li key={k} className="flex items-center gap-4 px-2 py-5 sm:px-6">
+              <span className="font-display text-sm font-semibold text-accent">{String(i + 1).padStart(2, "0")}</span>
+              <span className="font-display text-base font-semibold md:text-lg">{t(k)}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-10 grid grid-cols-3 gap-6">
+          <Stat n={lang === "ar" ? pair("ui_contactview_1")[0] : pair("ui_contactview_1")[1]} labelKey="stat_years" />
+          <Stat n={lang === "ar" ? pair("ui_contactview_2")[0] : pair("ui_contactview_2")[1]} labelKey="stat_brands" />
+          <Stat n={lang === "ar" ? pair("ui_contactview_3")[0] : pair("ui_contactview_3")[1]} labelKey="stat_sectors" />
         </div>
       </div>
     </section>
@@ -217,45 +242,19 @@ function Services({ items }: { items: ServiceDTO[] }) {
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-24">
-      <div className="flex flex-col gap-4 border-b border-border pb-8 md:flex-row md:items-end md:justify-between md:gap-6">
-        <div>
-          <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("services_kicker")}</span>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold">{t("services_title")}</h2>
-        </div>
-        <p className="max-w-md text-muted-foreground">{t("services_lede")}</p>
-      </div>
-      <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <Reveal>
+        <SectionHead kicker={t("services_kicker")} title={t("services_title")} lede={t("services_lede")} />
+      </Reveal>
+      <div className="mt-14 border-t border-border">
         {list.map((item, i) => (
-          <Reveal key={i} delay={i * 60}>
-            <Link to={item.href}
-              className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-background transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_30px_60px_-30px_rgb(0_0_0/0.25)]"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  loading="lazy"
-                  width={1024}
-                  height={768}
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/60 via-ink/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90" />
-                <span
-                  className={`absolute top-4 font-display text-xs font-semibold tracking-widest text-white/90 ${lang === "ar" ? "right-4" : "left-4"}`}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="font-display text-xl font-bold text-foreground transition-colors group-hover:text-accent md:text-2xl">
-                  {item.title}
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
-                <div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-accent transition-all duration-300">
-                  <span>{item.cta}</span>
-                  <span aria-hidden className={`transition-transform duration-300 ${lang === "ar" ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"}`}>{lang === "ar" ? "←" : "→"}</span>
-                </div>
-              </div>
+          <Reveal key={i} delay={i * 50}>
+            <Link to={item.href} className="group relative grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-border py-6 transition-colors hover:bg-card md:grid-cols-[5rem_1.2fr_2fr_9rem_auto] md:gap-8 md:px-4 md:py-8">
+              <span className="font-display text-sm font-semibold text-muted-foreground transition-colors group-hover:text-accent md:text-base">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="font-display text-xl font-bold transition-colors group-hover:text-accent md:text-3xl">{item.title}</h3>
+              <p className="hidden text-sm leading-relaxed text-muted-foreground md:block">{item.desc}</p>
+              <img src={item.image} alt="" loading="lazy" width={288} height={192} className="hidden h-24 w-36 rounded-xl object-cover opacity-70 grayscale transition-all duration-500 group-hover:opacity-100 group-hover:grayscale-0 md:block" />
+              <span aria-hidden className={`flex h-11 w-11 items-center justify-center rounded-full border border-border text-lg transition-all group-hover:border-accent group-hover:bg-accent group-hover:text-accent-foreground`}>{lang === "ar" ? "←" : "→"}</span>
+              <p className="col-span-3 text-sm leading-relaxed text-muted-foreground md:hidden">{item.desc}</p>
             </Link>
           </Reveal>
         ))}
@@ -307,7 +306,8 @@ function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
           {steps.map((step, i) => (
             <Reveal key={step.key} delay={i * 90}>
               <div className="relative flex h-full flex-col rounded-2xl border border-border bg-background p-6 transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.2)]">
-                <div className="mb-5 flex h-10 items-center gap-3">
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="font-display text-5xl font-bold text-accent/90">{String(i + 1).padStart(2, "0")}</span>
                   <span className="h-px flex-1 bg-border" />
                 </div>
                 <h3 className="font-display text-lg font-bold">{step.title}</h3>
@@ -325,7 +325,7 @@ function CTA() {
   const { t, lang } = useLang();
   const contactHref = lang === "ar" ? "/contact" : "/en/contact";
   return (
-    <section className="relative overflow-hidden bg-ink text-white">
+    <section className="relative mx-auto my-10 max-w-7xl overflow-hidden rounded-[2rem] bg-ink text-white md:my-16">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute -top-32 right-1/4 h-80 w-80 rounded-full bg-accent/15 blur-3xl" />
         <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />

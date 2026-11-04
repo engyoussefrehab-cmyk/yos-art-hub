@@ -1286,5 +1286,49 @@
   "ui_homeview_3": {
     "ar": "ابدأ مشروعك",
     "en": "Start a project"
+  },
+  "promo_strip": {
+    "ar": "جديد: أدوات ومقالات مجانية للمصممين",
+    "en": "New: free tools & articles for designers"
+  },
+  "promo_link": {
+    "ar": "استكشفها الآن",
+    "en": "Explore now"
+  },
+  "hero_cat_1": {
+    "ar": "الهوية والعلامة",
+    "en": "Brand & Identity"
+  },
+  "hero_cat_2": {
+    "ar": "التصميم الرقمي والسوشيال",
+    "en": "Digital & Social"
+  },
+  "hero_cat_3": {
+    "ar": "الذكاء الاصطناعي والاستراتيجية",
+    "en": "AI & Strategy"
+  },
+  "work_kicker": {
+    "ar": "أعمال مختارة",
+    "en": "Selected work"
+  },
+  "work_title": {
+    "ar": "أفكار مُلهِمة",
+    "en": "Inspiring ideas"
+  },
+  "work_all": {
+    "ar": "جميع الأعمال",
+    "en": "All projects"
+  },
+  "services_all": {
+    "ar": "كل الخدمات",
+    "en": "All services"
+  },
+  "footer_cta_title": {
+    "ar": "خلّنا نبدأ مشروعك",
+    "en": "Let's start your project"
+  },
+  "footer_sitemap": {
+    "ar": "خريطة الموقع",
+    "en": "Sitemap"
   }
 }

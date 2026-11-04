@@ -405,24 +405,33 @@ function SiteNav() {
     ? [...cmsLinks.filter((link) => link.to !== `${base}/tools/color-brief`), ...(cmsLinks.some((link) => link.to === toolLink.to) ? [] : [toolLink])]
     : defaults;
   return (
+    <>
+    <div className="bg-ink text-white">
+      <div className="mx-auto flex max-w-7xl items-center justify-center gap-3 px-4 py-2 text-xs">
+        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+        <span className="text-white/80">{t("promo_strip")}</span>
+        <Link to={`${base}/insights`} className="font-semibold text-accent underline-offset-4 hover:underline">{t("promo_link")}</Link>
+      </div>
+    </div>
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
+      <ScrollProgress />
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
         <Link to={base || "/"} className="flex shrink-0 items-center gap-2" onClick={() => setOpen(false)} aria-label={t("brand_alt")}>
           <img src={logoFull.url} alt={t("brand_alt")} className="h-7 w-auto md:h-9 [filter:brightness(0)] dark:[filter:brightness(0)_invert(1)]" />
         </Link>
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-1 rounded-full border border-border bg-card/70 p-1">
           {links.map((l) => (
             l.external ? (
               <a key={l.to} href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground">{l.label}</a>
+                className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-background hover:text-foreground">{l.label}</a>
             ) : (
               <Link
                 key={l.to}
                 to={l.to}
                 activeOptions={{ exact: l.to === "/" || l.to === "/en" }}
-                activeProps={{ className: "text-foreground font-semibold" }}
-                inactiveProps={{ className: "text-muted-foreground" }}
-                className="text-sm transition-colors hover:text-foreground"
+                activeProps={{ className: "bg-primary text-primary-foreground font-semibold hover:text-primary-foreground" }}
+                inactiveProps={{ className: "text-muted-foreground hover:bg-background" }}
+                className="rounded-full px-4 py-2 text-sm transition-colors hover:text-foreground"
               >{l.label}</Link>
             )
           ))}
@@ -430,7 +439,7 @@ function SiteNav() {
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
           <LangSwitcher />
-          <Link to={`${base}/contact`} className="inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5">{t("cta_start_project")}</Link>
+          <Link to={`${base}/contact`} className="inline-flex rounded-full bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground transition-transform hover:-translate-y-0.5">{t("cta_start_project")}</Link>
         </div>
         <div className="md:hidden flex items-center gap-1.5">
           <ThemeToggle />
@@ -445,8 +454,8 @@ function SiteNav() {
         </div>
       </div>
       {open && (
-        <div className="md:hidden border-t border-border bg-background">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-4">
+        <div className="md:hidden fixed inset-x-0 top-[3.75rem] bottom-0 z-40 overflow-y-auto border-t border-border bg-background">
+          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-6 [&_a]:border-b [&_a]:border-border [&_a]:py-4 [&_a]:font-display [&_a]:text-2xl [&_a]:font-bold [&_a]:text-foreground">
             {links.map((l) => (
               l.external ? (
                 <a key={l.to} href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined}
@@ -459,7 +468,22 @@ function SiteNav() {
         </div>
       )}
     </header>
+    </>
   );
+}
+
+function ScrollProgress() {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    const on = () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setP(h > 0 ? Math.min(1, window.scrollY / h) : 0);
+    };
+    on();
+    window.addEventListener("scroll", on, { passive: true });
+    return () => window.removeEventListener("scroll", on);
+  }, []);
+  return <div aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 origin-[right] bg-accent rtl:origin-right ltr:origin-left" style={{ transform: `scaleX(${p})` }} />;
 }
 
 function SiteFooter() {
@@ -493,6 +517,12 @@ function SiteFooter() {
 
   return (
     <footer className="mt-auto bg-ink text-white/70 border-t border-white/10">
+      <div className="mx-auto max-w-7xl px-6 pt-16">
+        <Link to={`${base}/contact`} className="group flex items-center justify-between gap-6 border-b border-white/10 pb-12">
+          <span className="font-display text-4xl font-bold leading-tight text-white transition-colors group-hover:text-accent md:text-7xl">{t("footer_cta_title")}</span>
+          <span aria-hidden className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-2xl text-accent-foreground transition-transform group-hover:scale-110 md:h-20 md:w-20">{lang === "ar" ? "←" : "→"}</span>
+        </Link>
+      </div>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 md:grid-cols-12">
         <div className="md:col-span-5 space-y-5">
           <Link to={base || "/"} className="inline-flex items-center" aria-label={t("brand_alt")}>
@@ -502,7 +532,7 @@ function SiteFooter() {
           <NewsletterForm />
         </div>
         <div className="md:col-span-3">
-          <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">{t("explore")}</div>
+          <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-accent">{t("footer_sitemap")}</div>
           <ul className="space-y-2 text-sm">
             {footerLinks.map((l) => (
               <li key={l.to}>
