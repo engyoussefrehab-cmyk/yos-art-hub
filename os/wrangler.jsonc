@@ -1,0 +1,11 @@
+// Cloudflare Workers static-assets deploy for YR Studio OS.
+// Cloudflare runs `npm run build` then `npx wrangler deploy` from this folder.
+{
+  "name": "yr-studio-os",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    // Any unknown path (e.g. /leads, /inquiry) serves index.html — the app routes it.
+    "not_found_handling": "single-page-application"
+  }
+}
