@@ -1,0 +1,20 @@
+/*
+ * YR Studio brand tokens — the ONE place to change colours and fonts.
+ * Values are taken from the live website (yrstudio.art, dark theme).
+ * The accent can also be overridden from Settings → Brand.
+ */
+:root {
+  --yr-bg: #161616; /* page background */
+  --yr-surface: #000000; /* cards, tables, sidebar */
+  --yr-surface-2: #1f1f1f; /* inputs, hover rows (neutral step between bg and surface) */
+  --yr-fg: #f7f7f7; /* main text */
+  --yr-muted: #bdbdbd; /* secondary text */
+  --yr-border: #444444; /* borders and dividers */
+  --yr-accent: #ff4848; /* brand red */
+  --yr-accent-fg: #000000; /* text on brand red (black passes contrast, white does not) */
+  --yr-success: #3ecf8e; /* status only — not a brand colour */
+  --yr-warning: #f5b544; /* status only — not a brand colour */
+
+  --yr-font: "Readex Pro", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --yr-radius: 14px;
+}

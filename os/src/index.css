@@ -1,0 +1,68 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@theme inline {
+  --color-bg: var(--yr-bg);
+  --color-surface: var(--yr-surface);
+  --color-surface-2: var(--yr-surface-2);
+  --color-fg: var(--yr-fg);
+  --color-muted: var(--yr-muted);
+  --color-line: var(--yr-border);
+  --color-accent: var(--yr-accent);
+  --color-accent-fg: var(--yr-accent-fg);
+  --color-success: var(--yr-success);
+  --color-warning: var(--yr-warning);
+  --font-sans: var(--yr-font);
+  --radius-card: var(--yr-radius);
+}
+
+html {
+  color-scheme: dark;
+}
+body {
+  background: var(--yr-bg);
+  color: var(--yr-fg);
+  font-family: var(--yr-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.input {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--yr-border);
+  background: var(--yr-surface-2);
+  padding: 0.55rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--yr-fg);
+  outline: none;
+}
+.input:focus {
+  border-color: var(--yr-accent);
+}
+.input::placeholder {
+  color: color-mix(in srgb, var(--yr-muted) 60%, transparent);
+}
+select.input {
+  appearance: auto;
+}
+
+:focus-visible {
+  outline: 2px solid var(--yr-accent);
+  outline-offset: 2px;
+}
+
+/* Quotation document: printed on white paper. */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
