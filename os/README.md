@@ -64,16 +64,14 @@ cp .env.example .env.local   # then paste the URL and anon key
 bun run dev                  # http://127.0.0.1:5190
 ```
 
-### 3. Deploy on Cloudflare Pages (needs the owner's go-ahead)
-1. In Cloudflare, go to **Workers & Pages → Create → Pages → Connect to Git** and pick this repository.
-2. Use these settings:
-   - Production branch: `main`
-   - Root directory: `os`
-   - Build command: `bun install && bun run build`
-   - Output directory: `dist`
-3. Add the environment variables `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-4. Deploy. You get a `https://<name>.pages.dev` link to test.
-5. **Custom domain:** go to *Custom domains → Set up* and enter `os.yrstudio.art`, then add the CNAME record Cloudflare shows (`os` → `<name>.pages.dev`) at your DNS provider. *This changes DNS, so only do it once you're happy with the app.*
+### 3. Hosting (live)
+The app runs on **Cloudflare Workers (static assets, free)**:
+**https://yr-studio-os.eng-youssefrehab.workers.dev**
+
+- It is connected to this GitHub repo. Every push to `main` that changes `os/` rebuilds and publishes the app automatically.
+- Build settings in Cloudflare: Root directory `os`, Build command `npm install && npm run build`, Deploy command `npx wrangler deploy`. The routing config is in `wrangler.jsonc`.
+- The Supabase URL and anon key are in `.env.production`. Both are public by design, so no build variables are needed.
+- **`os.yrstudio.art` (optional, later):** Workers custom domains need the domain's DNS on Cloudflare. Today the DNS for `yrstudio.art` is at Hostinger (dns-parking). Moving it to Cloudflare is free, but it changes DNS for the whole site, so only do it as a planned step.
 
 The main website (GitHub Pages) does not build or deploy anything in `os/`. The two are independent.
 
