@@ -10,10 +10,21 @@ import type { DictKey } from "@/i18n/dictionary";
 import type { ServiceDTO } from "@/lib/services.functions";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import type { MethodologyDataDTO } from "@/lib/methodology.functions";
-
 import { pair } from "@/i18n/dictionary";
 import contact from "@/content/contact.json";
-// Thumbnails for the six "What I offer" cards (black studio renders, brand red #FF4848).
+
+/*
+ * Home page — one story, top to bottom:
+ *   1. Hero      who I am + one clear action
+ *   2. Work      proof first: the latest projects
+ *   3. Clients   trust: brands that hired me
+ *   4. Services  what you can hire me for (scannable list)
+ *   5. Process   how we'll work together
+ *   6. Reviews   what clients say
+ *   7. CTA       start a project
+ */
+
+// Thumbnails for the six services (black studio renders, brand red #FF4848).
 const SERVICE_IMAGES = [
   "/media/services/visual-identity.webp",
   "/media/services/logo-design.webp",
@@ -23,75 +34,113 @@ const SERVICE_IMAGES = [
   "/media/services/creative-direction.webp",
 ];
 
-export function HomeView({ services = [], projects = [], methodology }: { services?: ServiceDTO[]; projects?: PortfolioDTO[]; methodology?: MethodologyDataDTO }) {
+const focusRing =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
+/** Paths and the reading-direction arrow for the current language. */
+function useNav() {
+  const { lang } = useLang();
+  const ar = lang === "ar";
+  return {
+    ar,
+    arrow: ar ? "←" : "→",
+    href: (path: string) => (ar ? path : `/en${path}`),
+  };
+}
+
+export function HomeView({
+  projects = [],
+  methodology,
+}: {
+  services?: ServiceDTO[];
+  projects?: PortfolioDTO[];
+  methodology?: MethodologyDataDTO;
+}) {
   return (
     <>
       <Hero />
-      <ClientsMarquee />
-      {projects.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 py-16">
-          <Reveal>
-            <LatestProjectsSlider projects={projects} compact limit={10} />
-          </Reveal>
-        </section>
-      )}
-      <About /><Services items={services} />
+      {projects.length > 0 && <Work projects={projects} />}
+      <ClientsMarquee showStats={false} />
+      <Services />
       <Process methodology={methodology} />
-      
       <Testimonials />
       <CTA />
     </>
   );
 }
 
+/* ---------------------------------------------------------------- Hero */
+
 function Hero() {
   const { t, lang } = useLang();
-  const projectsHref = lang === "ar" ? "/projects" : "/en/projects";
-  const contactHref = lang === "ar" ? "/contact" : "/en/contact";
+  const { arrow, href } = useNav();
+  const v = (key: DictKey) => (lang === "ar" ? pair(key)[0] : pair(key)[1]);
+  const stats: Array<[string, DictKey]> = [
+    [v("ui_contactview_1"), "stat_years"],
+    [v("ui_contactview_2"), "stat_brands"],
+    [v("ui_contactview_3"), "stat_sectors"],
+  ];
+
   return (
     <section className="relative overflow-hidden">
-      {/* Ambient background accents */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
-        <div className="absolute top-1/3 -left-32 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
-      </div>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 start-1/3 -z-10 h-96 w-96 rounded-full bg-accent/10 blur-3xl"
+      />
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-12 md:py-28">
-        <div className="md:col-span-7 flex flex-col justify-center">
-          <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-cream px-4 py-1.5 text-xs font-medium text-muted-foreground">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-24 md:pt-20">
+        {/* Copy */}
+        <div className="md:col-span-7">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium text-muted-foreground">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
             </span>
             {t("hero_badge")}
           </span>
-          <h1 className="font-display text-[2rem] font-semibold leading-[1.45] text-balance sm:text-4xl md:text-5xl lg:text-6xl md:leading-[1.3]">
-            {t("hero_title_a")} <span className="text-accent">{t("hero_title_b")}</span>
-            <span className="block mt-2 text-muted-foreground/90 font-normal text-[0.72em]">
-              {t("hero_subtitle")}
-            </span>
+
+          <h1 className="mt-6 font-display text-[2.6rem] font-bold leading-[1.15] tracking-tight text-balance sm:text-6xl lg:text-7xl">
+            {t("hero_title_a")}
+            <span className="block text-accent">{t("hero_title_b")}</span>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-[1.9] text-muted-foreground md:text-lg">
+          <p className="mt-4 font-display text-lg text-muted-foreground md:text-xl">
+            {t("hero_subtitle")}
+          </p>
+          <p className="mt-5 max-w-xl text-base leading-[1.9] text-foreground/80 md:text-lg">
             {t("hero_intro")}
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            <Link to={projectsHref} className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.5)] transition-all hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-14px_hsl(var(--primary)/0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto">
-              {t("hero_cta_projects")}
-              <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-                {lang === "ar" ? "←" : "→"}
-              </span>
-            </Link>
-            <Link to={contactHref} className="inline-flex w-full items-center justify-center rounded-full border border-foreground/15 px-7 py-3 text-sm font-semibold text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto">
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link
+              to={href("/contact")}
+              className={`group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-bold text-accent-foreground transition-transform hover:-translate-y-0.5 ${focusRing}`}
+            >
               {t("cta_start_project")}
+              <span aria-hidden>{arrow}</span>
+            </Link>
+            <Link
+              to={href("/projects")}
+              className={`inline-flex items-center justify-center rounded-full border border-foreground/15 px-7 py-3.5 text-sm font-semibold transition-colors hover:border-foreground ${focusRing}`}
+            >
+              {t("hero_cta_projects")}
             </Link>
             <a
               href={portfolioPdf.url}
               download="Youssef-Rehab-Portfolio.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full px-3 py-3 text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-accent hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
+              className={`inline-flex items-center justify-center gap-2 rounded-full px-3 py-3 text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline ${focusRing}`}
             >
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <svg
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
@@ -99,185 +148,143 @@ function Hero() {
               {t("hero_cta_download")}
             </a>
           </div>
-          <div className="mt-12 grid grid-cols-3 gap-6 border-t border-border pt-8">
-            <Stat n={lang === "ar" ? pair("ui_contactview_1")[0] : pair("ui_contactview_1")[1]} labelKey="stat_years" />
-            <Stat n={lang === "ar" ? pair("ui_contactview_2")[0] : pair("ui_contactview_2")[1]} labelKey="stat_brands" />
-            <Stat n={lang === "ar" ? pair("ui_contactview_3")[0] : pair("ui_contactview_3")[1]} labelKey="stat_sectors" />
-          </div>
-        </div>
-        <div className="md:col-span-5 relative flex items-center justify-center">
-          <div className={`absolute inset-0 hidden md:block rounded-3xl border border-accent/30 ${lang === "ar" ? "-translate-x-4 translate-y-4" : "translate-x-4 translate-y-4"}`} aria-hidden />
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl bg-ink shadow-2xl">
-            <img src={youssefPortrait.url} alt={t("brand_alt")} className="h-full w-full object-cover object-center transition-transform duration-[1200ms] hover:scale-[1.03]" />
-          </div>
-          <div className={`absolute -bottom-5 hidden md:flex items-center gap-3 rounded-full bg-accent px-5 py-3 text-primary shadow-xl ${lang === "ar" ? "right-6" : "left-6"}`}>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 font-display text-sm font-bold">YR</span>
-            <div className="leading-tight">
-              <div className="font-display text-[10px] font-semibold uppercase tracking-widest opacity-70">{t("strategic_brand")}</div>
-              <div className="font-display text-base font-bold">{t("identity_designer")}</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Scroll cue */}
-      <div className="pointer-events-none mx-auto hidden max-w-7xl px-6 pb-6 md:block">
-        <div className="flex items-center gap-3 text-xs text-muted-foreground/70">
-          <span className="h-px w-10 bg-border" />
-          <span className="tracking-wide">{t("home_scroll_cue")}</span>
-          <span aria-hidden className="inline-block animate-bounce">↓</span>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Stat({ n, labelKey }: { n: string; labelKey: DictKey }) {
-  const { t } = useLang();
-  return (
-    <div>
-      <div className="font-display text-3xl md:text-4xl font-bold">{n}</div>
-      <div className="mt-1 text-xs text-muted-foreground">{t(labelKey)}</div>
-    </div>
-  );
-}
-
-function About() {
-  const { t } = useLang();
-  const skillKeys: DictKey[] = [
-    "skill_visual_identity",
-    "skill_visual_systems",
-    "skill_logo_design",
-    "skill_generative_ai",
-    "skill_presentation",
-    "skill_social",
-    "skill_typography",
-    "skill_creative_direction",
-  ];
-  return (
-    <section className="border-y border-border bg-cream">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-24 md:grid-cols-12">
-        <div className="md:col-span-5">
-          <div className="sticky top-24">
-            <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("about_kicker")}</span>
-            <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold leading-tight">{t("about_title_a")}<br /> {t("about_title_b")}</h2>
-          </div>
-        </div>
-        <div className="md:col-span-7">
-          <Reveal>
-            <p className="text-lg leading-relaxed text-foreground/90">{t("about_p1")}</p>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{t("about_p2")}</p>
-          </Reveal>
-          <Reveal delay={120}>
-            <div className="mt-10">
-              <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{t("about_skills_kicker")}</div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {skillKeys.map((k) => (
-                  <span key={k} className="rounded-full border border-border bg-background px-4 py-2 text-sm transition-colors hover:border-accent/60 hover:text-accent">{t(k)}</span>
-                ))}
+          <dl className="mt-10 grid max-w-lg grid-cols-3 border-t border-border pt-6">
+            {stats.map(([n, label]) => (
+              <div key={label} className="border-s border-border px-4 first:border-s-0 first:ps-0">
+                <dt className="sr-only">{t(label)}</dt>
+                <dd className="font-display text-3xl font-bold md:text-4xl">{n}</dd>
+                <dd aria-hidden className="mt-1 text-xs text-muted-foreground">
+                  {t(label)}
+                </dd>
               </div>
+            ))}
+          </dl>
+        </div>
+
+        {/* Portrait — shorter crop on phones so the CTAs stay near the top */}
+        <div className="relative md:col-span-5">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-ink md:aspect-[4/5]">
+            <img
+              src={youssefPortrait.url}
+              alt={t("brand_alt")}
+              fetchPriority="high"
+              className="h-full w-full object-cover object-[center_30%]"
+            />
+          </div>
+          <div className="absolute -bottom-4 start-5 flex items-center gap-3 rounded-full bg-background px-4 py-2.5 shadow-xl ring-1 ring-border">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent font-display text-xs font-bold text-accent-foreground">
+              YR
+            </span>
+            <div className="leading-tight">
+              <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                {t("strategic_brand")}
+              </div>
+              <div className="font-display text-sm font-bold">{t("identity_designer")}</div>
             </div>
-          </Reveal>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function Services({ items }: { items: ServiceDTO[] }) {
-  const { t, lang } = useLang();
-  // Each card points to proof of that service: its projects category when it
+/* ---------------------------------------------------------------- Work */
+
+function Work({ projects }: { projects: PortfolioDTO[] }) {
+  // The slider already links to all projects (in its header on desktop, below it on phones).
+  return (
+    <section className="mx-auto max-w-7xl px-6 pb-20 pt-4">
+      <Reveal>
+        <LatestProjectsSlider projects={projects} compact limit={10} />
+      </Reveal>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------ Services */
+
+function Services() {
+  const { t } = useLang();
+  const { ar, arrow, href } = useNav();
+  const viewWork = ar ? pair("ui_homeview_2")[0] : pair("ui_homeview_2")[1];
+  const startProject = ar ? pair("ui_homeview_3")[0] : pair("ui_homeview_3")[1];
+  // Each row points to proof of that service: its projects category when it
   // has published work, otherwise the contact page (never an empty page).
-  const work = (cat: string) => (lang === "ar" ? `/projects/${cat}` : `/en/projects/${cat}`);
-  const contactHref = lang === "ar" ? "/contact" : "/en/contact";
-  const viewWork = lang === "ar" ? pair("ui_homeview_2")[0] : pair("ui_homeview_2")[1];
-  const startProject = lang === "ar" ? pair("ui_homeview_3")[0] : pair("ui_homeview_3")[1];
-  const targets: Array<{ href: string; cta: string }> = [
-    { href: work("branding"), cta: viewWork }, // Visual identity
-    { href: contactHref, cta: startProject }, // Logo design (no published logos yet)
-    { href: work("profiles"), cta: viewWork }, // Company profiles
-    { href: work("social"), cta: viewWork }, // Social media
-    { href: work("branding"), cta: viewWork }, // Design systems (shown inside identity work)
-    { href: contactHref, cta: startProject }, // Creative direction
+  const targets: Array<[string, string]> = [
+    [href("/projects/branding"), viewWork], // Visual identity
+    [href("/contact"), startProject], // Logo design (no published logos yet)
+    [href("/projects/profiles"), viewWork], // Company profiles
+    [href("/projects/social"), viewWork], // Social media
+    [href("/projects/branding"), viewWork], // Design systems (shown inside identity work)
+    [href("/contact"), startProject], // Creative direction
   ];
-  const list = ([
-    ["svc_1_t", "svc_1_d"],
-    ["svc_2_t", "svc_2_d"],
-    ["svc_3_t", "svc_3_d"],
-    ["svc_4_t", "svc_4_d"],
-    ["svc_5_t", "svc_5_d"],
-    ["svc_6_t", "svc_6_d"],
-  ] as [DictKey, DictKey][]).map(([tk, dk], i) => ({
-    title: t(tk),
-    desc: t(dk),
+  const rows = ([1, 2, 3, 4, 5, 6] as const).map((n, i) => ({
+    title: t(`svc_${n}_t` as DictKey),
+    desc: t(`svc_${n}_d` as DictKey),
     image: SERVICE_IMAGES[i],
-    href: targets[i].href,
-    cta: targets[i].cta,
+    href: targets[i][0],
+    cta: targets[i][1],
   }));
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-24">
-      <div className="flex flex-col gap-4 border-b border-border pb-8 md:flex-row md:items-end md:justify-between md:gap-6">
-        <div>
-          <span className="text-xs font-semibold uppercase tracking-widest text-accent">{t("services_kicker")}</span>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold">{t("services_title")}</h2>
-        </div>
-        <p className="max-w-md text-muted-foreground">{t("services_lede")}</p>
-      </div>
-      <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {list.map((item, i) => (
-          <Reveal key={i} delay={i * 60}>
-            <Link to={item.href}
-              className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-background transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_30px_60px_-30px_rgb(0_0_0/0.25)]"
+    <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
+      <SectionHead
+        kicker={t("services_kicker")}
+        title={t("services_title")}
+        lede={t("services_lede")}
+      />
+      <ul className="mt-10 border-t border-border">
+        {rows.map((row, i) => (
+          <li key={i} className="border-b border-border">
+            <Link
+              to={row.href}
+              className={`group grid grid-cols-[2.5rem_1fr_auto] items-center gap-4 py-5 md:grid-cols-[3rem_1.2fr_1fr_8rem_auto] md:gap-8 md:py-6 ${focusRing}`}
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  loading="lazy"
-                  width={1024}
-                  height={768}
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/60 via-ink/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90" />
-                <span
-                  className={`absolute top-4 font-display text-xs font-semibold tracking-widest text-white/90 ${lang === "ar" ? "right-4" : "left-4"}`}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="font-display text-xl font-bold text-foreground transition-colors group-hover:text-accent md:text-2xl">
-                  {item.title}
+              <span className="font-display text-sm font-semibold text-muted-foreground">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h3 className="font-display text-xl font-bold transition-colors group-hover:text-accent md:text-3xl">
+                  {row.title}
                 </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
-                <div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-accent transition-all duration-300">
-                  <span>{item.cta}</span>
-                  <span aria-hidden className={`transition-transform duration-300 ${lang === "ar" ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"}`}>{lang === "ar" ? "←" : "→"}</span>
-                </div>
+                <p className="mt-1 text-sm text-muted-foreground md:hidden">{row.desc}</p>
               </div>
+              <p className="hidden text-sm leading-relaxed text-muted-foreground md:block">
+                {row.desc}
+              </p>
+              <img
+                src={row.image}
+                alt=""
+                loading="lazy"
+                width={1024}
+                height={768}
+                className="hidden aspect-[4/3] w-32 rounded-xl object-cover grayscale transition duration-500 group-hover:grayscale-0 md:block"
+              />
+              <span
+                aria-label={row.cta}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors group-hover:border-accent group-hover:bg-accent group-hover:text-accent-foreground"
+              >
+                <span aria-hidden>{arrow}</span>
+              </span>
             </Link>
-          </Reveal>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }
 
+/* ------------------------------------------------------------- Process */
+
 function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
   const { t, lang } = useLang();
-  const fallback: Array<{ t: DictKey; d: DictKey }> = [
-    { t: "process_1_t", d: "process_1_d" },
-    { t: "process_2_t", d: "process_2_d" },
-    { t: "process_3_t", d: "process_3_d" },
-    { t: "process_4_t", d: "process_4_d" },
-  ];
   const copy = methodology?.copy;
   if (copy && copy.is_visible === false) return null;
 
-  const pick = (ar?: string | null, en?: string | null, fb?: string) => {
+  const pick = (ar?: string | null, en?: string | null, fb = "") => {
     const v = lang === "ar" ? ar : en;
-    return v && v.trim() ? v : fb ?? "";
+    return v && v.trim() ? v : fb;
   };
 
   const cmsSteps = methodology?.steps ?? [];
@@ -287,82 +294,85 @@ function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
         title: pick(s.title_ar, s.title_en),
         desc: pick(s.description_ar, s.description_en),
       }))
-    : fallback.map((s) => ({ key: s.t, title: t(s.t), desc: t(s.d) }));
-
-  const kicker = pick(copy?.kicker_ar, copy?.kicker_en, t("process_kicker"));
-  const title = pick(copy?.title_ar, copy?.title_en, t("process_title"));
-  const lede = pick(copy?.lede_ar, copy?.lede_en, t("process_lede"));
+    : ([1, 2, 3, 4] as const).map((n) => ({
+        key: String(n),
+        title: t(`process_${n}_t` as DictKey),
+        desc: t(`process_${n}_d` as DictKey),
+      }));
 
   return (
-    <section className="border-y border-border bg-cream/60">
-      <div className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="text-xs font-semibold uppercase tracking-widest text-accent">{kicker}</span>
-          <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold">{title}</h2>
-          <p className="mt-4 text-muted-foreground">{lede}</p>
-        </div>
-        <div className="relative mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Connector line — desktop only */}
-          <div aria-hidden className="pointer-events-none absolute inset-x-6 top-10 hidden h-px bg-gradient-to-r from-transparent via-border to-transparent lg:block" />
+    <section className="border-y border-border bg-cream">
+      <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
+        <SectionHead
+          kicker={pick(copy?.kicker_ar, copy?.kicker_en, t("process_kicker"))}
+          title={pick(copy?.title_ar, copy?.title_en, t("process_title"))}
+          lede={pick(copy?.lede_ar, copy?.lede_en, t("process_lede"))}
+        />
+        <ol className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, i) => (
-            <Reveal key={step.key} delay={i * 90}>
-              <div className="relative flex h-full flex-col rounded-2xl border border-border bg-background p-6 transition-all duration-500 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_20px_40px_-24px_rgb(0_0_0/0.2)]">
-                <div className="mb-5 flex h-10 items-center gap-3">
-                  <span className="h-px flex-1 bg-border" />
-                </div>
-                <h3 className="font-display text-lg font-bold">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
-              </div>
-            </Reveal>
+            <li key={step.key} className="border-t-2 border-foreground pt-5">
+              <span className="font-display text-sm font-bold text-accent">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-2 font-display text-xl font-bold">{step.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );
 }
 
+/* ----------------------------------------------------------------- CTA */
+
 function CTA() {
-  const { t, lang } = useLang();
-  const contactHref = lang === "ar" ? "/contact" : "/en/contact";
+  const { t } = useLang();
+  const { arrow, href } = useNav();
   return (
-    <section className="relative overflow-hidden bg-ink text-white">
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 right-1/4 h-80 w-80 rounded-full bg-accent/15 blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
-      </div>
-      <div className="relative mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-20 md:flex-row md:items-center">
+    <section className="bg-ink text-white">
+      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-20 md:flex-row md:items-end md:py-24">
         <div>
-          <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
+          <h2 className="font-display text-4xl font-bold leading-tight md:text-6xl">
             {t("cta_title_a")} <span className="text-accent">{t("cta_title_b")}</span>
           </h2>
           <p className="mt-4 max-w-xl text-white/70">{t("cta_sub")}</p>
-          <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/70">
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              {t("cta_reply_time")}
-            </span>
-            <span className="hidden h-3 w-px bg-white/20 md:inline-block" />
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              {t("hero_badge")}
-            </span>
-          </div>
+          <p className="mt-4 inline-flex items-center gap-2 text-sm text-white/70">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            {t("cta_reply_time")}
+          </p>
         </div>
         <div className="flex flex-col items-start gap-3 md:items-end">
           <Link
-            to={contactHref}
-            className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-bold text-primary transition-transform hover:-translate-y-0.5"
+            to={href("/contact")}
+            className="group inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-bold text-accent-foreground transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           >
-            {t("cta_button")}
+            {t("cta_button")} <span aria-hidden>{arrow}</span>
           </Link>
           <a
             href={`mailto:${contact.cta_email}`}
-            className="text-xs text-white/60 underline-offset-4 transition-colors hover:text-accent hover:underline"
+            className="text-sm text-white/60 underline-offset-4 hover:text-white hover:underline"
           >
             {contact.cta_email}
           </a>
         </div>
       </div>
     </section>
+  );
+}
+
+/* ------------------------------------------------------------- Shared */
+
+function SectionHead({ kicker, title, lede }: { kicker: string; title: string; lede?: string }) {
+  return (
+    <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between md:gap-10">
+      <div>
+        <span className="text-xs font-semibold uppercase tracking-widest text-accent">
+          {kicker}
+        </span>
+        <h2 className="mt-2 font-display text-4xl font-bold md:text-5xl">{title}</h2>
+      </div>
+      {lede && <p className="max-w-md text-muted-foreground">{lede}</p>}
+    </div>
   );
 }

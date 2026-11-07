@@ -81,7 +81,7 @@ function Row({ logos, reverse = false, duration = 50 }: { logos: Logo[]; reverse
   );
 }
 
-export function ClientsMarquee() {
+export function ClientsMarquee({ showStats = true }: { showStats?: boolean } = {}) {
   const { lang } = useLang();
   const [logos, setLogos] = useState<Logo[] | null>(null);
 
@@ -158,7 +158,7 @@ export function ClientsMarquee() {
         </div>
 
         {/* Stats strip */}
-        <div className="mx-auto mt-10 grid max-w-2xl grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/[0.06] bg-white/[0.02] py-5 text-center backdrop-blur-sm rtl:divide-x-reverse">
+        {showStats && (<div className="mx-auto mt-10 grid max-w-2xl grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/[0.06] bg-white/[0.02] py-5 text-center backdrop-blur-sm rtl:divide-x-reverse">
           <div className="px-3">
             <div className="font-display text-2xl font-bold text-white md:text-3xl">
               {count}+
@@ -179,7 +179,7 @@ export function ClientsMarquee() {
               {lang === "ar" ? pair("ui_clientsmarquee_5")[0] : pair("ui_clientsmarquee_5")[1]}
             </div>
           </div>
-        </div>
+        </div>)}
       </div>
 
       {/* Marquee rows */}
