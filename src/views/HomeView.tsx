@@ -88,9 +88,9 @@ function Hero() {
         className="pointer-events-none absolute -top-40 start-1/3 -z-10 h-96 w-96 rounded-full bg-accent/10 blur-3xl"
       />
 
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-16 pt-12 md:grid-cols-12 md:gap-12 md:pb-24 md:pt-20">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-16 pt-12 md:pb-24 md:pt-20 lg:grid-cols-12 lg:gap-12">
         {/* Copy */}
-        <div className="md:col-span-7">
+        <div className="lg:col-span-7">
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3.5 py-1.5 text-xs font-medium text-muted-foreground">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
@@ -113,14 +113,14 @@ function Hero() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link
               to={href("/contact")}
-              className={`group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-bold text-accent-foreground transition-transform hover:-translate-y-0.5 ${focusRing}`}
+              className={`group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-accent px-7 py-3.5 text-sm font-bold text-accent-foreground transition-transform hover:-translate-y-0.5 ${focusRing}`}
             >
               {t("cta_start_project")}
               <span aria-hidden>{arrow}</span>
             </Link>
             <Link
               to={href("/projects")}
-              className={`inline-flex items-center justify-center rounded-full border border-foreground/15 px-7 py-3.5 text-sm font-semibold transition-colors hover:border-foreground ${focusRing}`}
+              className={`inline-flex items-center justify-center whitespace-nowrap rounded-full border border-foreground/15 px-7 py-3.5 text-sm font-semibold transition-colors hover:border-foreground ${focusRing}`}
             >
               {t("hero_cta_projects")}
             </Link>
@@ -163,8 +163,8 @@ function Hero() {
         </div>
 
         {/* Portrait — shorter crop on phones so the CTAs stay near the top */}
-        <div className="relative md:col-span-5">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-ink md:aspect-[4/5]">
+        <div className="relative lg:col-span-5">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-ink ring-1 ring-border md:aspect-[16/10] lg:aspect-[4/5]">
             <img
               src={youssefPortrait.url}
               alt={t("brand_alt")}
@@ -239,7 +239,7 @@ function Services() {
           <li key={i} className="border-b border-border">
             <Link
               to={row.href}
-              className={`group grid grid-cols-[2.5rem_1fr_auto] items-center gap-4 py-5 md:grid-cols-[3rem_1.2fr_1fr_8rem_auto] md:gap-8 md:py-6 ${focusRing}`}
+              className={`group grid grid-cols-[2.5rem_1fr_auto] items-center gap-4 py-5 md:py-6 lg:grid-cols-[3rem_1.2fr_1fr_8rem_auto] lg:gap-8 ${focusRing}`}
             >
               <span className="font-display text-sm font-semibold text-muted-foreground">
                 {String(i + 1).padStart(2, "0")}
@@ -248,9 +248,9 @@ function Services() {
                 <h3 className="font-display text-xl font-bold transition-colors group-hover:text-accent md:text-3xl">
                   {row.title}
                 </h3>
-                <p className="mt-1 text-sm text-muted-foreground md:hidden">{row.desc}</p>
+                <p className="mt-1 text-sm text-muted-foreground lg:hidden">{row.desc}</p>
               </div>
-              <p className="hidden text-sm leading-relaxed text-muted-foreground md:block">
+              <p className="hidden text-sm leading-relaxed text-muted-foreground lg:block">
                 {row.desc}
               </p>
               <img
@@ -259,7 +259,7 @@ function Services() {
                 loading="lazy"
                 width={1024}
                 height={768}
-                className="hidden aspect-[4/3] w-32 rounded-xl object-cover grayscale transition duration-500 group-hover:grayscale-0 md:block"
+                className="hidden aspect-[4/3] w-32 rounded-xl object-cover grayscale transition duration-500 group-hover:grayscale-0 lg:block"
               />
               <span
                 aria-label={row.cta}
@@ -328,7 +328,7 @@ function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
 
 function CTA() {
   const { t } = useLang();
-  const { arrow, href } = useNav();
+  const { href } = useNav();
   return (
     <section className="bg-ink text-white">
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-20 md:flex-row md:items-end md:py-24">
@@ -347,7 +347,7 @@ function CTA() {
             to={href("/contact")}
             className="group inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-sm font-bold text-accent-foreground transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           >
-            {t("cta_button")} <span aria-hidden>{arrow}</span>
+            {t("cta_button")}
           </Link>
           <a
             href={`mailto:${contact.cta_email}`}
