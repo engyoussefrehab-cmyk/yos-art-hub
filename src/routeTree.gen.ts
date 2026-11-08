@@ -9,59 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as R404RouteImport } from './routes/404'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as PackagesRouteImport } from './routes/packages'
-import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as EnIndexRouteImport } from './routes/en.index'
-import { Route as EnContactRouteImport } from './routes/en.contact'
-import { Route as EnPackagesRouteImport } from './routes/en.packages'
-import { Route as EnRssDotxmlRouteImport } from './routes/en.rss[.]xml'
-import { Route as GoSplatRouteImport } from './routes/go.$'
-import { Route as InsightsIndexRouteImport } from './routes/insights.index'
-import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as PackagesRouteImport } from './routes/packages'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as R404RouteImport } from './routes/404'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools.index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
+import { Route as InsightsIndexRouteImport } from './routes/insights.index'
+import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as ToolsColorBriefRouteImport } from './routes/tools.color-brief'
-import { Route as EnGoSplatRouteImport } from './routes/en.go.$'
-import { Route as EnInsightsIndexRouteImport } from './routes/en.insights.index'
-import { Route as EnProjectsIndexRouteImport } from './routes/en.projects.index'
-import { Route as EnToolsIndexRouteImport } from './routes/en.tools.index'
-import { Route as EnToolsColorBriefRouteImport } from './routes/en.tools.color-brief'
-import { Route as InsightsCategoryIndexRouteImport } from './routes/insights.$category.index'
-import { Route as InsightsCategorySlugRouteImport } from './routes/insights.$category.$slug'
+import { Route as GoSplatRouteImport } from './routes/go.$'
+import { Route as EnSplatRouteImport } from './routes/en.$'
 import { Route as ProjectsCategoryIndexRouteImport } from './routes/projects.$category.index'
+import { Route as InsightsCategoryIndexRouteImport } from './routes/insights.$category.index'
 import { Route as ProjectsCategorySlugRouteImport } from './routes/projects.$category.$slug'
-import { Route as EnInsightsCategoryIndexRouteImport } from './routes/en.insights.$category.index'
-import { Route as EnInsightsCategorySlugRouteImport } from './routes/en.insights.$category.$slug'
-import { Route as EnProjectsCategoryIndexRouteImport } from './routes/en.projects.$category.index'
-import { Route as EnProjectsCategorySlugRouteImport } from './routes/en.projects.$category.$slug'
+import { Route as InsightsCategorySlugRouteImport } from './routes/insights.$category.$slug'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const R404Route = R404RouteImport.update({
-  id: '/404',
-  path: '/404',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PackagesRoute = PackagesRouteImport.update({
-  id: '/packages',
-  path: '/packages',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
@@ -69,44 +38,29 @@ const RssDotxmlRoute = RssDotxmlRouteImport.update({
   path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
+const PackagesRoute = PackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnIndexRoute = EnIndexRouteImport.update({
-  id: '/en/',
-  path: '/en/',
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnContactRoute = EnContactRouteImport.update({
-  id: '/en/contact',
-  path: '/en/contact',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnPackagesRoute = EnPackagesRouteImport.update({
-  id: '/en/packages',
-  path: '/en/packages',
+const R404Route = R404RouteImport.update({
+  id: '/404',
+  path: '/404',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnRssDotxmlRoute = EnRssDotxmlRouteImport.update({
-  id: '/en/rss.xml',
-  path: '/en/rss.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GoSplatRoute = GoSplatRouteImport.update({
-  id: '/go/$',
-  path: '/go/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsightsIndexRoute = InsightsIndexRouteImport.update({
-  id: '/insights/',
-  path: '/insights/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
-  id: '/projects/',
-  path: '/projects/',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToolsIndexRoute = ToolsIndexRouteImport.update({
@@ -114,44 +68,34 @@ const ToolsIndexRoute = ToolsIndexRouteImport.update({
   path: '/tools/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsIndexRoute = InsightsIndexRouteImport.update({
+  id: '/insights/',
+  path: '/insights/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/en/',
+  path: '/en/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsColorBriefRoute = ToolsColorBriefRouteImport.update({
   id: '/tools/color-brief',
   path: '/tools/color-brief',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnGoSplatRoute = EnGoSplatRouteImport.update({
-  id: '/en/go/$',
-  path: '/en/go/$',
+const GoSplatRoute = GoSplatRouteImport.update({
+  id: '/go/$',
+  path: '/go/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnInsightsIndexRoute = EnInsightsIndexRouteImport.update({
-  id: '/en/insights/',
-  path: '/en/insights/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EnProjectsIndexRoute = EnProjectsIndexRouteImport.update({
-  id: '/en/projects/',
-  path: '/en/projects/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EnToolsIndexRoute = EnToolsIndexRouteImport.update({
-  id: '/en/tools/',
-  path: '/en/tools/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EnToolsColorBriefRoute = EnToolsColorBriefRouteImport.update({
-  id: '/en/tools/color-brief',
-  path: '/en/tools/color-brief',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsightsCategoryIndexRoute = InsightsCategoryIndexRouteImport.update({
-  id: '/insights/$category/',
-  path: '/insights/$category/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InsightsCategorySlugRoute = InsightsCategorySlugRouteImport.update({
-  id: '/insights/$category/$slug',
-  path: '/insights/$category/$slug',
+const EnSplatRoute = EnSplatRouteImport.update({
+  id: '/en/$',
+  path: '/en/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsCategoryIndexRoute = ProjectsCategoryIndexRouteImport.update({
@@ -159,29 +103,19 @@ const ProjectsCategoryIndexRoute = ProjectsCategoryIndexRouteImport.update({
   path: '/projects/$category/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InsightsCategoryIndexRoute = InsightsCategoryIndexRouteImport.update({
+  id: '/insights/$category/',
+  path: '/insights/$category/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjectsCategorySlugRoute = ProjectsCategorySlugRouteImport.update({
   id: '/projects/$category/$slug',
   path: '/projects/$category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnInsightsCategoryIndexRoute = EnInsightsCategoryIndexRouteImport.update({
-  id: '/en/insights/$category/',
-  path: '/en/insights/$category/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EnInsightsCategorySlugRoute = EnInsightsCategorySlugRouteImport.update({
-  id: '/en/insights/$category/$slug',
-  path: '/en/insights/$category/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EnProjectsCategoryIndexRoute = EnProjectsCategoryIndexRouteImport.update({
-  id: '/en/projects/$category/',
-  path: '/en/projects/$category/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EnProjectsCategorySlugRoute = EnProjectsCategorySlugRouteImport.update({
-  id: '/en/projects/$category/$slug',
-  path: '/en/projects/$category/$slug',
+const InsightsCategorySlugRoute = InsightsCategorySlugRouteImport.update({
+  id: '/insights/$category/$slug',
+  path: '/insights/$category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -193,28 +127,17 @@ export interface FileRoutesByFullPath {
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/en/contact': typeof EnContactRoute
-  '/en/packages': typeof EnPackagesRoute
-  '/en/rss.xml': typeof EnRssDotxmlRoute
+  '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
   '/en/': typeof EnIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/tools/': typeof ToolsIndexRoute
-  '/en/go/$': typeof EnGoSplatRoute
-  '/en/tools/color-brief': typeof EnToolsColorBriefRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
-  '/en/insights/': typeof EnInsightsIndexRoute
-  '/en/projects/': typeof EnProjectsIndexRoute
-  '/en/tools/': typeof EnToolsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
-  '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
-  '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
-  '/en/insights/$category/': typeof EnInsightsCategoryIndexRoute
-  '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -224,28 +147,17 @@ export interface FileRoutesByTo {
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/en/contact': typeof EnContactRoute
-  '/en/packages': typeof EnPackagesRoute
-  '/en/rss.xml': typeof EnRssDotxmlRoute
+  '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
   '/en': typeof EnIndexRoute
   '/insights': typeof InsightsIndexRoute
   '/projects': typeof ProjectsIndexRoute
   '/tools': typeof ToolsIndexRoute
-  '/en/go/$': typeof EnGoSplatRoute
-  '/en/tools/color-brief': typeof EnToolsColorBriefRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
-  '/en/insights': typeof EnInsightsIndexRoute
-  '/en/projects': typeof EnProjectsIndexRoute
-  '/en/tools': typeof EnToolsIndexRoute
   '/insights/$category': typeof InsightsCategoryIndexRoute
   '/projects/$category': typeof ProjectsCategoryIndexRoute
-  '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
-  '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
-  '/en/insights/$category': typeof EnInsightsCategoryIndexRoute
-  '/en/projects/$category': typeof EnProjectsCategoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -256,28 +168,17 @@ export interface FileRoutesById {
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/en/contact': typeof EnContactRoute
-  '/en/packages': typeof EnPackagesRoute
-  '/en/rss.xml': typeof EnRssDotxmlRoute
+  '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
   '/en/': typeof EnIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/tools/': typeof ToolsIndexRoute
-  '/en/go/$': typeof EnGoSplatRoute
-  '/en/tools/color-brief': typeof EnToolsColorBriefRoute
   '/insights/$category/$slug': typeof InsightsCategorySlugRoute
   '/projects/$category/$slug': typeof ProjectsCategorySlugRoute
-  '/en/insights/': typeof EnInsightsIndexRoute
-  '/en/projects/': typeof EnProjectsIndexRoute
-  '/en/tools/': typeof EnToolsIndexRoute
   '/insights/$category/': typeof InsightsCategoryIndexRoute
   '/projects/$category/': typeof ProjectsCategoryIndexRoute
-  '/en/insights/$category/$slug': typeof EnInsightsCategorySlugRoute
-  '/en/projects/$category/$slug': typeof EnProjectsCategorySlugRoute
-  '/en/insights/$category/': typeof EnInsightsCategoryIndexRoute
-  '/en/projects/$category/': typeof EnProjectsCategoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -289,28 +190,17 @@ export interface FileRouteTypes {
     | '/packages'
     | '/rss.xml'
     | '/sitemap.xml'
-    | '/en/contact'
-    | '/en/packages'
-    | '/en/rss.xml'
+    | '/en/$'
     | '/go/$'
     | '/tools/color-brief'
     | '/en/'
     | '/insights/'
     | '/projects/'
     | '/tools/'
-    | '/en/go/$'
-    | '/en/tools/color-brief'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
-    | '/en/insights/'
-    | '/en/projects/'
-    | '/en/tools/'
     | '/insights/$category/'
     | '/projects/$category/'
-    | '/en/insights/$category/$slug'
-    | '/en/projects/$category/$slug'
-    | '/en/insights/$category/'
-    | '/en/projects/$category/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -320,28 +210,17 @@ export interface FileRouteTypes {
     | '/packages'
     | '/rss.xml'
     | '/sitemap.xml'
-    | '/en/contact'
-    | '/en/packages'
-    | '/en/rss.xml'
+    | '/en/$'
     | '/go/$'
     | '/tools/color-brief'
     | '/en'
     | '/insights'
     | '/projects'
     | '/tools'
-    | '/en/go/$'
-    | '/en/tools/color-brief'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
-    | '/en/insights'
-    | '/en/projects'
-    | '/en/tools'
     | '/insights/$category'
     | '/projects/$category'
-    | '/en/insights/$category/$slug'
-    | '/en/projects/$category/$slug'
-    | '/en/insights/$category'
-    | '/en/projects/$category'
   id:
     | '__root__'
     | '/'
@@ -351,28 +230,17 @@ export interface FileRouteTypes {
     | '/packages'
     | '/rss.xml'
     | '/sitemap.xml'
-    | '/en/contact'
-    | '/en/packages'
-    | '/en/rss.xml'
+    | '/en/$'
     | '/go/$'
     | '/tools/color-brief'
     | '/en/'
     | '/insights/'
     | '/projects/'
     | '/tools/'
-    | '/en/go/$'
-    | '/en/tools/color-brief'
     | '/insights/$category/$slug'
     | '/projects/$category/$slug'
-    | '/en/insights/'
-    | '/en/projects/'
-    | '/en/tools/'
     | '/insights/$category/'
     | '/projects/$category/'
-    | '/en/insights/$category/$slug'
-    | '/en/projects/$category/$slug'
-    | '/en/insights/$category/'
-    | '/en/projects/$category/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -383,65 +251,26 @@ export interface RootRouteChildren {
   PackagesRoute: typeof PackagesRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  EnContactRoute: typeof EnContactRoute
-  EnPackagesRoute: typeof EnPackagesRoute
-  EnRssDotxmlRoute: typeof EnRssDotxmlRoute
+  EnSplatRoute: typeof EnSplatRoute
   GoSplatRoute: typeof GoSplatRoute
   ToolsColorBriefRoute: typeof ToolsColorBriefRoute
   EnIndexRoute: typeof EnIndexRoute
   InsightsIndexRoute: typeof InsightsIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
-  EnGoSplatRoute: typeof EnGoSplatRoute
-  EnToolsColorBriefRoute: typeof EnToolsColorBriefRoute
   InsightsCategorySlugRoute: typeof InsightsCategorySlugRoute
   ProjectsCategorySlugRoute: typeof ProjectsCategorySlugRoute
-  EnInsightsIndexRoute: typeof EnInsightsIndexRoute
-  EnProjectsIndexRoute: typeof EnProjectsIndexRoute
-  EnToolsIndexRoute: typeof EnToolsIndexRoute
   InsightsCategoryIndexRoute: typeof InsightsCategoryIndexRoute
   ProjectsCategoryIndexRoute: typeof ProjectsCategoryIndexRoute
-  EnInsightsCategorySlugRoute: typeof EnInsightsCategorySlugRoute
-  EnProjectsCategorySlugRoute: typeof EnProjectsCategorySlugRoute
-  EnInsightsCategoryIndexRoute: typeof EnInsightsCategoryIndexRoute
-  EnProjectsCategoryIndexRoute: typeof EnProjectsCategoryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/404': {
-      id: '/404'
-      path: '/404'
-      fullPath: '/404'
-      preLoaderRoute: typeof R404RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/packages': {
-      id: '/packages'
-      path: '/packages'
-      fullPath: '/packages'
-      preLoaderRoute: typeof PackagesRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rss.xml': {
@@ -451,60 +280,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
+    '/packages': {
+      id: '/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof PackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/': {
-      id: '/en/'
-      path: '/en'
-      fullPath: '/en/'
-      preLoaderRoute: typeof EnIndexRouteImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/contact': {
-      id: '/en/contact'
-      path: '/en/contact'
-      fullPath: '/en/contact'
-      preLoaderRoute: typeof EnContactRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/packages': {
-      id: '/en/packages'
-      path: '/en/packages'
-      fullPath: '/en/packages'
-      preLoaderRoute: typeof EnPackagesRouteImport
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/rss.xml': {
-      id: '/en/rss.xml'
-      path: '/en/rss.xml'
-      fullPath: '/en/rss.xml'
-      preLoaderRoute: typeof EnRssDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/go/$': {
-      id: '/go/$'
-      path: '/go/$'
-      fullPath: '/go/$'
-      preLoaderRoute: typeof GoSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insights/': {
-      id: '/insights/'
-      path: '/insights'
-      fullPath: '/insights/'
-      preLoaderRoute: typeof InsightsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projects/': {
-      id: '/projects/'
-      path: '/projects'
-      fullPath: '/projects/'
-      preLoaderRoute: typeof ProjectsIndexRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tools/': {
@@ -514,6 +322,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/projects/': {
+      id: '/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights/': {
+      id: '/insights/'
+      path: '/insights'
+      fullPath: '/insights/'
+      preLoaderRoute: typeof InsightsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/': {
+      id: '/en/'
+      path: '/en'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/color-brief': {
       id: '/tools/color-brief'
       path: '/tools/color-brief'
@@ -521,53 +350,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsColorBriefRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/go/$': {
-      id: '/en/go/$'
-      path: '/en/go/$'
-      fullPath: '/en/go/$'
-      preLoaderRoute: typeof EnGoSplatRouteImport
+    '/go/$': {
+      id: '/go/$'
+      path: '/go/$'
+      fullPath: '/go/$'
+      preLoaderRoute: typeof GoSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/insights/': {
-      id: '/en/insights/'
-      path: '/en/insights'
-      fullPath: '/en/insights/'
-      preLoaderRoute: typeof EnInsightsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/en/projects/': {
-      id: '/en/projects/'
-      path: '/en/projects'
-      fullPath: '/en/projects/'
-      preLoaderRoute: typeof EnProjectsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/en/tools/': {
-      id: '/en/tools/'
-      path: '/en/tools'
-      fullPath: '/en/tools/'
-      preLoaderRoute: typeof EnToolsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/en/tools/color-brief': {
-      id: '/en/tools/color-brief'
-      path: '/en/tools/color-brief'
-      fullPath: '/en/tools/color-brief'
-      preLoaderRoute: typeof EnToolsColorBriefRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insights/$category/': {
-      id: '/insights/$category/'
-      path: '/insights/$category'
-      fullPath: '/insights/$category/'
-      preLoaderRoute: typeof InsightsCategoryIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/insights/$category/$slug': {
-      id: '/insights/$category/$slug'
-      path: '/insights/$category/$slug'
-      fullPath: '/insights/$category/$slug'
-      preLoaderRoute: typeof InsightsCategorySlugRouteImport
+    '/en/$': {
+      id: '/en/$'
+      path: '/en/$'
+      fullPath: '/en/$'
+      preLoaderRoute: typeof EnSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects/$category/': {
@@ -577,6 +371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsCategoryIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/insights/$category/': {
+      id: '/insights/$category/'
+      path: '/insights/$category'
+      fullPath: '/insights/$category/'
+      preLoaderRoute: typeof InsightsCategoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/$category/$slug': {
       id: '/projects/$category/$slug'
       path: '/projects/$category/$slug'
@@ -584,32 +385,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/insights/$category/': {
-      id: '/en/insights/$category/'
-      path: '/en/insights/$category'
-      fullPath: '/en/insights/$category/'
-      preLoaderRoute: typeof EnInsightsCategoryIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/en/insights/$category/$slug': {
-      id: '/en/insights/$category/$slug'
-      path: '/en/insights/$category/$slug'
-      fullPath: '/en/insights/$category/$slug'
-      preLoaderRoute: typeof EnInsightsCategorySlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/en/projects/$category/': {
-      id: '/en/projects/$category/'
-      path: '/en/projects/$category'
-      fullPath: '/en/projects/$category/'
-      preLoaderRoute: typeof EnProjectsCategoryIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/en/projects/$category/$slug': {
-      id: '/en/projects/$category/$slug'
-      path: '/en/projects/$category/$slug'
-      fullPath: '/en/projects/$category/$slug'
-      preLoaderRoute: typeof EnProjectsCategorySlugRouteImport
+    '/insights/$category/$slug': {
+      id: '/insights/$category/$slug'
+      path: '/insights/$category/$slug'
+      fullPath: '/insights/$category/$slug'
+      preLoaderRoute: typeof InsightsCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -623,28 +403,17 @@ const rootRouteChildren: RootRouteChildren = {
   PackagesRoute: PackagesRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  EnContactRoute: EnContactRoute,
-  EnPackagesRoute: EnPackagesRoute,
-  EnRssDotxmlRoute: EnRssDotxmlRoute,
+  EnSplatRoute: EnSplatRoute,
   GoSplatRoute: GoSplatRoute,
   ToolsColorBriefRoute: ToolsColorBriefRoute,
   EnIndexRoute: EnIndexRoute,
   InsightsIndexRoute: InsightsIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
   ToolsIndexRoute: ToolsIndexRoute,
-  EnGoSplatRoute: EnGoSplatRoute,
-  EnToolsColorBriefRoute: EnToolsColorBriefRoute,
   InsightsCategorySlugRoute: InsightsCategorySlugRoute,
   ProjectsCategorySlugRoute: ProjectsCategorySlugRoute,
-  EnInsightsIndexRoute: EnInsightsIndexRoute,
-  EnProjectsIndexRoute: EnProjectsIndexRoute,
-  EnToolsIndexRoute: EnToolsIndexRoute,
   InsightsCategoryIndexRoute: InsightsCategoryIndexRoute,
   ProjectsCategoryIndexRoute: ProjectsCategoryIndexRoute,
-  EnInsightsCategorySlugRoute: EnInsightsCategorySlugRoute,
-  EnProjectsCategorySlugRoute: EnProjectsCategorySlugRoute,
-  EnInsightsCategoryIndexRoute: EnInsightsCategoryIndexRoute,
-  EnProjectsCategoryIndexRoute: EnProjectsCategoryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
