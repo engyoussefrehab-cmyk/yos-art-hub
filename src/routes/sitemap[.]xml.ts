@@ -21,6 +21,7 @@ const ARABIC: Entry[] = [
   { path: "/contact", changefreq: "monthly", priority: "0.7", hasAlt: true },
   { path: "/brief", changefreq: "monthly", priority: "0.7" },
   { path: "/tools/color-brief", changefreq: "monthly", priority: "0.7", hasAlt: true },
+  { path: "/tools/color-wheel", changefreq: "monthly", priority: "0.7", hasAlt: true },
   { path: "/tools", changefreq: "monthly", priority: "0.8", hasAlt: true },
   { path: "/insights", changefreq: "weekly", priority: "0.9", hasAlt: true },
   { path: "/insights/brand-strategy", changefreq: "weekly", priority: "0.7", hasAlt: true },

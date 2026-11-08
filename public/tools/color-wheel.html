@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>عجلة الألوان</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Readex+Pro:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ECEDEF;--panel:#FFFFFF;--panel2:#F4F5F6;--line:#D9DBDF;--text:#0C0C0C;--mute:#5B6068;--soft:#33373D;--red:#E03B3B;--ok:#1E7A4C;--bad:#B42318;
+  --chipon:#E3E4E8;--track:#E3E4E7;--warnbg:#FDECEA;--warnfg:#8A2A1E;--badge:#B4541A;--okline:#BFE0CC;--badline:#F1C4BE;--swline:rgba(0,0,0,.12)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0E0F11;--panel:#17181B;--panel2:#111214;--line:#2B2D32;--text:#F2F2F2;--mute:#9CA0A8;--soft:#D2D4D8;--red:#FF4848;--ok:#7EDC8A;--bad:#FF9C92;
+  --chipon:#2A2C30;--track:#26282C;--warnbg:#2A1512;--warnfg:#FFC2B8;--badge:#FFB27A;--okline:#2B4A2F;--badline:#4A2B2B;--swline:rgba(255,255,255,.15);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0E0F11;--panel:#17181B;--panel2:#111214;--line:#2B2D32;--text:#F2F2F2;--mute:#9CA0A8;--soft:#D2D4D8;--red:#FF4848;--ok:#7EDC8A;--bad:#FF9C92;
+  --chipon:#2A2C30;--track:#26282C;--warnbg:#2A1512;--warnfg:#FFC2B8;--badge:#FFB27A;--okline:#2B4A2F;--badline:#4A2B2B;--swline:rgba(255,255,255,.15);color-scheme:dark}
+body.embed footer{display:none}
+body.embed .wrap{padding-top:8px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 18px 60px}
+header h1{font-family:"Readex Pro",sans-serif;font-size:clamp(30px,5vw,46px);margin:0 0 6px;line-height:1.2}
+header h1 span{color:var(--red)}
+header p{margin:0;color:var(--mute);font-size:16px;line-height:1.7;max-width:640px}
+.layout{display:grid;grid-template-columns:1fr;gap:18px;margin-top:24px;align-items:start}
+@media(min-width:960px){.layout{grid-template-columns:1fr 440px}.side{position:sticky;top:18px}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px}
+.card+.card{margin-top:14px}
+.step{display:flex;align-items:center;gap:10px;font-family:"Readex Pro",sans-serif;font-size:17px;margin:0 0 14px}
+.step i{font-style:normal;color:var(--red);font-size:14px}
+.sub{color:var(--mute);font-size:13.5px;margin:-8px 0 12px;line-height:1.6}
+/* color input */
+.colorrow{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+.swbtn{position:relative;width:76px;height:76px;border-radius:18px;border:1px solid var(--swline);cursor:pointer;overflow:hidden;flex:none}
+.swbtn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.hexbox{flex:1;min-width:170px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.hexbox input{background:var(--panel2);border:1px solid var(--line);border-radius:12px;color:var(--text);font-family:"IBM Plex Mono",monospace;font-size:18px;padding:10px 12px;direction:ltr;text-align:left;outline:none;width:100%}
+.hexbox input:focus{border-color:var(--mute)}
+.hexbox small{color:var(--mute);font-size:12.5px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ghost{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:13.5px;cursor:pointer;color:var(--soft)}
+.ghost:hover{border-color:var(--mute)}
+.ghost input{display:none}
+.found{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.found button{width:38px;height:38px;border-radius:10px;border:1px solid var(--swline);cursor:pointer}
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.quick span{color:var(--mute);font-size:12.5px;margin-inline-end:4px}
+.quick button{width:26px;height:26px;border-radius:8px;border:1px solid var(--swline);cursor:pointer}
+.sec2{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--soft);cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--red);width:18px;height:18px}
+.warn{margin-top:12px;font-size:13.5px;color:var(--warnfg);line-height:1.7;background:var(--warnbg);border-radius:12px;padding:8px 12px}
+.warn:empty{display:none}
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{background:var(--panel2);border:1px solid var(--line);color:var(--soft);border-radius:999px;padding:7px 13px;font-size:13.5px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:5px;margin-top:14px}
+.seg button{border:0;background:transparent;border-radius:10px;padding:9px 6px;cursor:pointer;font-size:14px;color:var(--soft)}
+.seg button b{display:block;font-size:14.5px;color:var(--text)}
+.seg button small{display:block;font-size:11.5px;color:var(--mute);margin-top:2px}
+.seg button[aria-pressed=true]{background:var(--chipon)}
+.snote{margin-top:12px;font-size:13.5px;color:var(--soft);line-height:1.7}
+.snote:empty{display:none}
+/* result */
+.best{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center}
+.best .big{width:96px;height:96px;border-radius:20px;border:1px solid var(--swline);cursor:pointer;position:relative}
+.best .big span{direction:ltr;unicode-bidi:isolate;position:absolute;bottom:6px;right:6px;left:6px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11px;padding:2px;border-radius:6px}
+.best h3{margin:0 0 4px;font-family:"Readex Pro",sans-serif;font-size:19px}
+.best p{margin:0;color:var(--soft);font-size:14.5px;line-height:1.7}
+.checks{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.ck{font-size:12.5px;border-radius:999px;padding:4px 10px;border:1px solid var(--line);color:var(--mute)}
+.ck.ok{color:var(--ok);border-color:var(--okline)}
+.ck.bad{color:var(--bad);border-color:var(--badline)}
+.meter{margin-top:14px}
+.meter .lab{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin-bottom:6px}
+.meter .bar{height:8px;background:var(--track);border-radius:999px;overflow:hidden}
+.meter .bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#FF7A59,#FF3B30)}
+.others{margin-top:18px}
+.others p{margin:0 0 8px;color:var(--mute);font-size:13px}
+.olist{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.ob{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:8px;cursor:pointer;text-align:right}
+.ob[aria-pressed=true]{border-color:var(--red);box-shadow:0 0 0 1px var(--red) inset}
+.ob i{display:block;height:34px;border-radius:9px;margin-bottom:6px}
+.ob b{display:block;font-size:12.5px;line-height:1.4}
+.ob small{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--mute);direction:ltr;text-align:right}
+.ob em{font-style:normal;font-size:10.5px;color:var(--badge)}
+.ring{display:flex;align-items:center;gap:14px;margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+.ring svg{width:76px;height:76px;flex:none}
+.ring p{margin:0;font-size:13px;color:var(--mute);line-height:1.7}
+/* preview */
+.vtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:12px}
+.vtabs button{border:0;background:transparent;border-radius:9px;padding:7px 2px;font-size:12.5px;cursor:pointer;color:var(--soft)}
+.vtabs button[aria-pressed=true]{background:var(--chipon);color:var(--text)}
+.vnote{font-size:12.5px;color:var(--mute);margin:-4px 0 10px;line-height:1.6;min-height:20px}
+.poster{position:relative;width:100%;aspect-ratio:4/5;border-radius:18px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.45);transition:filter .25s}
+.poster .glow{position:absolute;inset:0;pointer-events:none}
+.poster .hero{position:absolute;left:50%;top:57%;width:46%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%}
+.poster .dot{position:absolute;width:15%;aspect-ratio:1;border-radius:50%;left:60%;top:38%}
+.poster .floor{position:absolute;left:50%;top:80%;width:52%;height:5%;transform:translateX(-50%);border-radius:50%;filter:blur(8px)}
+.poster .copy{position:absolute;top:8%;right:8%;left:8%;font-family:"Readex Pro",sans-serif;color:#fff;line-height:1.25}
+.poster .copy .s{font-size:17px;font-weight:500;opacity:.85}
+.poster .copy .k{display:inline-block;font-size:34px;font-weight:700;padding:2px 12px;border-radius:8px;margin:6px 0}
+.poster .copy .l{font-size:23px;font-weight:700}
+.strip{display:flex;height:14px;border-radius:999px;overflow:hidden;margin-top:14px}
+.pal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.pc{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:8px;cursor:pointer;text-align:right}
+.pc i{display:block;height:30px;border-radius:8px;margin-bottom:6px}
+.pc b{display:block;font-size:12.5px}
+.pc span{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--mute);direction:ltr;display:block;text-align:right}
+.btn{display:block;width:100%;margin-top:12px;background:var(--red);color:#fff;border:0;border-radius:14px;padding:13px;font-family:"Readex Pro",sans-serif;font-size:16px;cursor:pointer}
+.btn2{display:block;width:100%;margin-top:8px;background:transparent;color:var(--soft);border:1px solid var(--line);border-radius:14px;padding:10px;font-size:14px;cursor:pointer}
+/* science */
+details{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:4px 18px}
+summary{cursor:pointer;list-style:none;padding:14px 0;font-family:"Readex Pro",sans-serif;font-size:16px;display:flex;justify-content:space-between;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--red);font-size:22px}
+details[open] summary::after{content:"–"}
+.sci{padding-bottom:14px}
+.sci ol{margin:0;padding-inline-start:20px;line-height:1.9;color:var(--soft);font-size:14.5px}
+.sci ol li{margin-bottom:6px}
+.sci ol li::marker{color:var(--red);font-family:"Readex Pro",sans-serif}
+.sci .src{margin-top:12px;font-size:12.5px;color:var(--mute);line-height:1.9;direction:ltr;text-align:left}
+.sci .src a{color:var(--soft)}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--panel);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{margin-top:26px;color:var(--mute);font-size:13px;text-align:center}
+footer a{color:var(--text)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Machado, Oliveira & Fernandes (2009), severity 1.0 — applied in linear RGB -->
+  <filter id="deut" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="0.367322 0.860646 -0.227968 0 0  0.280085 0.672501 0.047413 0 0  -0.011820 0.042940 0.968881 0 0  0 0 0 1 0"/></filter>
+  <filter id="prot" color-interpolation-filters="linearRGB"><feColorMatrix type="matrix" values="0.152286 1.052583 -0.204868 0 0  0.114503 0.786281 0.099216 0 0  -0.003882 -0.048116 1.051998 0 0  0 0 0 1 0"/></filter>
+</svg>
+
+<div class="wrap">
+  <header>
+    <h1>عجلة <span>الألوان</span></h1>
+    <p>اختار لون الخلفية ومجال مشروعك… والأداة تطلّعلك اللون اللي هيشد العين، وتقولك ليه، وتختبرهولك.</p>
+  </header>
+
+  <div class="layout">
+    <main>
+      <section class="card">
+        <h2 class="step"><i>01</i> لون الخلفية</h2>
+        <div class="colorrow">
+          <label class="swbtn" id="baseSw" title="اختار اللون"><input type="color" id="baseC" value="#1F4E5A" aria-label="لون الخلفية"></label>
+          <div class="hexbox">
+            <input type="text" id="baseT" value="#1F4E5A" maxlength="7" spellcheck="false" aria-label="كود اللون">
+            <small id="baseName">دوس على المربع أو اكتب كود اللون</small>
+          </div>
+        </div>
+        <div class="tools">
+          <label class="ghost">ارفع لوجو أو صورة وخُد لونها<input type="file" id="img" accept="image/*"></label>
+          <button class="ghost" id="dropper" hidden>خُد لون من الشاشة</button>
+        </div>
+        <div class="found" id="found"></div>
+        <div class="quick" id="quick"><span>أو جرّب:</span></div>
+
+        <div class="sec2">
+          <label class="toggle"><input type="checkbox" id="hasSec"> عندي لون تاني للصورة والعناصر</label>
+          <div class="colorrow" id="secRow" style="display:none;margin-top:12px">
+            <label class="swbtn" id="secSw" style="width:56px;height:56px;border-radius:14px"><input type="color" id="secC" value="#B8B2A7" aria-label="اللون التاني"></label>
+            <div class="hexbox"><input type="text" id="secT" value="#B8B2A7" maxlength="7" spellcheck="false" aria-label="كود اللون التاني"></div>
+          </div>
+        </div>
+        <div class="warn" id="warn"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="step"><i>02</i> مشروعك عن إيه؟</h2>
+        <div class="chips" id="sectors"></div>
+        <div class="seg" id="moods"></div>
+        <div class="snote" id="snote"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="step"><i>03</i> اللون اللي هيشد العين</h2>
+        <div class="best" id="best"></div>
+        <div class="checks" id="checks"></div>
+        <div class="meter"><div class="lab"><span>قوة الجذب</span><span id="mtxt"></span></div><div class="bar"><i id="mbar"></i></div></div>
+        <div class="ring" id="ring"></div>
+        <div class="others"><p>اختيارات تانية</p><div class="olist" id="olist"></div></div>
+      </section>
+
+    </main>
+
+    <aside class="side">
+      <section class="card">
+        <h2 class="step"><i>04</i> جرّبه على بوستر</h2>
+        <div class="vtabs" id="vtabs">
+          <button data-v="normal" aria-pressed="true">عادي</button>
+          <button data-v="squint" aria-pressed="false">ضيّق عينك</button>
+          <button data-v="gray" aria-pressed="false">أبيض وإسود</button>
+          <button data-v="cvd" aria-pressed="false">عمى ألوان</button>
+        </div>
+        <div class="vnote" id="vnote">ده شكل البوستر بالألوان دي.</div>
+        <div class="poster" id="poster">
+          <div class="glow" id="glow"></div>
+          <div class="floor" id="floor"></div>
+          <div class="hero" id="hero"></div>
+          <div class="dot" id="dot"></div>
+          <div class="copy">
+            <div class="s">حاجة صغيرة</div>
+            <div class="k" id="kbox">بتغيّر</div>
+            <div class="l">البوستر كله</div>
+          </div>
+        </div>
+        <div class="strip" id="strip"></div>
+        <div class="pal" id="pal"></div>
+        <button class="btn" id="copyAll">انسخ الألوان</button>
+        <button class="btn2" id="copyCss">انسخها كـ CSS</button>
+      </section>
+    </aside>
+  </div>
+
+  <details>
+        <summary>ليه بنختار كده؟ (الأساس العلمي)</summary>
+        <div class="sci">
+          <ol>
+            <li><b>العين بتشوف المختلف قبل ما تدوّر:</b> لون واحد مختلف عن اللي حواليه بيتلقط في لحظة، مهما كان فيه عناصر تانية. عشان كده بنقترح لون واحد بس يشد العين. (Treisman & Gelade)</li>
+            <li><b>المختلف هو اللي بيتفتكر:</b> الحاجة الوحيدة المختلفة وسط حاجات شبه بعض بتتفتكر أكتر. فحط اللون ده على الكلمة أو الحاجة اللي عايزها تتفتكر. (von Restorff)</li>
+            <li><b>العجلة اللي بنختار منها هي عجلة الرسامين:</b> اللون قصاد اللون، والقريب من قصاده، واللي على بُعد تلت الدايرة. دي طرق التوافق اللي بيشتغل بيها المصممين من أيام الباوهاوس. (Itten)</li>
+            <li><b>بنحسب الألوان زي ما العين بتشوفها:</b> الأداة بتظبط فتاحة اللون وقوّته بنظام OKLCH، اللي متصمم إن الأرقام تمشي مع إحساس العين. فالاقتراحات متوازنة ومش فاقعة بالغلط. (Ottosson)</li>
+            <li><b>لازم يبان على الخلفية:</b> بنتأكد إن الفرق بين اللون والخلفية ٣:١ على الأقل. ده الحد الأدنى في معايير الويب للعناصر اللي لازم تتشاف. (WCAG 2.2)</li>
+            <li><b>شوية صغيرين كفاية:</b> اللون الصريح بيبان أقوى من مساحته. عشان كده ٦٠ / ٣٠ / ١٠. ودي طريقة مصممين ونقطة بداية، مش قانون بالمللي. (Goethe · Itten)</li>
+            <li><b>ضعف تمييز الأحمر والأخضر مش نادر:</b> بيوصل لحوالي ١ من كل ١٢ راجل في بعض الشعوب، وأقل في شعوب تانية. عشان كده بنختبر اللون زي ما هما بيشوفوه، ونقولك لو هيضيع. (MedlinePlus · Machado et al.)</li>
+            <li><b>معنى اللون مش قاعدة ثابتة:</b> ارتباطات المجالات (الأكل سخن، الطبي هادي…) شائعة، بس الأبحاث بتقول إن تأثير اللون بيتغيّر حسب السياق والثقافة. فاعتبرها بداية مش حكم. (Elliot)</li>
+          </ol>
+          <div class="src">
+            Treisman & Gelade (1980) <a href="https://doi.org/10.1016/0010-0285(80)90005-5">Feature-integration theory of attention</a> ·
+            von Restorff (1933) <a href="https://doi.org/10.1007/BF02409636">Isolation effect</a> ·
+            Itten (1961) The Art of Color ·
+            Ottosson (2020) <a href="https://bottosson.github.io/posts/oklab/">OKLab</a> ·
+            W3C <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast">WCAG 2.2 — 1.4.11 Non-text Contrast</a> ·
+            Machado, Oliveira & Fernandes (2009) <a href="https://doi.org/10.1109/TVCG.2009.113">CVD simulation</a> ·
+            MedlinePlus <a href="https://medlineplus.gov/genetics/condition/color-vision-deficiency">Color vision deficiency</a> ·
+            Elliot (2015) <a href="https://doi.org/10.3389/fpsyg.2015.00368">Color & psychological functioning</a>
+          </div>
+        </div>
+      </details>
+
+  <footer>عجلة الألوان — Youssef Rehab · <a href="https://www.yrstudio.art">yrstudio.art</a></footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= color science ================= */
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const $=id=>document.getElementById(id);
+function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16);return[(n>>16)&255,(n>>8)&255,n&255]}
+function rgbToHex(r,g,b){return'#'+[r,g,b].map(v=>Math.round(clamp(v,0,255)).toString(16).padStart(2,'0')).join('').toUpperCase()}
+function rgbToHsl(r,g,b){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0,l=(mx+mn)/2;const d=mx-mn;if(d){s=l>.5?d/(2-mx-mn):d/(mx+mn);if(mx===r)h=((g-b)/d+(g<b?6:0));else if(mx===g)h=(b-r)/d+2;else h=(r-g)/d+4;h*=60}return[h,s,l]}
+function hslToRgb(h,s,l){h=((h%360)+360)%360;const c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2;let r,g,b;
+  if(h<60)[r,g,b]=[c,x,0];else if(h<120)[r,g,b]=[x,c,0];else if(h<180)[r,g,b]=[0,c,x];else if(h<240)[r,g,b]=[0,x,c];else if(h<300)[r,g,b]=[x,0,c];else[r,g,b]=[c,0,x];
+  return[(r+m)*255,(g+m)*255,(b+m)*255]}
+const toLin=v=>{v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)};
+const fromLin=v=>255*(v<=.0031308?12.92*v:1.055*Math.pow(v,1/2.4)-.055);
+// OKLab (Ottosson 2020)
+function rgbToOklab(R,G,B){const r=toLin(R),g=toLin(G),b=toLin(B);
+  const l=Math.cbrt(.4122214708*r+.5363325363*g+.0514459929*b),m=Math.cbrt(.2119034982*r+.6806995451*g+.1073969566*b),s=Math.cbrt(.0883024619*r+.2817188376*g+.6299787005*b);
+  return[.2104542553*l+.793617785*m-.0040720468*s,1.9779984951*l-2.428592205*m+.4505937099*s,.0259040371*l+.7827717662*m-.808675766*s]}
+function oklabToLinRgb(L,a,b){const l=(L+.3963377774*a+.2158037573*b)**3,m=(L-.1055613458*a-.0638541728*b)**3,s=(L-.0894841775*a-1.291485548*b)**3;
+  return[4.0767416621*l-3.3077115913*m+.2309699292*s,-1.2684380046*l+2.6097574011*m-.3413193965*s,-.0041960863*l-.7034186147*m+1.707614701*s]}
+const hexOklab=h=>rgbToOklab(...hexToRgb(h));
+function hexOklch(h){const[L,a,b]=hexOklab(h);return[L,Math.hypot(a,b),((Math.atan2(b,a)*180/Math.PI)+360)%360]}
+function oklchHex(L,C,H){ // gamut-map by reducing chroma
+  const t=H*Math.PI/180;let c=C;
+  for(let i=0;i<40;i++){const rgb=oklabToLinRgb(L,c*Math.cos(t),c*Math.sin(t));if(rgb.every(v=>v>=-.0005&&v<=1.0005))return rgbToHex(...rgb.map(v=>fromLin(clamp(v,0,1))));c*=.93}
+  const rgb=oklabToLinRgb(L,0,0);return rgbToHex(...rgb.map(v=>fromLin(clamp(v,0,1))));
+}
+const dE=(x,y)=>{const A=hexOklab(x),B=hexOklab(y);return Math.hypot(A[0]-B[0],A[1]-B[1],A[2]-B[2])};
+// WCAG relative luminance & contrast
+function lum(hex){return hexToRgb(hex).map(toLin).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0)}
+function contrast(a,b){const A=lum(a),B=lum(b);return(Math.max(A,B)+.05)/(Math.min(A,B)+.05)}
+const textOn=hex=>contrast(hex,'#FFFFFF')>=contrast(hex,'#111111')?'#FFFFFF':'#111111';
+// CVD simulation (Machado 2009, severity 1) in linear RGB
+const CVD={deut:[[.367322,.860646,-.227968],[.280085,.672501,.047413],[-.01182,.04294,.968881]],prot:[[.152286,1.052583,-.204868],[.114503,.786281,.099216],[-.003882,-.048116,1.051998]]};
+function sim(hex,k){const v=hexToRgb(hex).map(toLin),M=CVD[k];return rgbToHex(...M.map(r=>fromLin(clamp(r[0]*v[0]+r[1]*v[1]+r[2]*v[2],0,1))))}
+// painter's wheel (RYB) <-> screen hue
+const RYB=[0,60,120,180,240,300,360],HUE=[0,30,60,120,220,280,360];
+function interp(x,xs,ys){x=((x%360)+360)%360;for(let i=0;i<xs.length-1;i++)if(x>=xs[i]&&x<=xs[i+1])return ys[i]+(x-xs[i])/(xs[i+1]-xs[i])*(ys[i+1]-ys[i]);return 0}
+const hueToRyb=h=>interp(h,HUE,RYB),rybToHue=a=>interp(a,RYB,HUE);
+const hexHsl=h=>rgbToHsl(...hexToRgb(h));
+const hueDist=(a,b)=>{const d=Math.abs(a-b)%360;return d>180?360-d:d};
+function temp(hex){const[h,s]=hexHsl(hex);if(s<.12)return'محايد';if(h<75||h>=330)return'سخن';if(h>=150&&h<320)return'بارد';return'متوسط'}
+function mix(hex,to,t){const a=hexToRgb(hex),b=hexToRgb(to);return rgbToHex(...a.map((v,i)=>v+(b[i]-v)*t))}
+function rgba(hex,a){const[r,g,b]=hexToRgb(hex);return`rgba(${r},${g},${b},${a})`}
+const inR=(h,rs)=>rs.some(([a,b])=>h>=a&&h<=b);
+// plain-language color name (Arabic)
+function colorName(hex){const[h,s,l]=hexHsl(hex);
+  if(s<.1)return l<.15?'إسود':l>.88?'أبيض':'رمادي';
+  if(l<.12)return'غامق جدًا';
+  let n='';
+  if(h<12||h>=345)n='أحمر';else if(h<40)n=(l<.35?'بني':(h>=30&&s<.65?'دهبي':'برتقالي'));else if(h<52)n=(l<.4?'بني دهبي':'دهبي');else if(h<68)n='أصفر';else if(h<95)n='ليموني';else if(h<150)n='أخضر';else if(h<175)n='منت';else if(h<195)n='تركواز';else if(h<215)n='سماوي';else if(h<245)n='أزرق';else if(h<275)n='نيلي';else if(h<300)n='بنفسجي';else if(h<325)n='موف';else n='بينك';
+  if(['أزرق','أخضر','بنفسجي','أحمر'].includes(n)&&l<.28)n+=' غامق';
+  if(n==='أزرق'&&l<.3)n='كحلي';if(n==='تركواز'&&l<.35)n='بترولي';if(n==='بينك'&&l<.35)n='نبيتي';if(n==='أحمر'&&l<.3)n='نبيتي';if(n==='أحمر'&&l>.62)n='روز';
+  if(s<.3&&l>.6&&!n.includes('غامق'))n+=' فاتح هادي';
+  return n;
+}
+
+/* ================= knowledge ================= */
+const HARM=[
+  {key:'comp',k:'قصاده بالظبط',off:180,mood:'bold',why:'اللون اللي قصاد لونك في دايرة الألوان. ده أقوى فرق ممكن، فالعين هتروحله على طول.'},
+  {key:'split',k:'جنب اللي قصاده',off:150,mood:'classy',why:'جنب اللون اللي قصادك بخطوة. باين قوي، بس أهدى وأقل متوقع.'},
+  {key:'split',k:'جنب اللي قصاده',off:210,mood:'classy',why:'الناحية التانية من اللون اللي قصادك. نفس القوة بإحساس مختلف.'},
+  {key:'triad',k:'تلت الدايرة',off:120,mood:'cheerful',why:'بعيد عن لونك بتلت الدايرة. الألوان كده بتبقى أفرح وأكتر حيوية.'},
+  {key:'triad',k:'تلت الدايرة',off:240,mood:'cheerful',why:'التلت التاني من الدايرة. مبهج برضه بإحساس مختلف.'},
+  {key:'near',k:'قريب من قصاده',off:165,mood:'classy',why:'قريب جدًا من اللون اللي قصادك، بس أنعم.'},
+  {key:'near',k:'قريب من قصاده',off:195,mood:'classy',why:'قريب جدًا من اللون اللي قصادك من الناحية التانية.'},
+  {key:'square',k:'ربع الدايرة',off:90,mood:'cheerful',why:'بعيد عن لونك بربع الدايرة. بيبان بإحساس أهدى من القصاد.'},
+  {key:'square',k:'ربع الدايرة',off:270,mood:'cheerful',why:'ربع الدايرة من الناحية التانية.'}
+];
+const MOODS={
+  bold:{t:'قوي',d:'يتشاف من بعيد',C:.19,pref:['comp','near']},
+  classy:{t:'شيك',d:'هادي ومش متوقع',C:.12,pref:['split','near']},
+  cheerful:{t:'مبهج',d:'فرحان وشبابي',C:.17,pref:['triad','square']}
+};
+// screen-hue ranges
+const SECTORS={
+  'عام':{mood:'bold',like:[],avoid:[],note:''},
+  'عيادة أطفال':{mood:'cheerful',like:[[0,20],[38,60],[80,110],[188,212],[320,350]],avoid:[],note:'الأطفال وأهاليهم بيرتاحوا للألوان الفاتحة المبهجة اللي بتبعد عن إحساس المستشفى.'},
+  'عيادة وطبي':{mood:'classy',like:[[160,215]],avoid:[[345,360],[0,15]],note:'في الطبي الناس بتدوّر على الهدوء والنضافة، والأحمر الصريح ممكن يفكّرهم بالدم.'},
+  'هندسة ومقاولات':{mood:'bold',like:[[22,55],[200,225]],avoid:[[300,345]],note:'الأصفر والبرتقالي مرتبطين بمواقع الشغل والأمان، والأزرق بالثقة.'},
+  'عقارات':{mood:'classy',like:[[14,30],[38,50]],avoid:[[280,340],[70,110]],note:'الدهبي والطوبي بيدّوا إحساس بالقيمة والأرض.'},
+  'مطعم وأكل':{mood:'bold',like:[[0,50]],avoid:[[200,300]],note:'الألوان السخنة مرتبطة بالأكل، والأزرق والبنفسجي نادر تلاقيهم في الأكل.'},
+  'كافيه':{mood:'classy',like:[[18,40],[95,150]],avoid:[[260,330]],note:'الكراميل والطوبي من لون القهوة نفسها، والأخضر بيدّي إحساس طبيعي.'},
+  'حلويات':{mood:'cheerful',like:[[320,355],[0,20],[42,58],[150,178]],avoid:[],note:'البينك والكورال والمنت بيتربطوا بالسكر والطعم الحلو.'},
+  'تكنولوجيا':{mood:'bold',like:[[180,232],[255,290],[75,100]],avoid:[[18,40]],note:'الأزرق الكهربا والبنفسجي والليموني بيدّوا إحساس بالسرعة والحداثة.'},
+  'بنوك ومالية':{mood:'classy',like:[[38,50],[130,160],[205,225]],avoid:[[290,345]],note:'الدهبي والأخضر والأزرق مرتبطين بالفلوس والثقة.'},
+  'تعليم':{mood:'cheerful',like:[[40,58],[20,35],[190,212],[100,140]],avoid:[],note:'الألوان الدافية والمبهجة بتشجّع وبتقرّب، من غير ما تبقى طفولية زيادة.'},
+  'بيوتي وموضة':{mood:'classy',like:[[330,356],[38,50],[265,300]],avoid:[[70,130]],note:'الروز والدهبي والليلاكي بيدّوا إحساس ناعم وراقي.'},
+  'رياضة وجيم':{mood:'bold',like:[[72,105],[12,35],[350,360],[0,6],[195,215]],avoid:[],note:'الليموني والبرتقالي والأحمر ألوان طاقة وحركة.'},
+  'عطور وفخامة':{mood:'classy',like:[[38,50],[345,360],[0,8]],avoid:[[70,200]],note:'الدهبي والنبيتي بيدّوا إحساس بالفخامة لما يبقوا قليلين.'},
+  'محاماة واستشارات':{mood:'classy',like:[[38,50],[205,225]],avoid:[[280,345],[70,110]],note:'الدهبي والأزرق الهادي بيدّوا إحساس بالثقة والجدية.'}
+};
+const QUICK=['#1F4E5A','#0F2A4A','#6E2F5E','#2E3B2F','#F2EDE4','#1C1C1C','#7A2E2E','#E9E4F2'];
+
+/* ================= state ================= */
+let base='#1F4E5A',sec=null,sector='عام',mood='bold',moodManual=false,opts=[],chosen=0,view='normal';
+
+/* ================= engine ================= */
+function makeAccent(screenHue){
+  const[L0]=hexOklch(base),bgLum=lum(base),dark=bgLum<.3;
+  const Hok=hexOklch(rgbToHex(...hslToRgb(screenHue,1,.5)))[2];
+  let C=MOODS[mood].C, L=dark?.74:.6;
+  if(mood==='classy')L=dark?.72:.56;
+  let hex=oklchHex(L,C,Hok),i=0;
+  // WCAG 1.4.11: at least 3:1 against the background
+  while(contrast(hex,base)<3&&i<40){L=clamp(L+(dark?.012:-.012),.25,.95);hex=oklchHex(L,C,Hok);i++}
+  return hex;
+}
+function neutralFor(){const[L,C,H]=hexOklch(base);const dark=lum(base)<.3;return oklchHex(dark?.84:.34,clamp(C*.25,.012,.03),H)}
+function evaluate(hex){
+  const mid=sec||neutralFor();
+  const cr=contrast(hex,base);
+  const d1=dE(hex,base),d2=dE(hex,mid);
+  const dd=Math.min(dE(sim(hex,'deut'),sim(base,'deut')),dE(sim(hex,'prot'),sim(base,'prot')));
+  const [,C]=hexOklch(hex);
+  // salience: colour difference from both other colours + chroma (feature contrast)
+  const sal=clamp((Math.min(d1,d2)/.3)*.6+(C/.2)*.25+(Math.min(cr,7)/7)*.15,0,1);
+  const tb=temp(base),ta=temp(hex);
+  return{cr,dd,sal,tempOk:(tb==='سخن'&&ta==='بارد')||(tb==='بارد'&&ta==='سخن'),tb,ta};
+}
+function score(o){
+  const p=SECTORS[sector],h=hexHsl(o.hex)[0];let sc=0;
+  if(sector!=='عام'){if(inR(h,p.like))sc+=4;if(inR(h,p.avoid))sc-=6}
+  if(MOODS[mood].pref.includes(o.key))sc+=2;
+  sc+=o.ev.sal*2+(o.ev.tempOk?1:0)+(o.ev.dd>.1?.5:-1);
+  return sc;
+}
+function build(){
+  const[bh]=hexHsl(base),br=hueToRyb(bh);
+  const pool=HARM.map(m=>({...m,hex:makeAccent(rybToHue(br+m.off))}));
+  // sector pick: the sector colour furthest from the background on the wheel
+  const p=SECTORS[sector];
+  if(p.like.length){let best=null;for(const[a,b]of p.like)for(let x=a;x<=b;x+=2){const d=hueDist(hueToRyb(x),br);if(d>=60&&(!best||d>best.d))best={x,d}}
+    if(best)pool.unshift({key:'sector',k:'من ألوان مجالك',mood,why:p.note,hex:makeAccent(best.x),sector:true});}
+  pool.forEach(o=>o.ev=evaluate(o.hex));
+  pool.forEach(o=>o.sc=score(o)+(o.sector?1:0));
+  pool.sort((a,b)=>b.sc-a.sc);
+  // keep only clearly different colours (OKLab ΔE)
+  const kept=[];for(const o of pool){if(kept.every(k=>dE(k.hex,o.hex)>=.085))kept.push(o);if(kept.length===6)break}
+  opts=kept;chosen=0;renderAll();
+}
+
+/* ================= render ================= */
+function renderSectors(){
+  $('sectors').innerHTML=Object.keys(SECTORS).map(k=>`<button class="chip" aria-pressed="${k===sector}" data-k="${k}">${k}</button>`).join('');
+  $('sectors').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{sector=b.dataset.k;if(!moodManual)mood=SECTORS[sector].mood;renderSectors();renderMoods();build()});
+  const n=SECTORS[sector].note;let extra='';
+  if(n&&inR(hexHsl(base)[0],SECTORS[sector].like))extra=' ولون خلفيتك نفسه من ألوان المجال ده، فاللون التالت مهمته بس إنه يبان.';
+  $('snote').textContent=n?n+' دي ارتباطات شائعة، مش قاعدة ثابتة.'+extra:'';
+}
+function renderMoods(){
+  $('moods').innerHTML=Object.entries(MOODS).map(([k,m])=>`<button data-m="${k}" aria-pressed="${k===mood}"><b>${m.t}</b><small>${m.d}</small></button>`).join('');
+  $('moods').querySelectorAll('button').forEach(b=>b.onclick=()=>{mood=b.dataset.m;moodManual=true;renderMoods();build()});
+}
+function renderAll(){
+  const o=opts[chosen],acc=o.hex,mid=sec||neutralFor(),ev=o.ev;
+  // swatches
+  $('baseSw').style.background=base;$('baseName').textContent=colorName(base)+' · دوس على المربع أو اكتب الكود';
+  if(sec)$('secSw').style.background=sec;
+  // warnings
+  const[,bs,bl]=hexHsl(base),w=[];
+  if(lum(base)<.012)w.push('لونك قريب من الإسود. الخلفية بتبان أحلى لما تبقى مش غامقة أوي، وسيب الإسود للكلام.');
+  if(lum(base)>.85)w.push('لونك قريب من الأبيض. جرّب درجة أغمق شوية عشان اللون التالت يبان.');
+  if(bs<.1&&bl>.12&&bl<.88)w.push('لونك رمادي تقريبًا، فأي لون صريح هيبان عليه. اختار اللي يناسب مجالك.');
+  if(sec&&dE(sec,base)<.08)w.push('اللون التاني قريب أوي من الخلفية. هيضيع جواها، جرّب لون أفتح أو أغمق.');
+  $('warn').textContent=w.join(' ');
+  // best card
+  const isBest=chosen===0;
+  $('best').innerHTML=`<button class="big" style="background:${acc}" data-h="${acc}" title="انسخ"><span style="background:${rgba(textOn(acc)==='#FFFFFF'?'#000000':'#FFFFFF',.35)};color:${textOn(acc)}">${acc}</span></button>
+    <div><h3>${isBest?'★ ':''}${colorName(acc)} — ${o.k}</h3><p>${o.why}</p></div>`;
+  $('best').querySelector('.big').onclick=e=>copy(acc,'اتنسخ '+acc);
+  const ck=[
+    [ev.cr>=3,ev.cr>=3?'باين على الخلفية':'مش باين كفاية — استخدمه في مساحة كبيرة'],
+    ev.tempOk?[true,'سخن قصاد بارد']:ev.tb==='محايد'?[true,'خلفية محايدة تشيل أي لون']:(ev.tb===ev.ta&&ev.tb!=='متوسط')?[null,'الخلفية واللون الاتنين '+ev.tb+' — بيبان بالفتاحة مش بالحرارة']:[null,'حرارة اللون قريبة من الخلفية'],
+    [ev.dd>.1,ev.dd>.1?'واضح لعمى الألوان':'ممكن يضيع عند اللي عندهم عمى ألوان']
+  ];
+  if(sector!=='عام'){const h=hexHsl(acc)[0],p=SECTORS[sector];if(inR(h,p.like))ck.push([true,'من ألوان '+sector]);else if(inR(h,p.avoid))ck.push([false,'مش شائع في '+sector])}
+  $('checks').innerHTML=ck.map(([ok,t])=>`<span class="ck ${ok===true?'ok':ok===false?'bad':''}">${ok===true?'✓ ':ok===false?'! ':''}${t}</span>`).join('');
+  $('mbar').style.width=Math.round(ev.sal*100)+'%';
+  $('mtxt').textContent=ev.sal>.75?'قوي جدًا':ev.sal>.55?'قوي':ev.sal>.35?'متوسط':'ضعيف';
+  // ring (explanation only)
+  const stops=[];for(let a=0;a<=360;a+=15)stops.push(rgbToHex(...hslToRgb(rybToHue(a),.75,.55)));
+  const pos=(h,r)=>{const a=hueToRyb(h)*Math.PI/180;return[50+r*Math.sin(a),50-r*Math.cos(a)]};
+  const segs=stops.slice(0,-1).map((c,i)=>{const a0=i*15*Math.PI/180,a1=(i+1)*15*Math.PI/180+.02,R=46,r=34;
+    const p=(a,rr)=>`${50+rr*Math.sin(a)},${50-rr*Math.cos(a)}`;return`<path d="M${p(a0,R)} A${R},${R} 0 0 1 ${p(a1,R)} L${p(a1,r)} A${r},${r} 0 0 0 ${p(a0,r)}Z" fill="${c}"/>`}).join('');
+  const[bx,by]=pos(hexHsl(base)[0],40),[ax,ay]=pos(hexHsl(acc)[0],40);
+  $('ring').innerHTML=`<svg viewBox="0 0 100 100">${segs}<line x1="${bx}" y1="${by}" x2="${ax}" y2="${ay}" stroke="#fff" stroke-width="1.2" stroke-dasharray="2 2"/><circle cx="${bx}" cy="${by}" r="7" fill="${base}" stroke="#fff" stroke-width="2"/><circle cx="${ax}" cy="${ay}" r="7" fill="${acc}" stroke="#fff" stroke-width="2"/></svg>
+    <p>دي مكان لونك ومكان اللون المقترح في دايرة الألوان. اختيارها كان بطريقة <b style="color:var(--text)">«${o.k}»</b>.</p>`;
+  // others
+  $('olist').innerHTML=opts.map((x,i)=>`<button class="ob" aria-pressed="${i===chosen}" data-i="${i}"><i style="background:${x.hex}"></i><b>${colorName(x.hex)}</b>${i===0?'<em>★ الأنسب</em>':''}<small>${x.hex}</small></button>`).join('');
+  $('olist').querySelectorAll('.ob').forEach(b=>b.onclick=()=>{chosen=+b.dataset.i;renderAll()});
+  // poster
+  const light=mix(base,'#FFFFFF',.16),dark=mix(base,'#000000',.35);
+  $('poster').style.background=`radial-gradient(circle at 50% 52%, ${light} 0%, ${base} 45%, ${dark} 100%)`;
+  $('glow').style.background=`radial-gradient(ellipse at 0% 60%, ${rgba(acc,.32)} 0%, transparent 45%)`;
+  $('hero').style.background=`radial-gradient(circle at 35% 30%, ${mix(mid,'#FFFFFF',.25)} 0%, ${mid} 55%, ${mix(mid,'#000000',.3)} 100%)`;
+  $('hero').style.boxShadow=`-14px 0 40px ${rgba(acc,.25)}`;
+  $('dot').style.background=acc;$('dot').style.boxShadow=`0 0 24px ${rgba(acc,.65)}`;
+  $('floor').style.background=rgba(mix(base,'#000000',.6),.8);
+  $('kbox').style.background=acc;$('kbox').style.color=textOn(acc);
+  $('strip').innerHTML=`<i style="flex:6;background:${base}"></i><i style="flex:3;background:${mid}"></i><i style="flex:1;background:${acc}"></i>`;
+  const items=[['٦٠٪ الخلفية',base],['٣٠٪ الصورة والكلام',mid],['١٠٪ اللي بيشد العين',acc]];
+  $('pal').innerHTML=items.map(([n,h])=>`<button class="pc" data-h="${h}"><i style="background:${h}"></i><b>${n}</b><span>${h}</span></button>`).join('');
+  $('pal').querySelectorAll('.pc').forEach(c=>c.onclick=()=>copy(c.dataset.h,'اتنسخ '+c.dataset.h));
+  setView(view);
+}
+const VNOTE={normal:'ده شكل البوستر بالألوان دي.',squint:'كأنك مضيّق عينك أو شايفه من بعيد. لو أول حاجة عينك راحتلها هي اللون التالت، يبقى اخترت صح.',gray:'من غير ألوان خالص. لو الكلمة والعنصر لسه باينين، يبقى الفرق في الفتاحة كويس.',cvd:'زي ما بيشوفه اللي عندهم ضعف في تمييز الأحمر والأخضر (الأشهر). لو اللون لسه باين، يبقى أمان.'};
+function setView(v){view=v;
+  $('vtabs').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v));
+  $('poster').style.filter=v==='squint'?'blur(7px)':v==='gray'?'grayscale(1)':v==='cvd'?'url(#deut)':'none';
+  $('vnote').textContent=VNOTE[v];
+}
+$('vtabs').querySelectorAll('button').forEach(b=>b.onclick=()=>setView(b.dataset.v));
+
+/* ================= inputs ================= */
+const valid=v=>/^#?[0-9a-fA-F]{6}$/.test(v.trim());
+const norm=v=>('#'+v.trim().replace('#','')).toUpperCase();
+function setBase(h){base=norm(h);$('baseC').value=base;$('baseT').value=base;renderSectors();build()}
+$('baseC').oninput=e=>setBase(e.target.value);
+$('baseT').oninput=e=>{if(valid(e.target.value))setBase(e.target.value)};
+function setSec(h){sec=norm(h);$('secC').value=sec;$('secT').value=sec;opts.forEach(o=>o.ev=evaluate(o.hex));renderAll()}
+$('secC').oninput=e=>setSec(e.target.value);
+$('secT').oninput=e=>{if(valid(e.target.value))setSec(e.target.value)};
+$('hasSec').onchange=e=>{$('secRow').style.display=e.target.checked?'flex':'none';if(e.target.checked)setSec($('secC').value);else{sec=null;opts.forEach(o=>o.ev=evaluate(o.hex));renderAll()}};
+$('quick').insertAdjacentHTML('beforeend',QUICK.map(h=>`<button style="background:${h}" data-h="${h}" title="${h}"></button>`).join(''));
+$('quick').querySelectorAll('button').forEach(b=>b.onclick=()=>setBase(b.dataset.h));
+// eyedropper (where the browser allows it)
+if('EyeDropper' in window){$('dropper').hidden=false;$('dropper').onclick=async()=>{try{const r=await new EyeDropper().open();setBase(r.sRGBHex)}catch(e){}}}
+// extract colours from an uploaded logo/photo (k-means in OKLab)
+$('img').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{
+  const c=document.createElement('canvas'),S=64;c.width=S;c.height=S;const x=c.getContext('2d');x.drawImage(im,0,0,S,S);
+  const d=x.getImageData(0,0,S,S).data,px=[];
+  for(let i=0;i<d.length;i+=4){if(d[i+3]<128)continue;const hx=rgbToHex(d[i],d[i+1],d[i+2]);const[,s,l]=hexHsl(hx);if(l>.95||l<.04)continue;px.push(hexOklab(hx).concat([hx]))}
+  if(!px.length){toast('مقدرتش ألاقي ألوان في الصورة');return}
+  let K=Math.min(5,px.length),cent=[];for(let i=0;i<K;i++)cent.push(px[Math.floor(i*px.length/K)].slice(0,3));
+  let asg=[];for(let it=0;it<10;it++){asg=px.map(p=>{let bi=0,bd=1e9;cent.forEach((c,i)=>{const dd=(p[0]-c[0])**2+(p[1]-c[1])**2+(p[2]-c[2])**2;if(dd<bd){bd=dd;bi=i}});return bi});
+    cent=cent.map((c,i)=>{const m=px.filter((_,j)=>asg[j]===i);if(!m.length)return c;return[0,1,2].map(k=>m.reduce((a,p)=>a+p[k],0)/m.length)})}
+  const counts=cent.map((_,i)=>asg.filter(a=>a===i).length);
+  const cols=cent.map((c,i)=>({hex:rgbToHex(...oklabToLinRgb(...c).map(v=>fromLin(clamp(v,0,1)))),n:counts[i]})).filter(c=>c.n>0).sort((a,b)=>b.n-a.n);
+  const uniq=[];cols.forEach(c=>{if(uniq.every(u=>dE(u.hex,c.hex)>.06))uniq.push(c)});
+  $('found').innerHTML='<span style="color:var(--mute);font-size:12.5px;align-self:center">ألوان الصورة — دوس على واحد:</span>'+uniq.map(c=>`<button style="background:${c.hex}" data-h="${c.hex}" title="${c.hex}"></button>`).join('');
+  $('found').querySelectorAll('button').forEach(b=>b.onclick=()=>setBase(b.dataset.h));
+  setBase(uniq[0].hex);URL.revokeObjectURL(im.src)};im.src=URL.createObjectURL(f)};
+
+/* ================= copy ================= */
+function toast(t){const el=$('toast');el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),1700)}
+async function copy(text,msg){try{await navigator.clipboard.writeText(text);toast(msg||'اتنسخ')}catch(e){toast(text)}}
+$('copyAll').onclick=()=>{const o=opts[chosen],mid=sec||neutralFor();copy(`60% ${base}\n30% ${mid}\n10% ${o.hex}`,'الألوان اتنسخت')};
+$('copyCss').onclick=()=>{const o=opts[chosen],mid=sec||neutralFor();copy(`:root{\n  --color-base: ${base};\n  --color-support: ${mid};\n  --color-accent: ${o.hex};\n}`,'اتنسخت كـ CSS')};
+
+try{if(window.self!==window.top)document.body.classList.add('embed')}catch(e){document.body.classList.add('embed')}
+renderSectors();renderMoods();build();
+</script>
+</body>
+</html>

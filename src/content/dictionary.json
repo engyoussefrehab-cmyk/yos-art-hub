@@ -51,6 +51,18 @@
     "ar": "الألوان",
     "en": "Color selection"
   },
+  "tools_wheel_title": {
+    "ar": "عجلة الألوان",
+    "en": "Color Wheel"
+  },
+  "tools_wheel_desc": {
+    "ar": "اختار لون الخلفية ومجال مشروعك، وخُد اللون اللي هيشد العين، وليه، وجرّبه على بوستر.",
+    "en": "Pick a background color and your field, and get the accent color that grabs attention — with the reason and a poster preview."
+  },
+  "tools_wheel_tag": {
+    "ar": "اللون اللي يشد العين",
+    "en": "Accent color"
+  },
   "tools_coming_soon": {
     "ar": "المزيد من الأدوات قريبا",
     "en": "More tools coming soon"

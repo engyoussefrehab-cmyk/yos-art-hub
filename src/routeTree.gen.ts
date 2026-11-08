@@ -21,6 +21,7 @@ import { Route as ToolsIndexRouteImport } from './routes/tools.index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as EnIndexRouteImport } from './routes/en.index'
+import { Route as ToolsColorWheelRouteImport } from './routes/tools.color-wheel'
 import { Route as ToolsColorBriefRouteImport } from './routes/tools.color-brief'
 import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as EnSplatRouteImport } from './routes/en.$'
@@ -89,6 +90,11 @@ const EnIndexRoute = EnIndexRouteImport.update({
   path: '/en/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsColorWheelRoute = ToolsColorWheelRouteImport.update({
+  id: '/tools/color-wheel',
+  path: '/tools/color-wheel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsColorBriefRoute = ToolsColorBriefRouteImport.update({
   id: '/tools/color-brief',
   path: '/tools/color-brief',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
+  '/tools/color-wheel': typeof ToolsColorWheelRoute
   '/en/': typeof EnIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
+  '/tools/color-wheel': typeof ToolsColorWheelRoute
   '/en': typeof EnIndexRoute
   '/insights': typeof InsightsIndexRoute
   '/projects': typeof ProjectsIndexRoute
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
+  '/tools/color-wheel': typeof ToolsColorWheelRoute
   '/en/': typeof EnIndexRoute
   '/insights/': typeof InsightsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
@@ -203,6 +212,7 @@ export interface FileRouteTypes {
     | '/en/$'
     | '/go/$'
     | '/tools/color-brief'
+    | '/tools/color-wheel'
     | '/en/'
     | '/insights/'
     | '/projects/'
@@ -224,6 +234,7 @@ export interface FileRouteTypes {
     | '/en/$'
     | '/go/$'
     | '/tools/color-brief'
+    | '/tools/color-wheel'
     | '/en'
     | '/insights'
     | '/projects'
@@ -245,6 +256,7 @@ export interface FileRouteTypes {
     | '/en/$'
     | '/go/$'
     | '/tools/color-brief'
+    | '/tools/color-wheel'
     | '/en/'
     | '/insights/'
     | '/projects/'
@@ -267,6 +279,7 @@ export interface RootRouteChildren {
   EnSplatRoute: typeof EnSplatRoute
   GoSplatRoute: typeof GoSplatRoute
   ToolsColorBriefRoute: typeof ToolsColorBriefRoute
+  ToolsColorWheelRoute: typeof ToolsColorWheelRoute
   EnIndexRoute: typeof EnIndexRoute
   InsightsIndexRoute: typeof InsightsIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
@@ -363,6 +376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/color-wheel': {
+      id: '/tools/color-wheel'
+      path: '/tools/color-wheel'
+      fullPath: '/tools/color-wheel'
+      preLoaderRoute: typeof ToolsColorWheelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/color-brief': {
       id: '/tools/color-brief'
       path: '/tools/color-brief'
@@ -427,6 +447,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnSplatRoute: EnSplatRoute,
   GoSplatRoute: GoSplatRoute,
   ToolsColorBriefRoute: ToolsColorBriefRoute,
+  ToolsColorWheelRoute: ToolsColorWheelRoute,
   EnIndexRoute: EnIndexRoute,
   InsightsIndexRoute: InsightsIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
