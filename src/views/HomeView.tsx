@@ -135,7 +135,9 @@ function Heading({
           <span className="text-accent">✦</span>
           {kicker}
         </span>
-        <h2 className="mt-3 font-display text-4xl font-bold leading-[1.1] md:text-6xl">{title}</h2>
+        <h2 className="mt-3 font-display text-3xl font-bold leading-[1.2] md:text-[2.75rem]">
+          {title}
+        </h2>
       </div>
       {action && <div className="shrink-0 self-start md:self-auto">{action}</div>}
     </div>
@@ -148,7 +150,7 @@ function Hero() {
   const { t } = useLang();
   return (
     <section className="px-3 pt-3 sm:px-6">
-      <div className="relative isolate mx-auto flex min-h-[86svh] max-w-[1400px] flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] px-6 pb-8 pt-28 md:px-12 md:pb-12">
+      <div className="relative isolate mx-auto flex min-h-[78svh] max-w-[1400px] flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] px-6 pb-10 pt-28 md:px-16 md:pb-16">
         {/* Animated colour field */}
         <div aria-hidden className="absolute inset-0 -z-10">
           <div className="yr-blob absolute -top-24 end-[-10%] h-[70%] w-[70%] rounded-full bg-accent/60 blur-[110px]" />
@@ -169,12 +171,12 @@ function Hero() {
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
               {t("hero_badge")}
             </span>
-            <h1 className="mt-6 font-display text-[3rem] font-bold leading-[1.02] text-white sm:text-7xl lg:text-[7.5rem]">
+            <h1 className="mt-6 font-display text-[2.5rem] font-bold leading-[1.1] text-white sm:text-6xl lg:text-[4.75rem]">
               هويات
               <br />
               تبنى لتبقى.
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-[1.9] text-white/80 md:text-xl">
+            <p className="mt-6 max-w-lg text-base leading-[1.9] text-white/75 md:text-lg">
               أنا يوسف رحاب، مصمم هويات بصرية. أصمم لعلامتك شعارا وألوانا وخطوطا تجعلها واضحة ومميزة
               في السوق.
             </p>
@@ -215,16 +217,16 @@ function Hero() {
 function BigMarquee({ words }: { words: string[] }) {
   const row = [...words, ...words];
   return (
-    <div className="overflow-hidden py-10 md:py-16" aria-hidden dir="ltr">
+    <div className="overflow-hidden py-14 md:py-24" aria-hidden dir="ltr">
       <div className="yr-marquee flex w-max">
         {[0, 1].map((copy) => (
           <div key={copy} className="flex shrink-0 items-center">
             {row.map((w, i) => (
               <span key={`${copy}-${i}`} className="flex items-center" dir="rtl">
-                <span className="px-6 font-display text-6xl font-bold text-white md:px-10 md:text-[8.5rem] md:leading-none">
+                <span className="px-5 font-display text-4xl font-bold text-white/90 md:px-8 md:text-[4.5rem] md:leading-none">
                   {w}
                 </span>
-                <span className="text-4xl text-white/30 md:text-7xl">✦</span>
+                <span className="text-2xl text-white/25 md:text-4xl">✦</span>
               </span>
             ))}
           </div>
@@ -250,14 +252,14 @@ function About() {
     [v("ui_contactview_3"), "stat_sectors"],
   ];
   return (
-    <section className="mx-auto max-w-[1400px] px-6 pb-20 md:pb-28">
+    <section className="mx-auto max-w-[1400px] px-6 pb-28 md:px-10 md:pb-40">
       <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-7">
           <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
             <span className="text-accent">✦</span>
             من أنا
           </span>
-          <p className="mt-5 font-display text-3xl font-bold leading-[1.4] md:text-5xl md:leading-[1.3]">
+          <p className="mt-5 max-w-2xl font-display text-2xl font-bold leading-[1.6] md:text-[2.125rem] md:leading-[1.55]">
             الهوية ليست شعارا فقط.{" "}
             <span className="text-white/40">
               هي الطريقة التي يتذكر بها الناس علامتك. أصممها بوضوح، ليختارك عميلك من أول نظرة.
@@ -267,7 +269,7 @@ function About() {
             {stats.map(([n, label]) => (
               <div key={label} className="rounded-3xl bg-white/[0.04] p-5">
                 <dt className="sr-only">{t(label)}</dt>
-                <dd className="font-display text-3xl font-bold md:text-5xl">{n}</dd>
+                <dd className="font-display text-2xl font-bold md:text-4xl">{n}</dd>
                 <dd aria-hidden className="mt-1 text-xs text-muted-foreground md:text-sm">
                   {t(label)}
                 </dd>
@@ -376,7 +378,7 @@ const TONES = {
 function Services() {
   return (
     <section id="services" className="mx-auto max-w-[1400px] scroll-mt-24 px-3 sm:px-6">
-      <div className="px-3 sm:px-0">
+      <div className="px-3 sm:px-0 md:px-4">
         <Heading kicker="الخدمات والأسعار" title="ماذا أقدم، وبكم" />
       </div>
       <div className="mt-10">
@@ -388,11 +390,11 @@ function Services() {
               className={`sticky mb-4 overflow-hidden rounded-[2rem] ${tone.card}`}
               style={{ top: `calc(5.5rem + ${i * 12}px)` }}
             >
-              <div className="relative flex min-h-[240px] flex-col p-6 md:min-h-[260px] md:p-9">
+              <div className="relative flex min-h-[240px] flex-col p-7 md:min-h-[270px] md:p-12">
                 {/* Big outlined number as decoration */}
                 <span
                   aria-hidden
-                  className={`pointer-events-none absolute bottom-[-0.15em] end-6 hidden font-display md:block text-[7rem] font-bold leading-none text-transparent md:end-10 md:text-[11rem] ${
+                  className={`pointer-events-none absolute bottom-[-0.15em] end-6 hidden font-display md:block text-[7rem] font-bold leading-none text-transparent md:end-10 md:text-[8rem] ${
                     s.tone === "red" || s.tone === "white"
                       ? "[-webkit-text-stroke:1.5px_rgba(0,0,0,0.25)]"
                       : "[-webkit-text-stroke:1.5px_rgba(255,255,255,0.18)]"
@@ -402,9 +404,7 @@ function Services() {
                 </span>
 
                 <div className="flex items-start justify-between gap-4">
-                  <h3 className="font-display text-2xl font-bold sm:text-3xl md:text-5xl">
-                    {s.title}
-                  </h3>
+                  <h3 className="font-display text-2xl font-bold md:text-[2.5rem]">{s.title}</h3>
                   <a
                     href={`/projects?cat=${s.cat}#browse`}
                     className={`group ${focusRing} rounded-full`}
@@ -426,7 +426,7 @@ function Services() {
                     {s.line}
                   </p>
                   <div className="mt-5 flex flex-wrap items-center gap-4">
-                    <span className="font-display text-2xl font-bold md:text-3xl">{s.price}</span>
+                    <span className="font-display text-xl font-bold md:text-2xl">{s.price}</span>
                     <Link
                       to="/contact"
                       className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold ${tone.tag} ${focusRing}`}
@@ -461,7 +461,7 @@ function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
       }));
 
   return (
-    <section className="mx-auto max-w-[1400px] px-6 py-24 md:py-32">
+    <section className="mx-auto max-w-[1400px] px-6 py-28 md:px-10 md:py-40">
       <Heading
         kicker={pick(copy?.kicker_ar, t("process_kicker"))}
         title={pick(copy?.title_ar, t("process_title"))}
@@ -475,12 +475,12 @@ function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
         {steps.map((s, i) => (
           <li
             key={s.key}
-            className="grid grid-cols-[3.5rem_1fr] items-start gap-4 border-b border-white/10 py-7 md:grid-cols-[6rem_1fr_1.4fr] md:items-center md:gap-10 md:py-9"
+            className="grid grid-cols-[3.5rem_1fr] items-start gap-4 border-b border-white/10 py-8 md:grid-cols-[6rem_1fr_1.4fr] md:items-center md:gap-12 md:py-11"
           >
-            <span className="font-display text-4xl font-bold text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.45)] md:text-6xl">
+            <span className="font-display text-4xl font-bold text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.45)] md:text-5xl">
               {String(i + 1).padStart(2, "0")}
             </span>
-            <h3 className="font-display text-2xl font-bold md:text-4xl">{s.title}</h3>
+            <h3 className="font-display text-xl font-bold md:text-[1.75rem]">{s.title}</h3>
             <p className="col-start-2 text-sm leading-relaxed text-muted-foreground md:col-start-auto md:text-base">
               {s.desc}
             </p>
@@ -504,7 +504,7 @@ function Sectors({ projects }: { projects: PortfolioDTO[] }) {
     .slice(0, 7);
 
   return (
-    <section className="mx-auto max-w-[1400px] px-6 pb-24 md:pb-32">
+    <section className="mx-auto max-w-[1400px] px-6 pb-28 md:px-10 md:pb-40">
       <Heading
         kicker="ما مجال شركتك؟"
         title="مجالات اشتغلت فيها"
@@ -521,10 +521,10 @@ function Sectors({ projects }: { projects: PortfolioDTO[] }) {
             <li key={s.key} className="border-b border-white/10">
               <a
                 href={`/projects?sector=${s.key}#browse`}
-                className={`group grid grid-cols-[1fr_auto] items-center gap-4 py-6 md:grid-cols-[1.3fr_1fr_auto] md:py-8 ${focusRing}`}
+                className={`group grid grid-cols-[1fr_auto] items-center gap-4 py-7 md:grid-cols-[1.3fr_1fr_auto] md:py-10 ${focusRing}`}
               >
-                <span className="flex items-center gap-4 font-display text-3xl font-bold transition-colors group-hover:text-accent md:text-5xl">
-                  <span className="text-2xl transition-transform group-hover:-translate-x-2 md:text-4xl">
+                <span className="flex items-center gap-4 font-display text-2xl font-bold transition-colors group-hover:text-accent md:text-[2rem]">
+                  <span className="text-xl transition-transform group-hover:-translate-x-2 md:text-2xl">
                     ←
                   </span>
                   {s.ar}
@@ -555,7 +555,7 @@ function Work({ projects }: { projects: PortfolioDTO[] }) {
     .sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""))
     .slice(0, 6);
   return (
-    <section className="mx-auto max-w-[1400px] px-6 py-24 md:py-32">
+    <section className="mx-auto max-w-[1400px] px-6 py-28 md:px-10 md:py-40">
       <Heading
         kicker="أحدث الأعمال"
         title="مشاريع قريبة"
@@ -590,7 +590,7 @@ function Work({ projects }: { projects: PortfolioDTO[] }) {
                 )}
               </div>
             </div>
-            <h3 className="mt-4 font-display text-xl font-bold transition-colors group-hover:text-accent">
+            <h3 className="mt-4 font-display text-lg font-bold transition-colors group-hover:text-accent">
               {p.name_ar}
             </h3>
             {p.short_ar && (
@@ -608,12 +608,12 @@ function Work({ projects }: { projects: PortfolioDTO[] }) {
 function CTA() {
   return (
     <section className="px-3 pb-6 sm:px-6">
-      <div className="relative isolate mx-auto max-w-[1400px] overflow-hidden rounded-[2rem] bg-[#0b0b0b] px-6 py-16 md:px-14 md:py-24">
+      <div className="relative isolate mx-auto max-w-[1400px] overflow-hidden rounded-[2rem] bg-[#0b0b0b] px-6 py-20 md:px-16 md:py-32">
         <div aria-hidden className="absolute inset-0 -z-10">
           <div className="yr-blob absolute -bottom-1/3 end-[-10%] h-[90%] w-[60%] rounded-full bg-accent/50 blur-[120px]" />
           <div className="yr-blob absolute -top-1/3 start-[-10%] h-[70%] w-[50%] rounded-full bg-[#7b2cff]/25 blur-[120px] [animation-delay:-8s]" />
         </div>
-        <h2 className="font-display text-5xl font-bold leading-[1.05] text-white md:text-[7rem]">
+        <h2 className="font-display text-4xl font-bold leading-[1.15] text-white md:text-[4.25rem]">
           حدّثني
           <br />
           عن مشروعك.

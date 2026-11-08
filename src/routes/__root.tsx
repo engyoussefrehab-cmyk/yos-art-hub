@@ -434,7 +434,7 @@ function SiteFooter() {
     ? [...cmsLinks.filter((link) => link.to !== `${base}/tools/color-brief`), ...(cmsLinks.some((link) => link.to === toolLink.to) ? [] : [toolLink])]
     : defaults;
 
-  const bigLink = "block font-display text-4xl font-bold leading-[1.25] transition-colors hover:text-accent md:text-5xl";
+  const bigLink = "block font-display text-2xl font-bold leading-[1.6] transition-colors hover:text-accent md:text-[2rem]";
   const card = "rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-6 md:p-8";
   return (
     <footer className="mt-auto px-3 pb-3 pt-3 sm:px-6">
@@ -470,7 +470,7 @@ function SiteFooter() {
 
           {/* Big CTA card */}
           <Link to="/contact" className="group flex flex-col justify-between rounded-[2rem] bg-accent p-6 text-black md:p-8">
-            <span className="font-display text-3xl font-bold leading-tight md:text-4xl">{t("cta_start_project")}</span>
+            <span className="font-display text-2xl font-bold leading-tight md:text-3xl">{t("cta_start_project")}</span>
             <span className="mt-8 inline-flex h-14 w-14 items-center justify-center rounded-full bg-black text-xl text-white transition-transform group-hover:-rotate-45" aria-hidden>↖</span>
           </Link>
 
