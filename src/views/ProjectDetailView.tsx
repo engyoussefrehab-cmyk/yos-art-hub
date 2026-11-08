@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
-import { ProjectBlocksRenderer, type RenderContext } from "@/components/project-blocks/ProjectBlocksRenderer";
+import {
+  ProjectBlocksRenderer,
+  type RenderContext,
+} from "@/components/project-blocks/ProjectBlocksRenderer";
 
 import { pair } from "@/i18n/dictionary";
 const CAT_LABELS: Record<string, { ar: string; en: string }> = {
@@ -25,8 +28,8 @@ export function ProjectDetailView({
   const catSlug = project.category_slug ?? "branding";
   const catLabel = CAT_LABELS[catSlug]?.[lang === "ar" ? "ar" : "en"] ?? catSlug;
 
-  const projectsHref ="/projects";
-  const categoryHref =`/projects/${catSlug}`;
+  const projectsHref = "/projects";
+  const categoryHref = `/projects/${catSlug}`;
 
   const context: RenderContext = {
     projectName: name,
@@ -40,15 +43,18 @@ export function ProjectDetailView({
           slug: next.slug,
           name: lang === "ar" ? next.name_ar : next.name_en,
           categorySlug: next.category_slug ?? null,
-          href:`/projects/${next.category_slug ?? catSlug}/${next.slug}`,
+          href: `/projects/${next.category_slug ?? catSlug}/${next.slug}`,
         }
       : null,
   };
 
   return (
     <article>
-      <div className="mx-auto max-w-7xl px-6 pt-6">
-        <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="mx-auto max-w-[1400px] px-6 pt-10 md:px-10">
+        <nav
+          aria-label="مسار الصفحة"
+          className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground"
+        >
           <Link to={projectsHref} className="hover:text-foreground">
             {t("crumb_projects")}
           </Link>

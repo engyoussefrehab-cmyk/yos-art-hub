@@ -11,6 +11,7 @@ import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import type { MethodologyDataDTO } from "@/lib/methodology.functions";
 import { SECTORS, sectorOf } from "@/lib/sectors";
 import contact from "@/content/contact.json";
+import { ArrowDot, Heading, Pill, focusRing } from "@/components/studio";
 
 /*
  * Home page — bold "studio" style: big type, oversized rounded cards that
@@ -18,8 +19,6 @@ import contact from "@/content/contact.json";
  * arrow, sector rows with arrows. Real work replaces decorative imagery.
  */
 
-const focusRing =
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 const CAT_AR: Record<string, string> = {
   branding: "هوية بصرية",
   profiles: "ملف تعريفي",
@@ -56,93 +55,6 @@ export function HomeView({
 }
 
 /* ================================================================ Shared */
-
-/** Round arrow icon used inside buttons and on cards. */
-function ArrowDot({
-  tone = "dark",
-  size = "sm",
-}: {
-  tone?: "dark" | "light" | "red";
-  size?: "sm" | "lg";
-}) {
-  const tones = {
-    dark: "bg-black text-white",
-    light: "bg-white text-black",
-    red: "bg-accent text-accent-foreground",
-  };
-  return (
-    <span
-      aria-hidden
-      className={`inline-flex shrink-0 items-center justify-center rounded-full transition-transform group-hover:-rotate-45 ${tones[tone]} ${
-        size === "lg" ? "h-14 w-14 text-xl" : "h-8 w-8 text-sm"
-      }`}
-    >
-      ↖
-    </span>
-  );
-}
-
-function Pill({
-  to,
-  href,
-  children,
-  variant = "light",
-  download,
-}: {
-  to?: string;
-  href?: string;
-  children: React.ReactNode;
-  variant?: "light" | "red" | "ghost";
-  download?: string;
-}) {
-  const styles = {
-    light: "bg-white text-black",
-    red: "bg-accent text-accent-foreground",
-    ghost: "border border-white/20 text-white hover:border-white/60",
-  };
-  const cls = `group inline-flex items-center gap-3 whitespace-nowrap rounded-full py-1.5 pe-1.5 ps-5 text-sm font-bold transition ${styles[variant]} ${focusRing}`;
-  const dot = (
-    <ArrowDot tone={variant === "light" ? "red" : variant === "red" ? "dark" : "light"} />
-  );
-  if (href)
-    return (
-      <a href={href} className={cls} download={download} target="_blank" rel="noopener noreferrer">
-        {children}
-        {dot}
-      </a>
-    );
-  return (
-    <Link to={to!} className={cls}>
-      {children}
-      {dot}
-    </Link>
-  );
-}
-
-function Heading({
-  kicker,
-  title,
-  action,
-}: {
-  kicker: string;
-  title: string;
-  action?: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-      <div>
-        <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-          <span className="text-accent">✦</span>
-          {kicker}
-        </span>
-        <h2 className="mt-3 font-display text-3xl font-bold leading-[1.2] md:text-[2.75rem]">
-          {title}
-        </h2>
-      </div>
-      {action && <div className="shrink-0 self-start md:self-auto">{action}</div>}
-    </div>
-  );
-}
 
 /* ================================================================ Hero */
 
@@ -199,15 +111,6 @@ function Hero() {
           </ul>
         </div>
       </div>
-      <style>{`
-        .yr-blob { animation: yr-blob 18s ease-in-out infinite alternate; }
-        @keyframes yr-blob {
-          0% { transform: translate(0,0) scale(1); }
-          50% { transform: translate(6%,8%) scale(1.15); }
-          100% { transform: translate(-6%,-4%) scale(0.95); }
-        }
-        @media (prefers-reduced-motion: reduce) { .yr-blob { animation: none; } }
-      `}</style>
     </section>
   );
 }
@@ -232,11 +135,6 @@ function BigMarquee({ words }: { words: string[] }) {
           </div>
         ))}
       </div>
-      <style>{`
-        .yr-marquee { animation: yr-marquee 60s linear infinite; }
-        @keyframes yr-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        @media (prefers-reduced-motion: reduce) { .yr-marquee { animation: none; } }
-      `}</style>
     </div>
   );
 }

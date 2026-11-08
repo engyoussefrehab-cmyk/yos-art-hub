@@ -1,3 +1,4 @@
+import { ColourField } from "@/components/studio";
 import { WEB3FORMS_ACCESS_KEY } from "@/lib/site";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -28,12 +29,9 @@ export function NotFoundComponent() {
   const contact ="/contact";
   const arrow = isAr ? "←" : "→";
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-background px-6 py-24 overflow-hidden" dir={isAr ? "rtl" : "ltr"}>
-      {/* Ambient decorative background */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.35]">
-        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-[380px] w-[380px] rounded-full bg-primary/10 blur-3xl" />
-      </div>
+    <div className="px-3 pt-3 sm:px-6" dir={isAr ? "rtl" : "ltr"}>
+    <div className="relative isolate mx-auto flex min-h-[80svh] max-w-[1400px] items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] px-6 py-24">
+      <ColourField />
 
       <div className="relative z-10 mx-auto w-full max-w-2xl text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
@@ -62,7 +60,7 @@ export function NotFoundComponent() {
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <Link
             to={home}
-            className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
+            className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-bold text-accent-foreground transition hover:brightness-110"
           >
             {t("nf_back")}
             <span className="transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">{arrow}</span>
@@ -81,6 +79,7 @@ export function NotFoundComponent() {
           </Link>
         </div>
       </div>
+    </div>
     </div>
   );
 }

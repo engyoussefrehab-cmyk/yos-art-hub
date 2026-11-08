@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { ColourField } from "@/components/studio";
 import { Link } from "@tanstack/react-router";
 import { ExternalLink, Star } from "lucide-react";
 import type { ProjectBlock } from "@/lib/project-blocks";
@@ -55,31 +56,33 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const typeValue = pick(b.type_value_ar, b.type_value_en, lang) || context?.industry || context?.categoryLabel || "";
       const showMeta = b.show_meta_card !== false;
       return (
-        <section className="border-b border-border bg-cream">
-          <div className="mx-auto max-w-7xl px-6 pt-8 pb-16 md:pt-12 md:pb-24">
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
-              <div className={showMeta ? "md:col-span-7" : "md:col-span-12"}>
+        <section className="px-3 pt-4 sm:px-6">
+          <div className="relative isolate mx-auto max-w-[1400px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] px-6 pb-10 pt-16 md:px-16 md:pb-16 md:pt-24">
+            <ColourField variant="soft" />
+            <div className="grid grid-cols-1 items-end gap-10 md:grid-cols-12">
+              <div className={showMeta ? "md:col-span-8" : "md:col-span-12"}>
                 {(kicker || context?.industry) && (
-                  <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
-                    <span>{kicker || context?.categoryLabel}</span>
-                    {(kicker && context?.industry) && <span className="h-px w-8 bg-border" />}
-                    {context?.industry && <span>{context.industry}</span>}
-                  </div>
+                  <span className="inline-flex flex-wrap items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs text-white backdrop-blur">
+                    <span className="text-accent">✦</span>
+                    {kicker || context?.categoryLabel}
+                    {kicker && context?.industry && <span className="text-white/50">·</span>}
+                    {context?.industry && <span className="text-white/70">{context.industry}</span>}
+                  </span>
                 )}
-                <h1 className="mt-4 font-display text-5xl md:text-7xl font-bold leading-[1.05]">{title}</h1>
-                {subtitle && <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">{subtitle}</p>}
-                {description && <p className="mt-4 max-w-xl leading-relaxed text-foreground/85">{description}</p>}
+                <h1 className="mt-5 font-display text-[2.25rem] font-bold leading-[1.15] text-white sm:text-5xl lg:text-[3.75rem]">{title}</h1>
+                {subtitle && <p className="mt-5 max-w-2xl text-base leading-[1.9] text-white/75 md:text-lg">{subtitle}</p>}
+                {description && <p className="mt-3 max-w-2xl leading-[1.9] text-white/70">{description}</p>}
               </div>
               {showMeta && (
-                <div className="md:col-span-5">
-                  <dl className="grid grid-cols-2 gap-6 rounded-2xl border border-border bg-background p-6">
-                    <div>
-                      <dt className="text-xs uppercase tracking-widest text-muted-foreground">{specialtyLabel}</dt>
-                      <dd className="mt-1 font-semibold">{specialtyValue}</dd>
+                <div className="md:col-span-4">
+                  <dl className="grid grid-cols-2 gap-2">
+                    <div className="rounded-3xl bg-white/[0.06] p-5 backdrop-blur">
+                      <dt className="text-xs text-white/60">{specialtyLabel}</dt>
+                      <dd className="mt-1 font-semibold text-white">{specialtyValue}</dd>
                     </div>
-                    <div>
-                      <dt className="text-xs uppercase tracking-widest text-muted-foreground">{typeLabel}</dt>
-                      <dd className="mt-1 font-semibold">{typeValue}</dd>
+                    <div className="rounded-3xl bg-white/[0.06] p-5 backdrop-blur">
+                      <dt className="text-xs text-white/60">{typeLabel}</dt>
+                      <dd className="mt-1 font-semibold text-white">{typeValue}</dd>
                     </div>
                   </dl>
                 </div>
@@ -93,8 +96,8 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       if (!b.url) return null;
       const alt = pick(b.alt_ar, b.alt_en, lang) || context?.projectName || "";
       return (
-        <section className="mx-auto max-w-7xl px-6 py-16">
-          <div className="overflow-hidden rounded-3xl border border-border bg-cream">
+        <section className="mx-auto max-w-[1400px] px-6 md:px-10 py-16">
+          <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0b]">
             <ZoomableImage src={b.url} alt={alt} eager />
           </div>
         </section>
@@ -226,7 +229,7 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
                 href={it.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2.5 text-sm font-semibold hover:bg-cream"
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold hover:border-white/50"
               >
                 <ExternalLink className="h-4 w-4" />
                 {pick(it.label_ar, it.label_en, lang) || it.url}
@@ -243,7 +246,7 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const rating = Math.max(0, Math.min(5, b.rating ?? 0));
       return (
         <section className="mx-auto max-w-4xl px-6 py-16">
-          <figure className="rounded-3xl border border-border bg-background p-8 shadow-sm md:p-10">
+          <figure className="rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] p-8 shadow-sm md:p-10">
             {rating > 0 && (
               <div className="mb-4 flex gap-1 text-accent">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -277,7 +280,7 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const caption = pick(b.caption_ar, b.caption_en, lang);
       return (
         <section className="mx-auto max-w-6xl px-6 py-10">
-          <div className={`overflow-hidden rounded-3xl border border-border bg-black ${aspectCls}`}>
+          <div className={`overflow-hidden rounded-[1.75rem] border border-white/10 bg-black ${aspectCls}`}>
             <iframe
               src={b.url}
               className="h-full w-full"
@@ -298,16 +301,28 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const allLabel = pick(b.all_label_ar, b.all_label_en, lang) || (lang === "ar" ? pair("ui_projectblocksrenderer_7")[0] : pair("ui_projectblocksrenderer_7")[1]);
       const arrow = lang === "ar" ? "←" : "→";
       return (
-        <section className="border-t border-border">
-          <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-6 py-16 md:flex-row md:items-center">
+        <section className="px-3 pb-3 pt-16 sm:px-6 md:pt-24">
+          <Link
+            to={context.next.href}
+            className="group relative isolate mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-8 overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] px-6 py-12 md:flex-row md:items-end md:px-16 md:py-20"
+          >
+            <ColourField variant="soft" />
             <div>
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
-              <div className="mt-2 font-display text-3xl md:text-4xl font-bold">{context.next.name}</div>
+              <div className="inline-flex items-center gap-2 text-sm text-white/60">
+                <span className="text-accent">✦</span>
+                {label}
+              </div>
+              <div className="mt-3 font-display text-3xl font-bold text-white md:text-5xl">{context.next.name}</div>
             </div>
-            <div className="flex gap-3">
-              <Link to={context.categoryHref} className="rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold hover:bg-cream">{allLabel}</Link>
-              <Link to={context.next.href} className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground">{`${cta} ${arrow}`}</Link>
-            </div>
+            <span className="inline-flex items-center gap-3 rounded-full bg-white py-1.5 pe-1.5 ps-5 text-sm font-bold text-black">
+              {cta}
+              <span aria-hidden className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent transition-transform group-hover:-rotate-45">↖</span>
+            </span>
+          </Link>
+          <div className="mx-auto mt-4 max-w-[1400px] text-center">
+            <Link to={context.categoryHref} className="text-sm text-muted-foreground hover:text-foreground">
+              {allLabel} {arrow}
+            </Link>
           </div>
         </section>
       );
@@ -343,7 +358,7 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const caption = pick(b.caption_ar, b.caption_en, lang);
       return (
         <section className={`mx-auto ${width} px-6 py-8`}>
-          <figure className="overflow-hidden rounded-3xl border border-border bg-cream">
+          <figure className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0b]">
             <ZoomableImage src={b.url} alt={caption || ""} />
             {caption && (
               <figcaption className="border-t border-border bg-background/70 px-6 py-3 text-sm text-muted-foreground">
@@ -357,10 +372,10 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
     case "two-col-image": {
       if (!b.url_left && !b.url_right) return null;
       return (
-        <section className="mx-auto max-w-7xl px-6 py-8">
+        <section className="mx-auto max-w-[1400px] px-6 md:px-10 py-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {[b.url_left, b.url_right].filter(Boolean).map((u, i) => (
-              <div key={i} className="overflow-hidden rounded-3xl border border-border bg-cream">
+              <div key={i} className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0b]">
                 <ZoomableImage src={u as string} alt="" />
               </div>
             ))}
@@ -377,10 +392,10 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const flow =
         cols <= 1 ? "columns-1" : cols === 2 ? "columns-1 sm:columns-2" : cols === 4 ? "columns-1 sm:columns-2 lg:columns-4" : "columns-1 sm:columns-2 lg:columns-3";
       return (
-        <section className="mx-auto max-w-7xl px-6 py-8">
+        <section className="mx-auto max-w-[1400px] px-6 md:px-10 py-8">
           <div className={`${flow} gap-4`}>
             {urls.map((u, i) => (
-              <div key={i} className="mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-border bg-cream">
+              <div key={i} className="mb-4 break-inside-avoid overflow-hidden rounded-[1.25rem] border border-white/10 bg-[#0b0b0b]">
                 <ZoomableImage src={u} alt={`${context?.projectName ?? ""} — ${i + 1}`} imgClassName="h-auto w-full" />
               </div>
             ))}
@@ -428,7 +443,7 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
       const caption = pick(b.caption_ar, b.caption_en, lang);
       return (
         <section className="mx-auto max-w-6xl px-6 py-10">
-          <div className="overflow-hidden rounded-3xl border border-border bg-black">
+          <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-black">
             {isYoutube || isVimeo ? (
               <div className="aspect-video">
                 <iframe
@@ -569,7 +584,7 @@ function BeforeAfterCompare({
   return (
     <div
       ref={wrapRef}
-      className="relative select-none overflow-hidden rounded-3xl border border-border bg-cream shadow-lg"
+      className="relative select-none overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] shadow-lg"
       onPointerDown={(e) => {
         draggingRef.current = true;
         (e.target as HTMLElement).setPointerCapture?.(e.pointerId);

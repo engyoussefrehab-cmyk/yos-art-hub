@@ -342,3 +342,16 @@ html, body { overflow-x: hidden; }
 
 /* While the color tool's bottom action bar is on screen (mobile), hide the floating WhatsApp / back-to-top buttons so they don't cover it. */
 html[data-tool-bar="1"] .fixed.bottom-4 { opacity: 0 !important; pointer-events: none !important; }
+
+/* ── Studio motion (shared by all pages) ───────────────────────────── */
+.yr-blob { animation: yr-blob 18s ease-in-out infinite alternate; }
+@keyframes yr-blob {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6%, 8%) scale(1.15); }
+  100% { transform: translate(-6%, -4%) scale(0.95); }
+}
+.yr-marquee { animation: yr-marquee 60s linear infinite; }
+@keyframes yr-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .yr-blob, .yr-marquee { animation: none; }
+}

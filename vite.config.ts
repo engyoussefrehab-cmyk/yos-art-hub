@@ -57,6 +57,10 @@ export default defineConfig({
         // them with a text-decoded copy and corrupt them
         filter: (page) =>
           page.path !== "/en/404" &&
+          // links with filters (/projects?sector=…) or anchors (/#services) would be
+          // written over the plain page's HTML (e.g. /projects/index.html)
+          !page.path.includes("?") &&
+          !page.path.includes("#") &&
           !page.path.startsWith("/media/") &&
           !/\.(pdf|png|jpe?g|webp|gif|svg|mp4|zip|rar|woff2?)$/i.test(page.path),
       },

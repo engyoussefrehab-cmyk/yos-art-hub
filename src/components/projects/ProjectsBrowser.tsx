@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, getRouteApi } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
@@ -33,7 +33,14 @@ export function ProjectsBrowser({
 }) {
   const { lang } = useLang();
   const routeApi = getRouteApi(routeId);
-  const search = routeApi.useSearch() as ProjectFilters;
+  const urlSearch = routeApi.useSearch() as ProjectFilters;
+  // The static HTML is built without filters; apply the URL's filters only
+  // after the first client render so hydration matches the HTML.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  const search: ProjectFilters = hydrated
+    ? urlSearch
+    : { sector: "", cat: "", country: "", year: "", tag: "", sort: "newest" };
   const navigate = useNavigate({ from: routeId });
 
   const isAr = lang === "ar";
@@ -113,13 +120,13 @@ export function ProjectsBrowser({
   const active =
     !!(search.sector || search.cat || search.country || search.year || search.tag) ||
     search.sort !== "newest";
-  const projectHref = (p: PortfolioDTO) =>`/projects/${p.category_slug ?? "branding"}/${p.slug}`;
+  const projectHref = (p: PortfolioDTO) => `/projects/${p.category_slug ?? "branding"}/${p.slug}`;
 
   return (
     <div id="browse" className="scroll-mt-24">
       {/* Step 1: the client's own business sector */}
-      <div className="-mx-6 border-y border-border bg-cream/60 px-6 py-5 sm:mx-0 sm:rounded-3xl sm:border md:p-8">
-        <h2 className="font-display text-2xl font-bold md:text-3xl">
+      <div className="rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] p-5 md:p-10">
+        <h2 className="font-display text-2xl font-bold md:text-[2rem]">
           {t("ما مجال شركتك؟", "What does your company do?")}
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -128,7 +135,7 @@ export function ProjectsBrowser({
             "Pick your field to see work for companies like yours.",
           )}
         </p>
-        <div className="mt-4 -mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+        <div className="mt-6 -mx-5 flex snap-x gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
           {sectors.map((sec) => {
             const on = search.sector === sec.key;
             return (
@@ -137,15 +144,15 @@ export function ProjectsBrowser({
                 type="button"
                 aria-pressed={on}
                 onClick={() => setParam("sector", on ? "" : sec.key)}
-                className={`flex shrink-0 snap-start items-center justify-between gap-3 whitespace-nowrap rounded-full border px-4 py-2.5 text-start text-sm font-semibold transition-colors sm:rounded-2xl sm:py-3 ${
+                className={`flex shrink-0 snap-start items-center gap-3 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors ${
                   on
-                    ? "border-foreground bg-foreground text-background"
-                    : "border-border bg-background hover:border-foreground/40"
+                    ? "border-accent bg-accent text-accent-foreground"
+                    : "border-white/15 hover:border-white/50"
                 }`}
               >
                 <span>{sec.label}</span>
                 <span
-                  className={`text-xs font-normal ${on ? "text-background/70" : "text-muted-foreground"}`}
+                  className={`text-xs font-normal ${on ? "text-black/60" : "text-muted-foreground"}`}
                 >
                   {sec.n}
                 </span>
@@ -155,9 +162,9 @@ export function ProjectsBrowser({
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-end justify-between gap-3 sm:mt-10">
+      <div className="mt-14 flex flex-wrap items-end justify-between gap-3 md:mt-20">
         <div>
-          <h2 className="font-display text-xl font-bold sm:text-2xl md:text-3xl">
+          <h2 className="font-display text-2xl font-bold md:text-[2.25rem]">
             {search.sector
               ? `${t("أعمال في مجال", "Work in")} ${sectors.find((x) => x.key === search.sector)?.label ?? ""}`
               : t("كل الأعمال", "All work")}
@@ -167,7 +174,7 @@ export function ProjectsBrowser({
           </p>
         </div>
         {active && (
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-cream/60 px-4 py-2 text-sm">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-4 py-2 text-sm">
             <Search className="h-3.5 w-3.5 text-muted-foreground" />
             <span className="font-semibold text-foreground">{filtered.length}</span>
             <span className="text-muted-foreground">{t(...pair("projects_results_count"))}</span>
@@ -188,7 +195,7 @@ export function ProjectsBrowser({
       </div>
 
       {/* Advanced filters — tucked away; most clients only need sector + service */}
-      <details className="mt-4 rounded-2xl border border-border/70 bg-cream/50 p-4">
+      <details className="mt-4 rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] p-4 md:p-5">
         <summary className="cursor-pointer text-sm font-semibold text-muted-foreground">
           {t("فلاتر إضافية", "More filters")}
         </summary>
@@ -258,36 +265,32 @@ export function ProjectsBrowser({
           </button>
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-6 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
           {filtered.map((p) => {
             const name = isAr ? p.name_ar : p.name_en;
             const short = isAr ? p.short_ar : p.short_en;
             return (
-              <Link
-                key={p.slug}
-                to={projectHref(p)}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-cream transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/40 hover:shadow-xl"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+              <Link key={p.slug} to={projectHref(p)} className="group relative flex flex-col">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-white/5 sm:rounded-[1.75rem]">
                   {p.cover && (
                     <img
                       src={p.cover}
                       alt={name}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   )}
                   {p.featured && (
-                    <span className="absolute end-3 top-3 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-accent-foreground shadow-sm">
+                    <span className="absolute end-3 top-3 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
                       {t(...pair("ui_latestprojectsslider_5"))}
                     </span>
                   )}
-                  <span className="absolute bottom-3 end-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/90 text-foreground opacity-0 shadow-sm backdrop-blur transition-all duration-500 group-hover:opacity-100">
+                  <span className="absolute bottom-3 end-3 hidden h-10 w-10 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:-rotate-45 sm:inline-flex">
                     <ArrowUpRight className={`h-4 w-4 ${isAr ? "-scale-x-100" : ""}`} />
                   </span>
                 </div>
-                <div className="flex flex-1 flex-col p-3 sm:p-5">
-                  <div className="hidden items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground sm:flex">
+                <div className="flex flex-1 flex-col pt-3 sm:pt-4">
+                  <div className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
                     {p.category_slug && (
                       <span>
                         {CAT_LABELS[p.category_slug]?.[isAr ? "ar" : "en"] ?? p.category_slug}
@@ -303,7 +306,7 @@ export function ProjectsBrowser({
                       }
                     </span>
                   </div>
-                  <h3 className="font-display text-sm font-bold leading-snug transition-colors group-hover:text-accent sm:mt-2 sm:text-xl">
+                  <h3 className="font-display text-sm font-bold leading-snug transition-colors group-hover:text-accent sm:mt-1 sm:text-lg">
                     {name}
                   </h3>
                   {short && (
@@ -316,7 +319,7 @@ export function ProjectsBrowser({
                       {p.tags.slice(0, 3).map((tg) => (
                         <span
                           key={tg}
-                          className="rounded-full bg-background px-2 py-0.5 text-[10px] text-muted-foreground"
+                          className="rounded-full border border-white/10 px-2.5 py-0.5 text-[11px] text-muted-foreground"
                         >
                           {tg}
                         </span>
@@ -348,8 +351,8 @@ function CatChip({
       onClick={onClick}
       className={`shrink-0 snap-start whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
         active
-          ? "border-accent bg-accent text-accent-foreground shadow-sm"
-          : "border-border bg-background text-muted-foreground hover:border-accent/40 hover:text-foreground"
+          ? "border-white bg-white text-black"
+          : "border-white/15 text-muted-foreground hover:border-white/50 hover:text-foreground"
       }`}
     >
       {children}
