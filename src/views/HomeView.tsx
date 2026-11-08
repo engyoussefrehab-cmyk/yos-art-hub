@@ -517,8 +517,8 @@ function CTA() {
           عن مشروعك.
         </h2>
         <div className="mt-10 flex flex-wrap items-center gap-3">
-          <Pill to="/contact" variant="red">
-            ابدأ مشروعك
+          <Pill to="/brief" variant="red">
+            املأ نموذج المشروع
           </Pill>
           <Pill href={contact.whatsapp_url} variant="ghost">
             واتساب

@@ -28,6 +28,9 @@ export function ContactView() {
           </dl>
         }
       >
+        <Pill to="/brief" variant="red">
+          املأ نموذج المشروع
+        </Pill>
         <Pill href="/go/wa" variant="light" newTab>
           واتساب
         </Pill>

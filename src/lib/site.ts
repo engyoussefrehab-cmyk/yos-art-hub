@@ -27,3 +27,11 @@ export function shareImage(url: string | null | undefined): string | undefined {
   const m = url.match(/^\/media\/(.+)\.webp$/);
   return absUrl(m ? `/media/share/${m[1]}.jpg` : url);
 }
+
+/**
+ * YR Studio OS (Supabase) — the project brief form saves each submission as a
+ * lead there. Both values are public by design: the anon key can only call
+ * submit_inquiry() and list service names (Row Level Security blocks the rest).
+ */
+export const OS_SUPABASE_URL = "https://vbkgiaxsytaajexmoqmj.supabase.co";
+export const OS_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZia2dpYXhzeXRhYWpleG1vcW1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQwNDkwMTYsImV4cCI6MjEwOTYyNTAxNn0.w9KvuTfpqx-NZ6l6FG4LCB_5KKRK3KVG4BTF-KVBvQk";
