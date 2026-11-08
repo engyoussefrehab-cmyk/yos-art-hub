@@ -20,10 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-        with:
-          # Pinned: resolving "latest" has been failing with HTTP 504.
-          bun-version: "1.4.4"
+      # Install Bun from npm (oven-sh/setup-bun kept failing with HTTP 504).
+      - run: npm install -g bun@1.4.4
       - run: bun install --frozen-lockfile
       - run: bun run build
       - uses: actions/configure-pages@v5
