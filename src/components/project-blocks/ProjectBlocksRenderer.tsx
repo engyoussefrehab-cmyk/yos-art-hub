@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { ExternalLink, Star } from "lucide-react";
 import type { ProjectBlock } from "@/lib/project-blocks";
 import { ZoomableImage } from "@/components/ZoomableImage";
+import { ProjectSlider } from "@/components/project-blocks/ProjectSlider";
 
 import { pair } from "@/i18n/dictionary";
 type Lang = "ar" | "en";
@@ -386,19 +387,17 @@ function BlockRender({ block: b, lang, context }: { block: ProjectBlock; lang: L
     case "gallery": {
       const urls = (b.urls ?? []).filter(Boolean);
       if (urls.length === 0) return null;
-      // Show the work uncropped at its natural shape. Never more columns than
-      // images, one column on phones, masonry flow so tall pieces don't leave gaps.
-      const cols = Math.min(b.columns ?? 3, urls.length);
-      const flow =
-        cols <= 1 ? "columns-1" : cols === 2 ? "columns-1 sm:columns-2" : cols === 4 ? "columns-1 sm:columns-2 lg:columns-4" : "columns-1 sm:columns-2 lg:columns-3";
+      // More than one image: a slider, so visitors see there is more to flip through.
+      if (urls.length > 1)
+        return (
+          <section className="mx-auto max-w-[1400px] px-6 py-8 md:px-10">
+            <ProjectSlider urls={urls} name={context?.projectName ?? ""} />
+          </section>
+        );
       return (
-        <section className="mx-auto max-w-[1400px] px-6 md:px-10 py-8">
-          <div className={`${flow} gap-4`}>
-            {urls.map((u, i) => (
-              <div key={i} className="mb-4 break-inside-avoid overflow-hidden rounded-[1.25rem] border border-white/10 bg-[#0b0b0b]">
-                <ZoomableImage src={u} alt={`${context?.projectName ?? ""} — ${i + 1}`} imgClassName="h-auto w-full" />
-              </div>
-            ))}
+        <section className="mx-auto max-w-[1400px] px-6 py-8 md:px-10">
+          <div className="overflow-hidden rounded-[1.25rem] border border-white/10 bg-[#0b0b0b]">
+            <ZoomableImage src={urls[0]} alt={context?.projectName ?? ""} imgClassName="h-auto w-full" />
           </div>
         </section>
       );

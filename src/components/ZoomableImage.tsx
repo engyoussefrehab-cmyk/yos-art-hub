@@ -57,7 +57,8 @@ export function ZoomableImage({ src, alt = "", className = "", imgClassName = ""
 const btn =
   "inline-flex items-center justify-center rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
-function Viewer({ list, start, alt, onClose }: { list: string[]; start: number; alt: string; onClose: () => void }) {
+/** Full-screen gallery (also used by the project slider). */
+export function Viewer({ list, start, alt, onClose }: { list: string[]; start: number; alt: string; onClose: () => void }) {
   const [i, setI] = useState(start);
   const touchX = useRef<number | null>(null);
   const thumbs = useRef<HTMLDivElement>(null);
