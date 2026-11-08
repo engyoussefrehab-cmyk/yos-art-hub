@@ -14,7 +14,7 @@ type Props = {
  * Image that opens a full-screen gallery when clicked. The gallery holds
  * every zoomable image on the page (in page order), so a visitor can flip
  * through all images of a project: arrows, thumbnails, keyboard ← → and
- * swipe on phones. Esc, ✕ or a click on the backdrop closes it.
+ * swipe on phones. Esc or the ✕ button closes it; a stray click never does.
  */
 export function ZoomableImage({ src, alt = "", className = "", imgClassName = "", eager }: Props) {
   const [gallery, setGallery] = useState<{ list: string[]; index: number } | null>(null);
@@ -92,7 +92,6 @@ export function Viewer({ list, start, alt, onClose }: { list: string[]; start: n
       role="dialog"
       aria-modal="true"
       aria-label="معرض الصور"
-      onClick={onClose}
       onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
       onTouchEnd={(e) => {
         if (touchX.current === null || !many) return;
@@ -100,7 +99,7 @@ export function Viewer({ list, start, alt, onClose }: { list: string[]; start: n
         touchX.current = null;
         if (Math.abs(dx) > 50) (dx > 0 ? next : prev)();
       }}
-      className="fixed inset-0 z-[100] flex flex-col bg-black/95"
+      className="fixed inset-0 z-[100] flex flex-col bg-black"
     >
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-4 md:px-6">
@@ -113,7 +112,7 @@ export function Viewer({ list, start, alt, onClose }: { list: string[]; start: n
       </div>
 
       {/* Image */}
-      <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 md:px-24">
+      <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 md:px-28">
         <img
           key={list[i]}
           src={list[i]}
@@ -130,9 +129,9 @@ export function Viewer({ list, start, alt, onClose }: { list: string[]; start: n
                 prev();
               }}
               aria-label="الصورة السابقة"
-              className={`${btn} absolute start-3 top-1/2 h-12 w-12 -translate-y-1/2 bg-white/10 text-white hover:bg-white/20 md:start-6`}
+              className={`${btn} absolute start-3 top-1/2 h-14 w-14 -translate-y-1/2 bg-white text-black shadow-xl hover:scale-105 md:start-6 md:h-16 md:w-16`}
             >
-              <ChevronRight className="h-6 w-6" />
+              <ChevronRight className="h-7 w-7" />
             </button>
             <button
               type="button"
@@ -141,9 +140,9 @@ export function Viewer({ list, start, alt, onClose }: { list: string[]; start: n
                 next();
               }}
               aria-label="الصورة التالية"
-              className={`${btn} absolute end-3 top-1/2 h-12 w-12 -translate-y-1/2 bg-white/10 text-white hover:bg-white/20 md:end-6`}
+              className={`${btn} absolute end-3 top-1/2 h-14 w-14 -translate-y-1/2 bg-white text-black shadow-xl hover:scale-105 md:end-6 md:h-16 md:w-16`}
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-7 w-7" />
             </button>
           </>
         )}

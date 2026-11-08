@@ -62,8 +62,8 @@ export function ProjectSlider({ urls, name = "" }: { urls: string[]; name?: stri
           key={urls[i]}
           src={urls[i]}
           alt={`${name} — ${i + 1}`}
-          onClick={() => setFull(true)}
-          className="h-full w-full cursor-zoom-in object-contain"
+          onClick={next}
+          className="h-full w-full cursor-pointer select-none object-contain"
         />
 
         {/* Counter + full screen */}
@@ -84,17 +84,17 @@ export function ProjectSlider({ urls, name = "" }: { urls: string[]; name?: stri
           type="button"
           onClick={prev}
           aria-label="الصورة السابقة"
-          className={`${round} absolute start-3 top-1/2 h-10 w-10 -translate-y-1/2 bg-white text-black shadow-lg hover:scale-105 md:start-5 md:h-14 md:w-14`}
+          className={`${round} absolute start-3 top-1/2 h-12 w-12 -translate-y-1/2 bg-white text-black shadow-xl hover:scale-105 md:start-5 md:h-16 md:w-16`}
         >
-          <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
+          <ChevronRight className="h-6 w-6 md:h-7 md:w-7" />
         </button>
         <button
           type="button"
           onClick={next}
           aria-label="الصورة التالية"
-          className={`${round} absolute end-3 top-1/2 h-10 w-10 -translate-y-1/2 bg-white text-black shadow-lg hover:scale-105 md:end-5 md:h-14 md:w-14`}
+          className={`${round} absolute end-3 top-1/2 h-12 w-12 -translate-y-1/2 bg-white text-black shadow-xl hover:scale-105 md:end-5 md:h-16 md:w-16`}
         >
-          <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
+          <ChevronLeft className="h-6 w-6 md:h-7 md:w-7" />
         </button>
 
         {/* Progress */}
