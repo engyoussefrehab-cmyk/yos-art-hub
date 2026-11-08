@@ -26,8 +26,8 @@ function toRFC822(iso: string | null): string {
 async function buildRss(lang: "ar" | "en"): Promise<string> {
   const articles = await getPublishedArticlesFn();
   const isAr = lang === "ar";
-  const feedUrl = `${SITE_URL}${isAr ? "/rss.xml" : "/en/rss.xml"}`;
-  const homeUrl = `${SITE_URL}${isAr ? "/insights" : "/en/insights"}`;
+  const feedUrl = `${SITE_URL}${"/rss.xml"}`;
+  const homeUrl = `${SITE_URL}${"/insights"}`;
   const title = isAr ? `${SITE_NAME_AR} — المقالات` : "Youssef Rehab — Insights";
   const description = isAr ? pair("ui_rss_xml_1")[0] : pair("ui_rss_xml_1")[1];
 
@@ -35,7 +35,7 @@ async function buildRss(lang: "ar" | "en"): Promise<string> {
     .filter((a) => a.published_at && new Date(a.published_at) <= new Date())
     .slice(0, 50)
     .map((a) => {
-      const path = `${isAr ? "/insights" : "/en/insights"}/${a.category.slug}/${a.slug}`;
+      const path = `${"/insights"}/${a.category.slug}/${a.slug}`;
       const itemTitle = isAr ? a.title_ar : a.title_en || a.title_ar;
       const itemDesc = isAr ? a.excerpt_ar : a.excerpt_en || a.excerpt_ar;
       const cat = isAr ? a.category.label_ar : a.category.label_en;

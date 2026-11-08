@@ -58,7 +58,7 @@ function Cover({ article, className }: { article: InsightArticle; className?: st
 
 function ArticleCard({ article }: { article: InsightArticle }) {
   const { lang } = useLang();
-  const base = lang === "ar" ? "/insights" : "/en/insights";
+  const base ="/insights";
   const title = lang === "ar" ? article.title_ar : article.title_en || article.title_ar;
   const excerpt = lang === "ar" ? article.excerpt_ar : article.excerpt_en || article.excerpt_ar;
   return (
@@ -96,7 +96,7 @@ interface HubProps {
 
 export function InsightsHubView({ categories, articles }: HubProps) {
   const { lang } = useLang();
-  const base = lang === "ar" ? "/insights" : "/en/insights";
+  const base ="/insights";
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<string>("all");
   const [suggestOpen, setSuggestOpen] = useState(false);

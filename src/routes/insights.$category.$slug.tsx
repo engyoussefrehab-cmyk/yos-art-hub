@@ -92,7 +92,6 @@ export const Route = createFileRoute("/insights/$category/$slug")({
       links: [
         { rel: "canonical", href: url },
         { rel: "alternate", hreflang: "ar", href: url },
-        { rel: "alternate", hreflang: "en", href: absUrl(`/en/insights/${params.category}/${params.slug}`) },
         { rel: "alternate", hreflang: "x-default", href: url },
         { rel: "alternate", type: "application/rss+xml", title: "Insights RSS", href: absUrl("/rss.xml") },
       ],

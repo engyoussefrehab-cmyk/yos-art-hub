@@ -15,7 +15,7 @@ export function ToolsLibrary() {
 
       <section aria-label={t("nav_tools")} className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
         <Link
-          to={isAr ? "/tools/color-brief" : "/en/tools/color-brief"}
+          to={"/tools/color-brief"}
           className="group relative flex min-h-80 flex-col overflow-hidden rounded-3xl border border-border bg-card p-6 text-start shadow-sm transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-xl sm:p-8"
         >
           <div className="pointer-events-none absolute -end-16 -top-20 h-56 w-56 rounded-full bg-accent/10 blur-3xl transition duration-500 group-hover:bg-accent/20" />

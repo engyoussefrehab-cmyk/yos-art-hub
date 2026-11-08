@@ -29,7 +29,7 @@ export function ProjectsBrowser({
   routeId,
 }: {
   projects: PortfolioDTO[];
-  routeId: "/projects/" | "/en/projects/";
+  routeId: "/projects/";
 }) {
   const { lang } = useLang();
   const routeApi = getRouteApi(routeId);
@@ -113,10 +113,7 @@ export function ProjectsBrowser({
   const active =
     !!(search.sector || search.cat || search.country || search.year || search.tag) ||
     search.sort !== "newest";
-  const projectHref = (p: PortfolioDTO) =>
-    isAr
-      ? `/projects/${p.category_slug ?? "branding"}/${p.slug}`
-      : `/en/projects/${p.category_slug ?? "branding"}/${p.slug}`;
+  const projectHref = (p: PortfolioDTO) =>`/projects/${p.category_slug ?? "branding"}/${p.slug}`;
 
   return (
     <div id="browse" className="scroll-mt-24">

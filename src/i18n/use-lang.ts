@@ -1,8 +1,10 @@
 import { useRouterState } from "@tanstack/react-router";
 import { dict, type DictKey, type Lang } from "./dictionary";
 
-export function detectLang(pathname: string): Lang {
-  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "ar";
+// The site is Arabic only (the English version was removed in Nov 2026).
+// Old /en/… links forward to the Arabic page (see routes/en.$.tsx).
+export function detectLang(_pathname?: string): Lang {
+  return "ar";
 }
 
 export function useLang() {
@@ -10,8 +12,7 @@ export function useLang() {
   const lang: Lang = detectLang(pathname);
   const dir: "rtl" | "ltr" = lang === "ar" ? "rtl" : "ltr";
   const t = (key: DictKey): string => dict[key][lang] ?? dict[key].ar;
-  // Build alternate-language path preserving the rest of the URL.
-  const altHref = lang === "ar" ? `/en${pathname === "/" ? "" : pathname}` : pathname.replace(/^\/en/, "") || "/";
+  const altHref = pathname;
   return { lang, dir, t, pathname, altHref };
 }
 

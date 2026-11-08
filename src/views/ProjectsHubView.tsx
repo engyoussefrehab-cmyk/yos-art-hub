@@ -33,7 +33,7 @@ export function ProjectsHubView({
   projects?: PortfolioDTO[];
   categories?: CategoryDTO[];
   stats?: ProjectsStatsDTO;
-  routeId: "/projects/" | "/en/projects/";
+  routeId: "/projects/";
 }) {
   const { t, lang } = useLang();
   const isAr = lang === "ar";
@@ -132,7 +132,7 @@ export function ProjectsHubView({
             const desc = dbDesc || (fallbackMeta ? t(fallbackMeta.desc) : "");
             const cover = c.cover_image_url || FALLBACK_COVERS[c.slug] || FALLBACK_COVERS.branding;
             const idx = String(i + 1).padStart(2, "0");
-            const href = lang === "ar" ? `/projects/${c.slug}` : `/en/projects/${c.slug}`;
+            const href =`/projects/${c.slug}`;
             return (
               <Reveal key={c.slug} delay={i * 60}>
                 <Link

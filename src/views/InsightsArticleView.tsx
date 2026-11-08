@@ -35,7 +35,7 @@ function processContent(html: string): { html: string; toc: { id: string; text: 
 
 export function InsightsArticleView({ article, allArticles }: Props) {
   const { lang } = useLang();
-  const base = lang === "ar" ? "/insights" : "/en/insights";
+  const base ="/insights";
   const category = article.category;
 
   const rawContent = (lang === "ar" ? article.content_ar : article.content_en) || article.content_ar;
@@ -196,7 +196,7 @@ export function InsightsArticleView({ article, allArticles }: Props) {
               {lang === "ar" ? pair("ui_insightsarticleview_6")[0] : pair("ui_insightsarticleview_6")[1]}
             </p>
             <Link
-              to={lang === "ar" ? "/contact" : "/en/contact"}
+              to={"/contact"}
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
             >
               {lang === "ar" ? pair("ui_insightsarticleview_7")[0] : pair("ui_insightsarticleview_7")[1]}
@@ -271,7 +271,7 @@ function ShareBtn({ onClick, label, children }: { onClick: () => void; label: st
 
 function RelatedCard({ article }: { article: InsightArticle }) {
   const { lang } = useLang();
-  const base = lang === "ar" ? "/insights" : "/en/insights";
+  const base ="/insights";
   const style = article.cover_url
     ? { backgroundImage: `url(${article.cover_url})`, backgroundSize: "cover", backgroundPosition: "center" }
     : { background: "linear-gradient(135deg,#1a1a2e,#0f3460)" };

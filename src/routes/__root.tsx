@@ -23,9 +23,9 @@ import contact from "@/content/contact.json"; import analytics from "@/content/a
 export function NotFoundComponent() {
   const { t, lang } = useLang();
   const isAr = lang === "ar";
-  const home = isAr ? "/" : "/en";
-  const projects = isAr ? "/projects" : "/en/projects";
-  const contact = isAr ? "/contact" : "/en/contact";
+  const home ="/";
+  const projects ="/projects";
+  const contact ="/contact";
   const arrow = isAr ? "←" : "→";
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-6 py-24 overflow-hidden" dir={isAr ? "rtl" : "ltr"}>
@@ -100,7 +100,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <p className="mt-2 text-sm text-muted-foreground">{t("err_desc")}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button onClick={() => { router.invalidate(); reset(); }} className="rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground">{t("err_retry")}</button>
-          <a href={isAr ? "/" : "/en"} className="rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium text-foreground">{t("nav_home")}</a>
+          <a href={"/"} className="rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium text-foreground">{t("nav_home")}</a>
         </div>
       </div>
     </div>
@@ -175,50 +175,17 @@ function RootShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const lang = detectLang(pathname);
   const dir = lang === "ar" ? "rtl" : "ltr";
-  const themeInit = `(function(){try{var t=localStorage.getItem('theme');var m=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(!t&&m)){document.documentElement.classList.add('dark');}}catch(e){}})();`;
+  // Dark mode only.
   return (
-    <html lang={lang} dir={dir}>
+    <html lang={lang} dir={dir} className="dark" style={{ colorScheme: "dark" }}>
       <head>
         <HeadContent />
-        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
       <body>{children}<Scripts /></body>
     </html>
   );
 }
 
-function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"));
-  }, []);
-  const toggle = () => {
-    const next = !isDark;
-    setIsDark(next);
-    if (next) document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
-    try { localStorage.setItem("theme", next ? "dark" : "light"); } catch {}
-  };
-  return (
-    <button
-      type="button"
-      onClick={toggle}
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="inline-flex h-10 w-10 md:h-8 md:w-8 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-    >
-      {isDark ? (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="4" />
-          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-      )}
-    </button>
-  );
-}
 
 function LangSync() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -230,15 +197,12 @@ function LangSync() {
     }
     // Manage hreflang alternate links
     try {
-      const isEn = pathname === "/en" || pathname.startsWith("/en/");
-      const arPath = isEn ? (pathname.replace(/^\/en/, "") || "/") : pathname;
-      const enPath = isEn ? pathname : `/en${pathname === "/" ? "" : pathname}`;
+      const arPath = pathname;
       const origin = "https://yrstudio.art";
       const entries: Array<[string, string]> = [
         ["ar", `${origin}${arPath}`],
         ["ar-SA", `${origin}${arPath}`],
         ["ar-AE", `${origin}${arPath}`],
-        ["en", `${origin}${enPath}`],
         ["x-default", `${origin}${arPath}`],
       ];
       document.querySelectorAll('link[rel="alternate"][data-hreflang="1"]').forEach((n) => n.remove());
@@ -365,26 +329,11 @@ function WhatsAppFab() {
   );
 }
 
-function LangSwitcher({ onNavigate }: { onNavigate?: () => void }) {
-  const { lang, altHref } = useLang();
-  return (
-    <Link
-      to={altHref}
-      onClick={onNavigate}
-      aria-label={lang === "ar" ? "Switch to English" : "التبديل إلى العربية"}
-      className="inline-flex min-h-10 md:min-h-0 items-center gap-1 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-    >
-      <span className={lang === "ar" ? "text-accent" : "text-muted-foreground"}>AR</span>
-      <span className="text-muted-foreground/60">|</span>
-      <span className={lang === "en" ? "text-accent" : "text-muted-foreground"}>EN</span>
-    </Link>
-  );
-}
 
 function SiteNav() {
   const { t, lang } = useLang();
   const [open, setOpen] = useState(false);
-  const base = lang === "ar" ? "" : "/en";
+  const base ="";
   const cmsMenu = useCmsMenu("header");
   const defaults = [
     { to: base || "/", label: t("nav_home"), external: false, newTab: false },
@@ -404,12 +353,12 @@ function SiteNav() {
     ? [...cmsLinks.filter((link) => link.to !== `${base}/tools/color-brief`), ...(cmsLinks.some((link) => link.to === toolLink.to) ? [] : [toolLink])]
     : defaults;
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
+    <header className="sticky top-0 z-40 px-3 pt-3 sm:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-full border border-white/10 bg-black/70 py-2 pe-2 ps-5 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.8)] backdrop-blur-md">
         <Link to={base || "/"} className="flex shrink-0 items-center gap-2" onClick={() => setOpen(false)} aria-label={t("brand_alt")}>
           <img src={logoFull.url} alt={t("brand_alt")} className="h-7 w-auto md:h-9 [filter:brightness(0)] dark:[filter:brightness(0)_invert(1)]" />
         </Link>
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-1">
           {links.map((l) => (
             l.external ? (
               <a key={l.to} href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined}
@@ -421,20 +370,16 @@ function SiteNav() {
                 activeOptions={{ exact: l.to === "/" || l.to === "/en" }}
                 activeProps={{ className: "text-foreground font-semibold" }}
                 inactiveProps={{ className: "text-muted-foreground" }}
-                className="text-sm transition-colors hover:text-foreground"
+                className="rounded-full px-3 py-1.5 text-sm transition-colors hover:bg-white/5 hover:text-foreground"
               >{l.label}</Link>
             )
           ))}
         </nav>
         <div className="hidden md:flex items-center gap-3">
-          <ThemeToggle />
-          <LangSwitcher />
-          <Link to={`${base}/contact`} className="inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5">{t("cta_start_project")}</Link>
+          <Link to={`${base}/contact`} className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-bold text-accent-foreground transition hover:brightness-110">{t("cta_start_project")} <span aria-hidden>←</span></Link>
         </div>
         <div className="md:hidden flex items-center gap-1.5">
-          <ThemeToggle />
-          <LangSwitcher />
-          <button className="inline-flex h-10 w-10 md:h-8 md:w-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent" onClick={() => setOpen(v => !v)} aria-label={t("menu_label")}>
+          <button className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground" onClick={() => setOpen(v => !v)} aria-label={t("menu_label")} aria-expanded={open}>
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <line x1="4" y1="7" x2="20" y2="7" />
               <line x1="4" y1="12" x2="20" y2="12" />
@@ -444,14 +389,14 @@ function SiteNav() {
         </div>
       </div>
       {open && (
-        <div className="md:hidden border-t border-border bg-background">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-4">
+        <div className="md:hidden mx-auto mt-2 max-w-7xl overflow-hidden rounded-3xl border border-white/10 bg-black/95 backdrop-blur-md">
+          <div className="flex flex-col gap-1 p-3">
             {links.map((l) => (
               l.external ? (
                 <a key={l.to} href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined}
-                  onClick={() => setOpen(false)} className="text-sm text-muted-foreground">{l.label}</a>
+                  onClick={() => setOpen(false)} className="rounded-2xl px-4 py-3 font-display text-lg text-foreground hover:bg-white/5">{l.label}</a>
               ) : (
-                <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="text-sm text-muted-foreground">{l.label}</Link>
+                <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className="rounded-2xl px-4 py-3 font-display text-lg text-foreground hover:bg-white/5">{l.label}</Link>
               )
             ))}
           </div>
@@ -463,7 +408,7 @@ function SiteNav() {
 
 function SiteFooter() {
   const { t, lang } = useLang();
-  const base = lang === "ar" ? "" : "/en";
+  const base ="";
   const year = new Date().getFullYear();
   const cmsMenu = useCmsMenu("footer_primary");
   const settings = useCmsSettings();

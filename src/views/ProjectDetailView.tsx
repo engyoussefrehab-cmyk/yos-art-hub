@@ -25,8 +25,8 @@ export function ProjectDetailView({
   const catSlug = project.category_slug ?? "branding";
   const catLabel = CAT_LABELS[catSlug]?.[lang === "ar" ? "ar" : "en"] ?? catSlug;
 
-  const projectsHref = lang === "ar" ? "/projects" : "/en/projects";
-  const categoryHref = lang === "ar" ? `/projects/${catSlug}` : `/en/projects/${catSlug}`;
+  const projectsHref ="/projects";
+  const categoryHref =`/projects/${catSlug}`;
 
   const context: RenderContext = {
     projectName: name,
@@ -40,10 +40,7 @@ export function ProjectDetailView({
           slug: next.slug,
           name: lang === "ar" ? next.name_ar : next.name_en,
           categorySlug: next.category_slug ?? null,
-          href:
-            lang === "ar"
-              ? `/projects/${next.category_slug ?? catSlug}/${next.slug}`
-              : `/en/projects/${next.category_slug ?? catSlug}/${next.slug}`,
+          href:`/projects/${next.category_slug ?? catSlug}/${next.slug}`,
         }
       : null,
   };

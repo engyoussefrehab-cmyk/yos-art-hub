@@ -10,7 +10,7 @@ type Entry = {
   hasAlt?: boolean; // ar<->en pair
 };
 
-// Static public routes. Arabic paths are canonical; each maps to an /en/ twin.
+// Static public routes (the site is Arabic only).
 const ARABIC: Entry[] = [
   { path: "/", changefreq: "weekly", priority: "1.0", hasAlt: true },
   { path: "/projects", changefreq: "weekly", priority: "0.9", hasAlt: true },
@@ -41,24 +41,11 @@ for (const a of insightArticles as any[]) {
   ARABIC.push({ path: `/insights/${cat}/${a.slug}`, changefreq: "monthly", priority: "0.8", hasAlt: true });
 }
 
-function toEn(arPath: string): string {
-  if (arPath === "/") return "/en";
-  return `/en${arPath}`;
-}
-
 function buildXml(lastmod: string): string {
   const urls: string[] = [];
 
   for (const e of ARABIC) {
     const arLoc = `${SITE_URL}${e.path}`;
-    const enLoc = `${SITE_URL}${toEn(e.path)}`;
-    const altsAr = e.hasAlt
-      ? [
-          `      <xhtml:link rel="alternate" hreflang="ar" href="${arLoc}" />`,
-          `      <xhtml:link rel="alternate" hreflang="en" href="${enLoc}" />`,
-          `      <xhtml:link rel="alternate" hreflang="x-default" href="${arLoc}" />`,
-        ].join("\n")
-      : "";
     urls.push(
       [
         `  <url>`,
@@ -66,28 +53,12 @@ function buildXml(lastmod: string): string {
         `    <lastmod>${lastmod}</lastmod>`,
         `    <changefreq>${e.changefreq}</changefreq>`,
         `    <priority>${e.priority}</priority>`,
-        altsAr,
         `  </url>`,
       ]
         .filter(Boolean)
         .join("\n"),
     );
 
-    if (e.hasAlt) {
-      urls.push(
-        [
-          `  <url>`,
-          `    <loc>${enLoc}</loc>`,
-          `    <lastmod>${lastmod}</lastmod>`,
-          `    <changefreq>${e.changefreq}</changefreq>`,
-          `    <priority>${e.priority}</priority>`,
-          `      <xhtml:link rel="alternate" hreflang="ar" href="${arLoc}" />`,
-          `      <xhtml:link rel="alternate" hreflang="en" href="${enLoc}" />`,
-          `      <xhtml:link rel="alternate" hreflang="x-default" href="${arLoc}" />`,
-          `  </url>`,
-        ].join("\n"),
-      );
-    }
   }
 
   return [

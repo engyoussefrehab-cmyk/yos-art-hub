@@ -11,7 +11,7 @@ interface Props {
 
 export function InsightsCategoryView({ category, articles, allCategories }: Props) {
   const { lang } = useLang();
-  const base = lang === "ar" ? "/insights" : "/en/insights";
+  const base ="/insights";
 
   return (
     <div className="bg-background">
@@ -70,7 +70,7 @@ export function InsightsCategoryView({ category, articles, allCategories }: Prop
 
 function MiniCard({ article }: { article: InsightArticle }) {
   const { lang } = useLang();
-  const base = lang === "ar" ? "/insights" : "/en/insights";
+  const base ="/insights";
   const title = lang === "ar" ? article.title_ar : article.title_en || article.title_ar;
   const excerpt = lang === "ar" ? article.excerpt_ar : article.excerpt_en || article.excerpt_ar;
   const style = article.cover_url

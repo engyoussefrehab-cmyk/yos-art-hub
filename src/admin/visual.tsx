@@ -113,7 +113,6 @@ const PAGES = [
   { path: "/projects/", label: "المشاريع" },
   { path: "/contact/", label: "تواصل" },
   { path: "/insights/", label: "المقالات" },
-  { path: "/en/", label: "English — Home" },
 ];
 
 const STYLE = `

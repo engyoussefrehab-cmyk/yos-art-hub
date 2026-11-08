@@ -122,7 +122,7 @@ export function LatestProjectsSlider({
   const titleClass = compact ? "text-sm sm:text-base" : "text-2xl";
   const pad = compact ? "p-3 sm:p-4" : "p-6";
 
-  const allProjectsHref = isAr ? "/projects" : "/en/projects";
+  const allProjectsHref ="/projects";
 
   return (
     <section className={compact ? "" : "mt-16"}>
@@ -198,9 +198,7 @@ export function LatestProjectsSlider({
           const catLabel = p.category_slug
             ? CAT_LABELS[p.category_slug]?.[isAr ? "ar" : "en"] ?? p.category_slug
             : null;
-          const href = isAr
-            ? `/projects/${p.category_slug ?? "branding"}/${p.slug}`
-            : `/en/projects/${p.category_slug ?? "branding"}/${p.slug}`;
+          const href =`/projects/${p.category_slug ?? "branding"}/${p.slug}`;
           return (
             <Link
               key={`${p.slug}-${i}`}

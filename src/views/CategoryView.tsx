@@ -19,7 +19,7 @@ export function CategoryView({
   const rawContent = lang === "ar" ? category.content_ar : category.content_en;
   const content = useMemo(() => (rawContent ? sanitizeHtml(rawContent) : ""), [rawContent]);
   const ctaLabel = lang === "ar" ? category.cta_label_ar : category.cta_label_en;
-  const projectsHref = lang === "ar" ? "/projects" : "/en/projects";
+  const projectsHref ="/projects";
   const featuredIds = new Set(category.featured_project_ids ?? []);
   const featured = projects.filter((p) => featuredIds.has((p as any).id));
   const rest = projects.filter((p) => !featuredIds.has((p as any).id));
@@ -101,9 +101,7 @@ function ProjectsList({ categorySlug, projects }: { categorySlug: string; projec
         const name = lang === "ar" ? p.name_ar : p.name_en;
         const short = lang === "ar" ? p.short_ar : p.short_en;
         const idx = String(i + 1).padStart(2, "0");
-        const href = lang === "ar"
-          ? `/projects/${categorySlug}/${p.slug}`
-          : `/en/projects/${categorySlug}/${p.slug}`;
+        const href =`/projects/${categorySlug}/${p.slug}`;
         return (
           <Link
             key={p.slug}
