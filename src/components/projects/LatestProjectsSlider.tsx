@@ -139,7 +139,7 @@ export function LatestProjectsSlider({
           {!compact && (
             <p className="mt-2 max-w-lg text-sm text-muted-foreground">
               {t(
-                "لمحة سريعة من آخر ما أنجزته — مرّر جانبيًا لاستكشاف الأعمال.",
+                "لمحة سريعة عن آخر أعمالي، مرر جانبيا لمشاهدة المزيد.",
                 "A quick glance at the latest work — swipe sideways to explore.",
               )}
             </p>
@@ -264,7 +264,7 @@ export function LatestProjectsSlider({
         })}
       </div>
 
-{compact && <Link to={allProjectsHref} className="mt-2 inline-flex min-h-10 items-center gap-1 text-xs font-semibold text-accent sm:hidden">{t("استكشف كل المشاريع", "Explore all projects")}<ArrowUpRight className={`h-3.5 w-3.5 ${isAr ? "-scale-x-100" : ""}`} /></Link>} {/* Progress bar */}
+{compact && <Link to={allProjectsHref} className="mt-2 inline-flex min-h-10 items-center gap-1 text-xs font-semibold text-accent sm:hidden">{t("شاهد كل المشاريع", "Explore all projects")}<ArrowUpRight className={`h-3.5 w-3.5 ${isAr ? "-scale-x-100" : ""}`} /></Link>} {/* Progress bar */}
       {!compact && items.length > 1 && (
         <div className="mt-2 h-0.5 w-full overflow-hidden rounded-full bg-border/60">
           <div

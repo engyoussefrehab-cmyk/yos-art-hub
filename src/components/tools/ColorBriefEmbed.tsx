@@ -86,7 +86,7 @@ export function ColorBriefEmbed() {
       <iframe
         ref={frameRef}
         src={COLOR_TOOL_SRC}
-        title={isAr ? "مختبر الألوان لاختيار لوحات لونية" : "Color Palette Studio"}
+        title={isAr ? "أداة اختيار الألوان" : "Color Palette Studio"}
         className="block w-full border-0"
         style={{ height: "1200px" }}
         loading="eager"

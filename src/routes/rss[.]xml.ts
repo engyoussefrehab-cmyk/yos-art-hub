@@ -28,7 +28,7 @@ async function buildRss(lang: "ar" | "en"): Promise<string> {
   const isAr = lang === "ar";
   const feedUrl = `${SITE_URL}${isAr ? "/rss.xml" : "/en/rss.xml"}`;
   const homeUrl = `${SITE_URL}${isAr ? "/insights" : "/en/insights"}`;
-  const title = isAr ? `${SITE_NAME_AR} — رؤى ومقالات` : "Youssef Rehab — Insights";
+  const title = isAr ? `${SITE_NAME_AR} — المقالات` : "Youssef Rehab — Insights";
   const description = isAr ? pair("ui_rss_xml_1")[0] : pair("ui_rss_xml_1")[1];
 
   const items = articles

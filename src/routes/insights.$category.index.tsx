@@ -16,9 +16,9 @@ export const Route = createFileRoute("/insights/$category/")({
     const desc = loaderData?.category.description_ar ?? "";
     return {
       meta: [
-        { title: `${label} — رؤى | يوسف رحاب` },
+        { title: `${label} — المقالات | يوسف رحاب` },
         { name: "description", content: desc },
-        { property: "og:title", content: `${label} — رؤى` },
+        { property: "og:title", content: `${label} — المقالات` },
         { property: "og:description", content: desc },
         { property: "og:url", content: `/insights/${params.category}` },
       ],

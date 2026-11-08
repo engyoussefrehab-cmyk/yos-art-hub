@@ -8,51 +8,51 @@
     "en": "Projects"
   },
   "nav_contact": {
-    "ar": "تواصل",
+    "ar": "تواصل معي",
     "en": "Contact"
   },
   "nav_packages": {
-    "ar": "فئات الخدمات",
+    "ar": "الباقات",
     "en": "Service Tiers"
   },
   "nav_insights": {
-    "ar": "الرؤى",
+    "ar": "المقالات",
     "en": "Insights"
   },
   "nav_tools": {
-    "ar": "أدوات",
+    "ar": "الأدوات",
     "en": "Tools"
   },
   "tools_kicker": {
-    "ar": "أدوات YR Studio",
+    "ar": "أدوات مجانية",
     "en": "YR Studio Tools"
   },
   "tools_title": {
-    "ar": "أدوات صغيرة، أفكار أوضح",
+    "ar": "أدوات بسيطة تسهل عملك",
     "en": "Small tools. Clearer ideas."
   },
   "tools_intro": {
-    "ar": "أدوات عملية تساعدك على حلّ تفاصيل التصميم اليومية بسهولة وسرعة.",
+    "ar": "أدوات عملية تساعدك في تفاصيل التصميم اليومية بسرعة وسهولة.",
     "en": "Practical tools to make everyday design decisions easier and faster."
   },
   "tools_palette_title": {
-    "ar": "مختبر الألوان",
+    "ar": "أداة اختيار الألوان",
     "en": "Color Palette Studio"
   },
   "tools_palette_desc": {
-    "ar": "استكشف اتجاهات لونية متناسقة تناسب شخصية العلامة وجمهورها، وابدأ كل مشروع باختيار أوضح.",
+    "ar": "جرب مجموعات ألوان متناسقة تناسب شخصية علامتك وجمهورها، وابدأ مشروعك باختيار أوضح.",
     "en": "Explore coordinated color directions for a brand’s personality and audience, and start each project with more clarity."
   },
   "tools_palette_cta": {
-    "ar": "جرّب الأداة",
+    "ar": "جرب الأداة",
     "en": "Open tool"
   },
   "tools_palette_tag": {
-    "ar": "اختيار الألوان",
+    "ar": "الألوان",
     "en": "Color selection"
   },
   "tools_coming_soon": {
-    "ar": "المزيد من الأدوات قريبًا",
+    "ar": "المزيد من الأدوات قريبا",
     "en": "More tools coming soon"
   },
   "cta_start_project": {
@@ -64,51 +64,51 @@
     "en": "Menu"
   },
   "hero_badge": {
-    "ar": "متاحٌ لاستقبال مشاريع جديدة",
+    "ar": "متاح لمشاريع جديدة",
     "en": "Available for new projects"
   },
   "hero_title_a": {
-    "ar": "هوياتٌ بصريّة",
+    "ar": "هويات بصرية",
     "en": "Visual identities"
   },
   "hero_title_b": {
-    "ar": "تُبنى لتبقى",
+    "ar": "تبنى لتبقى",
     "en": "built to last"
   },
   "hero_subtitle": {
-    "ar": "نظيفةٌ · ذكيّةٌ · خالدة",
+    "ar": "بسيطة · مدروسة · تدوم",
     "en": "Clean · Smart · Timeless"
   },
   "hero_intro": {
-    "ar": "أنا يوسف رحاب، مصمّم هويةٍ بصريّةٍ استراتيجي. أُساعد العلامات التجارية على التعبير عن ذاتها بوضوحٍ عبر أنظمةٍ بصريّةٍ محكمةٍ تصنع فارقًا حقيقيًّا في السوق.",
+    "ar": "أنا يوسف رحاب، مصمم هويات بصرية. أساعد الشركات والعلامات التجارية على الظهور بصورة واضحة ومميزة، من خلال شعار وألوان وخطوط متناسقة تصنع فرقا حقيقيا في السوق.",
     "en": "I'm Youssef Rehab, a strategic visual identity designer. I help brands express themselves with clarity through refined visual systems that make a real difference in the market."
   },
   "hero_cta_projects": {
-    "ar": "استعراض المشاريع",
+    "ar": "شاهد الأعمال",
     "en": "View projects"
   },
   "hero_cta_download": {
-    "ar": "تحميل ملف الأعمال",
+    "ar": "حمل ملف الأعمال (PDF)",
     "en": "Download portfolio"
   },
   "stat_years": {
-    "ar": "سنواتُ خبرة",
+    "ar": "سنوات خبرة",
     "en": "Years of experience"
   },
   "stat_brands": {
-    "ar": "علامةٌ تجاريّة",
+    "ar": "علامة تجارية",
     "en": "Brands"
   },
   "stat_sectors": {
-    "ar": "دولةً وقطاعًا",
+    "ar": "دولة ومجال",
     "en": "Countries & sectors"
   },
   "strategic_brand": {
-    "ar": "علامةٌ استراتيجيّة",
+    "ar": "مصمم",
     "en": "Strategic Brand"
   },
   "identity_designer": {
-    "ar": "مصمّم هوية",
+    "ar": "هويات بصرية",
     "en": "Identity Designer"
   },
   "about_kicker": {
@@ -116,31 +116,31 @@
     "en": "About me"
   },
   "about_title_a": {
-    "ar": "أُصمّم هوياتٍ",
+    "ar": "أصمم هويات",
     "en": "I design identities"
   },
   "about_title_b": {
-    "ar": "تعيش طويلًا.",
+    "ar": "تعيش طويلا.",
     "en": "that stand the test of time."
   },
   "about_p1": {
-    "ar": "على مدى أكثر من ثماني سنوات، ساعدتُ أكثر من ٢٥٠ علامةً تجاريّة في مختلف قطاعات الخليج ومصر على تحويل أفكارها إلى هويّاتٍ قويّةٍ لا تُنسى. أتخصّص في تصاميم نظيفةٍ واستراتيجيّةٍ وخالدة، تتحدّث بوضوح وتصمد أمام الزمن.",
+    "ar": "خلال أكثر من ثماني سنوات، ساعدت أكثر من ٢٥٠ علامة تجارية في الخليج ومصر على تحويل أفكارها إلى هويات قوية لا تنسى. أركز على التصميم البسيط والمدروس الذي يبقى مناسبا لسنوات.",
     "en": "Over more than eight years, I've helped 250+ brands across the Gulf and Egypt turn their ideas into strong, memorable identities. I specialize in clean, strategic, timeless design that speaks clearly and endures."
   },
   "about_p2": {
-    "ar": "أُؤمن بأنّ التصميم الجيّد ليس زخرفة، بل قرارٌ تجاري. كلّ تفصيلٍ في الهوية يجب أن يخدم موقع العلامة، وجمهورها، وأهدافها.",
+    "ar": "أؤمن بأن التصميم الجيد ليس زينة، بل قرار تجاري. كل تفصيلة في الهوية يجب أن تخدم مكانة العلامة وجمهورها وأهدافها.",
     "en": "Good design isn't decoration — it's a business decision. Every detail of an identity should serve the brand's position, audience and goals."
   },
   "about_skills_kicker": {
-    "ar": "مهاراتٌ أساسيّة",
+    "ar": "مهاراتي",
     "en": "Core skills"
   },
   "skill_visual_identity": {
-    "ar": "الهوية البصريّة",
+    "ar": "الهوية البصرية",
     "en": "Visual Identity"
   },
   "skill_visual_systems": {
-    "ar": "الأنظمة البصريّة",
+    "ar": "أدلة الهوية",
     "en": "Visual Systems"
   },
   "skill_logo_design": {
@@ -148,7 +148,7 @@
     "en": "Logo Design"
   },
   "skill_generative_ai": {
-    "ar": "الذكاء الاصطناعي التوليدي",
+    "ar": "الذكاء الاصطناعي",
     "en": "Generative AI"
   },
   "skill_presentation": {
@@ -156,15 +156,15 @@
     "en": "Presentation Design"
   },
   "skill_social": {
-    "ar": "السوشيال ميديا",
+    "ar": "منشورات التواصل الاجتماعي",
     "en": "Social Media"
   },
   "skill_typography": {
-    "ar": "التايبوجرافي",
+    "ar": "اختيار الخطوط",
     "en": "Typography"
   },
   "skill_creative_direction": {
-    "ar": "الإخراج الإبداعي",
+    "ar": "التوجيه الفني",
     "en": "Creative Direction"
   },
   "services_kicker": {
@@ -172,19 +172,19 @@
     "en": "Services"
   },
   "services_title": {
-    "ar": "ماذا أُقدّم",
+    "ar": "ماذا أقدم",
     "en": "What I offer"
   },
   "services_lede": {
-    "ar": "خدمات تصميمٍ شاملة تُحوّل رؤيتك إلى نظامٍ بصريٍّ متكامل.",
+    "ar": "خدمات تصميم متكاملة تحول فكرتك إلى هوية واضحة ومتناسقة.",
     "en": "Full-service design that turns your vision into a complete visual system."
   },
   "svc_1_t": {
-    "ar": "الهوية البصريّة",
+    "ar": "الهوية البصرية",
     "en": "Visual Identity"
   },
   "svc_1_d": {
-    "ar": "أنظمةٌ هوية استراتيجيّة متكاملة تعكس شخصيّة العلامة.",
+    "ar": "هوية متكاملة تعبر عن شخصية علامتك.",
     "en": "Strategic identity systems that reflect the brand's personality."
   },
   "svc_2_t": {
@@ -192,39 +192,39 @@
     "en": "Logo Design"
   },
   "svc_2_d": {
-    "ar": "شعاراتٌ دقيقةٌ وخالدة، تحمل معنًى وتترك أثرًا.",
+    "ar": "شعار واضح وبسيط يحمل معنى ويبقى في الذاكرة.",
     "en": "Precise, timeless logos that carry meaning and leave a mark."
   },
   "svc_3_t": {
-    "ar": "ملفّات الشركات",
+    "ar": "الملفات التعريفية",
     "en": "Company Profiles"
   },
   "svc_3_d": {
-    "ar": "بروفايلاتٌ احترافيّة تُحوّل المعلومة إلى تأثير.",
+    "ar": "ملف تعريفي احترافي يعرض شركتك بشكل مقنع.",
     "en": "Professional profiles that turn information into impact."
   },
   "svc_4_t": {
-    "ar": "منشورات السوشيال ميديا",
+    "ar": "منشورات التواصل الاجتماعي",
     "en": "Social Media"
   },
   "svc_4_d": {
-    "ar": "محتوًى بصريٌّ إبداعيٌّ يرفع تفاعل جمهورك.",
+    "ar": "تصاميم جذابة تزيد تفاعل جمهورك.",
     "en": "Creative visual content that lifts your audience engagement."
   },
   "svc_5_t": {
-    "ar": "الأنظمة البصريّة",
+    "ar": "أدلة الهوية",
     "en": "Design Systems"
   },
   "svc_5_d": {
-    "ar": "أدلّةُ استخدامٍ واضحة تضمن اتّساق العلامة.",
+    "ar": "دليل استخدام واضح يحافظ على شكل علامتك في كل مكان.",
     "en": "Clear guidelines that keep the brand consistent."
   },
   "svc_6_t": {
-    "ar": "الإخراج الإبداعي",
+    "ar": "التوجيه الفني",
     "en": "Creative Direction"
   },
   "svc_6_d": {
-    "ar": "قيادةٌ إبداعيّةٌ شاملة لحملاتك ومنتجاتك.",
+    "ar": "إشراف فني كامل على حملاتك ومنتجاتك.",
     "en": "Full creative leadership for your campaigns and products."
   },
   "cta_title_a": {
@@ -232,11 +232,11 @@
     "en": "Have an idea?"
   },
   "cta_title_b": {
-    "ar": "دعنا نُحوّلها إلى هويّة.",
+    "ar": "لنحولها معا إلى هوية.",
     "en": "Let's turn it into an identity."
   },
   "cta_sub": {
-    "ar": "متاحٌ لمشاريع الهويّة البصريّة والتعاونات الإبداعيّة.",
+    "ar": "متاح لمشاريع الهوية البصرية والتعاون في المشاريع الإبداعية.",
     "en": "Available for identity projects and creative collaborations."
   },
   "cta_button": {
@@ -244,39 +244,39 @@
     "en": "Get in touch →"
   },
   "cta_reply_time": {
-    "ar": "متوسّط الردّ خلال ٢٤ ساعة",
+    "ar": "أرد عادة خلال ٢٤ ساعة",
     "en": "Average reply time under 24 hours"
   },
   "cta_or_reach": {
-    "ar": "أو تواصل مباشرةً عبر:",
+    "ar": "أو تواصل مباشرة عبر:",
     "en": "Or reach out directly via:"
   },
   "process_kicker": {
-    "ar": "منهجيّة العمل",
+    "ar": "خطوات العمل",
     "en": "How I work"
   },
   "process_title": {
-    "ar": "من الفكرة إلى الهويّة",
+    "ar": "من الفكرة إلى الهوية",
     "en": "From idea to identity"
   },
   "process_lede": {
-    "ar": "منهجٌ استراتيجيٌّ واضح يضمن أن تعكس هويّتك جوهر علامتك وتخدم أهدافها التجاريّة.",
+    "ar": "خطوات واضحة تضمن أن تعبر هويتك عن علامتك وتخدم أهدافها.",
     "en": "A clear strategic method that ensures your identity reflects your brand's essence and serves its business goals."
   },
   "process_1_t": {
-    "ar": "الاكتشاف",
+    "ar": "فهم المشروع",
     "en": "Discovery"
   },
   "process_1_d": {
-    "ar": "جلسةٌ عميقة لفهم علامتك، جمهورك، وموقعك في السوق.",
+    "ar": "جلسة لفهم علامتك وجمهورك ومكانك في السوق.",
     "en": "A deep session to understand your brand, audience, and market position."
   },
   "process_2_t": {
-    "ar": "الاستراتيجيّة",
+    "ar": "التخطيط",
     "en": "Strategy"
   },
   "process_2_d": {
-    "ar": "بناء التوجّه البصري والمفاهيم التي تقود التصميم.",
+    "ar": "تحديد الاتجاه البصري والأفكار التي يقوم عليها التصميم.",
     "en": "Building the visual direction and concepts that guide the design."
   },
   "process_3_t": {
@@ -284,7 +284,7 @@
     "en": "Design"
   },
   "process_3_d": {
-    "ar": "تنفيذ الهويّة عبر شعارٍ ونظامٍ بصريٍّ متكامل.",
+    "ar": "تصميم الشعار وباقي عناصر الهوية.",
     "en": "Executing the identity through a logo and a complete visual system."
   },
   "process_4_t": {
@@ -292,11 +292,11 @@
     "en": "Delivery"
   },
   "process_4_d": {
-    "ar": "دليل استخدامٍ واضح وملفّاتٌ نهائيّة جاهزة للتطبيق.",
+    "ar": "دليل استخدام واضح وملفات نهائية جاهزة للاستخدام.",
     "en": "A clear usage guide and final files ready for real-world application."
   },
   "home_scroll_cue": {
-    "ar": "اسحب للأسفل لاستعراض الأعمال",
+    "ar": "مرر للأسفل لمشاهدة الأعمال",
     "en": "Scroll to explore the work"
   },
   "t_kicker": {
@@ -304,19 +304,19 @@
     "en": "Client testimonials"
   },
   "t_title": {
-    "ar": "ثقةٌ تُبنى بمشروعٍ تلو الآخر",
+    "ar": "ثقة تبنى مشروعا بعد مشروع",
     "en": "Trust, built one project at a time"
   },
   "t_lede": {
-    "ar": "مختاراتٌ من آراء عملاء تعاملتُ معهم عبر مسيرتي المهنية.",
+    "ar": "مختارات من آراء عملاء عملت معهم.",
     "en": "A selection of reviews from clients I've worked with throughout my career."
   },
   "t_verified": {
-    "ar": "تقييمٌ موثّق",
+    "ar": "تقييم موثق",
     "en": "Verified reviews"
   },
   "t_verified_badge": {
-    "ar": "تقييم موثّق من منصّة مستقل",
+    "ar": "تقييم موثق من منصة مستقل",
     "en": "Verified review from Mostaql"
   },
   "t_prev": {
@@ -328,7 +328,7 @@
     "en": "Next"
   },
   "t_hint": {
-    "ar": "يمكنك السحب أو استخدام الأزرار للتنقّل",
+    "ar": "اسحب أو استخدم الأزرار للتنقل",
     "en": "Swipe or use the arrows to navigate"
   },
   "t_original_note": {
@@ -336,51 +336,51 @@
     "en": "Reviews are displayed in the original Arabic."
   },
   "projects_kicker": {
-    "ar": "أعمالٌ مختارة",
+    "ar": "أعمال مختارة",
     "en": "Selected work"
   },
   "projects_title": {
-    "ar": "التخصّصات",
+    "ar": "مجالات العمل",
     "en": "Specialties"
   },
   "projects_lede": {
-    "ar": "اختر التخصّص الذي تودّ استعراضه؛ كلّ قسمٍ يضمّ أعمالًا مختارة وتفاصيل كلّ مشروع.",
+    "ar": "اختر المجال الذي تريد مشاهدته؛ كل قسم يضم أعمالا مختارة وتفاصيل كل مشروع.",
     "en": "Pick the specialty you'd like to explore — each section holds selected work and project details."
   },
   "projects_items": {
-    "ar": "عملًا",
+    "ar": "عملا",
     "en": "projects"
   },
   "projects_view_section": {
-    "ar": "استعراض القسم",
+    "ar": "شاهد القسم",
     "en": "View section"
   },
   "projects_stat_projects": {
-    "ar": "مشروعًا مختارًا",
+    "ar": "مشروعا مختارا",
     "en": "Selected projects"
   },
   "projects_stat_sectors": {
-    "ar": "قطاعًا",
+    "ar": "مجالا",
     "en": "Sectors"
   },
   "projects_stat_countries": {
-    "ar": "دولًا وأسواقًا",
+    "ar": "دولة وسوقا",
     "en": "Countries & markets"
   },
   "projects_browser_kicker": {
-    "ar": "استكشف الأرشيف",
+    "ar": "كل الأعمال",
     "en": "Browse the archive"
   },
   "projects_browser_title": {
-    "ar": "كل الأعمال بين يديك",
+    "ar": "تصفح كل الأعمال",
     "en": "Every project, one search away"
   },
   "projects_browser_hint": {
-    "ar": "استخدم الفلاتر أدناه لتصفية الأعمال بحسب التخصّص أو السنة أو السوق.",
+    "ar": "استخدم الفلاتر لعرض الأعمال حسب المجال أو السنة أو الدولة.",
     "en": "Use the filters below to narrow the archive by specialty, year or market."
   },
   "projects_filter_all": {
-    "ar": "كل التخصّصات",
+    "ar": "كل المجالات",
     "en": "All specialties"
   },
   "projects_results_count": {
@@ -388,7 +388,7 @@
     "en": "results"
   },
   "cat_kicker": {
-    "ar": "تخصّص",
+    "ar": "مجال",
     "en": "Specialty"
   },
   "crumb_projects": {
@@ -416,7 +416,7 @@
     "en": "Visual Identity"
   },
   "cat_branding_desc": {
-    "ar": "هويات بصرية استراتيجية متكاملة تعكس شخصية العلامة.",
+    "ar": "هويات بصرية متكاملة تعبر عن شخصية العلامة.",
     "en": "Strategic identity systems reflecting the brand's personality."
   },
   "cat_logos_label": {
@@ -424,7 +424,7 @@
     "en": "Logos"
   },
   "cat_logos_desc": {
-    "ar": "شعارات دقيقة، خالدة، تحمل معنى وتترك أثرًا.",
+    "ar": "شعارات واضحة وبسيطة تحمل معنى وتبقى في الذاكرة.",
     "en": "Precise, timeless logos that carry meaning and leave a mark."
   },
   "cat_profiles_label": {
@@ -432,23 +432,23 @@
     "en": "Company Profiles"
   },
   "cat_profiles_desc": {
-    "ar": "بروفايلات مقنعة تحوّل المعلومة إلى تأثير.",
+    "ar": "ملفات تعريفية مقنعة تعرض الشركة بأفضل صورة.",
     "en": "Compelling profiles that turn information into impact."
   },
   "cat_social_label": {
-    "ar": "سوشيال ميديا",
+    "ar": "التواصل الاجتماعي",
     "en": "Social Media"
   },
   "cat_social_desc": {
-    "ar": "منشورات إبداعية ترفع علامتك وتثير التفاعل.",
+    "ar": "تصاميم منشورات جذابة ترفع تفاعل جمهورك.",
     "en": "Creative posts that elevate your brand and drive engagement."
   },
   "proj_kind": {
-    "ar": "هويّةٌ بصريّة",
+    "ar": "هوية بصرية",
     "en": "Visual Identity"
   },
   "proj_specialty": {
-    "ar": "التخصّص",
+    "ar": "المجال",
     "en": "Specialty"
   },
   "proj_year": {
@@ -464,15 +464,15 @@
     "en": "Type"
   },
   "proj_approach_kicker": {
-    "ar": "التوجّه والمقاربة",
+    "ar": "الفكرة والأسلوب",
     "en": "Approach"
   },
   "proj_approach_title": {
-    "ar": "كيف بنينا الهويّة",
+    "ar": "كيف صممنا الهوية",
     "en": "How we built the identity"
   },
   "proj_value": {
-    "ar": "القيمة المضافة",
+    "ar": "النتيجة",
     "en": "Value Proposition"
   },
   "proj_next": {
@@ -496,15 +496,15 @@
     "en": "Have an idea?"
   },
   "contact_title_b": {
-    "ar": "دعنا نُحوّلها إلى هويّة.",
+    "ar": "دعنا نحولها إلى هوية.",
     "en": "Let's turn it into an identity."
   },
   "contact_lede": {
-    "ar": "متاحٌ لمشاريع الهويّة البصريّة والتعاونات الإبداعيّة في الخليج ومصر والعالم العربي. اختر الوسيلة الأنسب أو أرسل تفاصيل مشروعك عبر النموذج.",
+    "ar": "متاح لمشاريع الهوية البصرية والتصميم في الخليج ومصر وكل الدول العربية. اختر طريقة التواصل المناسبة لك، أو أرسل تفاصيل مشروعك من النموذج.",
     "en": "Available for identity projects and creative collaborations across the Gulf, Egypt, and the wider Arab world. Pick the channel that suits you, or send project details through the form."
   },
   "contact_wa_label": {
-    "ar": "واتساب / اتصال",
+    "ar": "واتساب أو اتصال",
     "en": "WhatsApp / Call"
   },
   "contact_email_label": {
@@ -528,7 +528,7 @@
     "en": "Send your project details"
   },
   "form_sub": {
-    "ar": "سأعود إليك خلال ٢٤ ساعة.",
+    "ar": "سأرد عليك خلال ٢٤ ساعة.",
     "en": "I'll get back to you within 24 hours."
   },
   "f_name": {
@@ -548,7 +548,7 @@
     "en": "Project details"
   },
   "f_message_placeholder": {
-    "ar": "أخبرني عن علامتك التجاريّة، والقطاع، والجدول الزمني…",
+    "ar": "أخبرني عن علامتك ومجال عملك والوقت المتاح للمشروع…",
     "en": "Tell me about your brand, sector, and timeline…"
   },
   "f_send": {
@@ -556,11 +556,11 @@
     "en": "Send message"
   },
   "f_sent": {
-    "ar": "تمّ فتح بريدك لإكمال الإرسال ✓",
+    "ar": "تم فتح بريدك لإكمال الإرسال ✓",
     "en": "Your email client is open — finish sending ✓"
   },
   "f_spam": {
-    "ar": "يُرجى الانتظار قليلًا قبل إعادة الإرسال.",
+    "ar": "يرجى الانتظار قليلا قبل إعادة الإرسال.",
     "en": "Please wait a moment before resending."
   },
   "err_name": {
@@ -568,7 +568,7 @@
     "en": "Name is required"
   },
   "err_name_long": {
-    "ar": "الاسم طويل جدًا",
+    "ar": "الاسم طويل جدا",
     "en": "Name is too long"
   },
   "err_email": {
@@ -580,11 +580,11 @@
     "en": "Subject is required"
   },
   "err_msg_short": {
-    "ar": "الرسالة قصيرة جدًا",
+    "ar": "الرسالة قصيرة جدا",
     "en": "Message is too short"
   },
   "err_msg_long": {
-    "ar": "الرسالة طويلة جدًا",
+    "ar": "الرسالة طويلة جدا",
     "en": "Message is too long"
   },
   "f_call_title": {
@@ -592,19 +592,19 @@
     "en": "Book a free call (optional)"
   },
   "f_call_sub": {
-    "ar": "اختر يومًا ووقتًا مناسبين لمكالمة قصيرة نرسم فيها ملامح المشروع.",
+    "ar": "اختر يوما ووقتا مناسبين لمكالمة قصيرة نتحدث فيها عن المشروع.",
     "en": "Pick a day and time for a short discovery call to outline your project."
   },
   "f_call_date": {
-    "ar": "التاريخ المفضّل",
+    "ar": "التاريخ المفضل",
     "en": "Preferred date"
   },
   "f_call_time": {
-    "ar": "الوقت المفضّل",
+    "ar": "الوقت المفضل",
     "en": "Preferred time"
   },
   "f_call_tz": {
-    "ar": "المنطقة الزمنية / ملاحظات",
+    "ar": "المنطقة الزمنية أو ملاحظات",
     "en": "Timezone / notes"
   },
   "f_call_tz_placeholder": {
@@ -612,7 +612,7 @@
     "en": "e.g. Riyadh time, afternoon"
   },
   "err_call_date_past": {
-    "ar": "اختر تاريخًا في المستقبل",
+    "ar": "اختر تاريخا في المستقبل",
     "en": "Pick a future date"
   },
   "mail_name_label": {
@@ -624,11 +624,11 @@
     "en": "Email"
   },
   "footer_bio": {
-    "ar": "مصمّم هويةٍ بصريّةٍ استراتيجي، أُحوّل أفكار العلامات إلى أنظمةٍ بصريّةٍ جريئةٍ وخالدة، تتحدّث بوضوحٍ في أسواقٍ تنافسيّة.",
+    "ar": "مصمم هويات بصرية، أحول أفكار العلامات التجارية إلى هويات واضحة ومميزة تدوم لسنوات.",
     "en": "A strategic visual identity designer turning brand ideas into bold, timeless visual systems that speak clearly in competitive markets."
   },
   "explore": {
-    "ar": "استكشف",
+    "ar": "روابط",
     "en": "Explore"
   },
   "contact": {
@@ -636,11 +636,11 @@
     "en": "Contact"
   },
   "newsletter": {
-    "ar": "النشرة البريديّة",
+    "ar": "النشرة البريدية",
     "en": "Newsletter"
   },
   "newsletter_sub": {
-    "ar": "اشترك لتصلك أحدث المشاريع والمقالات الإبداعيّة.",
+    "ar": "اشترك ليصلك جديد الأعمال والمقالات.",
     "en": "Subscribe to receive the latest projects and creative articles."
   },
   "newsletter_placeholder": {
@@ -652,11 +652,11 @@
     "en": "Subscribe"
   },
   "newsletter_ok": {
-    "ar": "تمّ الاشتراك بنجاح ✓",
+    "ar": "تم الاشتراك بنجاح ✓",
     "en": "Subscribed successfully ✓"
   },
   "newsletter_err": {
-    "ar": "بريدٌ إلكترونيٌّ غير صحيح",
+    "ar": "بريد إلكتروني غير صحيح",
     "en": "Invalid email address"
   },
   "rights": {
@@ -664,7 +664,7 @@
     "en": "All rights reserved."
   },
   "built_with_care": {
-    "ar": "صُمّم وبُني بعناية",
+    "ar": "صمم وطور بعناية",
     "en": "Designed & Built with care"
   },
   "nf_eyebrow": {
@@ -676,15 +676,15 @@
     "en": "Page not found"
   },
   "nf_desc": {
-    "ar": "يبدو أنّ الصفحة التي تبحث عنها لم تعد متاحة أو نُقلت إلى مسارٍ آخر. يمكنك العودة إلى الصفحة الرئيسيّة أو استكشاف الأقسام أدناه.",
+    "ar": "يبدو أن الصفحة التي تبحث عنها لم تعد موجودة أو تغير رابطها. يمكنك العودة إلى الصفحة الرئيسية أو زيارة الأقسام التالية.",
     "en": "The page you're looking for is no longer available or has moved. You can return to the home page or explore the sections below."
   },
   "nf_back": {
-    "ar": "العودة إلى الرئيسيّة",
+    "ar": "العودة إلى الرئيسية",
     "en": "Back to home"
   },
   "nf_explore_projects": {
-    "ar": "استعراض المشاريع",
+    "ar": "شاهد الأعمال",
     "en": "View projects"
   },
   "nf_contact": {
@@ -696,11 +696,11 @@
     "en": "Suggested links"
   },
   "err_title": {
-    "ar": "حدث خطأٌ ما",
+    "ar": "حدث خطأ",
     "en": "Something went wrong"
   },
   "err_desc": {
-    "ar": "يمكنك إعادة المحاولة أو العودة إلى الصفحة الرئيسيّة.",
+    "ar": "يمكنك إعادة المحاولة أو العودة إلى الصفحة الرئيسية.",
     "en": "You can retry or head back to the home page."
   },
   "err_retry": {
@@ -708,7 +708,7 @@
     "en": "Retry"
   },
   "err_home": {
-    "ar": "الرئيسيّة",
+    "ar": "الرئيسية",
     "en": "Home"
   },
   "back_to_top": {
@@ -744,7 +744,7 @@
     "en": "Projects — Youssef Rehab"
   },
   "meta_projects_desc": {
-    "ar": "مشاريع مختارة عبر أربعة تخصصات: الهوية البصرية، الشعارات، ملفات الشركات، والسوشيال ميديا.",
+    "ar": "مشاريع مختارة في أربعة مجالات: الهوية البصرية، والشعارات، والملفات التعريفية، ومنشورات التواصل الاجتماعي.",
     "en": "Selected work across four specialties: visual identity, logos, company profiles, and social media."
   },
   "meta_contact_title": {
@@ -752,11 +752,11 @@
     "en": "Contact — Youssef Rehab"
   },
   "meta_contact_desc": {
-    "ar": "تواصل مع يوسف رحاب لمشاريع الهوية البصرية والتصميم الإبداعي.",
+    "ar": "تواصل مع يوسف رحاب لمشاريع الهوية البصرية والتصميم.",
     "en": "Get in touch with Youssef Rehab for visual identity and creative design projects."
   },
   "skip_to_content": {
-    "ar": "تخطَّ إلى المحتوى",
+    "ar": "انتقل إلى المحتوى",
     "en": "Skip to content"
   },
   "close": {
@@ -764,23 +764,23 @@
     "en": "Close"
   },
   "trust_kicker": {
-    "ar": "علاماتٌ وثقت بأعمالنا",
+    "ar": "علامات وثقت بعملي",
     "en": "Trusted by brands"
   },
   "trust_title": {
-    "ar": "شراكاتٌ عبر الخليج ومصر",
+    "ar": "عملاء في الخليج ومصر",
     "en": "Partnerships across the Gulf & Egypt"
   },
   "trust_lede": {
-    "ar": "أكثر من ٢٥٠ علامةً تجاريّة في قطاعاتٍ متنوّعة اختارت أعمالنا لبناء هويّاتها البصريّة.",
+    "ar": "أكثر من ٢٥٠ علامة تجارية في مجالات مختلفة اختارتني لتصميم هوياتها.",
     "en": "250+ brands across diverse sectors have chosen our work to build their visual identity."
   },
   "f_budget": {
-    "ar": "الميزانيّة التقديريّة (اختياري)",
+    "ar": "الميزانية المتوقعة (اختياري)",
     "en": "Estimated budget (optional)"
   },
   "f_budget_placeholder": {
-    "ar": "اختر نطاقًا",
+    "ar": "اختر نطاقا",
     "en": "Select a range"
   },
   "budget_under_1k": {
@@ -800,7 +800,7 @@
     "en": "$8,000+"
   },
   "budget_unsure": {
-    "ar": "غير محدّد بعد",
+    "ar": "لم أحددها بعد",
     "en": "Not sure yet"
   },
   "f_project_type": {
@@ -812,7 +812,7 @@
     "en": "Select type"
   },
   "ptype_identity": {
-    "ar": "هويّة بصريّة",
+    "ar": "هوية بصرية",
     "en": "Visual Identity"
   },
   "ptype_logo": {
@@ -820,11 +820,11 @@
     "en": "Logo Design"
   },
   "ptype_profile": {
-    "ar": "ملفّ شركة",
+    "ar": "ملف تعريفي",
     "en": "Company Profile"
   },
   "ptype_social": {
-    "ar": "سوشيال ميديا",
+    "ar": "منشورات التواصل الاجتماعي",
     "en": "Social Media"
   },
   "ptype_other": {
@@ -836,7 +836,7 @@
     "en": "Selected clients"
   },
   "ui_clientsmarquee_2": {
-    "ar": "نخبةٌ من العلامات في السعودية والإمارات ومصر والخليج — شراكاتٌ بنيت على الأثر لا على الظهور.",
+    "ar": "علامات من السعودية والإمارات ومصر ودول الخليج، تعاونا معا لبناء أثر حقيقي.",
     "en": "A selection of brands across KSA, UAE, Egypt and the Gulf — partnerships built on impact, not visibility."
   },
   "ui_clientsmarquee_3": {
@@ -872,19 +872,19 @@
     "en": "Reset"
   },
   "ui_zoomableimage_6": {
-    "ar": "قرص للتكبير · اسحب للتحريك · انقر مرتين للتبديل",
+    "ar": "قرب بإصبعين للتكبير · اسحب للتحريك · انقر مرتين للتكبير السريع",
     "en": "Pinch to zoom · drag to pan · double-tap to toggle"
   },
   "ui_projectblocksrenderer_1": {
-    "ar": "التخصص",
+    "ar": "المجال",
     "en": "Specialty"
   },
   "ui_projectblocksrenderer_2": {
-    "ar": "القيمة",
+    "ar": "النتيجة",
     "en": "Value"
   },
   "ui_projectblocksrenderer_3": {
-    "ar": "الطباعة هي صوت العلامة.",
+    "ar": "الخطوط هي صوت العلامة.",
     "en": "Typography is the voice of the brand."
   },
   "ui_projectblocksrenderer_4": {
@@ -892,7 +892,7 @@
     "en": "Heading font"
   },
   "ui_projectblocksrenderer_5": {
-    "ar": "خط المتن",
+    "ar": "خط النصوص",
     "en": "Body font"
   },
   "ui_projectblocksrenderer_6": {
@@ -928,7 +928,7 @@
     "en": "Play"
   },
   "ui_latestprojectsslider_5": {
-    "ar": "مميّز",
+    "ar": "مميز",
     "en": "Featured"
   },
   "ui_latestprojectsslider_6": {
@@ -936,23 +936,23 @@
     "en": "Brand Identity"
   },
   "ui_projectsbrowser_1": {
-    "ar": "استكشاف كل الأعمال",
+    "ar": "تصفح كل الأعمال",
     "en": "Browse all work"
   },
   "ui_projectsbrowser_2": {
-    "ar": "الأرشيف الكامل",
+    "ar": "كل الأعمال",
     "en": "The full archive"
   },
   "ui_projectsbrowser_3": {
-    "ar": "استخدم الفلاتر لتصفية الأعمال بحسب التخصّص أو السنة أو السوق.",
+    "ar": "استخدم الفلاتر لعرض الأعمال حسب المجال أو السنة أو الدولة.",
     "en": "Filter the archive by specialty, year, market or tag."
   },
   "ui_projectsbrowser_4": {
-    "ar": "البلد",
+    "ar": "الدولة",
     "en": "Country"
   },
   "ui_projectsbrowser_5": {
-    "ar": "كل البلدان",
+    "ar": "كل الدول",
     "en": "All countries"
   },
   "ui_projectsbrowser_6": {
@@ -960,11 +960,11 @@
     "en": "All years"
   },
   "ui_projectsbrowser_7": {
-    "ar": "الوسوم",
+    "ar": "الكلمات المفتاحية",
     "en": "Tag"
   },
   "ui_projectsbrowser_8": {
-    "ar": "كل الوسوم",
+    "ar": "كل الكلمات",
     "en": "All tags"
   },
   "ui_projectsbrowser_9": {
@@ -980,11 +980,11 @@
     "en": "Oldest"
   },
   "ui_projectsbrowser_12": {
-    "ar": "المميّز أولًا",
+    "ar": "المميز أولا",
     "en": "Featured first"
   },
   "ui_projectsbrowser_13": {
-    "ar": "أبجديًا",
+    "ar": "حسب الاسم",
     "en": "A → Z"
   },
   "ui_projectsbrowser_14": {
@@ -992,7 +992,7 @@
     "en": "Clear filters"
   },
   "ui_projectsbrowser_15": {
-    "ar": "لا توجد نتائج مطابقة. جرّب تعديل الفلاتر.",
+    "ar": "لا توجد نتائج. جرب تغيير الفلاتر.",
     "en": "No results. Try adjusting the filters."
   },
   "ui_project_blocks_1": {
@@ -1000,7 +1000,7 @@
     "en": "Client"
   },
   "ui_project_blocks_2": {
-    "ar": "الدور",
+    "ar": "دوري",
     "en": "Role"
   },
   "ui_project_blocks_3": {
@@ -1028,11 +1028,11 @@
     "en": "Link"
   },
   "ui_project_blocks_9": {
-    "ar": "منهجية العمل",
+    "ar": "خطوات العمل",
     "en": "Our Approach"
   },
   "ui_project_blocks_10": {
-    "ar": "كيف بنينا الهوية",
+    "ar": "كيف صممنا الهوية",
     "en": "How We Built the Identity"
   },
   "ui_project_blocks_11": {
@@ -1040,11 +1040,11 @@
     "en": "Color Palette"
   },
   "ui_project_blocks_12": {
-    "ar": "الطباعة",
+    "ar": "الخطوط",
     "en": "Typography"
   },
   "ui_project_blocks_13": {
-    "ar": "المخرجات",
+    "ar": "ما تم تسليمه",
     "en": "Deliverables"
   },
   "ui_project_blocks_14": {
@@ -1060,7 +1060,7 @@
     "en": "English"
   },
   "ui_rss_xml_1": {
-    "ar": "أحدث المقالات في استراتيجية العلامة، الهوية البصرية، تصميم الشعارات والعروض.",
+    "ar": "أحدث المقالات عن الهوية البصرية وتصميم الشعارات والعروض التقديمية.",
     "en": "Latest articles on brand strategy, visual identity, logo & presentation design."
   },
   "ui_categoryview_1": {
@@ -1088,15 +1088,15 @@
     "en": "Project type"
   },
   "ui_contactview_5": {
-    "ar": "الميزانيّة",
+    "ar": "الميزانية",
     "en": "Budget"
   },
   "ui_contactview_6": {
-    "ar": "تعذّر الإرسال، حاول لاحقًا.",
+    "ar": "لم يتم الإرسال، حاول مرة أخرى بعد قليل.",
     "en": "Failed to send. Please try again."
   },
   "ui_contactview_7": {
-    "ar": "جارٍ الإرسال...",
+    "ar": "جار الإرسال...",
     "en": "Sending..."
   },
   "ui_homeview_1": {
@@ -1120,15 +1120,15 @@
     "en": "Frequently asked questions"
   },
   "ui_insightsarticleview_5": {
-    "ar": "جاهزٌ لبناء علامةٍ أقوى؟",
+    "ar": "هل تريد علامة أقوى؟",
     "en": "Ready to build a stronger brand?"
   },
   "ui_insightsarticleview_6": {
-    "ar": "احجز جلسة استكشاف مجانيّة، سنستعرض موقعك الحاليّ وفرص التطوير خطوةً بخطوة.",
+    "ar": "احجز مكالمة تعارف مجانية، نراجع فيها وضع علامتك الحالي وما يمكن تحسينه خطوة بخطوة.",
     "en": "Book a free discovery call — we'll walk through your current position and where to grow, step by step."
   },
   "ui_insightsarticleview_7": {
-    "ar": "احجز جلسة استكشاف",
+    "ar": "احجز مكالمة مجانية",
     "en": "Book a Discovery Call"
   },
   "ui_insightsarticleview_8": {
@@ -1148,15 +1148,15 @@
     "en": "Related reading"
   },
   "ui_insightscategoryview_1": {
-    "ar": "تصنيف",
+    "ar": "قسم",
     "en": "Category"
   },
   "ui_insightscategoryview_2": {
-    "ar": "قريبًا — مقالات جديدة في هذا التصنيف.",
+    "ar": "قريبا: مقالات جديدة في هذا القسم.",
     "en": "Coming soon — new articles in this category."
   },
   "ui_insightscategoryview_3": {
-    "ar": "استكشف تصنيفات أخرى",
+    "ar": "أقسام أخرى",
     "en": "Explore other categories"
   },
   "ui_insightscategoryview_4": {
@@ -1168,19 +1168,19 @@
     "en": "Read article"
   },
   "ui_insightshubview_2": {
-    "ar": "رؤى ومقالات",
+    "ar": "المقالات",
     "en": "Insights"
   },
   "ui_insightshubview_3": {
-    "ar": "رؤًى تُبنى بها العلامات",
+    "ar": "مقالات وأدلة مجانية",
     "en": "Insights that build brands"
   },
   "ui_insightshubview_4": {
-    "ar": "استراتيجيات عمليّة، أنظمة هويّة بصريّة، تصميم شعارات، تصميم العروض، رؤى الأعمال، سير عمل الذكاء الاصطناعي، ودراسات حالة من العالم الحقيقي.",
+    "ar": "نصائح عملية وأدلة مجانية في الهوية البصرية، وتصميم الشعارات والعروض التقديمية، واستخدام الذكاء الاصطناعي في التصميم.",
     "en": "Practical brand strategies, visual identity systems, logo design, presentation design, business insights, AI workflows, and real-world case studies."
   },
   "ui_insightshubview_5": {
-    "ar": "ابحث في المقالات، الكلمات المفتاحية، التصنيفات…",
+    "ar": "ابحث في المقالات…",
     "en": "Search articles, keywords, categories…"
   },
   "ui_insightshubview_6": {
@@ -1192,11 +1192,11 @@
     "en": "Clear"
   },
   "ui_insightshubview_8": {
-    "ar": "التصنيفات",
+    "ar": "الأقسام",
     "en": "Categories"
   },
   "ui_insightshubview_9": {
-    "ar": "لا توجد اقتراحات مطابقة.",
+    "ar": "لا توجد نتائج.",
     "en": "No matching suggestions."
   },
   "ui_insightshubview_10": {
@@ -1204,7 +1204,7 @@
     "en": "All"
   },
   "ui_insightshubview_11": {
-    "ar": "مقال مميّز",
+    "ar": "مقال مميز",
     "en": "Featured"
   },
   "ui_insightshubview_12": {
@@ -1216,47 +1216,47 @@
     "en": "Latest articles"
   },
   "ui_insightshubview_14": {
-    "ar": "قريبًا — نُعِدّ أوّل مقالاتنا.",
+    "ar": "قريبا: أول المقالات.",
     "en": "Coming soon — we're preparing our first articles."
   },
   "ui_insightshubview_15": {
-    "ar": "لا توجد نتائج مطابقة.",
+    "ar": "لا توجد نتائج.",
     "en": "No matching results."
   },
   "ui_packagesview_1": {
-    "ar": "الأكثر اختيارًا",
+    "ar": "الأكثر اختيارا",
     "en": "Most Popular"
   },
   "ui_packagesview_2": {
-    "ar": "المنهجيّة",
+    "ar": "خطوات العمل",
     "en": "Process"
   },
   "ui_packagesview_3": {
-    "ar": "كيف نبني علامتك خطوةً بخطوة",
+    "ar": "كيف نبني علامتك خطوة بخطوة",
     "en": "How we build your brand, step by step"
   },
   "ui_packagesview_4": {
-    "ar": "أساسيّ",
+    "ar": "أساسي",
     "en": "Core"
   },
   "ui_packagesview_5": {
-    "ar": "موسّع",
+    "ar": "متوسط",
     "en": "Extended"
   },
   "ui_packagesview_6": {
-    "ar": "متكامل",
+    "ar": "شامل",
     "en": "Full"
   },
   "ui_packagesview_7": {
-    "ar": "غير مُضمَّن",
+    "ar": "غير متضمن",
     "en": "Not included"
   },
   "ui_packagesview_8": {
-    "ar": "← اسحب لعرض جميع الفئات →",
+    "ar": "← اسحب لرؤية كل الباقات →",
     "en": "← Swipe to see all tiers →"
   },
   "ui_packagesview_9": {
-    "ar": "المكوّنات",
+    "ar": "ما تتضمنه الباقة",
     "en": "Deliverables"
   },
   "ui_packagesview_10": {
@@ -1264,11 +1264,11 @@
     "en": "FAQ"
   },
   "ui_packagesview_11": {
-    "ar": "أسئلةٌ يسألها العملاء عادةً",
+    "ar": "أسئلة يطرحها العملاء عادة",
     "en": "Questions clients usually ask"
   },
   "ui_packagesview_12": {
-    "ar": "استعرض الأعمال",
+    "ar": "شاهد الأعمال",
     "en": "Explore projects"
   },
   "ui_projectdetailview_1": {
@@ -1280,7 +1280,7 @@
     "en": "Packaging"
   },
   "ui_homeview_2": {
-    "ar": "شوف الأعمال",
+    "ar": "شاهد الأعمال",
     "en": "View work"
   },
   "ui_homeview_3": {

@@ -171,7 +171,7 @@ export function ProjectsBrowser({
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
             {t(
-              "اختر تخصّصًا أو استخدم الفلاتر بالأعلى لعرض نتائج مخصّصة من الأرشيف.",
+              "اختر مجالا أو استخدم الفلاتر بالأعلى لعرض الأعمال التي تريدها.",
               "Pick a specialty or use the filters above to browse tailored results from the archive.",
             )}
           </p>

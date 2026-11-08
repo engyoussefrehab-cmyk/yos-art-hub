@@ -79,7 +79,7 @@
     ]
   },
   {
-    "title": "منهجية العمل",
+    "title": "خطوات العمل",
     "keys": [
       "process_kicker",
       "process_title",
@@ -212,7 +212,7 @@
     ]
   },
   {
-    "title": "الفوتر",
+    "title": "أسفل الصفحة",
     "keys": [
       "footer_bio",
       "explore",
@@ -435,7 +435,7 @@
     ]
   },
   {
-    "title": "قسم الرؤى",
+    "title": "قسم المقالات",
     "keys": [
       "ui_insightscategoryview_1",
       "ui_insightscategoryview_2",
@@ -444,7 +444,7 @@
     ]
   },
   {
-    "title": "صفحة الرؤى",
+    "title": "صفحة المقالات",
     "keys": [
       "ui_insightshubview_1",
       "ui_insightshubview_2",
@@ -464,7 +464,7 @@
     ]
   },
   {
-    "title": "صفحة فئات الخدمات",
+    "title": "صفحة الباقات",
     "keys": [
       "ui_packagesview_1",
       "ui_packagesview_2",

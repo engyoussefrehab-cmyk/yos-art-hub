@@ -54,7 +54,7 @@ export const Route = createFileRoute("/insights/$category/$slug")({
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "الرؤى", item: absUrl("/insights") },
+        { "@type": "ListItem", position: 1, name: "المقالات", item: absUrl("/insights") },
         { "@type": "ListItem", position: 2, name: catLabel, item: absUrl(`/insights/${params.category}`) },
         { "@type": "ListItem", position: 3, name: a.title_ar, item: url },
       ],

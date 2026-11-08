@@ -391,7 +391,7 @@ export function TextsEditor() {
 
 /* ---------------------------------- SEO ---------------------------------- */
 
-const SEO_PAGES: Record<string, string> = { site: "الإعداد العام", home: "الصفحة الرئيسية", projects: "صفحة المشاريع", packages: "فئات الخدمات", contact: "تواصل", insights: "المقالات" };
+const SEO_PAGES: Record<string, string> = { site: "الإعداد العام", home: "الصفحة الرئيسية", projects: "صفحة المشاريع", packages: "الباقات", contact: "تواصل", insights: "المقالات" };
 const SEO_FIELDS: { key: string; label: string; multi?: boolean; image?: boolean }[] = [
   { key: "title", label: "عنوان الصفحة (بيظهر في جوجل وفي التاب)" },
   { key: "description", label: "الوصف في جوجل", multi: true },

@@ -225,12 +225,12 @@ export type ProjectBlock =
 export type BlockType = ProjectBlock["type"];
 
 export const BLOCK_LABELS: Record<BlockType, { ar: string; en: string }> = {
-  hero: { ar: "قسم البطل (رأس الصفحة)", en: "Hero" },
+  hero: { ar: "رأس الصفحة", en: "Hero" },
   cover: { ar: "صورة الغلاف", en: "Cover Image" },
-  approach: { ar: "المنهجية", en: "Approach" },
+  approach: { ar: "خطوات العمل", en: "Approach" },
   meta: { ar: "بيانات المشروع", en: "Project Meta" },
-  deliverables: { ar: "المخرجات", en: "Deliverables" },
-  typography: { ar: "الطباعة", en: "Typography" },
+  deliverables: { ar: "ما تم تسليمه", en: "Deliverables" },
+  typography: { ar: "الخطوط", en: "Typography" },
   links: { ar: "روابط خارجية", en: "External Links" },
   testimonial: { ar: "شهادة عميل", en: "Testimonial" },
   embed: { ar: "تضمين خارجي (iframe)", en: "Embed" },
@@ -238,7 +238,7 @@ export const BLOCK_LABELS: Record<BlockType, { ar: string; en: string }> = {
   heading: { ar: "عنوان", en: "Heading" },
   text: { ar: "نص", en: "Text" },
   image: { ar: "صورة", en: "Image" },
-  "two-col-image": { ar: "صورتان جنبًا إلى جنب", en: "Two-column image" },
+  "two-col-image": { ar: "صورتان جنبا إلى جنب", en: "Two-column image" },
   gallery: { ar: "معرض صور", en: "Gallery grid" },
   quote: { ar: "اقتباس", en: "Quote" },
   palette: { ar: "لوحة ألوان", en: "Color palette" },
@@ -263,7 +263,7 @@ export function newBlock(type: BlockType): ProjectBlock {
         subtitle_ar: "", subtitle_en: "",
         description_ar: "", description_en: "",
         show_meta_card: true,
-        specialty_label_ar: "التخصص", specialty_label_en: "Specialty",
+        specialty_label_ar: "المجال", specialty_label_en: "Specialty",
         type_label_ar: "النوع", type_label_en: "Type",
       };
     case "cover":
@@ -271,17 +271,17 @@ export function newBlock(type: BlockType): ProjectBlock {
     case "approach":
       return {
         id, type,
-        kicker_ar: "منهجية العمل", kicker_en: "Our Approach",
-        title_ar: "كيف بنينا الهوية", title_en: "How We Built the Identity",
+        kicker_ar: "خطوات العمل", kicker_en: "Our Approach",
+        title_ar: "كيف صممنا الهوية", title_en: "How We Built the Identity",
         items_ar: [], items_en: [],
-        value_label_ar: "القيمة", value_label_en: "Value",
+        value_label_ar: "النتيجة", value_label_en: "Value",
       };
     case "meta":
       return { id, type, title_ar: "بيانات المشروع", title_en: "Project Details", items: [] };
     case "deliverables":
-      return { id, type, title_ar: "المخرجات", title_en: "Deliverables", items: [] };
+      return { id, type, title_ar: "ما تم تسليمه", title_en: "Deliverables", items: [] };
     case "typography":
-      return { id, type, title_ar: "الطباعة", title_en: "Typography", heading_font: "", body_font: "" };
+      return { id, type, title_ar: "الخطوط", title_en: "Typography", heading_font: "", body_font: "" };
     case "links":
       return { id, type, title_ar: "روابط ذات صلة", title_en: "Related Links", items: [] };
     case "testimonial":

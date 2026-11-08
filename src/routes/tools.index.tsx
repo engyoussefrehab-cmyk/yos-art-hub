@@ -5,7 +5,7 @@ export const Route = createFileRoute("/tools/")({
   head: () => ({
     meta: [
       { title: "أدوات التصميم | يوسف رحاب" },
-      { name: "description", content: "أدوات عملية تساعدك على حلّ تفاصيل التصميم اليومية، بدءًا من اختيار الألوان." },
+      { name: "description", content: "أدوات عملية تساعدك في تفاصيل التصميم اليومية، بدءا من اختيار الألوان." },
     ],
   }),
   component: ToolsLibrary,

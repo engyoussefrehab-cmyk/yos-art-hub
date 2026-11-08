@@ -364,7 +364,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "tierPage",
-    title: "فئات الخدمات — نصوص الصفحة",
+    title: "الباقات — نصوص الصفحة",
     file: `${SNAP}/service_tier_page.json`,
     kind: "single",
     index: 0,
@@ -400,7 +400,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "tiers",
-    title: "فئات الخدمات — الفئات",
+    title: "الباقات — الفئات",
     file: `${SNAP}/service_tiers.json`,
     kind: "list",
     sortKey: "sort_order",
@@ -444,7 +444,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "tierFeatures",
-    title: "فئات الخدمات — جدول المقارنة",
+    title: "الباقات — جدول المقارنة",
     file: `${SNAP}/service_tier_features.json`,
     kind: "list",
     sortKey: "sort_order",
@@ -489,7 +489,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "tierMeta",
-    title: "فئات الخدمات — مدة ومراجعات كل فئة",
+    title: "الباقات — مدة ومراجعات كل فئة",
     file: "src/content/packages.json",
     pointer: "tier_meta",
     kind: "single",
@@ -512,7 +512,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "trustStats",
-    title: "فئات الخدمات — أرقام الثقة",
+    title: "الباقات — أرقام الثقة",
     file: "src/content/packages.json",
     pointer: "trust_stats",
     kind: "list",
@@ -523,7 +523,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "processSteps",
-    title: "فئات الخدمات — خطوات العمل",
+    title: "الباقات — خطوات العمل",
     file: "src/content/packages.json",
     pointer: "process_steps",
     kind: "list",
@@ -535,7 +535,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "faqs",
-    title: "فئات الخدمات — الأسئلة الشائعة",
+    title: "الباقات — الأسئلة الشائعة",
     file: "src/content/packages.json",
     pointer: "faqs",
     kind: "list",
@@ -546,7 +546,7 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     id: "articles",
-    title: "المقالات (الرؤى)",
+    title: "المقالات (المقالات)",
     file: `${SNAP}/insight_articles.json`,
     kind: "list",
     visibility: { key: "status", on: "published", off: "draft" },
@@ -695,7 +695,7 @@ export const NAV_GROUPS: { title: string; items: { id: string; title: string }[]
     ],
   },
   {
-    title: "فئات الخدمات",
+    title: "الباقات",
     items: [
       { id: "tierPage", title: "نصوص الصفحة" },
       { id: "tiers", title: "الفئات" },
