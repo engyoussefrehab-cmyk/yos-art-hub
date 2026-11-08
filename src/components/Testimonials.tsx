@@ -63,13 +63,6 @@ function Card({ t: item }: { t: Item }) {
             <div className="truncate text-xs text-muted-foreground">{item.project}</div>
           </div>
         </div>
-        <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-cream px-2.5 py-1 text-[10.5px] text-muted-foreground">
-          <svg viewBox="0 0 24 24" className="h-3 w-3 text-accent" fill="currentColor" aria-hidden>
-            <path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-          </svg>
-          <span>{t("t_verified_badge")}</span>
-          {lang === "en" && <span className="opacity-60">· {t("t_original_note")}</span>}
-        </div>
       </div>
     </article>
   );
