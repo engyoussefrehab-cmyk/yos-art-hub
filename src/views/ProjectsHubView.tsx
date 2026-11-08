@@ -3,7 +3,6 @@ import { ArrowUpRight, Sparkles } from "lucide-react";
 import { useLang } from "@/i18n/use-lang";
 import type { DictKey } from "@/i18n/dictionary";
 import type { PortfolioDTO, CategoryDTO, ProjectsStatsDTO } from "@/lib/portfolio.functions";
-import { LatestProjectsSlider } from "@/components/projects/LatestProjectsSlider";
 import { ProjectsBrowser } from "@/components/projects/ProjectsBrowser";
 import { Reveal } from "@/components/Reveal";
 import p5 from "@/assets/portfolio/page_5.webp";
@@ -71,7 +70,7 @@ export function ProjectsHubView({
           className="pointer-events-none absolute -bottom-40 start-[-8%] h-[420px] w-[420px] rounded-full bg-primary/5 blur-3xl"
         />
 
-        <div className="mx-auto max-w-7xl px-6 pb-16 pt-24 md:pt-28">
+        <div className="mx-auto max-w-7xl px-6 pb-12 pt-16 md:pt-20">
           <Reveal>
             <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-accent backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" />
@@ -103,17 +102,14 @@ export function ProjectsHubView({
         </div>
       </section>
 
-      {/* ─── Latest projects ─────────────────────────────────── */}
+      {/* ─── Advanced browser ────────────────────────────────── */}
       {projects.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 pt-16">
-          <Reveal>
-            <LatestProjectsSlider projects={projects} />
-          </Reveal>
+        <section className="mx-auto max-w-7xl px-6 pt-12">
+          <ProjectsBrowser projects={projects} routeId={routeId} />
         </section>
       )}
-
       {/* ─── Category grid ───────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-6 pt-24">
+      <section className="mx-auto max-w-7xl px-6 pb-24 pt-24">
         <Reveal>
           <div className="flex items-end justify-between gap-6 border-t border-border/60 pt-10">
             <div className="max-w-2xl">
@@ -185,14 +181,6 @@ export function ProjectsHubView({
         </div>
       </section>
 
-      {/* ─── Advanced browser ────────────────────────────────── */}
-      {projects.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 pb-24">
-          <Reveal>
-            <ProjectsBrowser projects={projects} routeId={routeId} />
-          </Reveal>
-        </section>
-      )}
     </>
   );
 }

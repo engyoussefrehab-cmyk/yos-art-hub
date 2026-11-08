@@ -24,15 +24,6 @@ import contact from "@/content/contact.json";
  *   7. CTA       start a project
  */
 
-// Thumbnails for the six services (black studio renders, brand red #FF4848).
-const SERVICE_IMAGES = [
-  "/media/services/visual-identity.webp",
-  "/media/services/logo-design.webp",
-  "/media/services/company-profile.webp",
-  "/media/services/social-media.webp",
-  "/media/services/design-system.webp",
-  "/media/services/creative-direction.webp",
-];
 
 const focusRing =
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
@@ -204,73 +195,148 @@ function Work({ projects }: { projects: PortfolioDTO[] }) {
 
 /* ------------------------------------------------------------ Services */
 
-function Services() {
-  const { t } = useLang();
-  const { ar, arrow, href } = useNav();
-  const viewWork = ar ? pair("ui_homeview_2")[0] : pair("ui_homeview_2")[1];
-  const startProject = ar ? pair("ui_homeview_3")[0] : pair("ui_homeview_3")[1];
-  // Each row points to proof of that service: its projects category when it
-  // has published work, otherwise the contact page (never an empty page).
-  const targets: Array<[string, string]> = [
-    [href("/projects/branding"), viewWork], // Visual identity
-    [href("/contact"), startProject], // Logo design (no published logos yet)
-    [href("/projects/profiles"), viewWork], // Company profiles
-    [href("/projects/social"), viewWork], // Social media
-    [href("/projects/branding"), viewWork], // Design systems (shown inside identity work)
-    [href("/contact"), startProject], // Creative direction
-  ];
-  const rows = ([1, 2, 3, 4, 5, 6] as const).map((n, i) => ({
-    title: t(`svc_${n}_t` as DictKey),
-    desc: t(`svc_${n}_d` as DictKey),
-    image: SERVICE_IMAGES[i],
-    href: targets[i][0],
-    cta: targets[i][1],
-  }));
+// DRAFT prices: only identity ($1,250) and logo ($450) come from the current
+// packages page; the rest show "on request" until the owner sets them.
+const SERVICE_OFFERS: {
+  ar: string;
+  en: string;
+  getsAr: string[];
+  getsEn: string[];
+  timeAr: string;
+  timeEn: string;
+  priceAr: string;
+  priceEn: string;
+  work: string;
+}[] = [
+  {
+    ar: "الهوية البصرية الكاملة",
+    en: "Full visual identity",
+    getsAr: ["الشعار بكل نسخه", "الألوان والخطوط", "دليل استخدام الهوية", "تطبيقات على المطبوعات"],
+    getsEn: ["Logo in all versions", "Colours and fonts", "Brand guidelines", "Print applications"],
+    timeAr: "٣–٤ أسابيع",
+    timeEn: "3–4 weeks",
+    priceAr: "يبدأ من ١٬٢٥٠ $",
+    priceEn: "From $1,250",
+    work: "branding",
+  },
+  {
+    ar: "تصميم الشعار",
+    en: "Logo design",
+    getsAr: ["شعار بنسخ متعددة", "الألوان والخطوط", "كل ملفات التسليم"],
+    getsEn: ["Logo in several versions", "Colours and fonts", "All delivery files"],
+    timeAr: "٧–١٠ أيام",
+    timeEn: "7–10 days",
+    priceAr: "يبدأ من ٤٥٠ $",
+    priceEn: "From $450",
+    work: "branding",
+  },
+  {
+    ar: "الملف التعريفي للشركة",
+    en: "Company profile",
+    getsAr: ["تنظيم المحتوى", "تصميم كل الصفحات", "ملف PDF للطباعة والإرسال"],
+    getsEn: ["Content structure", "All pages designed", "PDF for print and sharing"],
+    timeAr: "١–٢ أسبوع",
+    timeEn: "1–2 weeks",
+    priceAr: "حسب عدد الصفحات",
+    priceEn: "Priced by pages",
+    work: "profiles",
+  },
+  {
+    ar: "منشورات التواصل الاجتماعي",
+    en: "Social media posts",
+    getsAr: ["تصاميم بهوية علامتك", "قوالب قابلة للتعديل", "مقاسات كل المنصات"],
+    getsEn: ["Designs in your brand style", "Editable templates", "Sizes for every platform"],
+    timeAr: "حسب عدد المنشورات",
+    timeEn: "Depends on volume",
+    priceAr: "حسب عدد المنشورات",
+    priceEn: "Priced by volume",
+    work: "social",
+  },
+  {
+    ar: "العروض التقديمية",
+    en: "Presentations",
+    getsAr: ["تصميم الشرائح", "رسوم بيانية واضحة", "ملف قابل للتعديل"],
+    getsEn: ["Slide design", "Clear charts", "Editable file"],
+    timeAr: "٥–١٠ أيام",
+    timeEn: "5–10 days",
+    priceAr: "حسب عدد الشرائح",
+    priceEn: "Priced by slides",
+    work: "presentations",
+  },
+  {
+    ar: "التغليف",
+    en: "Packaging",
+    getsAr: ["تصميم العبوة", "ملفات جاهزة للمطبعة"],
+    getsEn: ["Pack design", "Print-ready files"],
+    timeAr: "حسب المنتج",
+    timeEn: "Depends on product",
+    priceAr: "اطلب عرض سعر",
+    priceEn: "Request a quote",
+    work: "branding",
+  },
+];
 
+function Services() {
+  const { t, lang } = useLang();
+  const { ar, arrow, href } = useNav();
+  const L = (a: string, e: string) => (lang === "ar" ? a : e);
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
       <SectionHead
         kicker={t("services_kicker")}
-        title={t("services_title")}
-        lede={t("services_lede")}
+        title={L("ماذا أقدم، وبكم", "What I do, and what it costs")}
+        lede={L(
+          "اختر الخدمة لترى ما ستستلمه والمدة والسعر المبدئي، أو شاهد أمثلة من أعمالي.",
+          "Pick a service to see what you get, how long it takes and the starting price — or see examples.",
+        )}
       />
-      <ul className="mt-10 border-t border-border">
-        {rows.map((row, i) => (
-          <li key={i} className="border-b border-border">
-            <Link
-              to={row.href}
-              className={`group grid grid-cols-[2.5rem_1fr_auto] items-center gap-4 py-5 md:py-6 lg:grid-cols-[3rem_1.2fr_1fr_8rem_auto] lg:gap-8 ${focusRing}`}
-            >
-              <span className="font-display text-sm font-semibold text-muted-foreground">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <h3 className="font-display text-xl font-bold transition-colors group-hover:text-accent md:text-3xl">
-                  {row.title}
-                </h3>
-                <p className="mt-1 text-sm text-muted-foreground lg:hidden">{row.desc}</p>
+      <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {SERVICE_OFFERS.map((o) => (
+          <article
+            key={o.en}
+            className="flex flex-col rounded-3xl border border-border bg-background p-6"
+          >
+            <h3 className="font-display text-xl font-bold">{L(o.ar, o.en)}</h3>
+            <p className="mt-3 text-xs font-semibold text-muted-foreground">
+              {L("ستستلم:", "You get:")}
+            </p>
+            <ul className="mt-2 space-y-1.5 text-sm">
+              {(ar ? o.getsAr : o.getsEn).map((g) => (
+                <li key={g} className="flex gap-2">
+                  <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                  {g}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-auto pt-6">
+              <div className="flex items-end justify-between gap-3 border-t border-border pt-4">
+                <div>
+                  <div className="text-xs text-muted-foreground">{L("المدة", "Time")}</div>
+                  <div className="text-sm font-semibold">{L(o.timeAr, o.timeEn)}</div>
+                </div>
+                <div className="text-end">
+                  <div className="text-xs text-muted-foreground">{L("السعر", "Price")}</div>
+                  <div className="font-display text-lg font-bold">{L(o.priceAr, o.priceEn)}</div>
+                </div>
               </div>
-              <p className="hidden text-sm leading-relaxed text-muted-foreground lg:block">
-                {row.desc}
-              </p>
-              <img
-                src={row.image}
-                alt=""
-                loading="lazy"
-                width={1024}
-                height={768}
-                className="hidden aspect-[4/3] w-32 rounded-xl object-cover grayscale transition duration-500 group-hover:grayscale-0 lg:block"
-              />
-              <span
-                aria-label={row.cta}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-border transition-colors group-hover:border-accent group-hover:bg-accent group-hover:text-accent-foreground"
-              >
-                <span aria-hidden>{arrow}</span>
-              </span>
-            </Link>
-          </li>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <Link
+                  to={href(`/projects?cat=${o.work}#browse`)}
+                  className={`inline-flex items-center justify-center rounded-full border border-foreground/15 px-3 py-2.5 text-sm font-semibold hover:border-foreground ${focusRing}`}
+                >
+                  {L("شاهد أمثلة", "See examples")}
+                </Link>
+                <Link
+                  to={href("/contact")}
+                  className={`inline-flex items-center justify-center gap-1 rounded-full bg-accent px-3 py-2.5 text-sm font-bold text-accent-foreground ${focusRing}`}
+                >
+                  {L("اطلب عرض سعر", "Get a quote")} <span aria-hidden>{arrow}</span>
+                </Link>
+              </div>
+            </div>
+          </article>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }

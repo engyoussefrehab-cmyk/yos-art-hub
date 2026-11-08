@@ -18,6 +18,10 @@ const DESTINATIONS: Record<string, string> = {
   script: "/insights/resources/logo-export-pack-script",
   font: "/insights/resources/font-families",
   fonts: "/insights/resources/font-families",
+  // Work for one business sector — send these to clients on WhatsApp.
+  ...Object.fromEntries(
+    ["construction", "realestate", "food", "health", "education", "legal", "travel", "beauty", "trade", "tech"].map((k) => [k, `/projects?sector=${k}#browse`]),
+  ),
 };
 
 // Static short links (/go/wa, /go/li …): a tiny page that forwards the visitor.

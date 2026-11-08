@@ -15,6 +15,7 @@ const asSort = (v: unknown) => {
 
 export const Route = createFileRoute("/projects/")({
   validateSearch: (s: Record<string, unknown>) => ({
+    sector: asStr(s.sector),
     cat: asStr(s.cat),
     country: asStr(s.country),
     year: asStr(s.year),

@@ -5,14 +5,18 @@ import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import { X, ArrowUpRight, Search } from "lucide-react";
 
 import { pair } from "@/i18n/dictionary";
+import { SECTORS, OTHER_SECTOR, sectorOf } from "@/lib/sectors";
 const CAT_LABELS: Record<string, { ar: string; en: string }> = {
   branding: { ar: pair("ui_latestprojectsslider_6")[0], en: pair("ui_latestprojectsslider_6")[1] },
   logos: { ar: pair("cat_logos_label")[0], en: pair("cat_logos_label")[1] },
   profiles: { ar: pair("cat_profiles_label")[0], en: pair("cat_profiles_label")[1] },
   social: { ar: pair("ptype_social")[0], en: pair("ptype_social")[1] },
+  presentations: { ar: "العروض التقديمية", en: "Presentations" },
+  packaging: { ar: "التغليف", en: "Packaging" },
 };
 
 export type ProjectFilters = {
+  sector: string;
   cat: string;
   country: string;
   year: string;
@@ -40,7 +44,10 @@ export function ProjectsBrowser({
     [projects],
   );
   const years = useMemo(
-    () => Array.from(new Set(projects.map((p) => p.year).filter(Boolean) as number[])).sort((a, b) => b - a),
+    () =>
+      Array.from(new Set(projects.map((p) => p.year).filter(Boolean) as number[])).sort(
+        (a, b) => b - a,
+      ),
     [projects],
   );
   const tags = useMemo(
@@ -52,8 +59,25 @@ export function ProjectsBrowser({
     [projects],
   );
 
+  // Business sectors that have work, with counts (biggest first).
+  const sectors = useMemo(() => {
+    const count = new Map<string, number>();
+    for (const p of projects)
+      count.set(sectorOf(p.industry), (count.get(sectorOf(p.industry)) ?? 0) + 1);
+    const list = SECTORS.filter((s) => count.get(s.key)).map((s) => ({
+      key: s.key,
+      label: s[isAr ? "ar" : "en"],
+      n: count.get(s.key)!,
+    }));
+    list.sort((a, b) => b.n - a.n);
+    if (count.get("other"))
+      list.push({ key: "other", label: OTHER_SECTOR[isAr ? "ar" : "en"], n: count.get("other")! });
+    return list;
+  }, [projects, isAr]);
+
   const filtered = useMemo(() => {
     let arr = projects.slice();
+    if (search.sector) arr = arr.filter((p) => sectorOf(p.industry) === search.sector);
     if (search.cat) arr = arr.filter((p) => p.category_slug === search.cat);
     if (search.country) arr = arr.filter((p) => p.country === search.country);
     if (search.year) arr = arr.filter((p) => String(p.year) === search.year);
@@ -66,7 +90,9 @@ export function ProjectsBrowser({
         arr.sort((a, b) => Number(b.featured) - Number(a.featured) || a.sort_order - b.sort_order);
         break;
       case "az":
-        arr.sort((a, b) => (isAr ? a.name_ar : a.name_en).localeCompare(isAr ? b.name_ar : b.name_en));
+        arr.sort((a, b) =>
+          (isAr ? a.name_ar : a.name_en).localeCompare(isAr ? b.name_ar : b.name_en),
+        );
         break;
       case "newest":
       default:
@@ -78,27 +104,69 @@ export function ProjectsBrowser({
   const setParam = (key: keyof ProjectFilters, value: string) =>
     navigate({ search: (prev: any) => ({ ...prev, [key]: value }), resetScroll: false });
   const reset = () =>
-    navigate({ search: () => ({ cat: "", country: "", year: "", tag: "", sort: "newest" }) as any, resetScroll: false });
+    navigate({
+      search: () =>
+        ({ sector: "", cat: "", country: "", year: "", tag: "", sort: "newest" }) as any,
+      resetScroll: false,
+    });
 
-
-  const active = !!(search.cat || search.country || search.year || search.tag) || search.sort !== "newest";
+  const active =
+    !!(search.sector || search.cat || search.country || search.year || search.tag) ||
+    search.sort !== "newest";
   const projectHref = (p: PortfolioDTO) =>
     isAr
       ? `/projects/${p.category_slug ?? "branding"}/${p.slug}`
       : `/en/projects/${p.category_slug ?? "branding"}/${p.slug}`;
 
   return (
-    <div className="mt-20">
-      <div className="flex flex-wrap items-end justify-between gap-4 border-t border-border/70 pt-10">
+    <div id="browse" className="scroll-mt-24">
+      {/* Step 1: the client's own business sector */}
+      <div className="rounded-3xl border border-border bg-cream/60 p-6 md:p-8">
+        <h2 className="font-display text-2xl font-bold md:text-3xl">
+          {t("ما مجال شركتك؟", "What does your company do?")}
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {t(
+            "اختر مجالك لترى أعمالا لشركات تشبه شركتك.",
+            "Pick your field to see work for companies like yours.",
+          )}
+        </p>
+        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          {sectors.map((sec) => {
+            const on = search.sector === sec.key;
+            return (
+              <button
+                key={sec.key}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setParam("sector", on ? "" : sec.key)}
+                className={`flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 text-start text-sm font-semibold transition-colors ${
+                  on
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-background hover:border-foreground/40"
+                }`}
+              >
+                <span>{sec.label}</span>
+                <span
+                  className={`text-xs font-normal ${on ? "text-background/70" : "text-muted-foreground"}`}
+                >
+                  {sec.n}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-10 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-xs font-semibold uppercase tracking-widest text-accent">
-            {t(...pair("ui_projectsbrowser_1"))}
-          </div>
-          <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">
-            {t(...pair("ui_projectsbrowser_2"))}
+          <h2 className="font-display text-2xl font-bold md:text-3xl">
+            {search.sector
+              ? `${t("أعمال في مجال", "Work in")} ${sectors.find((x) => x.key === search.sector)?.label ?? ""}`
+              : t("كل الأعمال", "All work")}
           </h2>
-          <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-            {t(...pair("ui_projectsbrowser_3"))}
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t("ويمكنك التصفية حسب نوع الخدمة:", "You can also filter by service:")}
           </p>
         </div>
         {active && (
@@ -113,7 +181,7 @@ export function ProjectsBrowser({
       {/* Category chips */}
       <div className="mt-6 flex flex-wrap gap-2">
         <CatChip active={!search.cat} onClick={() => setParam("cat", "")}>
-          {t(...pair("projects_filter_all"))}
+          {t("كل الخدمات", "All services")}
         </CatChip>
         {cats.map((c) => (
           <CatChip key={c} active={search.cat === c} onClick={() => setParam("cat", c)}>
@@ -122,49 +190,63 @@ export function ProjectsBrowser({
         ))}
       </div>
 
-      {/* Advanced filters */}
-      <div className="mt-4 grid gap-3 rounded-2xl border border-border/70 bg-cream/50 p-4 md:grid-cols-4">
-        <FilterSelect
-          label={t(...pair("ui_projectsbrowser_4"))}
-          value={search.country}
-          onChange={(v) => setParam("country", v)}
-          options={[["", t(...pair("ui_projectsbrowser_5"))], ...countries.map((c) => [c, c] as [string, string])]}
-        />
-        <FilterSelect
-          label={t(...pair("proj_year"))}
-          value={search.year}
-          onChange={(v) => setParam("year", v)}
-          options={[["", t(...pair("ui_projectsbrowser_6"))], ...years.map((y) => [String(y), String(y)] as [string, string])]}
-        />
-        <FilterSelect
-          label={t(...pair("ui_projectsbrowser_7"))}
-          value={search.tag}
-          onChange={(v) => setParam("tag", v)}
-          options={[["", t(...pair("ui_projectsbrowser_8"))], ...tags.map((tg) => [tg, tg] as [string, string])]}
-        />
-        <FilterSelect
-          label={t(...pair("ui_projectsbrowser_9"))}
-          value={search.sort}
-          onChange={(v) => setParam("sort", v)}
-          options={[
-            ["newest", t(...pair("ui_projectsbrowser_10"))],
-            ["oldest", t(...pair("ui_projectsbrowser_11"))],
-            ["featured", t(...pair("ui_projectsbrowser_12"))],
-            ["az", t(...pair("ui_projectsbrowser_13"))],
-          ]}
-        />
-        {active && (
-          <button
-            onClick={reset}
-            className="inline-flex items-center gap-1.5 self-end rounded-full border border-border/60 bg-background px-4 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground md:col-span-4 md:w-max"
-          >
-            <X className="h-3.5 w-3.5" />
-            {t(...pair("ui_projectsbrowser_14"))}
-          </button>
-        )}
-      </div>
+      {/* Advanced filters — tucked away; most clients only need sector + service */}
+      <details className="mt-4 rounded-2xl border border-border/70 bg-cream/50 p-4">
+        <summary className="cursor-pointer text-sm font-semibold text-muted-foreground">
+          {t("فلاتر إضافية", "More filters")}
+        </summary>
+        <div className="mt-4 grid gap-3 md:grid-cols-4">
+          <FilterSelect
+            label={t(...pair("ui_projectsbrowser_4"))}
+            value={search.country}
+            onChange={(v) => setParam("country", v)}
+            options={[
+              ["", t(...pair("ui_projectsbrowser_5"))],
+              ...countries.map((c) => [c, c] as [string, string]),
+            ]}
+          />
+          <FilterSelect
+            label={t(...pair("proj_year"))}
+            value={search.year}
+            onChange={(v) => setParam("year", v)}
+            options={[
+              ["", t(...pair("ui_projectsbrowser_6"))],
+              ...years.map((y) => [String(y), String(y)] as [string, string]),
+            ]}
+          />
+          <FilterSelect
+            label={t(...pair("ui_projectsbrowser_7"))}
+            value={search.tag}
+            onChange={(v) => setParam("tag", v)}
+            options={[
+              ["", t(...pair("ui_projectsbrowser_8"))],
+              ...tags.map((tg) => [tg, tg] as [string, string]),
+            ]}
+          />
+          <FilterSelect
+            label={t(...pair("ui_projectsbrowser_9"))}
+            value={search.sort}
+            onChange={(v) => setParam("sort", v)}
+            options={[
+              ["newest", t(...pair("ui_projectsbrowser_10"))],
+              ["oldest", t(...pair("ui_projectsbrowser_11"))],
+              ["featured", t(...pair("ui_projectsbrowser_12"))],
+              ["az", t(...pair("ui_projectsbrowser_13"))],
+            ]}
+          />
+          {active && (
+            <button
+              onClick={reset}
+              className="inline-flex items-center gap-1.5 self-end rounded-full border border-border/60 bg-background px-4 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground md:col-span-4 md:w-max"
+            >
+              <X className="h-3.5 w-3.5" />
+              {t(...pair("ui_projectsbrowser_14"))}
+            </button>
+          )}
+        </div>
+      </details>
 
-      {!active ? (
+      {false ? (
         <div className="mt-10 rounded-2xl border border-dashed border-border/70 bg-cream/40 p-12 text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
             <Search className="h-5 w-5" />
@@ -181,9 +263,7 @@ export function ProjectsBrowser({
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <Search className="h-5 w-5" />
           </div>
-          <p className="mt-4 text-muted-foreground">
-            {t(...pair("ui_projectsbrowser_15"))}
-          </p>
+          <p className="mt-4 text-muted-foreground">{t(...pair("ui_projectsbrowser_15"))}</p>
           <button
             onClick={reset}
             className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
@@ -223,16 +303,34 @@ export function ProjectsBrowser({
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
-                    {p.category_slug && <span>{CAT_LABELS[p.category_slug]?.[isAr ? "ar" : "en"] ?? p.category_slug}</span>}
+                    {p.category_slug && (
+                      <span>
+                        {CAT_LABELS[p.category_slug]?.[isAr ? "ar" : "en"] ?? p.category_slug}
+                      </span>
+                    )}
                     {p.year && <span>· {p.year}</span>}
-                    {p.country && <span>· {p.country}</span>}
+                    <span>
+                      ·{" "}
+                      {
+                        (SECTORS.find((x) => x.key === sectorOf(p.industry)) ?? OTHER_SECTOR)[
+                          isAr ? "ar" : "en"
+                        ]
+                      }
+                    </span>
                   </div>
-                  <h3 className="mt-2 font-display text-xl font-bold transition-colors group-hover:text-accent">{name}</h3>
-                  {short && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{short}</p>}
+                  <h3 className="mt-2 font-display text-xl font-bold transition-colors group-hover:text-accent">
+                    {name}
+                  </h3>
+                  {short && (
+                    <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{short}</p>
+                  )}
                   {p.tags.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1">
                       {p.tags.slice(0, 3).map((tg) => (
-                        <span key={tg} className="rounded-full bg-background px-2 py-0.5 text-[10px] text-muted-foreground">
+                        <span
+                          key={tg}
+                          className="rounded-full bg-background px-2 py-0.5 text-[10px] text-muted-foreground"
+                        >
                           {tg}
                         </span>
                       ))}
@@ -244,7 +342,6 @@ export function ProjectsBrowser({
           })}
         </div>
       )}
-
     </div>
   );
 }
@@ -274,7 +371,10 @@ function CatChip({
 }
 
 function FilterSelect({
-  label, value, onChange, options,
+  label,
+  value,
+  onChange,
+  options,
 }: {
   label: string;
   value: string;
@@ -290,7 +390,9 @@ function FilterSelect({
         className="w-full rounded-lg border border-border/60 bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/40"
       >
         {options.map(([v, l]) => (
-          <option key={v} value={v}>{l}</option>
+          <option key={v} value={v}>
+            {l}
+          </option>
         ))}
       </select>
     </label>
