@@ -1,18 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PackagesView } from "@/views/PackagesView";
+import { useEffect } from "react";
 
-import seo from "@/content/seo.json";
+// The packages page was removed: starting prices now live on the home page.
+// Old links (bookmarks, Google, WhatsApp) forward to the services section.
+const DEST = "/en#services";
+
 export const Route = createFileRoute("/en/packages")({
   head: () => ({
     meta: [
-      { title: seo.packages.en.title },
-      { name: "description", content: seo.packages.en.description },
-      { name: "keywords", content: seo.packages.en.keywords },
-      { property: "og:title", content: seo.packages.en.og_title },
-      { property: "og:description", content: seo.packages.en.og_description },
-      { property: "og:url", content: "/en/packages" },
+      { httpEquiv: "refresh", content: `0;url=${DEST}` },
+      { name: "robots", content: "noindex" },
     ],
-    links: [{ rel: "canonical", href: "/en/packages" }],
+    links: [{ rel: "canonical", href: DEST.split("#")[0] || "/" }],
   }),
-  component: PackagesView,
+  component: () => {
+    useEffect(() => {
+      window.location.replace(DEST);
+    }, []);
+    return (
+      <p style={{ padding: 40, textAlign: "center" }}>
+        <a href={DEST}>{DEST}</a>
+      </p>
+    );
+  },
 });

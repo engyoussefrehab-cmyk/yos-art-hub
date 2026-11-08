@@ -390,7 +390,6 @@ function SiteNav() {
     { to: base || "/", label: t("nav_home"), external: false, newTab: false },
     { to: `${base}/projects`, label: t("nav_projects"), external: false, newTab: false },
     { to: `${base}/insights`, label: t("nav_insights"), external: false, newTab: false },
-    { to: `${base}/packages`, label: t("nav_packages"), external: false, newTab: false },
     { to: `${base}/tools`, label: t("nav_tools"), external: false, newTab: false },
     { to: `${base}/contact`, label: t("nav_contact"), external: false, newTab: false },
   ];
@@ -476,7 +475,6 @@ function SiteFooter() {
     { to: base || "/", label: t("nav_home"), external: false, newTab: false },
     { to: `${base}/projects`, label: t("nav_projects"), external: false, newTab: false },
     { to: `${base}/insights`, label: t("nav_insights"), external: false, newTab: false },
-    { to: `${base}/packages`, label: t("nav_packages"), external: false, newTab: false },
     { to: `${base}/tools`, label: t("nav_tools"), external: false, newTab: false },
     { to: `${base}/contact`, label: t("nav_contact"), external: false, newTab: false },
   ];

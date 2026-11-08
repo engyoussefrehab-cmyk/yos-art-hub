@@ -111,7 +111,6 @@ function groupTargets(ts: Target[]): Target[] {
 const PAGES = [
   { path: "/", label: "الرئيسية" },
   { path: "/projects/", label: "المشاريع" },
-  { path: "/packages/", label: "الباقات" },
   { path: "/contact/", label: "تواصل" },
   { path: "/insights/", label: "المقالات" },
   { path: "/en/", label: "English — Home" },

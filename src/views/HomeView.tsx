@@ -279,7 +279,7 @@ function Services() {
   const { ar, arrow, href } = useNav();
   const L = (a: string, e: string) => (lang === "ar" ? a : e);
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
+    <section id="services" className="mx-auto max-w-7xl scroll-mt-20 px-6 py-20 md:py-28">
       <SectionHead
         kicker={t("services_kicker")}
         title={L("ماذا أقدم، وبكم", "What I do, and what it costs")}
