@@ -176,12 +176,12 @@ function About() {
           </dl>
         </div>
         <div className="lg:col-span-5">
-          <div className="relative overflow-hidden rounded-[2rem] bg-accent">
+          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-black">
             <img
               src={youssefPortrait.url}
               alt={t("brand_alt")}
               loading="lazy"
-              className="aspect-[4/3] w-full object-cover object-[center_30%] mix-blend-luminosity lg:aspect-[4/5]"
+              className="aspect-[4/3] w-full object-cover object-[center_30%] lg:aspect-[4/5]"
             />
             <div className="absolute bottom-4 start-4 rounded-full bg-black px-4 py-2 text-sm font-bold text-white">
               يوسف رحاب · مصمم هويات
