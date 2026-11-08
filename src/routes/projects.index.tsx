@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
 import { ProjectsHubView } from "@/views/ProjectsHubView";
 import { listPortfolio, listCategories, getProjectsStats } from "@/lib/portfolio.functions";
 
@@ -22,6 +22,10 @@ export const Route = createFileRoute("/projects/")({
     tag: asStr(s.tag),
     sort: asSort(s.sort),
   }),
+  // Leave empty filters out of the URL (/projects?cat=branding, not &sector=&…).
+  search: {
+    middlewares: [stripSearchParams({ sector: "", cat: "", country: "", year: "", tag: "", sort: "newest" as const })],
+  },
 
   head: () => ({
     meta: [
