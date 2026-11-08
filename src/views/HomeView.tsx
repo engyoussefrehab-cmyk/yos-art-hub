@@ -194,8 +194,7 @@ function Work({ projects }: { projects: PortfolioDTO[] }) {
 
 /* ------------------------------------------------------------ Services */
 
-// DRAFT prices: only identity ($1,250) and logo ($450) come from the current
-// packages page; the rest show "on request" until the owner sets them.
+// Starting prices set by the owner (Nov 2026). Presentations and packaging are quoted per project.
 const SERVICE_OFFERS: {
   ar: string;
   en: string;
@@ -214,8 +213,8 @@ const SERVICE_OFFERS: {
     getsEn: ["Logo in all versions", "Colours and fonts", "Brand guidelines", "Print applications"],
     timeAr: "٣–٤ أسابيع",
     timeEn: "3–4 weeks",
-    priceAr: "يبدأ من ١٬٢٥٠ $",
-    priceEn: "From $1,250",
+    priceAr: "يبدأ من ١٥٠ $",
+    priceEn: "From $150",
     work: "branding",
   },
   {
@@ -225,8 +224,8 @@ const SERVICE_OFFERS: {
     getsEn: ["Logo in several versions", "Colours and fonts", "All delivery files"],
     timeAr: "٧–١٠ أيام",
     timeEn: "7–10 days",
-    priceAr: "يبدأ من ٤٥٠ $",
-    priceEn: "From $450",
+    priceAr: "يبدأ من ٧٥ $",
+    priceEn: "From $75",
     work: "branding",
   },
   {
@@ -236,19 +235,19 @@ const SERVICE_OFFERS: {
     getsEn: ["Content structure", "All pages designed", "PDF for print and sharing"],
     timeAr: "١–٢ أسبوع",
     timeEn: "1–2 weeks",
-    priceAr: "حسب عدد الصفحات",
-    priceEn: "Priced by pages",
+    priceAr: "يبدأ من ١٠٠ $",
+    priceEn: "From $100",
     work: "profiles",
   },
   {
     ar: "منشورات التواصل الاجتماعي",
     en: "Social media posts",
-    getsAr: ["تصاميم بهوية علامتك", "قوالب قابلة للتعديل", "مقاسات كل المنصات"],
-    getsEn: ["Designs in your brand style", "Editable templates", "Sizes for every platform"],
+    getsAr: ["٥ منشورات على الأقل", "قوالب قابلة للتعديل", "مقاسات كل المنصات"],
+    getsEn: ["Minimum 5 posts", "Editable templates", "Sizes for every platform"],
     timeAr: "حسب عدد المنشورات",
     timeEn: "Depends on volume",
-    priceAr: "حسب عدد المنشورات",
-    priceEn: "Priced by volume",
+    priceAr: "يبدأ من ٣٥ $",
+    priceEn: "From $35",
     work: "social",
   },
   {
