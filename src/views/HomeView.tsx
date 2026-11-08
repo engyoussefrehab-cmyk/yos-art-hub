@@ -44,7 +44,7 @@ export function HomeView({
         words={["هوية بصرية", "شعارات", "ملفات تعريفية", "تغليف", "عروض تقديمية", "منشورات"]}
       />
       <About />
-      <Services projects={projects} />
+      <Services />
       <Process methodology={methodology} />
       <Sectors projects={projects} />
       <ClientsMarquee showStats={false} />
@@ -373,16 +373,7 @@ const TONES = {
   },
 };
 
-function Services({ projects }: { projects: PortfolioDTO[] }) {
-  // One real project image per service (latest in that category).
-  const imageFor = (cat: string, i: number) => {
-    const list = projects
-      .filter((p) => p.category_slug === cat && (p.mockup || p.cover))
-      .sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""));
-    const p = list[i % Math.max(1, list.length)] ?? projects[i];
-    return p ? p.mockup || p.cover : "";
-  };
-
+function Services() {
   return (
     <section id="services" className="mx-auto max-w-[1400px] scroll-mt-24 px-3 sm:px-6">
       <div className="px-3 sm:px-0">
@@ -391,61 +382,59 @@ function Services({ projects }: { projects: PortfolioDTO[] }) {
       <div className="mt-10">
         {SERVICE_OFFERS.map((s, i) => {
           const tone = TONES[s.tone];
-          const img = imageFor(s.cat, i === 1 ? 1 : 0);
           return (
             <article
               key={s.title}
-              className={`sticky mb-5 overflow-hidden rounded-[2rem] ${tone.card}`}
-              style={{ top: `calc(5.5rem + ${i * 14}px)` }}
+              className={`sticky mb-4 overflow-hidden rounded-[2rem] ${tone.card}`}
+              style={{ top: `calc(5.5rem + ${i * 12}px)` }}
             >
-              <div className="grid min-h-[440px] gap-6 p-6 md:min-h-[520px] md:grid-cols-2 md:p-10">
-                <div className="flex flex-col">
-                  <h3 className="font-display text-3xl font-bold md:text-6xl">{s.title}</h3>
-                  <div className="mt-auto pt-10">
-                    <ul className="flex flex-wrap gap-2">
-                      {s.tags.map((tg) => (
-                        <li
-                          key={tg}
-                          className={`rounded-full border px-3 py-1 text-xs ${tone.tag}`}
-                        >
-                          {tg}
-                        </li>
-                      ))}
-                    </ul>
-                    <p className={`mt-4 max-w-md text-sm font-semibold md:text-base ${tone.muted}`}>
-                      {s.line}
-                    </p>
-                    <div className="mt-6 flex flex-wrap items-center gap-4">
-                      <span className="font-display text-2xl font-bold md:text-3xl">{s.price}</span>
-                      <Link
-                        to="/contact"
-                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold ${tone.tag} ${focusRing}`}
-                      >
-                        اطلب عرض سعر
-                      </Link>
-                    </div>
+              <div className="relative flex min-h-[240px] flex-col p-6 md:min-h-[260px] md:p-9">
+                {/* Big outlined number as decoration */}
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute bottom-[-0.15em] end-6 hidden font-display md:block text-[7rem] font-bold leading-none text-transparent md:end-10 md:text-[11rem] ${
+                    s.tone === "red" || s.tone === "white"
+                      ? "[-webkit-text-stroke:1.5px_rgba(0,0,0,0.25)]"
+                      : "[-webkit-text-stroke:1.5px_rgba(255,255,255,0.18)]"
+                  }`}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="font-display text-2xl font-bold sm:text-3xl md:text-5xl">
+                    {s.title}
+                  </h3>
+                  <a
+                    href={`/projects?cat=${s.cat}#browse`}
+                    className={`group ${focusRing} rounded-full`}
+                    aria-label={`شاهد أمثلة: ${s.title}`}
+                  >
+                    <ArrowDot tone={tone.dot} size="lg" />
+                  </a>
+                </div>
+
+                <div className="relative mt-auto pt-8 md:max-w-[70%]">
+                  <ul className="flex flex-wrap gap-2">
+                    {s.tags.map((tg) => (
+                      <li key={tg} className={`rounded-full border px-3 py-1 text-xs ${tone.tag}`}>
+                        {tg}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className={`mt-3 text-sm font-semibold md:text-base ${tone.muted}`}>
+                    {s.line}
+                  </p>
+                  <div className="mt-5 flex flex-wrap items-center gap-4">
+                    <span className="font-display text-2xl font-bold md:text-3xl">{s.price}</span>
+                    <Link
+                      to="/contact"
+                      className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold ${tone.tag} ${focusRing}`}
+                    >
+                      اطلب عرض سعر
+                    </Link>
                   </div>
                 </div>
-                <a
-                  href={`/projects?cat=${s.cat}#browse`}
-                  className={`group relative order-first block min-h-[200px] overflow-hidden rounded-[1.5rem] md:order-none ${focusRing}`}
-                  aria-label={`شاهد أمثلة: ${s.title}`}
-                >
-                  {img && (
-                    <img
-                      src={img}
-                      alt=""
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  )}
-                  <span className="absolute start-4 top-4">
-                    <ArrowDot tone={tone.dot} size="lg" />
-                  </span>
-                  <span className="absolute bottom-4 start-4 rounded-full bg-black/70 px-3 py-1 text-xs text-white backdrop-blur">
-                    شاهد أمثلة
-                  </span>
-                </a>
               </div>
             </article>
           );
