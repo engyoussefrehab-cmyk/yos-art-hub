@@ -25,8 +25,8 @@ export const SECTORS: { key: SectorKey; ar: string; en: string; keywords: string
   },
   {
     key: "construction",
-    ar: "المقاولات والهندسة",
-    en: "Construction & engineering",
+    ar: "المقاولات",
+    en: "Construction",
     keywords: [
       "مقاول",
       "إنشاء",
@@ -90,14 +90,14 @@ export const SECTORS: { key: SectorKey; ar: string; en: string; keywords: string
   },
   {
     key: "education",
-    ar: "التعليم والتدريب",
+    ar: "التعليم",
     en: "Education & training",
     keywords: ["تعليم", "تدريب", "التعلم", "education", "training", "learning", "school"],
   },
   {
     key: "legal",
-    ar: "المحاماة والمحاسبة والاستشارات",
-    en: "Law, accounting & consulting",
+    ar: "المحاماة والمحاسبة",
+    en: "Law & accounting",
     keywords: [
       "محاما",
       "قانون",
@@ -112,7 +112,7 @@ export const SECTORS: { key: SectorKey; ar: string; en: string; keywords: string
   },
   {
     key: "travel",
-    ar: "السياحة والضيافة",
+    ar: "السياحة والفنادق",
     en: "Travel & hospitality",
     keywords: [
       "سياح",
@@ -133,8 +133,8 @@ export const SECTORS: { key: SectorKey; ar: string; en: string; keywords: string
   },
   {
     key: "beauty",
-    ar: "التجميل والعطور والمجوهرات",
-    en: "Beauty, perfume & jewelry",
+    ar: "العطور والتجميل",
+    en: "Beauty & perfume",
     keywords: [
       "تجميل",
       "عطر",
@@ -151,8 +151,8 @@ export const SECTORS: { key: SectorKey; ar: string; en: string; keywords: string
   },
   {
     key: "tech",
-    ar: "التقنية والتسويق",
-    en: "Tech & marketing",
+    ar: "التقنية",
+    en: "Tech",
     keywords: [
       "تقني",
       "رقمي",
@@ -172,8 +172,8 @@ export const SECTORS: { key: SectorKey; ar: string; en: string; keywords: string
   },
   {
     key: "trade",
-    ar: "التجارة والصناعة والنقل",
-    en: "Trade, industry & logistics",
+    ar: "التجارة والصناعة",
+    en: "Trade & industry",
     keywords: [
       "تجار",
       "توزيع",
@@ -194,7 +194,7 @@ export const SECTORS: { key: SectorKey; ar: string; en: string; keywords: string
   },
 ];
 
-export const OTHER_SECTOR = { key: "other" as const, ar: "مجالات أخرى", en: "Other" };
+export const OTHER_SECTOR = { key: "other" as const, ar: "أخرى", en: "Other" };
 
 export function sectorOf(industry: string | null | undefined): SectorKey {
   const s = (industry ?? "").toLowerCase();

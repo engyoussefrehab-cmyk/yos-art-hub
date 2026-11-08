@@ -121,7 +121,7 @@ export function ProjectsBrowser({
   return (
     <div id="browse" className="scroll-mt-24">
       {/* Step 1: the client's own business sector */}
-      <div className="rounded-3xl border border-border bg-cream/60 p-6 md:p-8">
+      <div className="-mx-6 border-y border-border bg-cream/60 px-6 py-5 sm:mx-0 sm:rounded-3xl sm:border md:p-8">
         <h2 className="font-display text-2xl font-bold md:text-3xl">
           {t("ما مجال شركتك؟", "What does your company do?")}
         </h2>
@@ -131,7 +131,7 @@ export function ProjectsBrowser({
             "Pick your field to see work for companies like yours.",
           )}
         </p>
-        <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-4 -mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {sectors.map((sec) => {
             const on = search.sector === sec.key;
             return (
@@ -140,7 +140,7 @@ export function ProjectsBrowser({
                 type="button"
                 aria-pressed={on}
                 onClick={() => setParam("sector", on ? "" : sec.key)}
-                className={`flex items-center justify-between gap-2 rounded-2xl border px-4 py-3 text-start text-sm font-semibold transition-colors ${
+                className={`flex shrink-0 snap-start items-center justify-between gap-3 whitespace-nowrap rounded-full border px-4 py-2.5 text-start text-sm font-semibold transition-colors sm:rounded-2xl sm:py-3 ${
                   on
                     ? "border-foreground bg-foreground text-background"
                     : "border-border bg-background hover:border-foreground/40"
@@ -158,9 +158,9 @@ export function ProjectsBrowser({
         </div>
       </div>
 
-      <div className="mt-10 flex flex-wrap items-end justify-between gap-4">
+      <div className="mt-6 flex flex-wrap items-end justify-between gap-3 sm:mt-10">
         <div>
-          <h2 className="font-display text-2xl font-bold md:text-3xl">
+          <h2 className="font-display text-xl font-bold sm:text-2xl md:text-3xl">
             {search.sector
               ? `${t("أعمال في مجال", "Work in")} ${sectors.find((x) => x.key === search.sector)?.label ?? ""}`
               : t("كل الأعمال", "All work")}
@@ -179,7 +179,7 @@ export function ProjectsBrowser({
       </div>
 
       {/* Category chips */}
-      <div className="mt-6 flex flex-wrap gap-2">
+      <div className="mt-4 -mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
         <CatChip active={!search.cat} onClick={() => setParam("cat", "")}>
           {t("كل الخدمات", "All services")}
         </CatChip>
@@ -273,7 +273,7 @@ export function ProjectsBrowser({
           </button>
         </div>
       ) : (
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-6 lg:grid-cols-3">
           {filtered.map((p) => {
             const name = isAr ? p.name_ar : p.name_en;
             const short = isAr ? p.short_ar : p.short_en;
@@ -301,8 +301,8 @@ export function ProjectsBrowser({
                     <ArrowUpRight className={`h-4 w-4 ${isAr ? "-scale-x-100" : ""}`} />
                   </span>
                 </div>
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground">
+                <div className="flex flex-1 flex-col p-3 sm:p-5">
+                  <div className="hidden items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground sm:flex">
                     {p.category_slug && (
                       <span>
                         {CAT_LABELS[p.category_slug]?.[isAr ? "ar" : "en"] ?? p.category_slug}
@@ -318,14 +318,16 @@ export function ProjectsBrowser({
                       }
                     </span>
                   </div>
-                  <h3 className="mt-2 font-display text-xl font-bold transition-colors group-hover:text-accent">
+                  <h3 className="font-display text-sm font-bold leading-snug transition-colors group-hover:text-accent sm:mt-2 sm:text-xl">
                     {name}
                   </h3>
                   {short && (
-                    <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{short}</p>
+                    <p className="mt-1 hidden text-sm text-muted-foreground line-clamp-2 sm:block">
+                      {short}
+                    </p>
                   )}
                   {p.tags.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-1">
+                    <div className="mt-3 hidden flex-wrap gap-1 sm:flex">
                       {p.tags.slice(0, 3).map((tg) => (
                         <span
                           key={tg}
@@ -359,7 +361,7 @@ function CatChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
+      className={`shrink-0 snap-start whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
         active
           ? "border-accent bg-accent text-accent-foreground shadow-sm"
           : "border-border bg-background text-muted-foreground hover:border-accent/40 hover:text-foreground"

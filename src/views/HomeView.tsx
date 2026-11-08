@@ -24,7 +24,6 @@ import contact from "@/content/contact.json";
  *   7. CTA       start a project
  */
 
-
 const focusRing =
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
@@ -290,11 +289,11 @@ function Services() {
           "Pick a service to see what you get, how long it takes and the starting price — or see examples.",
         )}
       />
-      <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="-mx-6 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-3 [&::-webkit-scrollbar]:hidden">
         {SERVICE_OFFERS.map((o) => (
           <article
             key={o.en}
-            className="flex flex-col rounded-3xl border border-border bg-background p-6"
+            className="flex w-[82%] shrink-0 snap-center flex-col rounded-3xl border border-border bg-background p-5 sm:w-auto sm:p-6"
           >
             <h3 className="font-display text-xl font-bold">{L(o.ar, o.en)}</h3>
             <p className="mt-3 text-xs font-semibold text-muted-foreground">
@@ -322,13 +321,13 @@ function Services() {
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <Link
                   to={href(`/projects?cat=${o.work}#browse`)}
-                  className={`inline-flex items-center justify-center rounded-full border border-foreground/15 px-3 py-2.5 text-sm font-semibold hover:border-foreground ${focusRing}`}
+                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-full border border-foreground/15 px-3 py-2.5 text-sm font-semibold hover:border-foreground ${focusRing}`}
                 >
                   {L("شاهد أمثلة", "See examples")}
                 </Link>
                 <Link
                   to={href("/contact")}
-                  className={`inline-flex items-center justify-center gap-1 rounded-full bg-accent px-3 py-2.5 text-sm font-bold text-accent-foreground ${focusRing}`}
+                  className={`inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-full bg-accent px-3 py-2.5 text-sm font-bold text-accent-foreground ${focusRing}`}
                 >
                   {L("اطلب عرض سعر", "Get a quote")} <span aria-hidden>{arrow}</span>
                 </Link>
