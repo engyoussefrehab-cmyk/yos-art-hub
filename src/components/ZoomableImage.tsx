@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Expand, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
 
 type Props = {
   src: string;
@@ -11,12 +11,22 @@ type Props = {
 };
 
 /**
- * Image that opens full screen when clicked. The viewer is a plain overlay
- * rendered on <body>: the image is centred and fits the screen; Esc, the
- * close button or a click outside the image closes it.
+ * Image that opens a full-screen gallery when clicked. The gallery holds
+ * every zoomable image on the page (in page order), so a visitor can flip
+ * through all images of a project: arrows, thumbnails, keyboard ← → and
+ * swipe on phones. Esc, ✕ or a click on the backdrop closes it.
  */
 export function ZoomableImage({ src, alt = "", className = "", imgClassName = "", eager }: Props) {
-  const [open, setOpen] = useState(false);
+  const [gallery, setGallery] = useState<{ list: string[]; index: number } | null>(null);
+
+  const open = () => {
+    // Page order; when an image repeats (e.g. the cover is also in the
+    // gallery) keep its later place so the gallery order stays intact.
+    const all = Array.from(document.querySelectorAll<HTMLImageElement>("img[data-zoom]")).map((i) => i.dataset.zoom!);
+    const list = all.filter((u, n) => all.lastIndexOf(u) === n);
+    const index = Math.max(0, list.indexOf(src));
+    setGallery({ list: list.length ? list : [src], index });
+  };
 
   return (
     <>
@@ -24,60 +34,140 @@ export function ZoomableImage({ src, alt = "", className = "", imgClassName = ""
         <img
           src={src}
           alt={alt}
+          data-zoom={src}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
-          onClick={() => setOpen(true)}
+          onClick={open}
           className={`cursor-zoom-in ${imgClassName || "w-full"}`}
         />
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={open}
           aria-label="تكبير الصورة"
           className="absolute end-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent md:opacity-0 md:group-hover:opacity-100"
         >
           <Expand className="h-4 w-4" />
         </button>
       </div>
-      {open && <Viewer src={src} alt={alt} onClose={() => setOpen(false)} />}
+      {gallery && <Viewer list={gallery.list} start={gallery.index} alt={alt} onClose={() => setGallery(null)} />}
     </>
   );
 }
 
-function Viewer({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+const btn =
+  "inline-flex items-center justify-center rounded-full transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+
+function Viewer({ list, start, alt, onClose }: { list: string[]; start: number; alt: string; onClose: () => void }) {
+  const [i, setI] = useState(start);
+  const touchX = useRef<number | null>(null);
+  const thumbs = useRef<HTMLDivElement>(null);
+  const many = list.length > 1;
+  const next = () => setI((v) => (v + 1) % list.length);
+  const prev = () => setI((v) => (v - 1 + list.length) % list.length);
+
   useEffect(() => {
-    const prev = document.body.style.overflow;
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      // Arabic reads right-to-left: ← goes forward, → goes back.
+      if (e.key === "ArrowLeft") setI((v) => (v + 1) % list.length);
+      if (e.key === "ArrowRight") setI((v) => (v - 1 + list.length) % list.length);
+    };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [onClose]);
+  }, [onClose, list.length]);
+
+  // Keep the active thumbnail in view.
+  useEffect(() => {
+    thumbs.current?.querySelector<HTMLElement>(`[data-i="${i}"]`)?.scrollIntoView({ block: "nearest", inline: "center" });
+  }, [i]);
 
   return createPortal(
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="عرض الصورة"
+      aria-label="معرض الصور"
       onClick={onClose}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-10"
+      onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+      onTouchEnd={(e) => {
+        if (touchX.current === null || !many) return;
+        const dx = e.changedTouches[0].clientX - touchX.current;
+        touchX.current = null;
+        if (Math.abs(dx) > 50) (dx > 0 ? next : prev)();
+      }}
+      className="fixed inset-0 z-[100] flex flex-col bg-black/95"
     >
-      <img
-        src={src}
-        alt={alt}
-        onClick={(e) => e.stopPropagation()}
-        className="max-h-full max-w-full rounded-lg object-contain"
-      />
-      <button
-        type="button"
-        onClick={onClose}
-        autoFocus
-        aria-label="إغلاق"
-        className="absolute end-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-black transition hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-      >
-        <X className="h-5 w-5" />
-      </button>
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-4 py-4 md:px-6">
+        <span className="text-sm tabular-nums text-white/70" dir="ltr">
+          {many ? `${i + 1} / ${list.length}` : ""}
+        </span>
+        <button type="button" onClick={onClose} autoFocus aria-label="إغلاق" className={`${btn} h-11 w-11 bg-white text-black hover:bg-white/90`}>
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Image */}
+      <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 md:px-24">
+        <img
+          key={list[i]}
+          src={list[i]}
+          alt={alt}
+          onClick={(e) => e.stopPropagation()}
+          className="max-h-full max-w-full rounded-lg object-contain"
+        />
+        {many && (
+          <>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                prev();
+              }}
+              aria-label="الصورة السابقة"
+              className={`${btn} absolute start-3 top-1/2 h-12 w-12 -translate-y-1/2 bg-white/10 text-white hover:bg-white/20 md:start-6`}
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                next();
+              }}
+              aria-label="الصورة التالية"
+              className={`${btn} absolute end-3 top-1/2 h-12 w-12 -translate-y-1/2 bg-white/10 text-white hover:bg-white/20 md:end-6`}
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Thumbnails */}
+      {many && (
+        <div ref={thumbs} onClick={(e) => e.stopPropagation()} className="flex gap-2 overflow-x-auto px-4 py-4 md:justify-center md:px-6">
+          {list.map((u, n) => (
+            <button
+              key={u}
+              type="button"
+              data-i={n}
+              onClick={() => setI(n)}
+              aria-label={`صورة ${n + 1}`}
+              aria-current={n === i}
+              className={`h-14 w-20 shrink-0 overflow-hidden rounded-md border-2 transition focus:outline-none focus-visible:border-accent md:h-16 md:w-24 ${
+                n === i ? "border-white opacity-100" : "border-transparent opacity-50 hover:opacity-90"
+              }`}
+            >
+              <img src={u} alt="" loading="lazy" className="h-full w-full object-cover" />
+            </button>
+          ))}
+        </div>
+      )}
     </div>,
     document.body,
   );

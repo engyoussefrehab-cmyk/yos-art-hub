@@ -271,7 +271,7 @@ export function ProjectsBrowser({
             const short = isAr ? p.short_ar : p.short_en;
             return (
               <Link key={p.slug} to={projectHref(p)} className="group relative flex flex-col">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-white/5 sm:rounded-[1.75rem]">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-white/5 sm:rounded-[1.75rem]">
                   {p.cover && (
                     <img
                       src={p.cover}

@@ -470,7 +470,7 @@ function Work({ projects }: { projects: PortfolioDTO[] }) {
             to={`/projects/${p.category_slug ?? "branding"}/${p.slug}`}
             className={`group block w-[78%] shrink-0 snap-center md:w-auto ${focusRing}`}
           >
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-white/5">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-white/5">
               <img
                 src={p.cover}
                 alt={p.name_ar}

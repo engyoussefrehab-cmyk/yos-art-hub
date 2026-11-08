@@ -114,7 +114,7 @@ function ProjectsList({
         const href = `/projects/${categorySlug}/${p.slug}`;
         return (
           <Link key={p.slug} to={href} className={`group flex flex-col ${focusRing}`}>
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-white/5 sm:rounded-[1.75rem]">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-white/5 sm:rounded-[1.75rem]">
               {p.cover && (
                 <img
                   src={p.cover}
