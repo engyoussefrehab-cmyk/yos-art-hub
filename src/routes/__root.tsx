@@ -371,7 +371,7 @@ function SiteNav() {
                 activeProps={{ className: "text-foreground font-semibold" }}
                 inactiveProps={{ className: "text-muted-foreground" }}
                 className="rounded-full px-3 py-1.5 text-sm transition-colors hover:bg-white/5 hover:text-foreground"
-              >{l.label}</Link>
+              >{l.label}<span aria-hidden className="ms-1 text-accent">+</span></Link>
             )
           ))}
         </nav>
@@ -434,74 +434,63 @@ function SiteFooter() {
     ? [...cmsLinks.filter((link) => link.to !== `${base}/tools/color-brief`), ...(cmsLinks.some((link) => link.to === toolLink.to) ? [] : [toolLink])]
     : defaults;
 
+  const bigLink = "block font-display text-4xl font-bold leading-[1.25] transition-colors hover:text-accent md:text-5xl";
+  const card = "rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-6 md:p-8";
   return (
-    <footer className="mt-auto bg-ink text-white/70 border-t border-white/10">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 md:grid-cols-12">
-        <div className="md:col-span-5 space-y-5">
-          <Link to={base || "/"} className="inline-flex items-center" aria-label={t("brand_alt")}>
-            <img src={logoFull.url} alt={t("brand_alt")} className="h-10 w-auto invert" />
-          </Link>
-          <p className="max-w-sm text-sm leading-relaxed text-white/60">{t("footer_bio")}</p>
-          <NewsletterForm />
-        </div>
-        <div className="md:col-span-3">
-          <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">{t("explore")}</div>
-          <ul className="space-y-2 text-sm">
+    <footer className="mt-auto px-3 pb-3 pt-3 sm:px-6">
+      <div className="mx-auto grid max-w-[1400px] gap-3 md:grid-cols-12">
+        {/* Navigation — big type */}
+        <nav className={`${card} md:col-span-5`} aria-label={t("explore")}>
+          <ul className="space-y-1">
             {footerLinks.map((l) => (
               <li key={l.to}>
                 {l.external ? (
-                  <a href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined} className="hover:text-accent transition-colors">{l.label}</a>
+                  <a href={l.to} target={l.newTab ? "_blank" : undefined} rel={l.newTab ? "noopener noreferrer" : undefined} className={bigLink}>{l.label}</a>
                 ) : (
-                  <Link to={l.to} className="hover:text-accent transition-colors">{l.label}</Link>
+                  <Link to={l.to} className={bigLink}>{l.label}</Link>
                 )}
               </li>
             ))}
           </ul>
-        </div>
-        <div className="md:col-span-4">
-          <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/50">{t("contact")}</div>
-          <ul className="space-y-2 text-sm">
-            <li><a href={phoneHref} className="hover:text-accent transition-colors" dir="ltr">{phone}</a></li>
-            <li><a href={`mailto:${email}`} className="hover:text-accent transition-colors">{email}</a></li>
-          </ul>
-          <div className="mt-5 flex items-center gap-3">
-            {socials.linkedin ? (
-              <a href={socials.linkedin} target="_blank" rel="noopener noreferrer" aria-label={t("linkedin")}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
-                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-              </a>
-            ) : (
-              <a href="/go/li" target="_blank" rel="noopener noreferrer" aria-label={t("linkedin")}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
-                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-              </a>
-            )}
-            {socials.instagram && (
-              <a href={socials.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-              </a>
-            )}
-            {socials.behance && (
-              <a href={socials.behance} target="_blank" rel="noopener noreferrer" aria-label="Behance"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
-                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M7.44 6.5c1.28 0 2.24.24 2.88.72.64.48.96 1.2.96 2.16 0 .58-.13 1.07-.4 1.47-.26.39-.65.7-1.16.94.7.2 1.22.55 1.58 1.04.36.5.53 1.12.53 1.86 0 1.13-.38 1.99-1.14 2.58-.76.59-1.83.88-3.22.88H2V6.5h5.44Zm-.14 3.9c.48 0 .85-.11 1.11-.33.26-.22.39-.55.39-.98 0-.42-.13-.73-.4-.93-.26-.2-.63-.3-1.1-.3H4.55v2.54H7.3Zm.12 4.72c1.15 0 1.72-.5 1.72-1.5 0-.51-.14-.88-.42-1.11-.28-.24-.72-.35-1.31-.35H4.55v2.96h2.87Zm10.35-3.66c1.03 0 1.62-.55 1.75-1.66h-3.5c.15 1.1.73 1.66 1.75 1.66Zm4.19.71h-5.94c.05.72.28 1.24.69 1.55.4.32.94.48 1.62.48.86 0 1.52-.32 2-.96l1.4.94c-.79 1.2-2 1.8-3.62 1.8-1.35 0-2.42-.4-3.22-1.19-.8-.79-1.2-1.87-1.2-3.24 0-1.31.4-2.36 1.2-3.14.8-.79 1.85-1.18 3.14-1.18 1.24 0 2.24.38 3 1.14.76.76 1.14 1.79 1.14 3.09 0 .28-.02.51-.05.71ZM19.94 8.9h-4.13V7.36h4.13V8.9Z"/></svg>
-              </a>
-            )}
-            {socials.twitter && (
-              <a href={socials.twitter} target="_blank" rel="noopener noreferrer" aria-label="X"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/70 transition-colors hover:border-accent hover:text-accent">
-                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true"><path d="M18.244 2H21l-6.564 7.5L22 22h-6.828l-4.75-6.203L4.8 22H2l7.02-8.02L2 2h6.914l4.3 5.68L18.244 2Zm-2.394 18h1.65L8.24 4H6.5l9.35 16Z"/></svg>
-              </a>
-            )}
+        </nav>
+
+        <div className="grid gap-3 md:col-span-7 md:grid-cols-2">
+          {/* Contact */}
+          <div className={card}>
+            <div className="font-display text-2xl font-bold">{t("contact")}</div>
+            <ul className="mt-5 space-y-3 text-white/80">
+              <li><a href={contact.whatsapp_url} target="_blank" rel="noopener noreferrer" className="hover:text-accent">واتساب ↖</a></li>
+              <li><a href={phoneHref} className="hover:text-accent" dir="ltr">{phone}</a></li>
+              <li><a href={`mailto:${email}`} className="hover:text-accent">{email}</a></li>
+              <li><a href={socials.linkedin || "/go/li"} target="_blank" rel="noopener noreferrer" className="hover:text-accent">{t("linkedin")} ↖</a></li>
+              {socials.instagram && <li><a href={socials.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-accent">إنستجرام ↖</a></li>}
+              {socials.behance && <li><a href={socials.behance} target="_blank" rel="noopener noreferrer" className="hover:text-accent">Behance ↖</a></li>}
+            </ul>
+          </div>
+
+          {/* Big CTA card */}
+          <Link to="/contact" className="group flex flex-col justify-between rounded-[2rem] bg-accent p-6 text-black md:p-8">
+            <span className="font-display text-3xl font-bold leading-tight md:text-4xl">{t("cta_start_project")}</span>
+            <span className="mt-8 inline-flex h-14 w-14 items-center justify-center rounded-full bg-black text-xl text-white transition-transform group-hover:-rotate-45" aria-hidden>↖</span>
+          </Link>
+
+          {/* Brand + newsletter */}
+          <div className={`${card} md:col-span-2`}>
+            <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+              <div className="max-w-sm">
+                <Link to="/" className="inline-flex" aria-label={t("brand_alt")}>
+                  <img src={logoFull.url} alt={t("brand_alt")} className="h-9 w-auto invert" />
+                </Link>
+                <p className="mt-4 text-sm leading-relaxed text-white/60">{t("footer_bio")}</p>
+              </div>
+              <div className="w-full md:max-w-sm"><NewsletterForm /></div>
+            </div>
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 md:flex-row">
-          <div className="text-xs text-white/50">© {year} {t("brand_alt")}® — {t("rights")}</div>
-          <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">{t("built_with_care")}</div>
-        </div>
+      <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-2 px-3 py-5 text-xs text-white/40 md:flex-row">
+        <div>© {year} {t("brand_alt")} — {t("rights")}</div>
+        <div>{t("built_with_care")}</div>
       </div>
     </footer>
   );
@@ -548,8 +537,8 @@ function NewsletterForm() {
         <input type="text" tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} className="hidden" aria-hidden="true" />
         <input type="email" required value={email} onChange={(e) => { setEmail(e.target.value); setStatus("idle"); }}
           placeholder={t("newsletter_placeholder")} dir="ltr"
-          className="flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-accent focus:outline-none" />
-        <button type="submit" className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5">{t("newsletter_subscribe")}</button>
+          className="min-w-0 flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-accent focus:outline-none" />
+        <button type="submit" className="shrink-0 whitespace-nowrap rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5">{t("newsletter_subscribe")}</button>
       </form>
       {status === "ok" && <p className="mt-2 text-xs text-accent">{t("newsletter_ok")}</p>}
       {status === "error" && <p className="mt-2 text-xs text-red-400">{t("newsletter_err")}</p>}

@@ -13,19 +13,13 @@ import { SECTORS, sectorOf } from "@/lib/sectors";
 import contact from "@/content/contact.json";
 
 /*
- * Home page (dark, Arabic only) — same story as before, new design:
- *   1. Hero      who I am, one clear action, numbers
- *   2. Work      latest projects + "what does your company do?"
- *   3. Clients   brands that hired me
- *   4. Services  what you get, how long, starting price
- *   5. Process   four steps
- *   6. Reviews   what clients say
- *   7. CTA       start a project
+ * Home page — bold "studio" style: big type, oversized rounded cards that
+ * stack while scrolling, giant marquee words, pill buttons with a round
+ * arrow, sector rows with arrows. Real work replaces decorative imagery.
  */
 
 const focusRing =
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
-const ARROW = "←";
 const CAT_AR: Record<string, string> = {
   branding: "هوية بصرية",
   profiles: "ملف تعريفي",
@@ -46,240 +40,198 @@ export function HomeView({
   return (
     <div className="overflow-x-clip">
       <Hero />
-      <Marquee />
-      {projects.length > 0 && <Work projects={projects} />}
-      <ClientsMarquee showStats={false} />
-      <Services />
+      <BigMarquee
+        words={["هوية بصرية", "شعارات", "ملفات تعريفية", "تغليف", "عروض تقديمية", "منشورات"]}
+      />
+      <About />
+      <Services projects={projects} />
       <Process methodology={methodology} />
+      <Sectors projects={projects} />
+      <ClientsMarquee showStats={false} />
+      {projects.length > 0 && <Work projects={projects} />}
       <Testimonials />
       <CTA />
     </div>
   );
 }
 
-/* ---------------------------------------------------------------- Shared */
+/* ================================================================ Shared */
 
-function Kicker({ children }: { children: React.ReactNode }) {
+/** Round arrow icon used inside buttons and on cards. */
+function ArrowDot({
+  tone = "dark",
+  size = "sm",
+}: {
+  tone?: "dark" | "light" | "red";
+  size?: "sm" | "lg";
+}) {
+  const tones = {
+    dark: "bg-black text-white",
+    light: "bg-white text-black",
+    red: "bg-accent text-accent-foreground",
+  };
   return (
-    <span className="inline-flex items-center gap-2 text-xs font-semibold text-accent">
-      <span aria-hidden className="h-px w-6 bg-accent" />
-      {children}
+    <span
+      aria-hidden
+      className={`inline-flex shrink-0 items-center justify-center rounded-full transition-transform group-hover:-rotate-45 ${tones[tone]} ${
+        size === "lg" ? "h-14 w-14 text-xl" : "h-8 w-8 text-sm"
+      }`}
+    >
+      ↖
     </span>
   );
 }
 
-function SectionHead({
-  kicker,
-  title,
-  lede,
-  action,
-}: {
-  kicker: string;
-  title: string;
-  lede?: string;
-  action?: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between md:gap-10">
-      <div className="max-w-2xl">
-        <Kicker>{kicker}</Kicker>
-        <h2 className="mt-3 font-display text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
-          {title}
-        </h2>
-        {lede && <p className="mt-3 text-muted-foreground md:text-lg">{lede}</p>}
-      </div>
-      {action}
-    </div>
-  );
-}
-
-function PillLink({
+function Pill({
   to,
+  href,
   children,
-  primary,
-  className = "",
+  variant = "light",
+  download,
 }: {
-  to: string;
+  to?: string;
+  href?: string;
   children: React.ReactNode;
-  primary?: boolean;
-  className?: string;
+  variant?: "light" | "red" | "ghost";
+  download?: string;
 }) {
+  const styles = {
+    light: "bg-white text-black",
+    red: "bg-accent text-accent-foreground",
+    ghost: "border border-white/20 text-white hover:border-white/60",
+  };
+  const cls = `group inline-flex items-center gap-3 whitespace-nowrap rounded-full py-1.5 pe-1.5 ps-5 text-sm font-bold transition ${styles[variant]} ${focusRing}`;
+  const dot = (
+    <ArrowDot tone={variant === "light" ? "red" : variant === "red" ? "dark" : "light"} />
+  );
+  if (href)
+    return (
+      <a href={href} className={cls} download={download} target="_blank" rel="noopener noreferrer">
+        {children}
+        {dot}
+      </a>
+    );
   return (
-    <Link
-      to={to}
-      className={`group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-sm font-bold transition ${
-        primary
-          ? "bg-accent text-accent-foreground hover:brightness-110"
-          : "border border-white/15 text-foreground hover:border-white/50"
-      } ${focusRing} ${className}`}
-    >
+    <Link to={to!} className={cls}>
       {children}
-      <span aria-hidden className="transition-transform group-hover:-translate-x-1">
-        {ARROW}
-      </span>
+      {dot}
     </Link>
   );
 }
 
-/* ---------------------------------------------------------------- 1. Hero */
+function Heading({
+  kicker,
+  title,
+  action,
+}: {
+  kicker: string;
+  title: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+      <div>
+        <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+          <span className="text-accent">✦</span>
+          {kicker}
+        </span>
+        <h2 className="mt-3 font-display text-4xl font-bold leading-[1.1] md:text-6xl">{title}</h2>
+      </div>
+      {action && <div className="shrink-0 self-start md:self-auto">{action}</div>}
+    </div>
+  );
+}
+
+/* ================================================================ Hero */
 
 function Hero() {
   const { t } = useLang();
-  const v = (key: DictKey) => pair(key)[0];
-  const stats: Array<[string, DictKey]> = [
-    [v("ui_contactview_1"), "stat_years"],
-    [v("ui_contactview_2"), "stat_brands"],
-    [v("ui_contactview_3"), "stat_sectors"],
-  ];
-
   return (
-    <section className="relative">
-      {/* Soft red glow + fine grid */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 start-[-10%] h-[520px] w-[520px] rounded-full bg-accent/20 blur-[120px]" />
-        <div
-          className="absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(ellipse at 70% 30%, black 20%, transparent 70%)",
-            WebkitMaskImage: "radial-gradient(ellipse at 70% 30%, black 20%, transparent 70%)",
-          }}
-        />
-      </div>
-
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 pb-14 pt-10 md:pt-16 lg:grid-cols-12 lg:gap-14 lg:pb-20">
-        <div className="lg:col-span-7">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-muted-foreground">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-            </span>
-            {t("hero_badge")}
-          </span>
-
-          <h1 className="mt-6 font-display text-[2.75rem] font-bold leading-[1.1] sm:text-6xl lg:text-[5.5rem]">
-            {t("hero_title_a")}
-            <span className="mt-1 block text-accent">{t("hero_title_b")}</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-base leading-[1.9] text-muted-foreground md:text-lg">
-            {t("hero_intro")}
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <PillLink to="/contact" primary>
-              {t("cta_start_project")}
-            </PillLink>
-            <PillLink to="/projects">{t("hero_cta_projects")}</PillLink>
-            <a
-              href={portfolioPdf.url}
-              download="Youssef-Rehab-Portfolio.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`inline-flex items-center gap-2 rounded-full px-2 py-3 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline ${focusRing}`}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              {t("hero_cta_download")}
-            </a>
-          </div>
-
-          <dl className="mt-10 grid max-w-lg grid-cols-3 gap-3">
-            {stats.map(([n, label]) => (
-              <div
-                key={label}
-                className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3"
-              >
-                <dt className="sr-only">{t(label)}</dt>
-                <dd className="font-display text-2xl font-bold md:text-3xl">{n}</dd>
-                <dd aria-hidden className="mt-0.5 text-xs text-muted-foreground">
-                  {t(label)}
-                </dd>
-              </div>
-            ))}
-          </dl>
+    <section className="px-3 pt-3 sm:px-6">
+      <div className="relative isolate mx-auto flex min-h-[86svh] max-w-[1400px] flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] px-6 pb-8 pt-28 md:px-12 md:pb-12">
+        {/* Animated colour field */}
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <div className="yr-blob absolute -top-24 end-[-10%] h-[70%] w-[70%] rounded-full bg-accent/60 blur-[110px]" />
+          <div className="yr-blob absolute bottom-[-30%] start-[-10%] h-[70%] w-[60%] rounded-full bg-[#ff9a62]/35 blur-[120px] [animation-delay:-6s]" />
+          <div className="yr-blob absolute top-[25%] start-[30%] h-[45%] w-[40%] rounded-full bg-[#7b2cff]/30 blur-[120px] [animation-delay:-12s]" />
+          <div
+            className="absolute inset-0 opacity-[0.07] mix-blend-overlay"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(115deg, white 0 1px, transparent 1px 22px)",
+            }}
+          />
         </div>
 
-        <div className="relative lg:col-span-5">
-          <div
-            aria-hidden
-            className="absolute -inset-3 -z-10 rounded-[2rem] border border-accent/30"
-          />
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] border border-white/10 bg-black md:aspect-[16/10] lg:aspect-[4/5]">
-            <img
-              src={youssefPortrait.url}
-              alt={t("brand_alt")}
-              fetchPriority="high"
-              className="h-full w-full object-cover object-[center_30%]"
-            />
-            <div
-              aria-hidden
-              className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent"
-            />
-            <div className="absolute bottom-4 start-4 end-4 flex items-center justify-between gap-3">
-              <div>
-                <div className="font-display text-lg font-bold">يوسف رحاب</div>
-                <div className="text-xs text-white/70">
-                  {t("strategic_brand")} {t("identity_designer")}
-                </div>
-              </div>
-              <span className="rounded-full bg-accent px-3 py-1 font-display text-xs font-bold text-accent-foreground">
-                YR
-              </span>
+        <div className="grid items-end gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs text-white backdrop-blur">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              {t("hero_badge")}
+            </span>
+            <h1 className="mt-6 font-display text-[3rem] font-bold leading-[1.02] text-white sm:text-7xl lg:text-[7.5rem]">
+              هويات
+              <br />
+              تبنى لتبقى.
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-[1.9] text-white/80 md:text-xl">
+              أنا يوسف رحاب، مصمم هويات بصرية. أصمم لعلامتك شعارا وألوانا وخطوطا تجعلها واضحة ومميزة
+              في السوق.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Pill to="/contact" variant="light">
+                {t("cta_start_project")}
+              </Pill>
+              <Pill href={portfolioPdf.url} download="Youssef-Rehab-Portfolio.pdf" variant="ghost">
+                حمّل ملف أعمالي
+              </Pill>
             </div>
           </div>
+          <ul className="space-y-3 text-sm text-white/85 lg:col-span-4 lg:justify-self-end">
+            {["هويات بصرية وشعارات", "ملفات تعريفية وعروض", "منشورات وتغليف"].map((s) => (
+              <li key={s} className="flex items-center gap-3">
+                <span className="text-accent">✦</span>
+                {s}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
+      <style>{`
+        .yr-blob { animation: yr-blob 18s ease-in-out infinite alternate; }
+        @keyframes yr-blob {
+          0% { transform: translate(0,0) scale(1); }
+          50% { transform: translate(6%,8%) scale(1.15); }
+          100% { transform: translate(-6%,-4%) scale(0.95); }
+        }
+        @media (prefers-reduced-motion: reduce) { .yr-blob { animation: none; } }
+      `}</style>
     </section>
   );
 }
 
-/* ------------------------------------------------------------- Marquee */
+/* ================================================================ Big marquee */
 
-const MARQUEE_WORDS = [
-  "هوية بصرية",
-  "تصميم شعارات",
-  "ملفات تعريفية",
-  "منشورات التواصل الاجتماعي",
-  "عروض تقديمية",
-  "تغليف",
-];
-
-function Marquee() {
-  const row = [...MARQUEE_WORDS, ...MARQUEE_WORDS];
+function BigMarquee({ words }: { words: string[] }) {
+  const row = [...words, ...words];
   return (
-    <div className="overflow-hidden border-y border-white/10 bg-black py-5" aria-hidden dir="ltr">
-      <div className="yr-marquee flex w-max gap-10" dir="ltr">
+    <div className="overflow-hidden py-10 md:py-16" aria-hidden dir="ltr">
+      <div className="yr-marquee flex w-max">
         {[0, 1].map((copy) => (
-          <div key={copy} className="flex shrink-0 items-center gap-10">
+          <div key={copy} className="flex shrink-0 items-center">
             {row.map((w, i) => (
-              <span
-                key={`${copy}-${i}`}
-                className="flex items-center gap-10 font-display text-2xl font-bold text-white/85 md:text-4xl"
-                dir="rtl"
-              >
-                {w}
-                <span className="text-accent">✦</span>
+              <span key={`${copy}-${i}`} className="flex items-center" dir="rtl">
+                <span className="px-6 font-display text-6xl font-bold text-white md:px-10 md:text-[8.5rem] md:leading-none">
+                  {w}
+                </span>
+                <span className="text-4xl text-white/30 md:text-7xl">✦</span>
               </span>
             ))}
           </div>
         ))}
       </div>
       <style>{`
-        .yr-marquee { animation: yr-marquee 40s linear infinite; }
+        .yr-marquee { animation: yr-marquee 60s linear infinite; }
         @keyframes yr-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         @media (prefers-reduced-motion: reduce) { .yr-marquee { animation: none; } }
       `}</style>
@@ -287,219 +239,229 @@ function Marquee() {
   );
 }
 
-/* ---------------------------------------------------------------- 2. Work */
+/* ================================================================ About */
 
-function Work({ projects }: { projects: PortfolioDTO[] }) {
-  const latest = [...projects]
-    .filter((p) => p.cover)
-    .sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""))
-    .slice(0, 5);
-
-  // Sectors with the most work, for the quick "what does your company do?" row.
-  const counts = new Map<string, number>();
-  for (const p of projects)
-    counts.set(sectorOf(p.industry), (counts.get(sectorOf(p.industry)) ?? 0) + 1);
-  const topSectors = SECTORS.filter((s) => counts.get(s.key))
-    .sort((a, b) => (counts.get(b.key) ?? 0) - (counts.get(a.key) ?? 0))
-    .slice(0, 8);
-
-  const href = (p: PortfolioDTO) => `/projects/${p.category_slug ?? "branding"}/${p.slug}`;
-
+function About() {
+  const { t } = useLang();
+  const v = (key: DictKey) => pair(key)[0];
+  const stats: Array<[string, DictKey]> = [
+    [v("ui_contactview_1"), "stat_years"],
+    [v("ui_contactview_2"), "stat_brands"],
+    [v("ui_contactview_3"), "stat_sectors"],
+  ];
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-      <SectionHead
-        kicker="أحدث الأعمال"
-        title="شغل حقيقي لعلامات حقيقية"
-        action={<PillLink to="/projects">كل الأعمال</PillLink>}
-      />
-
-      {/* Phones: swipe. Larger screens: bento grid. */}
-      <div className="-mx-6 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-4 md:grid-rows-2 md:gap-5 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
-        {latest.map((p, i) => (
-          <Link
-            key={p.slug}
-            to={href(p)}
-            className={`group relative block w-[78%] shrink-0 snap-center overflow-hidden rounded-[1.75rem] border border-white/10 bg-black md:w-auto ${
-              i === 0
-                ? "aspect-[4/5] md:col-span-2 md:row-span-2 md:aspect-auto"
-                : "aspect-[4/5] md:aspect-[4/3]"
-            } ${focusRing}`}
-          >
-            <img
-              src={p.cover}
-              alt={p.name_ar}
-              loading={i === 0 ? "eager" : "lazy"}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-            />
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent"
-            />
-            <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5">
-              <div>
-                <div className="text-xs text-white/70">
-                  {CAT_AR[p.category_slug ?? ""] ?? "مشروع"}
-                </div>
-                <h3
-                  className={`mt-1 font-display font-bold text-white ${i === 0 ? "text-2xl md:text-3xl" : "text-lg"}`}
-                >
-                  {p.name_ar}
-                </h3>
+    <section className="mx-auto max-w-[1400px] px-6 pb-20 md:pb-28">
+      <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
+        <div className="lg:col-span-7">
+          <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+            <span className="text-accent">✦</span>
+            من أنا
+          </span>
+          <p className="mt-5 font-display text-3xl font-bold leading-[1.4] md:text-5xl md:leading-[1.3]">
+            الهوية ليست شعارا فقط.{" "}
+            <span className="text-white/40">
+              هي الطريقة التي يتذكر بها الناس علامتك. أصممها بوضوح، ليختارك عميلك من أول نظرة.
+            </span>
+          </p>
+          <dl className="mt-10 grid grid-cols-3 gap-3">
+            {stats.map(([n, label]) => (
+              <div key={label} className="rounded-3xl bg-white/[0.04] p-5">
+                <dt className="sr-only">{t(label)}</dt>
+                <dd className="font-display text-3xl font-bold md:text-5xl">{n}</dd>
+                <dd aria-hidden className="mt-1 text-xs text-muted-foreground md:text-sm">
+                  {t(label)}
+                </dd>
               </div>
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-black transition-colors group-hover:bg-accent">
-                {ARROW}
-              </span>
+            ))}
+          </dl>
+        </div>
+        <div className="lg:col-span-5">
+          <div className="relative overflow-hidden rounded-[2rem] bg-accent">
+            <img
+              src={youssefPortrait.url}
+              alt={t("brand_alt")}
+              loading="lazy"
+              className="aspect-[4/3] w-full object-cover object-[center_30%] mix-blend-luminosity lg:aspect-[4/5]"
+            />
+            <div className="absolute bottom-4 start-4 rounded-full bg-black px-4 py-2 text-sm font-bold text-white">
+              يوسف رحاب · مصمم هويات
             </div>
-          </Link>
-        ))}
-      </div>
-
-      {/* Find work for your own field */}
-      <div className="mt-10 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-5 md:flex md:items-center md:gap-6 md:p-6">
-        <p className="shrink-0 font-display text-lg font-bold">ما مجال شركتك؟</p>
-        <div className="-mx-5 mt-3 flex gap-2 overflow-x-auto px-5 pb-1 [scrollbar-width:none] md:mx-0 md:mt-0 md:flex-wrap md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
-          {topSectors.map((s) => (
-            <a
-              key={s.key}
-              href={`/projects?sector=${s.key}#browse`}
-              className={`shrink-0 whitespace-nowrap rounded-full border border-white/15 px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent ${focusRing}`}
-            >
-              {s.ar} <span className="text-muted-foreground">{counts.get(s.key)}</span>
-            </a>
-          ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-/* ------------------------------------------------------------ 4. Services */
+/* ================================================================ Services (stacking cards) */
 
 // Starting prices set by the owner (Nov 2026). Presentations and packaging are quoted per project.
 const SERVICE_OFFERS: {
   title: string;
-  gets: string[];
-  time: string;
+  line: string;
+  tags: string[];
   price: string;
-  work: string;
+  cat: string;
+  tone: "black" | "red" | "white" | "gray";
 }[] = [
   {
-    title: "الهوية البصرية الكاملة",
-    gets: ["الشعار بكل نسخه", "الألوان والخطوط", "دليل استخدام الهوية", "تطبيقات على المطبوعات"],
-    time: "٣–٤ أسابيع",
+    title: "الهوية البصرية",
+    line: "هوية متكاملة: من الشعار إلى المطبوعات ودليل الاستخدام.",
+    tags: ["شعار", "ألوان", "خطوط", "دليل الهوية", "مطبوعات"],
     price: "يبدأ من ١٥٠ $",
-    work: "branding",
+    cat: "branding",
+    tone: "black",
   },
   {
     title: "تصميم الشعار",
-    gets: ["شعار بنسخ متعددة", "الألوان والخطوط", "كل ملفات التسليم"],
-    time: "٧–١٠ أيام",
+    line: "شعار واضح بنسخ متعددة، وكل ملفات التسليم.",
+    tags: ["شعار", "نسخ متعددة", "ملفات التسليم"],
     price: "يبدأ من ٧٥ $",
-    work: "branding",
+    cat: "branding",
+    tone: "red",
   },
   {
-    title: "الملف التعريفي للشركة",
-    gets: ["تنظيم المحتوى", "تصميم كل الصفحات", "ملف PDF للطباعة والإرسال"],
-    time: "١–٢ أسبوع",
+    title: "الملف التعريفي",
+    line: "ملف يعرض شركتك وخدماتها بشكل مقنع، جاهز للطباعة والإرسال.",
+    tags: ["تنظيم المحتوى", "تصميم الصفحات", "PDF"],
     price: "يبدأ من ١٠٠ $",
-    work: "profiles",
+    cat: "profiles",
+    tone: "white",
   },
   {
     title: "منشورات التواصل الاجتماعي",
-    gets: ["٥ منشورات على الأقل", "قوالب قابلة للتعديل", "مقاسات كل المنصات"],
-    time: "حسب عدد المنشورات",
+    line: "تصاميم بهوية علامتك لكل المنصات، ٥ منشورات على الأقل.",
+    tags: ["منشورات", "قوالب", "حملات"],
     price: "يبدأ من ٣٥ $",
-    work: "social",
+    cat: "social",
+    tone: "gray",
   },
   {
-    title: "العروض التقديمية",
-    gets: ["تصميم الشرائح", "رسوم بيانية واضحة", "ملف قابل للتعديل"],
-    time: "٥–١٠ أيام",
-    price: "حسب عدد الشرائح",
-    work: "presentations",
-  },
-  {
-    title: "التغليف",
-    gets: ["تصميم العبوة", "ملفات جاهزة للمطبعة"],
-    time: "حسب المنتج",
-    price: "اطلب عرض سعر",
-    work: "branding",
+    title: "العروض والتغليف",
+    line: "عروض تقديمية واضحة، وتصميم عبوات جاهزة للمطبعة.",
+    tags: ["عروض تقديمية", "تغليف", "مطبوعات"],
+    price: "حسب المشروع",
+    cat: "presentations",
+    tone: "black",
   },
 ];
 
-function Services() {
+const TONES = {
+  black: {
+    card: "bg-[#0b0b0b] text-white border border-white/10",
+    tag: "border-white/25",
+    dot: "red" as const,
+    muted: "text-white/70",
+  },
+  red: {
+    card: "bg-accent text-black",
+    tag: "border-black/30",
+    dot: "dark" as const,
+    muted: "text-black/75",
+  },
+  white: {
+    card: "bg-[#f3f1ec] text-black",
+    tag: "border-black/20",
+    dot: "dark" as const,
+    muted: "text-black/70",
+  },
+  gray: {
+    card: "bg-[#1d1d1d] text-white border border-white/10",
+    tag: "border-white/25",
+    dot: "light" as const,
+    muted: "text-white/70",
+  },
+};
+
+function Services({ projects }: { projects: PortfolioDTO[] }) {
+  // One real project image per service (latest in that category).
+  const imageFor = (cat: string, i: number) => {
+    const list = projects
+      .filter((p) => p.category_slug === cat && (p.mockup || p.cover))
+      .sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""));
+    const p = list[i % Math.max(1, list.length)] ?? projects[i];
+    return p ? p.mockup || p.cover : "";
+  };
+
   return (
-    <section id="services" className="scroll-mt-24 border-y border-white/10 bg-black">
-      <div className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-        <SectionHead
-          kicker="الخدمات والأسعار"
-          title="ماذا أقدم، وبكم"
-          lede="اختر الخدمة لترى ما ستستلمه والمدة والسعر المبدئي."
-        />
-        <div className="-mx-6 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-3 [&::-webkit-scrollbar]:hidden">
-          {SERVICE_OFFERS.map((o, i) => (
+    <section id="services" className="mx-auto max-w-[1400px] scroll-mt-24 px-3 sm:px-6">
+      <div className="px-3 sm:px-0">
+        <Heading kicker="الخدمات والأسعار" title="ماذا أقدم، وبكم" />
+      </div>
+      <div className="mt-10">
+        {SERVICE_OFFERS.map((s, i) => {
+          const tone = TONES[s.tone];
+          const img = imageFor(s.cat, i === 1 ? 1 : 0);
+          return (
             <article
-              key={o.title}
-              className="group flex w-[82%] shrink-0 snap-center flex-col rounded-[1.75rem] border border-white/10 bg-[#111] p-6 transition-colors hover:border-accent/50 sm:w-auto"
+              key={s.title}
+              className={`sticky mb-5 overflow-hidden rounded-[2rem] ${tone.card}`}
+              style={{ top: `calc(5.5rem + ${i * 14}px)` }}
             >
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="font-display text-xl font-bold md:text-2xl">{o.title}</h3>
-                <span className="font-display text-sm text-white/30">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </div>
-              <ul className="mt-5 flex flex-wrap gap-2">
-                {o.gets.map((g) => (
-                  <li
-                    key={g}
-                    className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/80"
-                  >
-                    {g}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto pt-8">
-                <div className="flex items-end justify-between gap-3">
-                  <div>
-                    <div className="text-xs text-muted-foreground">السعر</div>
-                    <div className="font-display text-2xl font-bold text-accent">{o.price}</div>
-                  </div>
-                  <div className="text-end">
-                    <div className="text-xs text-muted-foreground">المدة</div>
-                    <div className="text-sm font-semibold">{o.time}</div>
+              <div className="grid min-h-[440px] gap-6 p-6 md:min-h-[520px] md:grid-cols-2 md:p-10">
+                <div className="flex flex-col">
+                  <h3 className="font-display text-3xl font-bold md:text-6xl">{s.title}</h3>
+                  <div className="mt-auto pt-10">
+                    <ul className="flex flex-wrap gap-2">
+                      {s.tags.map((tg) => (
+                        <li
+                          key={tg}
+                          className={`rounded-full border px-3 py-1 text-xs ${tone.tag}`}
+                        >
+                          {tg}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className={`mt-4 max-w-md text-sm font-semibold md:text-base ${tone.muted}`}>
+                      {s.line}
+                    </p>
+                    <div className="mt-6 flex flex-wrap items-center gap-4">
+                      <span className="font-display text-2xl font-bold md:text-3xl">{s.price}</span>
+                      <Link
+                        to="/contact"
+                        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold ${tone.tag} ${focusRing}`}
+                      >
+                        اطلب عرض سعر
+                      </Link>
+                    </div>
                   </div>
                 </div>
-                <div className="mt-5 grid grid-cols-2 gap-2">
-                  <a
-                    href={`/projects?cat=${o.work}#browse`}
-                    className={`inline-flex items-center justify-center whitespace-nowrap rounded-full border border-white/15 px-3 py-2.5 text-sm font-semibold hover:border-white/50 ${focusRing}`}
-                  >
+                <a
+                  href={`/projects?cat=${s.cat}#browse`}
+                  className={`group relative order-first block min-h-[200px] overflow-hidden rounded-[1.5rem] md:order-none ${focusRing}`}
+                  aria-label={`شاهد أمثلة: ${s.title}`}
+                >
+                  {img && (
+                    <img
+                      src={img}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
+                  <span className="absolute start-4 top-4">
+                    <ArrowDot tone={tone.dot} size="lg" />
+                  </span>
+                  <span className="absolute bottom-4 start-4 rounded-full bg-black/70 px-3 py-1 text-xs text-white backdrop-blur">
                     شاهد أمثلة
-                  </a>
-                  <Link
-                    to="/contact"
-                    className={`inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-full bg-white px-3 py-2.5 text-sm font-bold text-black transition-colors hover:bg-accent ${focusRing}`}
-                  >
-                    اطلب عرض سعر
-                  </Link>
-                </div>
+                  </span>
+                </a>
               </div>
             </article>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </section>
   );
 }
 
-/* ------------------------------------------------------------- 5. Process */
+/* ================================================================ Process (rows) */
 
 function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
   const { t } = useLang();
   const copy = methodology?.copy;
   if (copy && copy.is_visible === false) return null;
   const pick = (v?: string | null, fb = "") => (v && v.trim() ? v : fb);
-
   const cmsSteps = methodology?.steps ?? [];
   const steps = cmsSteps.length
     ? cmsSteps.map((s) => ({ key: s.id, title: pick(s.title_ar), desc: pick(s.description_ar) }))
@@ -510,23 +472,29 @@ function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
       }));
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
-      <SectionHead
+    <section className="mx-auto max-w-[1400px] px-6 py-24 md:py-32">
+      <Heading
         kicker={pick(copy?.kicker_ar, t("process_kicker"))}
         title={pick(copy?.title_ar, t("process_title"))}
-        lede={pick(copy?.lede_ar, t("process_lede"))}
+        action={
+          <Pill to="/contact" variant="ghost">
+            هيا نتحدث
+          </Pill>
+        }
       />
-      <ol className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {steps.map((step, i) => (
+      <ol className="mt-12 border-t border-white/10">
+        {steps.map((s, i) => (
           <li
-            key={step.key}
-            className="relative rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6"
+            key={s.key}
+            className="grid grid-cols-[3.5rem_1fr] items-start gap-4 border-b border-white/10 py-7 md:grid-cols-[6rem_1fr_1.4fr] md:items-center md:gap-10 md:py-9"
           >
-            <span className="font-display text-5xl font-bold text-transparent [-webkit-text-stroke:1px_rgba(255,72,72,0.8)]">
+            <span className="font-display text-4xl font-bold text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.45)] md:text-6xl">
               {String(i + 1).padStart(2, "0")}
             </span>
-            <h3 className="mt-4 font-display text-xl font-bold">{step.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
+            <h3 className="font-display text-2xl font-bold md:text-4xl">{s.title}</h3>
+            <p className="col-start-2 text-sm leading-relaxed text-muted-foreground md:col-start-auto md:text-base">
+              {s.desc}
+            </p>
           </li>
         ))}
       </ol>
@@ -534,48 +502,146 @@ function Process({ methodology }: { methodology?: MethodologyDataDTO }) {
   );
 }
 
-/* ----------------------------------------------------------------- 7. CTA */
+/* ================================================================ Sectors (rows with arrows) */
+
+function Sectors({ projects }: { projects: PortfolioDTO[] }) {
+  const bySector = new Map<string, PortfolioDTO[]>();
+  for (const p of projects) {
+    const k = sectorOf(p.industry);
+    bySector.set(k, [...(bySector.get(k) ?? []), p]);
+  }
+  const rows = SECTORS.filter((s) => bySector.get(s.key)?.length)
+    .sort((a, b) => bySector.get(b.key)!.length - bySector.get(a.key)!.length)
+    .slice(0, 7);
+
+  return (
+    <section className="mx-auto max-w-[1400px] px-6 pb-24 md:pb-32">
+      <Heading
+        kicker="ما مجال شركتك؟"
+        title="مجالات اشتغلت فيها"
+        action={
+          <Pill to="/projects" variant="ghost">
+            كل الأعمال
+          </Pill>
+        }
+      />
+      <ul className="mt-12 border-t border-white/10">
+        {rows.map((s) => {
+          const list = bySector.get(s.key)!;
+          return (
+            <li key={s.key} className="border-b border-white/10">
+              <a
+                href={`/projects?sector=${s.key}#browse`}
+                className={`group grid grid-cols-[1fr_auto] items-center gap-4 py-6 md:grid-cols-[1.3fr_1fr_auto] md:py-8 ${focusRing}`}
+              >
+                <span className="flex items-center gap-4 font-display text-3xl font-bold transition-colors group-hover:text-accent md:text-5xl">
+                  <span className="text-2xl transition-transform group-hover:-translate-x-2 md:text-4xl">
+                    ←
+                  </span>
+                  {s.ar}
+                </span>
+                <span className="hidden text-sm text-muted-foreground md:block">
+                  {list
+                    .slice(0, 3)
+                    .map((p) => p.name_ar)
+                    .join(" · ")}
+                </span>
+                <span className="rounded-full bg-white/[0.06] px-3 py-1 text-sm">
+                  {list.length} مشروع
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+/* ================================================================ Work */
+
+function Work({ projects }: { projects: PortfolioDTO[] }) {
+  const latest = [...projects]
+    .filter((p) => p.cover)
+    .sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""))
+    .slice(0, 6);
+  return (
+    <section className="mx-auto max-w-[1400px] px-6 py-24 md:py-32">
+      <Heading
+        kicker="أحدث الأعمال"
+        title="مشاريع قريبة"
+        action={
+          <Pill to="/projects" variant="light">
+            كل المشاريع
+          </Pill>
+        }
+      />
+      <div className="-mx-6 mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 [&::-webkit-scrollbar]:hidden">
+        {latest.map((p) => (
+          <Link
+            key={p.slug}
+            to={`/projects/${p.category_slug ?? "branding"}/${p.slug}`}
+            className={`group block w-[78%] shrink-0 snap-center md:w-auto ${focusRing}`}
+          >
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-white/5">
+              <img
+                src={p.cover}
+                alt={p.name_ar}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute bottom-3 start-3 flex flex-wrap gap-1.5">
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-black">
+                  {CAT_AR[p.category_slug ?? ""] ?? "مشروع"}
+                </span>
+                {p.year && (
+                  <span className="rounded-full bg-black/70 px-3 py-1 text-xs text-white backdrop-blur">
+                    {p.year}
+                  </span>
+                )}
+              </div>
+            </div>
+            <h3 className="mt-4 font-display text-xl font-bold transition-colors group-hover:text-accent">
+              {p.name_ar}
+            </h3>
+            {p.short_ar && (
+              <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">{p.short_ar}</p>
+            )}
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ================================================================ CTA */
 
 function CTA() {
-  const { t } = useLang();
   return (
-    <section className="mx-auto max-w-7xl px-6 pb-20 md:pb-28">
-      <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-black px-6 py-14 md:px-14 md:py-20">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-40 -start-20 h-[420px] w-[420px] rounded-full bg-accent/25 blur-[120px]"
-        />
-        <div className="relative flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <h2 className="font-display text-4xl font-bold leading-tight md:text-6xl">
-              {t("cta_title_a")}
-              <span className="block text-accent">{t("cta_title_b")}</span>
-            </h2>
-            <p className="mt-5 text-muted-foreground md:text-lg">{t("cta_sub")}</p>
-            <p className="mt-4 inline-flex items-center gap-2 text-sm text-white/70">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              {t("cta_reply_time")}
-            </p>
-          </div>
-          <div className="flex flex-col items-start gap-3 md:items-end">
-            <PillLink to="/contact" primary className="px-8 py-4 text-base">
-              {t("cta_start_project")}
-            </PillLink>
-            <a
-              href={contact.whatsapp_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-white/70 underline-offset-4 hover:text-white hover:underline"
-            >
-              أو راسلني على واتساب
-            </a>
-            <a
-              href={`mailto:${contact.cta_email}`}
-              className="text-sm text-white/50 underline-offset-4 hover:text-white hover:underline"
-            >
-              {contact.cta_email}
-            </a>
-          </div>
+    <section className="px-3 pb-6 sm:px-6">
+      <div className="relative isolate mx-auto max-w-[1400px] overflow-hidden rounded-[2rem] bg-[#0b0b0b] px-6 py-16 md:px-14 md:py-24">
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <div className="yr-blob absolute -bottom-1/3 end-[-10%] h-[90%] w-[60%] rounded-full bg-accent/50 blur-[120px]" />
+          <div className="yr-blob absolute -top-1/3 start-[-10%] h-[70%] w-[50%] rounded-full bg-[#7b2cff]/25 blur-[120px] [animation-delay:-8s]" />
+        </div>
+        <h2 className="font-display text-5xl font-bold leading-[1.05] text-white md:text-[7rem]">
+          حدّثني
+          <br />
+          عن مشروعك.
+        </h2>
+        <div className="mt-10 flex flex-wrap items-center gap-3">
+          <Pill to="/contact" variant="red">
+            ابدأ مشروعك
+          </Pill>
+          <Pill href={contact.whatsapp_url} variant="ghost">
+            واتساب
+          </Pill>
+          <a
+            href={`mailto:${contact.cta_email}`}
+            className="ps-2 text-sm text-white/60 hover:text-white"
+          >
+            {contact.cta_email}
+          </a>
         </div>
       </div>
     </section>
