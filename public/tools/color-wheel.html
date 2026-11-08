@@ -343,14 +343,21 @@ let base='#1F4E5A',sec=null,sector='عام',mood='bold',moodManual=false,opts=[]
 
 /* ================= engine ================= */
 function makeAccent(screenHue){
-  const[L0]=hexOklch(base),bgLum=lum(base),dark=bgLum<.3;
+  // The accent follows the background: its lightness mirrors the background's
+  // lightness and its strength follows the background's strength, so every
+  // shade of the background gives its own accent (not one fixed preset).
+  // It stays inside a vivid band (never near-white or near-black).
+  const[Lb,Cb]=hexOklch(base),up=Lb<.6;
   const Hok=hexOklch(rgbToHex(...hslToRgb(screenHue,1,.5)))[2];
-  let C=MOODS[mood].C, L=dark?.74:.6;
-  if(mood==='classy')L=dark?.72:.56;
-  let hex=oklchHex(L,C,Hok),i=0;
-  // WCAG 1.4.11: at least 3:1 against the background
-  while(contrast(hex,base)<3&&i<40){L=clamp(L+(dark?.012:-.012),.25,.95);hex=oklchHex(L,C,Hok);i++}
-  return hex;
+  const gap=mood==='classy'?.3:.36;
+  const lo=.42,hi=.88;
+  let L=up?clamp(Lb+gap,.6,hi):clamp(Lb-gap,lo,.62);
+  const strength=.7+Math.min(Cb,.16)/.16*.6; // muted background -> softer accent, vivid -> stronger
+  const C=MOODS[mood].C*strength;
+  let hex=oklchHex(L,C,Hok),best=hex,bc=contrast(hex,base);
+  // WCAG 1.4.11: aim for at least 3:1 against the background
+  for(let i=0;i<60&&bc<3;i++){L+=up?.008:-.008;if(L<lo||L>hi)break;hex=oklchHex(L,C,Hok);const c=contrast(hex,base);if(c>bc){bc=c;best=hex}}
+  return best;
 }
 function neutralFor(){const[L,C,H]=hexOklch(base);const dark=lum(base)<.3;return oklchHex(dark?.84:.34,clamp(C*.25,.012,.03),H)}
 function evaluate(hex){
