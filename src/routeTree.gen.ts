@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BriefRouteImport } from './routes/brief'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as R404RouteImport } from './routes/404'
 import { Route as IndexRouteImport } from './routes/index'
@@ -46,6 +47,11 @@ const PackagesRoute = PackagesRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BriefRoute = BriefRouteImport.update({
+  id: '/brief',
+  path: '/brief',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/404': typeof R404Route
   '/admin': typeof AdminRoute
+  '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/404': typeof R404Route
   '/admin': typeof AdminRoute
+  '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/404': typeof R404Route
   '/admin': typeof AdminRoute
+  '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
     | '/'
     | '/404'
     | '/admin'
+    | '/brief'
     | '/contact'
     | '/packages'
     | '/rss.xml'
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/'
     | '/404'
     | '/admin'
+    | '/brief'
     | '/contact'
     | '/packages'
     | '/rss.xml'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/'
     | '/404'
     | '/admin'
+    | '/brief'
     | '/contact'
     | '/packages'
     | '/rss.xml'
@@ -247,6 +259,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   R404Route: typeof R404Route
   AdminRoute: typeof AdminRoute
+  BriefRoute: typeof BriefRoute
   ContactRoute: typeof ContactRoute
   PackagesRoute: typeof PackagesRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/brief': {
+      id: '/brief'
+      path: '/brief'
+      fullPath: '/brief'
+      preLoaderRoute: typeof BriefRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -399,6 +419,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   R404Route: R404Route,
   AdminRoute: AdminRoute,
+  BriefRoute: BriefRoute,
   ContactRoute: ContactRoute,
   PackagesRoute: PackagesRoute,
   RssDotxmlRoute: RssDotxmlRoute,
