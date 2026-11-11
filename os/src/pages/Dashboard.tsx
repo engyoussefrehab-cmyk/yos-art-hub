@@ -55,6 +55,7 @@ export function Dashboard() {
           const t = today();
           const weekAgo = today(-7);
           const newLeads = leads.filter((l) => l.status === "new_inquiry");
+          const recent = leads.filter((l) => !["won", "lost"].includes(l.status));
           const leadsThisWeek = leads.filter((l) => l.date >= weekAgo).length;
           const active = projects.filter((p) => !["completed", "cancelled"].includes(p.status));
           const overdue = followUps.filter((f) => f.due_date < t);
@@ -78,12 +79,12 @@ export function Dashboard() {
                 <Kpi to="/projects" label="Active projects" value={String(active.length)} hint={`${active.filter((p) => p.due_date && p.due_date < t).length} past due date`} />
               </div>
 
-              <Section title={`New inquiries (${newLeads.length})`} actions={<Link to="/leads" className="text-xs text-muted hover:text-fg">All leads →</Link>}>
-                {newLeads.length === 0 ? (
-                  <p className="text-sm text-muted">No new inquiries waiting.</p>
+              <Section title={`Latest inquiries (${recent.length})`} actions={<Link to="/leads" className="text-xs text-muted hover:text-fg">All leads →</Link>}>
+                {recent.length === 0 ? (
+                  <p className="text-sm text-muted">No inquiries yet.</p>
                 ) : (
                   <ul className="space-y-3">
-                    {newLeads.slice(0, 10).map((l, i) => (
+                    {recent.slice(0, 10).map((l, i) => (
                       <InquiryItem key={l.id} lead={l} defaultOpen={i === 0} />
                     ))}
                   </ul>
