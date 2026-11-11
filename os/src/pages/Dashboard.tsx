@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { must, supabase } from "../lib/supabase";
 import { useData } from "../lib/useData";
-import { LEAD_STATUSES, SOURCES, clientLabel, date, money, moneyMap, sumByCurrency, today } from "../lib/format";
+import { LEAD_STATUSES, SOURCES, date, money, moneyMap, sumByCurrency, today } from "../lib/format";
 import type { Currency, FollowUp, Lead, LeadSource, LeadStatus, Project, Quotation } from "../lib/types";
 import { balance } from "./Projects";
 import { Async, Button, Card, PageHeader, Section } from "../ui";
+import { InquiryItem } from "../BriefCard";
 
 /** Every number here is computed from the database — nothing is hard-coded. */
 export function Dashboard() {
@@ -17,7 +18,7 @@ export function Dashboard() {
       return d.toISOString().slice(0, 8) + "01";
     })();
     const [leads, quotes, projects, followUps, payments] = await Promise.all([
-      must(supabase.from("leads").select("id,ref,status,source,date,created_at,client_id,clients(name,brand)").order("created_at", { ascending: false })),
+      must(supabase.from("leads").select("id,ref,status,source,date,created_at,client_id,requested_service,brief,clients(name,brand,phone,email)").order("created_at", { ascending: false })),
       must(supabase.from("quotations").select("id,ref,status,currency,expiry_date,client_id,clients(name,brand),quotation_totals").eq("status", "sent")),
       must(supabase.from("projects").select("id,ref,name,status,budget,currency,due_date,clients(name,brand),payments(amount,currency)").not("status", "eq", "cancelled")),
       must(supabase.from("follow_ups").select("id,title,due_date,client_id,clients(name,phone)").is("done_at", null).lte("due_date", today()).order("due_date")),
@@ -77,6 +78,18 @@ export function Dashboard() {
                 <Kpi to="/projects" label="Active projects" value={String(active.length)} hint={`${active.filter((p) => p.due_date && p.due_date < t).length} past due date`} />
               </div>
 
+              <Section title={`New inquiries (${newLeads.length})`} actions={<Link to="/leads" className="text-xs text-muted hover:text-fg">All leads →</Link>}>
+                {newLeads.length === 0 ? (
+                  <p className="text-sm text-muted">No new inquiries waiting.</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {newLeads.slice(0, 10).map((l, i) => (
+                      <InquiryItem key={l.id} lead={l} defaultOpen={i === 0} />
+                    ))}
+                  </ul>
+                )}
+              </Section>
+
               <div className="grid gap-3 md:grid-cols-2">
                 <Card className="p-5">
                   <p className="text-xs text-muted">Received this month</p>
@@ -98,23 +111,6 @@ export function Dashboard() {
                         <li key={f.id} className="flex items-start justify-between gap-3">
                           <span>{f.title}</span>
                           <span className={`shrink-0 text-xs ${f.due_date < t ? "text-accent" : "text-muted"}`}>{f.due_date < t ? date(f.due_date) : "Today"}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Section>
-
-                <Section title="Newest inquiries" actions={<Link to="/leads" className="text-xs text-muted hover:text-fg">All →</Link>}>
-                  {newLeads.length === 0 ? (
-                    <p className="text-sm text-muted">No new inquiries waiting.</p>
-                  ) : (
-                    <ul className="space-y-2 text-sm">
-                      {newLeads.slice(0, 6).map((l) => (
-                        <li key={l.id} className="flex justify-between gap-3">
-                          <Link to={`/leads?open=${l.id}`} className="hover:text-accent">
-                            {clientLabel(l.clients)}
-                          </Link>
-                          <span className="shrink-0 text-xs text-muted">{SOURCES[l.source]} · {date(l.date)}</span>
                         </li>
                       ))}
                     </ul>
