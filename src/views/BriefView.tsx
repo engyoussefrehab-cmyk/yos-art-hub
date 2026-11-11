@@ -7,7 +7,7 @@
  * - On submit: saves a lead in YR Studio OS (Supabase RPC submit_inquiry —
  *   validation, rate limit, honeypot) and emails a copy via Web3Forms.
  */
-import { useEffect, useId, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { OS_SUPABASE_ANON_KEY, OS_SUPABASE_URL, WEB3FORMS_ACCESS_KEY } from "@/lib/site";
 import { SECTORS } from "@/lib/sectors";
 import { Pill, container, focusRing } from "@/components/studio";
@@ -413,6 +413,34 @@ export function BriefView() {
     return e;
   };
 
+  /** Tell the studio (Telegram, via a rate-limited RPC) that a visitor got stuck. Once per reason per visit. */
+  const reported = useRef(new Set<string>());
+  const report = (reason: string, stepIdx: number) => {
+    const key = `${stepIdx}:${reason}`;
+    if (reported.current.has(key)) return;
+    reported.current.add(key);
+    try {
+      void fetch(`${OS_SUPABASE_URL}/rest/v1/rpc/report_inquiry_problem`, {
+        method: "POST",
+        keepalive: true,
+        headers: { "Content-Type": "application/json", apikey: OS_SUPABASE_ANON_KEY, Authorization: `Bearer ${OS_SUPABASE_ANON_KEY}` },
+        body: JSON.stringify({
+          payload: {
+            reason: reason.slice(0, 300),
+            step: STEPS[stepIdx]?.title ?? "",
+            name: d.name.trim().slice(0, 100),
+            brand: d.brand.trim().slice(0, 100),
+            phone: d.phone.trim().slice(0, 30),
+            email: d.email.trim().slice(0, 150),
+            website: d.hp,
+          },
+        }),
+      }).catch(() => {});
+    } catch {
+      /* reporting must never disturb the form */
+    }
+  };
+
   const go = (i: number) => {
     setStep(i);
     setSendError(null);
@@ -421,7 +449,10 @@ export function BriefView() {
   const next = () => {
     const e = validate(step);
     setErrors(e);
-    if (Object.keys(e).length) return;
+    if (Object.keys(e).length) {
+      report("لم يستطع المتابعة: " + Object.values(e).filter(Boolean).join(" / "), step);
+      return;
+    }
     const n = Math.min(step + 1, STEPS.length - 1);
     setMaxStep((m) => Math.max(m, n));
     go(n);
@@ -473,6 +504,7 @@ export function BriefView() {
       const e = validate(i);
       if (Object.keys(e).length) {
         setErrors(e);
+        report("لم يستطع الإرسال: " + Object.values(e).filter(Boolean).join(" / "), i);
         go(i);
         return;
       }
@@ -522,6 +554,17 @@ export function BriefView() {
 
     const [lead, mail] = await Promise.allSettled([saveLead, sendEmail]);
     setSending(false);
+    if (lead.status === "rejected") {
+      const why = String((lead.reason as Error)?.message ?? "").slice(0, 200);
+      report(
+        mail.status === "fulfilled"
+          ? `الطلب لم يُحفظ في النظام (وصل بالإيميل فقط): ${why}`
+          : `فشل الإرسال بالكامل: ${why}`,
+        STEPS.length - 1,
+      );
+    } else if (mail.status === "rejected") {
+      report("الطلب حُفظ لكن إرسال الإيميل فشل", STEPS.length - 1);
+    }
     if (lead.status === "fulfilled" || mail.status === "fulfilled") {
       try {
         localStorage.removeItem(DRAFT_KEY);
