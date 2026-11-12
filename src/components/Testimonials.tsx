@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { testimonials as staticTestimonials, testimonialStats } from "@/lib/testimonials";
 import { useLang } from "@/i18n/use-lang";
 import { useCmsTestimonials } from "@/hooks/use-cms-data";
+import { fetchLiveReviews, type LiveReview } from "@/lib/reviews";
 
 type Item = { name: string; project: string; quote: string; rating: number };
 
@@ -261,7 +262,14 @@ function SliderNav({ step }: { step: (dir: 1 | -1) => void }) {
 export function Testimonials() {
   const { t, lang } = useLang();
   const rows = useCmsTestimonials();
+  const [live, setLive] = useState<LiveReview[]>([]);
+  useEffect(() => {
+    let alive = true;
+    fetchLiveReviews().then((r) => alive && setLive(r));
+    return () => { alive = false; };
+  }, []);
   const items = useMemo<Item[]>(() => {
+    const base = ((): Item[] => {
     if (rows.length > 0) {
       return rows.map((r) => ({
         name: (lang === "en" ? r.name_en : r.name_ar) || r.name_ar,
@@ -271,8 +279,10 @@ export function Testimonials() {
       }));
     }
     return staticTestimonials as unknown as Item[];
-  }, [rows, lang]);
-  const count = rows.length > 0 ? rows.length : testimonialStats.count;
+    })();
+    return [...live, ...base];
+  }, [rows, lang, live]);
+  const count = (rows.length > 0 ? rows.length : testimonialStats.count) + live.length;
   return (
     <section className="border-y border-border bg-cream" id="testimonials">
       <div className="mx-auto max-w-7xl px-6 py-24">

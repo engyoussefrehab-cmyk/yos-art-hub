@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as ReviewRouteImport } from './routes/review'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BriefRouteImport } from './routes/brief'
@@ -38,6 +39,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
   id: '/rss.xml',
   path: '/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewRoute = ReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PackagesRoute = PackagesRouteImport.update({
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
+  '/review': typeof ReviewRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/en/$': typeof EnSplatRoute
@@ -160,6 +167,7 @@ export interface FileRoutesByTo {
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
+  '/review': typeof ReviewRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/en/$': typeof EnSplatRoute
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/brief': typeof BriefRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
+  '/review': typeof ReviewRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/en/$': typeof EnSplatRoute
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/contact'
     | '/packages'
+    | '/review'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/en/$'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/contact'
     | '/packages'
+    | '/review'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/en/$'
@@ -251,6 +262,7 @@ export interface FileRouteTypes {
     | '/brief'
     | '/contact'
     | '/packages'
+    | '/review'
     | '/rss.xml'
     | '/sitemap.xml'
     | '/en/$'
@@ -274,6 +286,7 @@ export interface RootRouteChildren {
   BriefRoute: typeof BriefRoute
   ContactRoute: typeof ContactRoute
   PackagesRoute: typeof PackagesRoute
+  ReviewRoute: typeof ReviewRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   EnSplatRoute: typeof EnSplatRoute
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       path: '/rss.xml'
       fullPath: '/rss.xml'
       preLoaderRoute: typeof RssDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review': {
+      id: '/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof ReviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/packages': {
@@ -442,6 +462,7 @@ const rootRouteChildren: RootRouteChildren = {
   BriefRoute: BriefRoute,
   ContactRoute: ContactRoute,
   PackagesRoute: PackagesRoute,
+  ReviewRoute: ReviewRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   EnSplatRoute: EnSplatRoute,
