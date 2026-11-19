@@ -10,6 +10,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Clients, ClientDetail } from "./pages/Clients";
 import { Leads } from "./pages/Leads";
 import { Services } from "./pages/Services";
+import { Reviews } from "./pages/Reviews";
 import { Quotations, QuotationEditor, QuotationPrint } from "./pages/Quotations";
 import { Projects, ProjectDetail } from "./pages/Projects";
 import { FollowUps } from "./pages/FollowUps";
@@ -96,6 +97,7 @@ function Private() {
           <Route path="/clients/:id" element={<ClientDetail />} />
           <Route path="/leads" element={<Leads />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/reviews" element={<Reviews />} />
           <Route path="/quotations" element={<Quotations />} />
           <Route path="/quotations/:id" element={<QuotationEditor />} />
           <Route path="/quotations/:id/print" element={<QuotationPrint />} />
@@ -126,6 +128,7 @@ const NAV = [
   ["/follow-ups", "Follow-ups"],
   ["/templates", "Templates"],
   ["/services", "Services"],
+  ["/reviews", "Reviews"],
   ["/settings", "Settings"],
 ] as const;
 

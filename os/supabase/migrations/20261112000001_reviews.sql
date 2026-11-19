@@ -1,6 +1,6 @@
 -- Client reviews submitted from yrstudio.art/review.
--- Reviews publish automatically; hide a bad one with:
---   update public.reviews set is_visible = false where id = '...';
+-- New reviews wait for your approval (is_visible = false). Approve, hide or
+-- delete them from YR Studio OS -> Reviews.
 -- Anonymous visitors can only call submit_review() and public_reviews().
 
 create table if not exists public.reviews (
@@ -9,7 +9,7 @@ create table if not exists public.reviews (
   project text,
   text text not null,
   rating int not null check (rating between 1 and 5),
-  is_visible boolean not null default true,
+  is_visible boolean not null default false,
   ip text,
   created_at timestamptz not null default now()
 );
@@ -85,7 +85,7 @@ begin
     url := 'https://api.telegram.org/bot' || v_token || '/sendMessage',
     headers := '{"Content-Type": "application/json"}'::jsonb,
     body := jsonb_build_object('chat_id', v_chat, 'text',
-      E'⭐ تقييم جديد ' || new.rating || E'/5\nالاسم: ' || new.name
+      E'⭐ تقييم جديد بانتظار موافقتك ' || new.rating || E'/5\nالاسم: ' || new.name
       || E'\nالمشروع: ' || coalesce(new.project, '-') || E'\n\n' || left(new.text, 1500))
   );
   return new;

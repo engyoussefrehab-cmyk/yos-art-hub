@@ -59,7 +59,7 @@ export function ReviewView() {
       <PageHero
         kicker="رأيك يهمني"
         title={<>قيّم <span className="text-accent">تجربتك</span> معي</>}
-        lede="شكرا لثقتك. دقيقة واحدة لتخبرني كيف كانت التجربة، وسيظهر تقييمك مباشرة في آراء العملاء."
+        lede="شكرا لثقتك. دقيقة واحدة لتخبرني كيف كانت التجربة، وبعد مراجعته سيظهر في آراء العملاء."
       />
 
       <section className={`${container} py-14 md:py-20`}>
@@ -68,7 +68,7 @@ export function ReviewView() {
             <div role="status" className="rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-10 text-center text-white">
               <div className="text-5xl" aria-hidden>⭐</div>
               <h2 className="mt-4 font-display text-2xl font-bold">شكرا لك!</h2>
-              <p className="mt-2 text-white/70">تم نشر تقييمك في آراء العملاء بالأسفل.</p>
+              <p className="mt-2 text-white/70">وصل تقييمك، وسيظهر في آراء العملاء بعد المراجعة.</p>
             </div>
           ) : (
             <form
@@ -130,7 +130,7 @@ export function ReviewView() {
               >
                 {sending ? "جار الإرسال..." : "أرسل تقييمي"}
               </button>
-              <p className="mt-3 text-center text-xs text-white/40">سيظهر اسمك ورأيك علنا على الموقع.</p>
+              <p className="mt-3 text-center text-xs text-white/40">بعد الموافقة سيظهر اسمك ورأيك علنا على الموقع.</p>
             </form>
           )}
         </div>
