@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { testimonials as staticTestimonials, testimonialStats } from "@/lib/testimonials";
 import { useLang } from "@/i18n/use-lang";
 import { useCmsTestimonials } from "@/hooks/use-cms-data";
+import { Link } from "@tanstack/react-router";
 import { fetchLiveReviews, type LiveReview } from "@/lib/reviews";
 
 type Item = { name: string; project: string; quote: string; rating: number };
@@ -259,7 +260,7 @@ function SliderNav({ step }: { step: (dir: 1 | -1) => void }) {
 }
 
 
-export function Testimonials() {
+export function Testimonials({ showCta = true }: { showCta?: boolean }) {
   const { t, lang } = useLang();
   const rows = useCmsTestimonials();
   const [live, setLive] = useState<LiveReview[]>([]);
@@ -309,6 +310,17 @@ export function Testimonials() {
         </div>
 
         <Slider items={items} />
+
+        {showCta && (
+          <div className="mt-10 flex justify-center">
+            <Link
+              to="/review"
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-6 py-3 text-sm font-semibold transition hover:border-accent hover:bg-accent hover:text-accent-foreground"
+            >
+              قيّم تجربتك معي
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

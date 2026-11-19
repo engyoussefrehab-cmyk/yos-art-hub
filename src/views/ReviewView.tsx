@@ -136,7 +136,7 @@ export function ReviewView() {
         </div>
       </section>
 
-      <Testimonials />
+      <Testimonials showCta={false} />
     </>
   );
 }
