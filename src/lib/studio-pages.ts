@@ -1,15 +1,11 @@
 const STUDIO_PATHS = new Set(["/", "/projects", "/projects/"]);
 const PROJECT_DETAIL_PATH = /^\/projects\/[^/]+\/[^/]+\/?$/;
 
-export function studioSurface(pathname: string): "custom" | "light" | "dark" {
-  if (STUDIO_PATHS.has(pathname) || PROJECT_DETAIL_PATH.test(pathname)) return "custom";
-  if (
-    /^\/projects\/[^/]+\/?$/.test(pathname) ||
-    /^\/(tools|contact|brief)\/?$/.test(pathname) ||
-    /^\/insights(?:\/|$)/.test(pathname)
-  ) return "light";
-  return "dark";
+export function studioSurface(pathname: string): "custom" | "light" {
+  return STUDIO_PATHS.has(pathname) || PROJECT_DETAIL_PATH.test(pathname) ? "custom" : "light";
 }
+
+export const isAdminPath = (pathname: string) => pathname === "/admin" || pathname.startsWith("/admin/");
 
 export function isStandalonePath(pathname: string): boolean {
   const section = pathname.split("/")[1];

@@ -344,9 +344,6 @@ html, body { overflow-x: hidden; }
 .insights-content .gh-short { margin-top: 0.4rem; font-size: 0.95rem; color: var(--muted-foreground); }
 .insights-content .gh-short a { direction: ltr; unicode-bidi: isolate; }
 
-/* While the color tool's bottom action bar is on screen (mobile), hide the floating WhatsApp / back-to-top buttons so they don't cover it. */
-html[data-tool-bar="1"] .fixed.bottom-4 { opacity: 0 !important; pointer-events: none !important; }
-
 /* ── Studio motion (shared by all pages) ───────────────────────────── */
 .yr-blob { animation: yr-blob 18s ease-in-out infinite alternate; }
 @keyframes yr-blob {

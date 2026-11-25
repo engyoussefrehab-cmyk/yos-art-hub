@@ -1,5 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#ecedef">
 <title>مختبر الألوان</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -7,18 +9,13 @@
 <style>
 /* Layout: sticky brief panel on the start side, palette "proposals" stacked beside it on a neutral grey surround so colors are judged honestly. Studio identity: ink black, paper white, one red. */
 :root{
+  color-scheme:only light;
   --bg:#ECEDEF; --surface:#FFFFFF; --surface-2:#F4F5F6; --ink:#0C0C0C; --muted:#5B6068; --line:#D9DBDF;
   --red:#E03B3B; --red-ink:#FFFFFF; --ok:#1E7A4C; --warn:#9A5B00; --bad:#B42318;
   --display:'Alexandria','IBM Plex Sans Arabic',system-ui,sans-serif;
   --body:'IBM Plex Sans Arabic',system-ui,'Segoe UI',Tahoma,sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E0F11; --surface:#17181B; --surface-2:#202226; --ink:#F2F2F2; --muted:#9CA0A8; --line:#2B2D32;
-  --red:#FF4848; --red-ink:#0C0C0C; --ok:#5FCB93; --warn:#F2B45C; --bad:#FF7A6E; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0E0F11; --surface:#17181B; --surface-2:#202226; --ink:#F2F2F2; --muted:#9CA0A8; --line:#2B2D32;
-  --red:#FF4848; --red-ink:#0C0C0C; --ok:#5FCB93; --warn:#F2B45C; --bad:#FF7A6E; color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.65;padding-inline:16px;padding-block:20px 40px}

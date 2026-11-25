@@ -7,6 +7,7 @@ export const Route = createFileRoute("/tools/color-wheel")({
       { title: "عجلة الألوان — اختار اللون اللي يشد العين | يوسف رحاب" },
       { name: "description", content: "اختار لون الخلفية ومجال مشروعك، وخُد اللون اللي هيشد العين مع سبب اختياره واختبارات عمى الألوان ووضوح اللون." },
     ],
+    links: [{ rel: "canonical", href: "/tools/color-wheel/" }],
   }),
   component: ColorWheelEmbed,
 });

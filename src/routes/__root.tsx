@@ -1,4 +1,3 @@
-import { ColourField } from "@/components/studio";
 import { StudioPage } from "@/components/studio-site";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -16,7 +15,7 @@ import appCss from "../styles.css?url";
 import studioCss from "@/components/studio-site.css?url";
 import { useLang, detectLang } from "@/i18n/use-lang";
 import { Toaster } from "@/components/ui/sonner";
-import { isStandalonePath, studioSurface, STUDIO_FONTS, STUDIO_FONT_PRELOAD } from "@/lib/studio-pages";
+import { isAdminPath, isStandalonePath, studioSurface, STUDIO_FONTS, STUDIO_FONT_PRELOAD } from "@/lib/studio-pages";
 
 import seo from "@/content/seo.json";
 import contact from "@/content/contact.json";
@@ -30,8 +29,7 @@ export function NotFoundComponent() {
   const arrow = isAr ? "←" : "→";
   return (
     <div className="px-3 pt-3 sm:px-6" dir={isAr ? "rtl" : "ltr"}>
-    <div className="relative isolate mx-auto flex min-h-[80svh] max-w-[1400px] items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] px-6 py-24">
-      <ColourField />
+    <div className="mx-auto flex min-h-[65svh] max-w-[1400px] items-center justify-center rounded-xl border border-border bg-card px-6 py-14 md:py-20">
 
       <div className="relative z-10 mx-auto w-full max-w-2xl text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-accent">
@@ -176,10 +174,13 @@ function RootShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const lang = detectLang(pathname);
   const dir = lang === "ar" ? "rtl" : "ltr";
-  const light = studioSurface(pathname) !== "dark";
+  const admin = isAdminPath(pathname);
+  const scheme = admin ? "dark" : "only light";
   return (
-    <html lang={lang} dir={dir} className={light ? undefined : "dark"} style={{ colorScheme: light ? "light" : "dark" }}>
+    <html lang={lang} dir={dir} className={admin ? "dark" : "studio-light"} style={{ colorScheme: scheme }}>
       <head>
+        <meta name="color-scheme" content={scheme} />
+        <meta name="theme-color" content={admin ? "#161616" : "#f3efe7"} />
         <HeadContent />
       </head>
       <body>{children}<Scripts /></body>
@@ -223,7 +224,7 @@ function LangSync() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+  const isAdmin = isAdminPath(pathname);
   const previousPage = useRef<string | undefined>(undefined);
   const measurementId = analytics.google_analytics_id.trim();
 

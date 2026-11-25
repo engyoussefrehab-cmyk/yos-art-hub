@@ -4,7 +4,7 @@
  * «آراء العملاء» slider below and on the home page.
  */
 import { useId, useRef, useState, type FormEvent } from "react";
-import { PageHero, container } from "@/components/studio";
+import { StudioSectionHero, container } from "@/components/studio";
 import { Testimonials } from "@/components/Testimonials";
 import { submitReview } from "@/lib/reviews";
 
@@ -51,37 +51,37 @@ export function ReviewView() {
 
   const shown = hover || rating;
   const input =
-    "mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40";
-  const label = "block text-xs font-semibold uppercase tracking-widest text-white/60";
+    "mt-2 w-full rounded-lg border border-border bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40";
+  const label = "block text-xs font-semibold text-muted-foreground";
 
   return (
     <>
-      <PageHero
-        kicker="رأيك يهمني"
+      <StudioSectionHero
+        label="رأيك يهمني"
         title={<>قيّم <span className="text-accent">تجربتك</span> معي</>}
-        lede="شكرا لثقتك. دقيقة واحدة لتخبرني كيف كانت التجربة، وقد يظهر في آراء العملاء."
+        intro="شكرا لثقتك. دقيقة واحدة لتخبرني كيف كانت التجربة، وقد يظهر في آراء العملاء."
       />
 
       <section className={`${container} py-14 md:py-20`}>
         <div className="mx-auto max-w-2xl">
           {done ? (
-            <div role="status" className="rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-10 text-center text-white">
+            <div role="status" className="rounded-xl border border-border bg-card p-8 text-center text-foreground">
               <div className="text-5xl" aria-hidden>⭐</div>
               <h2 className="mt-4 font-display text-2xl font-bold">شكرا لك!</h2>
-              <p className="mt-2 text-white/70">وصلني تقييمك، وأقدّر وقتك وثقتك.</p>
+              <p className="mt-2 text-muted-foreground">وصلني تقييمك، وأقدّر وقتك وثقتك.</p>
             </div>
           ) : (
             <form
               onSubmit={onSubmit}
               noValidate
               dir="rtl"
-              className="rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-6 text-white md:p-10"
+              className="rounded-xl border border-border bg-card p-4 text-foreground sm:p-6 md:p-10"
             >
               <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
               <fieldset>
                 <legend className={label}>تقييمك العام</legend>
-                <div className="mt-3 flex items-center gap-3">
+                <div className="mt-3 flex flex-wrap items-center gap-3">
                   <div className="flex gap-1" dir="ltr" onMouseLeave={() => setHover(0)}>
                     {[1, 2, 3, 4, 5].map((n) => (
                       <button
@@ -91,16 +91,16 @@ export function ReviewView() {
                         aria-pressed={rating === n}
                         onClick={() => setRating(n)}
                         onMouseEnter={() => setHover(n)}
-                        className="rounded p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+                        className="grid size-10 place-items-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 sm:size-11"
                       >
                         <svg viewBox="0 0 20 20" width={36} height={36} fill="currentColor" aria-hidden
-                          className={n <= shown ? "text-accent" : "text-white/20"}>
+                          className={n <= shown ? "text-accent" : "text-muted-foreground/40"}>
                           <path d="M10 1.5l2.6 5.27 5.82.85-4.21 4.1.99 5.78L10 14.77l-5.2 2.73.99-5.78L1.58 7.62l5.82-.85L10 1.5z" />
                         </svg>
                       </button>
                     ))}
                   </div>
-                  <span className="text-sm text-white/70" aria-live="polite">{LABELS[shown]}</span>
+                  <span className="text-sm text-muted-foreground" aria-live="polite">{LABELS[shown]}</span>
                 </div>
               </fieldset>
 
@@ -121,7 +121,7 @@ export function ReviewView() {
                   placeholder="كيف كانت تجربتك؟ الجودة، التواصل، الالتزام بالمواعيد..." />
               </div>
 
-              {error && <p role="alert" className="mt-4 text-sm text-red-400">{error}</p>}
+              {error && <p role="alert" className="mt-4 text-sm text-accent">{error}</p>}
 
               <button
                 type="submit"
@@ -130,7 +130,7 @@ export function ReviewView() {
               >
                 {sending ? "جار الإرسال..." : "أرسل تقييمي"}
               </button>
-              <p className="mt-3 text-center text-xs text-white/40">قد يظهر اسمك ورأيك على الموقع.</p>
+              <p className="mt-3 text-center text-xs text-muted-foreground">قد يظهر اسمك ورأيك على الموقع.</p>
             </form>
           )}
         </div>

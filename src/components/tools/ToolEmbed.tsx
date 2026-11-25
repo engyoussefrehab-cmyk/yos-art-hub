@@ -8,7 +8,7 @@ type ToolEmbedProps = {
 };
 
 // Embeds a self-contained tool page from /public/tools and keeps the iframe
-// as tall as its content (no inner scrollbar) and in sync with the site theme.
+// as tall as its content so the page scrolls without a separate iframe scrollbar.
 export function ToolEmbed({ src, titleAr, titleEn }: ToolEmbedProps) {
   const { lang } = useLang();
   const frameRef = useRef<HTMLIFrameElement>(null);
@@ -22,11 +22,6 @@ export function ToolEmbed({ src, titleAr, titleEn }: ToolEmbedProps) {
     let contentMutations: MutationObserver | undefined;
     let resizeFrameRequest = 0;
     let frameWindow: Window | null = null;
-    const syncTheme = () => {
-      const frameDocument = frame.contentDocument;
-      if (!frameDocument?.documentElement) return;
-      frameDocument.documentElement.dataset.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
-    };
     const resizeFrame = () => {
       const frameDocument = frame.contentDocument;
       const frameBody = frameDocument?.body;
@@ -49,7 +44,6 @@ export function ToolEmbed({ src, titleAr, titleEn }: ToolEmbedProps) {
       resizeFrameRequest = requestAnimationFrame(resizeFrame);
     };
     const handleFrameLoad = () => {
-      syncTheme();
       const frameDocument = frame.contentDocument;
       if (!frameDocument?.body || !frameDocument.documentElement || !frameDocument.defaultView) return;
       contentObserver?.disconnect();
@@ -71,9 +65,6 @@ export function ToolEmbed({ src, titleAr, titleEn }: ToolEmbedProps) {
     // The iframe can finish loading before hydration attaches the listener;
     // wire the observers up right away in that case so the height keeps tracking.
     if (frame.contentDocument?.readyState === "complete" && frame.contentDocument.querySelector(".wrap")) handleFrameLoad();
-    const observer = new MutationObserver(syncTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-    syncTheme();
     scheduleResize();
 
     return () => {
@@ -82,7 +73,6 @@ export function ToolEmbed({ src, titleAr, titleEn }: ToolEmbedProps) {
       contentObserver?.disconnect();
       contentMutations?.disconnect();
       cancelAnimationFrame(resizeFrameRequest);
-      observer.disconnect();
       delete document.documentElement.dataset.toolBar;
     };
   }, []);

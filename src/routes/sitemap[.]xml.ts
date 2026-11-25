@@ -2,88 +2,53 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SITE_URL } from "@/lib/site";
 import insightArticles from "@/data/snapshot/insight_articles.json";
 import insightCategories from "@/data/snapshot/insight_categories.json";
+import portfolioProjects from "@/data/snapshot/portfolio_projects.json";
+import projectCategories from "@/data/snapshot/project_categories.json";
 
-type Entry = {
-  path: string;
-  changefreq: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
-  priority: string;
-  hasAlt?: boolean; // ar<->en pair
-};
+const publicPages = ["/", "/projects", "/contact", "/brief", "/tools", "/tools/color-brief/", "/tools/color-wheel/", "/insights"];
+const visibleProjectCategories = new Set(projectCategories.filter(({ is_hidden }) => !is_hidden).map(({ slug }) => slug));
+const articleCategorySlugs = new Map(insightCategories.map(({ id, slug }) => [id, slug]));
 
-// Static public routes (the site is Arabic only).
-const ARABIC: Entry[] = [
-  { path: "/", changefreq: "weekly", priority: "1.0", hasAlt: true },
-  { path: "/projects", changefreq: "weekly", priority: "0.9", hasAlt: true },
-  { path: "/projects/branding", changefreq: "weekly", priority: "0.8", hasAlt: false },
-  { path: "/projects/logos", changefreq: "weekly", priority: "0.8", hasAlt: false },
-  { path: "/projects/profiles", changefreq: "weekly", priority: "0.8", hasAlt: false },
-  { path: "/projects/social", changefreq: "weekly", priority: "0.8", hasAlt: false },
-  { path: "/contact", changefreq: "monthly", priority: "0.7", hasAlt: true },
-  { path: "/brief", changefreq: "monthly", priority: "0.7" },
-  { path: "/tools/color-brief", changefreq: "monthly", priority: "0.7", hasAlt: true },
-  { path: "/tools/color-wheel", changefreq: "monthly", priority: "0.7", hasAlt: true },
-  { path: "/tools", changefreq: "monthly", priority: "0.8", hasAlt: true },
-  { path: "/insights", changefreq: "weekly", priority: "0.9", hasAlt: true },
-  { path: "/insights/brand-strategy", changefreq: "weekly", priority: "0.7", hasAlt: true },
-  { path: "/insights/visual-identity", changefreq: "weekly", priority: "0.7", hasAlt: true },
-  { path: "/insights/logo-design", changefreq: "weekly", priority: "0.7", hasAlt: true },
-  { path: "/insights/presentation-design", changefreq: "weekly", priority: "0.7", hasAlt: true },
-  { path: "/insights/business", changefreq: "weekly", priority: "0.7", hasAlt: true },
-  { path: "/insights/marketing", changefreq: "weekly", priority: "0.7", hasAlt: true },
-  { path: "/insights/ai", changefreq: "weekly", priority: "0.7", hasAlt: true },
-  { path: "/insights/case-studies", changefreq: "weekly", priority: "0.7", hasAlt: true },
-  { path: "/insights/resources", changefreq: "weekly", priority: "0.7", hasAlt: true },
-];
+function makeSitemap() {
+  const pages = new Map<string, string | null>();
+  for (const path of publicPages) pages.set(path, null);
+  for (const slug of visibleProjectCategories) pages.set(`/projects/${encodeURIComponent(slug)}`, null);
+  for (const slug of articleCategorySlugs.values()) pages.set(`/insights/${encodeURIComponent(slug)}`, null);
 
-// Published insight articles (only those whose category exists).
-const catSlug = new Map((insightCategories as any[]).map((c) => [c.id, c.slug]));
-for (const a of insightArticles as any[]) {
-  const cat = catSlug.get(a.category_id);
-  if (a.status !== "published" || !cat) continue;
-  ARABIC.push({ path: `/insights/${cat}/${a.slug}`, changefreq: "monthly", priority: "0.8", hasAlt: true });
-}
-
-function buildXml(lastmod: string): string {
-  const urls: string[] = [];
-
-  for (const e of ARABIC) {
-    const arLoc = `${SITE_URL}${e.path}`;
-    urls.push(
-      [
-        `  <url>`,
-        `    <loc>${arLoc}</loc>`,
-        `    <lastmod>${lastmod}</lastmod>`,
-        `    <changefreq>${e.changefreq}</changefreq>`,
-        `    <priority>${e.priority}</priority>`,
-        `  </url>`,
-      ]
-        .filter(Boolean)
-        .join("\n"),
-    );
-
+  for (const project of portfolioProjects) {
+    const category = project.category_slug;
+    if (project.status === "published" && category && visibleProjectCategories.has(category)) {
+      pages.set(`/projects/${encodeURIComponent(category)}/${encodeURIComponent(project.slug)}`, project.updated_at || project.published_at);
+    }
+  }
+  for (const article of insightArticles) {
+    const category = articleCategorySlugs.get(article.category_id);
+    if (article.status === "published" && category) {
+      pages.set(`/insights/${encodeURIComponent(category)}/${encodeURIComponent(article.slug)}`, article.updated_at || article.published_at);
+    }
   }
 
+  const entries = Array.from(pages, ([path, date]) => {
+    const lastmod = date?.match(/^\d{4}-\d{2}-\d{2}/)?.[0];
+    return `  <url><loc>${SITE_URL}${path}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
+  });
   return [
-    `<?xml version="1.0" encoding="UTF-8"?>`,
-    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">`,
-    ...urls,
-    `</urlset>`,
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...entries,
+    "</urlset>",
   ].join("\n");
 }
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
-      GET: async () => {
-        const lastmod = new Date().toISOString().slice(0, 10);
-        const xml = buildXml(lastmod);
-        return new Response(xml, {
-          headers: {
-            "Content-Type": "application/xml; charset=utf-8",
-            "Cache-Control": "public, max-age=3600, s-maxage=3600",
-          },
-        });
-      },
+      GET: () => new Response(makeSitemap(), {
+        headers: {
+          "Content-Type": "application/xml; charset=utf-8",
+          "Cache-Control": "public, max-age=3600, s-maxage=3600",
+        },
+      }),
     },
   },
 });

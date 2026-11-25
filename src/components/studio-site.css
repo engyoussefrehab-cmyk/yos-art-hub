@@ -10,12 +10,17 @@
   font-display: swap;
   src: url("/fonts/thmanyah-serif-display-bold.woff2") format("woff2");
 }
-html:has(.yrh),
-body:has(.yrh) {
-  background: #f3efe7;
+html.studio-light {
+  color-scheme: only light;
+  --studio-paper: #f3efe7;
+  --background: var(--studio-paper);
+}
+html.studio-light,
+html.studio-light body {
+  background-color: var(--studio-paper);
 }
 .yrh {
-  --bg: #f3efe7;
+  --bg: var(--studio-paper, #f3efe7);
   --bg-2: #eae3d7;
   --ink: #3b1a1e;
   --ink-2: #5a3b3d;
@@ -36,7 +41,7 @@ body:has(.yrh) {
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
   min-height: 100vh;
-  color-scheme: light;
+  color-scheme: only light;
 }
 .yrh * {
   box-sizing: border-box;
@@ -346,9 +351,6 @@ body:has(.yrh) {
   background: var(--background);
   font-family: var(--sans);
 }
-.yrh .studio-content.dark {
-  color-scheme: dark;
-}
 .yrh .studio-content.light {
   --background: var(--bg);
   --foreground: var(--ink);
@@ -384,6 +386,10 @@ body:has(.yrh) {
   .yrh:has(.brief-page) .studio-top {
     display: none;
   }
+}
+html[data-tool-bar="1"] .yrh .wa,
+html[data-tool-bar="1"] .yrh .studio-top {
+  display: none;
 }
 .yrh .studio-skip:not(:focus) {
   position: absolute;
