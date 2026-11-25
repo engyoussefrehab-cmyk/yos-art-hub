@@ -4,9 +4,9 @@ import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import { SECTORS, OTHER_SECTOR, sectorOf } from "@/lib/sectors";
 import { StudioPage, AR } from "@/components/studio-site";
 
-/* /projects in the studio design: a title, one filter bar (service tabs + business
-   sector), then the work split into one section per service (6 each, with "view all").
-   Choosing a service shows that service alone, in one grid with "show more". Filters live in the URL
+/* /projects in the studio design. With no filter the page lists the sections only
+   (one row per service, no project images) plus a business-sector menu. Choosing a
+   section or a sector shows the filter bar and one grid with "show more". Filters live in the URL
    (?cat=…&sector=…) and apply after hydration so the static HTML matches. */
 
 type Filters = { sector: string; cat: string; country: string; year: string; tag: string; sort: "newest" | "oldest" | "featured" | "az" };
@@ -46,7 +46,6 @@ const byFeatured = (a: PortfolioDTO, b: PortfolioDTO) =>
   (b.published_at ?? "").localeCompare(a.published_at ?? "");
 
 const PAGE = 12;
-const PREVIEW = 6;
 
 export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
   const urlSearch = routeApi.useSearch() as Filters;
@@ -63,6 +62,11 @@ export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
         Object.fromEntries(Object.entries({ ...prev, ...next }).filter(([k, v]) => v && !(k === "sort" && v === "newest"))) as any,
       resetScroll: false,
     });
+  };
+
+  const openSection = (key: string) => {
+    setFilters({ cat: key, sector: "" });
+    document.getElementById("browse")?.scrollIntoView({ block: "start" });
   };
 
   const services = useMemo(
@@ -103,11 +107,41 @@ export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
         </div>
       </section>
 
+      {!search.cat && !search.sector ? (
+      <section className="browse g" id="browse" aria-label="أقسام الأعمال">
+        <nav className="secs" aria-label="أقسام الأعمال">
+          {services.map((s) => (
+            <a
+              className="sec rv"
+              key={s.key}
+              href={`/projects?cat=${s.key}`}
+              onClick={(e) => { e.preventDefault(); openSection(s.key); }}
+            >
+              <span className="scnt">{countLabel(s.n)}</span>
+              <h2>{s.label}</h2>
+              <p>{s.desc}</p>
+              <span className="sarr" aria-hidden="true">←</span>
+            </a>
+          ))}
+        </nav>
+        <div className="bysector rv">
+          <label className="sect">
+            <span>أو اختر مجال شركتك</span>
+            <select id="sector-index" value="" onChange={(e) => { setFilters({ sector: e.target.value }); document.getElementById("browse")?.scrollIntoView({ block: "start" }); }}>
+              <option value="">كل المجالات</option>
+              {sectors.map((s) => (
+                <option key={s.key} value={s.key}>{sectorLabel(s.key)} ({AR(s.n)})</option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </section>
+      ) : (
       <section className="browse g" id="browse" aria-label="تصفح الأعمال">
         <div className="fbar rv">
           <div className="tabs" role="group" aria-label="نوع الخدمة">
             <button type="button" aria-pressed={!search.cat} onClick={() => setFilters({ cat: "", sector: "" })}>
-              الكل <span>{AR(projects.length)}</span>
+              الأقسام
             </button>
             {services.map((s) => (
               <button
@@ -148,7 +182,7 @@ export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
             لا توجد أعمال بهذه التصفية حاليًا.
             <button type="button" className="pill" onClick={() => setFilters({ cat: "", sector: "" })}>اعرض كل الأعمال</button>
           </div>
-        ) : search.cat ? (
+        ) : (
           <>
             <div className="pgrid">
               {visible.map((p, i) => <Card key={p.slug} p={p} eager={i < 6} />)}
@@ -161,32 +195,9 @@ export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
               </div>
             )}
           </>
-        ) : (
-          SERVICES.map((s) => {
-            const items = results.filter((p) => p.category_slug === s.key);
-            if (!items.length) return null;
-            return (
-              <section className="grp" key={s.key} aria-labelledby={`g-${s.key}`}>
-                <div className="ghead">
-                  <div>
-                    <span className="gnum">{countLabel(items.length)}</span>
-                    <h2 id={`g-${s.key}`}>{s.label}</h2>
-                    <p>{s.desc}</p>
-                  </div>
-                  {items.length > PREVIEW && (
-                    <button type="button" className="pill" onClick={() => { setFilters({ cat: s.key }); document.getElementById("browse")?.scrollIntoView({ block: "start" }); }}>
-                      عرض الكل ({AR(items.length)}) ←
-                    </button>
-                  )}
-                </div>
-                <div className="pgrid">
-                  {items.slice(0, PREVIEW).map((p, i) => <Card key={p.slug} p={p} eager={i < 3} />)}
-                </div>
-              </section>
-            );
-          })
         )}
       </section>
+      )}
     </StudioPage>
   );
 }
@@ -250,17 +261,23 @@ const CSS = `
 .yrh .pill:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .yrh .pill span{font-weight:400;opacity:.75}
 .yrh .browse{scroll-margin-top:80px}
-.yrh .grp{padding-top:clamp(56px,6vw,96px)}
-.yrh .grp+.grp{margin-top:clamp(40px,5vw,72px);border-top:1px solid var(--line)}
-.yrh .ghead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
-.yrh .gnum{font-size:14px;color:var(--muted)}
-.yrh .ghead h2{font-family:var(--display);font-weight:700;font-size:clamp(32px,3.6vw,56px);line-height:1.15;margin-top:4px}
-.yrh .ghead p{color:var(--ink-2);margin-top:8px;max-width:48ch}
+.yrh .secs{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.yrh .sec{display:grid;grid-template-columns:minmax(140px,1fr) 2.2fr 2fr auto;align-items:center;gap:12px 32px;padding:clamp(26px,3vw,40px) 0;border-bottom:1px solid var(--line);transition:padding .35s,color .3s}
+.yrh .sec h2{font-family:var(--display);font-weight:700;font-size:clamp(34px,4.4vw,68px);line-height:1.1}
+.yrh .sec p{color:var(--ink-2);font-size:16px;max-width:40ch}
+.yrh .scnt{font-size:15px;color:var(--muted)}
+.yrh .sarr{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:22px;transition:all .3s}
+.yrh .sec:hover{padding-inline-start:16px}
+.yrh .sec:hover h2{color:var(--acc)}
+.yrh .sec:hover .sarr{background:var(--red);border-color:var(--red);color:var(--acc-ink)}
+.yrh .bysector{display:flex;justify-content:flex-start;margin-top:clamp(32px,4vw,48px)}
 .yrh .morew{display:flex;justify-content:center;margin-top:clamp(48px,6vw,80px)}
 .yrh .empty{margin-top:32px;padding:56px 24px;border:1px dashed var(--line);display:flex;flex-direction:column;align-items:center;gap:20px;color:var(--ink-2);text-align:center}
 
 @media (max-width:1000px){
   .yrh .pgrid{grid-template-columns:repeat(2,1fr)}
+  .yrh .sec{grid-template-columns:1fr 2fr auto}
+  .yrh .sec p{display:none}
   .yrh .fbar{flex-direction:column;align-items:stretch}
   .yrh .tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:calc(-1 * var(--gut));padding-inline:var(--gut)}
   .yrh .tabs::-webkit-scrollbar{display:none}
@@ -270,8 +287,9 @@ const CSS = `
 }
 @media (max-width:640px){
   .yrh .pgrid{grid-template-columns:1fr}
-  .yrh .grp .pc:nth-child(n+5){display:none}
-  .yrh .ghead .pill{width:100%;justify-content:center}
+  .yrh .sec{grid-template-columns:1fr auto;grid-template-areas:"c a" "h a" "p a";gap:4px 16px}
+  .yrh .sec .scnt{grid-area:c}.yrh .sec h2{grid-area:h}.yrh .sec p{grid-area:p;font-size:15px}.yrh .sec .sarr{grid-area:a;width:48px;height:48px}
+  .yrh .bysector .sect{width:100%;flex-wrap:wrap}
   .yrh .phead-foot{grid-template-columns:1fr}
   .yrh .clear{margin-inline-start:0}
 }
