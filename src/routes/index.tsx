@@ -1,19 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { HomeView } from "@/views/HomeView";
-import { listServices } from "@/lib/services.functions";
-import { listPortfolio } from "@/lib/portfolio.functions";
-import { getMethodology } from "@/lib/methodology.functions";
+import { StudioHome } from "@/views/StudioHome";
 
 import seo from "@/content/seo.json";
 export const Route = createFileRoute("/")({
-  loader: async () => {
-    const [services, projects, methodology] = await Promise.all([
-      listServices().catch(() => []),
-      listPortfolio({ data: {} }).catch(() => []),
-      getMethodology().catch(() => ({ copy: null, steps: [] })),
-    ]);
-    return { services, projects, methodology };
-  },
   head: () => ({
     meta: [
       { title: seo.home.ar.title },
@@ -30,6 +19,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:image", content: seo.home.ar.og_image },
     ],
     links: [
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Markazi+Text:wght@400;500;700&display=swap" },
       { rel: "canonical", href: "/" },
       { rel: "alternate", hrefLang: "ar", href: "/" },
       { rel: "alternate", hrefLang: "ar-SA", href: "/" },
@@ -41,6 +31,5 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeRoute() {
-  const { services, projects, methodology } = Route.useLoaderData();
-  return <HomeView services={services} projects={projects} methodology={methodology} />;
+  return <StudioHome />;
 }

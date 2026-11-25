@@ -174,9 +174,10 @@ function RootShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const lang = detectLang(pathname);
   const dir = lang === "ar" ? "rtl" : "ltr";
-  // Dark mode only.
+  // Dark mode everywhere except the Arabic homepage, which uses the ivory studio design.
+  const light = pathname === "/";
   return (
-    <html lang={lang} dir={dir} className="dark" style={{ colorScheme: "dark" }}>
+    <html lang={lang} dir={dir} className={light ? undefined : "dark"} style={{ colorScheme: light ? "light" : "dark" }}>
       <head>
         <HeadContent />
       </head>
@@ -253,6 +254,17 @@ function RootComponent() {
     });
     previousPage.current = window.location.href;
   }, [isAdmin, measurementId, pathname]);
+
+  if (pathname === "/") {
+    // The homepage brings its own header, footer and WhatsApp button.
+    return (
+      <QueryClientProvider client={queryClient}>
+        <LangSync />
+        <Toaster position="top-center" richColors closeButton />
+        <Outlet />
+      </QueryClientProvider>
+    );
+  }
 
   if (isAdmin) {
     return (
