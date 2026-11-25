@@ -1,6 +1,7 @@
 import { createFileRoute, stripSearchParams } from "@tanstack/react-router";
-import { ProjectsHubView } from "@/views/ProjectsHubView";
-import { listPortfolio, listCategories, getProjectsStats } from "@/lib/portfolio.functions";
+import { ProjectsStudio } from "@/views/ProjectsStudio";
+import { listPortfolio } from "@/lib/portfolio.functions";
+import { STUDIO_FONTS } from "@/lib/studio-pages";
 
 
 import seo from "@/content/seo.json";
@@ -36,21 +37,14 @@ export const Route = createFileRoute("/projects/")({
       { property: "og:description", content: seo.projects.ar.og_description },
       { property: "og:url", content: "/projects" },
     ],
-    links: [{ rel: "canonical", href: "/projects" }],
+    links: [STUDIO_FONTS, { rel: "canonical", href: "/projects" }],
   }),
-  loader: async () => {
-    const [projects, categories, stats] = await Promise.all([
-      listPortfolio({ data: {} }),
-      listCategories(),
-      getProjectsStats(),
-    ]);
-    return { projects, categories, stats };
-  },
+  loader: async () => ({ projects: await listPortfolio({ data: {} }) }),
   component: Page,
 });
 
 function Page() {
-  const { projects, categories, stats } = Route.useLoaderData();
-  return <ProjectsHubView projects={projects} categories={categories} stats={stats} routeId="/projects/" />;
+  const { projects } = Route.useLoaderData();
+  return <ProjectsStudio projects={projects} />;
 }
 

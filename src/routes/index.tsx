@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { StudioHome } from "@/views/StudioHome";
+import { STUDIO_FONTS } from "@/lib/studio-pages";
 
 import seo from "@/content/seo.json";
 export const Route = createFileRoute("/")({
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:image", content: seo.home.ar.og_image },
     ],
     links: [
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Markazi+Text:wght@400;500;700&display=swap" },
+      STUDIO_FONTS,
       { rel: "canonical", href: "/" },
       { rel: "alternate", hrefLang: "ar", href: "/" },
       { rel: "alternate", hrefLang: "ar-SA", href: "/" },

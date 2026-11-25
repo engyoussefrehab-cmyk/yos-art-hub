@@ -177,28 +177,6 @@ function mapCat(c: any, project_count = 0): CategoryDTO {
   };
 }
 
-export const listCategories = createServerFn({ method: "GET" })
-  .handler(async () => {
-    const supabase = publicClient();
-    const [cats, projs] = await Promise.all([
-      supabase
-        .from("project_categories")
-        .select(CAT_COLS)
-        .eq("is_hidden", false)
-        .order("sort_order", { ascending: true }),
-      supabase
-        .from("portfolio_projects")
-        .select("category_slug")
-        .eq("status", "published"),
-    ]);
-    if (cats.error) throw new Error(cats.error.message);
-    const counts = new Map<string, number>();
-    (projs.data ?? []).forEach((r: any) => {
-      if (r.category_slug) counts.set(r.category_slug, (counts.get(r.category_slug) ?? 0) + 1);
-    });
-    return (cats.data ?? []).map((c: any) => mapCat(c, counts.get(c.slug) ?? 0));
-  });
-
 export const getCategoryBySlug = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string }) => d)
   .handler(async ({ data }) => {
@@ -213,29 +191,3 @@ export const getCategoryBySlug = createServerFn({ method: "GET" })
     if (!row) return null;
     return mapCat(row);
   });
-
-
-
-/* ── Projects page statistics (admin-controlled) ─────────────── */
-
-export type ProjectsStatsDTO = {
-  projects_count: number;
-  countries_count: number;
-  sectors_count: number;
-};
-
-export const getProjectsStats = createServerFn({ method: "GET" }).handler(
-  async (): Promise<ProjectsStatsDTO> => {
-    const supabase = publicClient();
-    const { data } = await supabase
-      .from("projects_page_stats")
-      .select("projects_count,countries_count,sectors_count")
-      .eq("id", "default")
-      .maybeSingle();
-    return {
-      projects_count: data?.projects_count ?? 0,
-      countries_count: data?.countries_count ?? 0,
-      sectors_count: data?.sectors_count ?? 0,
-    };
-  },
-);

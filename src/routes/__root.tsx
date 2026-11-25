@@ -17,6 +17,7 @@ import logoFull from "@/assets/logo-full.png.asset.json";
 import { useLang, detectLang } from "@/i18n/use-lang";
 import { useCmsMenu, useCmsSettings } from "@/hooks/use-cms-data";
 import { Toaster } from "@/components/ui/sonner";
+import { isStudioPath } from "@/lib/studio-pages";
 
 import { pair } from "@/i18n/dictionary";
 import seo from "@/content/seo.json";
@@ -174,8 +175,8 @@ function RootShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const lang = detectLang(pathname);
   const dir = lang === "ar" ? "rtl" : "ltr";
-  // Dark mode everywhere except the Arabic homepage, which uses the ivory studio design.
-  const light = pathname === "/";
+  // Dark mode everywhere except the pages already moved to the ivory studio design.
+  const light = isStudioPath(pathname);
   return (
     <html lang={lang} dir={dir} className={light ? undefined : "dark"} style={{ colorScheme: light ? "light" : "dark" }}>
       <head>
@@ -255,8 +256,8 @@ function RootComponent() {
     previousPage.current = window.location.href;
   }, [isAdmin, measurementId, pathname]);
 
-  if (pathname === "/") {
-    // The homepage brings its own header, footer and WhatsApp button.
+  if (isStudioPath(pathname)) {
+    // Redesigned pages bring their own header, footer and WhatsApp button.
     return (
       <QueryClientProvider client={queryClient}>
         <LangSync />
