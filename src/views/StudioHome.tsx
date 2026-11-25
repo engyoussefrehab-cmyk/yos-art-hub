@@ -383,6 +383,7 @@ function Reviews({ reduce }: { reduce: boolean }) {
           </div>
         </figcaption>
       </figure>
+      <Link className="review-cta ul" to="/review">قيّم تجربتك معي ←</Link>
     </section>
   );
 }
@@ -436,6 +437,7 @@ const CSS = `
 .yrh .lg:hover i{opacity:1;background:var(--acc)}
 
 .yrh .voice{padding-top:clamp(100px,11vw,170px)}
+.yrh .review-cta{display:inline-flex;min-height:44px;align-items:center;margin-top:16px;font-weight:700;color:var(--acc-text)}
 .yrh .vrate{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
 .yrh .vrate b{font-family:var(--display);font-size:24px;line-height:1;color:var(--ink)}
 .yrh .stars{color:var(--red);letter-spacing:3px;font-size:16px}
