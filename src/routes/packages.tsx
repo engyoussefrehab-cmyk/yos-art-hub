@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-// The packages page was removed: starting prices now live on the home page.
-// Old links (bookmarks, Google, WhatsApp) forward to the services section.
+// Keep bookmarked package URLs pointing to the current services section.
 const DEST = "/#services";
 
 export const Route = createFileRoute("/packages")({
@@ -19,7 +18,7 @@ export const Route = createFileRoute("/packages")({
     }, []);
     return (
       <p style={{ padding: 40, textAlign: "center" }}>
-        <a href={DEST}>{DEST}</a>
+        <a href={DEST}>الخدمات</a>
       </p>
     );
   },

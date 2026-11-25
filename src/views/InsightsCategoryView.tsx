@@ -72,7 +72,7 @@ export function InsightsCategoryView({ category, articles, allCategories }: Prop
               .map((c) => (
                 <Link
                   key={c.slug}
-                  to={`${base}/${c.slug}`}
+                  to="/insights/$category" params={{ category: c.slug }}
                   className="rounded-full border border-white/20 px-4 py-2 text-sm text-white/80 transition-colors hover:border-white/60 hover:text-white"
                 >
                   {lang === "ar" ? c.label_ar : c.label_en}
@@ -99,7 +99,7 @@ function MiniCard({ article }: { article: InsightArticle }) {
     : { background: "linear-gradient(135deg,#1a1a2e,#16213e)" };
   return (
     <Link
-      to={`${base}/${article.category.slug}/${article.slug}`}
+      to="/insights/$category/$slug" params={{ category: article.category.slug, slug: article.slug }}
       className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] transition-colors hover:border-white/25"
     >
       <div className="aspect-[16/10] relative overflow-hidden" style={style} />

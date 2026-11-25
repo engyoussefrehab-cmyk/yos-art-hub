@@ -1,9 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { StudioHome } from "@/views/StudioHome";
-import { STUDIO_FONTS, STUDIO_FONT_PRELOAD } from "@/lib/studio-pages";
+import { getPublishedArticlesFn } from "@/lib/insights.functions";
 
 import seo from "@/content/seo.json";
 export const Route = createFileRoute("/")({
+  loader: async () => ({
+    posts: (await getPublishedArticlesFn()).slice(0, 3).map((article) => ({
+      title: article.title_ar || article.title_en,
+      to: `/insights/${article.category.slug}/${article.slug}`,
+      publishedAt: article.published_at,
+    })),
+  }),
   head: () => ({
     meta: [
       { title: seo.home.ar.title },
@@ -20,7 +27,6 @@ export const Route = createFileRoute("/")({
       { name: "twitter:image", content: seo.home.ar.og_image },
     ],
     links: [
-      STUDIO_FONTS, ...STUDIO_FONT_PRELOAD,
       { rel: "canonical", href: "/" },
       { rel: "alternate", hrefLang: "ar", href: "/" },
       { rel: "alternate", hrefLang: "ar-SA", href: "/" },
@@ -32,5 +38,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeRoute() {
-  return <StudioHome />;
+  const { posts } = Route.useLoaderData();
+  return <StudioHome posts={posts} />;
 }

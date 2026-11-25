@@ -13,6 +13,22 @@ export const focusRing =
 /** Standard page container width and side padding. */
 export const container = "mx-auto max-w-[1400px] px-6 md:px-10";
 
+export function StudioSectionHero({ title, intro, label, children }: {
+  title: ReactNode;
+  intro?: ReactNode;
+  label?: ReactNode;
+  children?: ReactNode;
+}) {
+  return (
+    <header className={`${container} border-b border-border pb-9 pt-12 sm:pb-14 sm:pt-20`}>
+      {label && <div className="mb-4 text-sm font-bold text-accent">{label}</div>}
+      <h1 className="font-display text-[clamp(3rem,7vw,6.5rem)] leading-[1.15] font-bold text-foreground">{title}</h1>
+      {intro && <p className="mt-4 max-w-2xl text-base leading-loose text-muted-foreground md:text-lg">{intro}</p>}
+      {children && <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">{children}</div>}
+    </header>
+  );
+}
+
 /** Card shell. */
 export const card = "rounded-[1.75rem] border border-white/10 bg-[#0b0b0b]";
 

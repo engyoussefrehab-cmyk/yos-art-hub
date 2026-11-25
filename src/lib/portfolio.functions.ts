@@ -12,6 +12,7 @@ function publicClient() {
 }
 
 export type PortfolioDTO = {
+  id: string;
   slug: string;
   name_ar: string;
   name_en: string;
@@ -54,6 +55,7 @@ function mapRow(r: any): PortfolioDTO {
   const cover = r.thumbnail_url || r.og_image_url || gallery[0] || "";
   const mockup = r.hero_image_url || gallery[1] || gallery[0] || cover;
   return {
+    id: r.id,
     slug: r.slug,
     name_ar: r.name_ar,
     name_en: r.name_en || r.name_ar,

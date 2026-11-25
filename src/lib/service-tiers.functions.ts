@@ -1,7 +1,6 @@
 import { createServerFn } from "@/lib/static-db/static-fn";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-const requireSupabaseAuth = null; // admin-only (static site)
 
 function publicClient() {
   return createClient<Database>(
@@ -85,8 +84,7 @@ export const getServiceTiersPageData = createServerFn({ method: "GET" }).handler
     if (featRes.error) throw new Error(featRes.error.message);
     return {
       page: (pageRes.data as ServiceTierPageDTO | null) ?? null,
-      tiers: (tiersRes.data ?? []).map((r) => {
-        const row = r as Record<string, unknown>;
+      tiers: (tiersRes.data ?? []).map((row: Record<string, unknown>) => {
         const raw = row.deliverables;
         const deliverables = Array.isArray(raw) ? (raw as TierDeliverable[]) : [];
         return { ...row, deliverables } as unknown as ServiceTierDTO;
@@ -95,28 +93,3 @@ export const getServiceTiersPageData = createServerFn({ method: "GET" }).handler
     };
   },
 );
-
-export const getServiceTierPageCopy = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    const supabase = (context as { supabase: ReturnType<typeof publicClient> }).supabase;
-    const { data, error } = await supabase
-      .from("service_tier_page")
-      .select("*")
-      .eq("id", "default")
-      .maybeSingle();
-    if (error) throw new Error(error.message);
-    return data as ServiceTierPageDTO | null;
-  });
-
-export const saveServiceTierPageCopy = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((d: Partial<ServiceTierPageDTO>) => d)
-  .handler(async ({ data, context }) => {
-    const supabase = (context as { supabase: ReturnType<typeof publicClient> }).supabase;
-    const { error } = await supabase
-      .from("service_tier_page")
-      .upsert({ id: "default", ...data });
-    if (error) throw new Error(error.message);
-    return { ok: true };
-  });

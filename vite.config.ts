@@ -49,6 +49,8 @@ export default defineConfig({
       pages: staticPages(),
       prerender: {
         enabled: true,
+        // Routes can share output directories. Write them serially on Windows.
+        concurrency: process.platform === "win32" ? 1 : 8,
         crawlLinks: true,
         autoSubfolderIndex: true,
         failOnError: true,

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, getRouteApi } from "@tanstack/react-router";
 import type { PortfolioDTO } from "@/lib/portfolio.functions";
 import { SECTORS, OTHER_SECTOR, sectorOf } from "@/lib/sectors";
-import { StudioPage, AR } from "@/components/studio-site";
+import { AR } from "@/components/studio-site";
 
 /* /projects in the studio design. With no filter the page lists the sections only
    (one row per service, no project images) plus a business-sector menu. Choosing a
@@ -97,7 +97,7 @@ export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
   const visible = results.slice(0, shown);
 
   return (
-    <StudioPage active="work">
+    <>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <section className="phead g">
         <h1 className="rv">الأعمال</h1>
@@ -198,7 +198,7 @@ export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
         )}
       </section>
       )}
-    </StudioPage>
+    </>
   );
 }
 

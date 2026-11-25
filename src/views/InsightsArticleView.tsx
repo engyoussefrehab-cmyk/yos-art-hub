@@ -145,7 +145,7 @@ export function InsightsArticleView({ article, allArticles }: Props) {
                 {lang === "ar" ? pair("nav_insights")[0] : pair("nav_insights")[1]}
               </Link>
               <span aria-hidden>/</span>
-              <Link to={`${base}/${category.slug}`} className="hover:text-white">
+              <Link to="/insights/$category" params={{ category: category.slug }} className="hover:text-white">
                 {catLabel}
               </Link>
             </nav>
@@ -300,7 +300,7 @@ export function InsightsArticleView({ article, allArticles }: Props) {
           <nav className="mt-12 grid gap-4 sm:grid-cols-2">
             {prev ? (
               <Link
-                to={`${base}/${prev.category.slug}/${prev.slug}`}
+                to="/insights/$category/$slug" params={{ category: prev.category.slug, slug: prev.slug }}
                 className="group rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] p-5 transition-all hover:border-accent/50"
               >
                 <span className="text-xs uppercase tracking-widest text-muted-foreground">
@@ -317,7 +317,7 @@ export function InsightsArticleView({ article, allArticles }: Props) {
             )}
             {next ? (
               <Link
-                to={`${base}/${next.category.slug}/${next.slug}`}
+                to="/insights/$category/$slug" params={{ category: next.category.slug, slug: next.slug }}
                 className="group rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] p-5 transition-all hover:border-accent/50"
               >
                 <span className="text-xs uppercase tracking-widest text-muted-foreground">
@@ -413,7 +413,7 @@ function RelatedCard({ article }: { article: InsightArticle }) {
     : { background: "linear-gradient(135deg,#1a1a2e,#0f3460)" };
   return (
     <Link
-      to={`${base}/${article.category.slug}/${article.slug}`}
+      to="/insights/$category/$slug" params={{ category: article.category.slug, slug: article.slug }}
       className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] transition-all hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
     >
       <div className="aspect-[16/9]" style={style} aria-hidden />

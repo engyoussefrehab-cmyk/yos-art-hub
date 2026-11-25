@@ -1,6 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { YRLockup, YRMark } from "@/components/yr-logo";
+import { NewsletterForm } from "@/components/NewsletterForm";
+import { useCmsMenu, useCmsSettings } from "@/hooks/use-cms-data";
+import type { studioSurface } from "@/lib/studio-pages";
 import contact from "@/content/contact.json";
 
 /* Shared frame for the redesigned pages (ivory / wine / brand red):
@@ -11,13 +14,47 @@ export const WA = contact.whatsapp_url;
 export const EMAIL = contact.cta_email;
 export const AR = (n: number) => String(n).replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[Number(d)]);
 
-export function StudioPage({ children, active }: { children: ReactNode; active?: "work" }) {
+type MenuLink = { href: string; label: string; newTab?: boolean };
+const headerLinks: MenuLink[] = [
+  { href: "/projects", label: "الأعمال" },
+  { href: "/#studio", label: "الاستوديو" },
+  { href: "/insights", label: "المقالات" },
+  { href: "/tools", label: "الأدوات" },
+  { href: "/contact", label: "تواصل" },
+];
+const footerLinks: MenuLink[] = [
+  { href: "/projects", label: "الأعمال" },
+  { href: "/#services", label: "الخدمات" },
+  { href: "/tools", label: "الأدوات" },
+];
+
+function useStudioMenu(location: string, defaults: MenuLink[]) {
+  const configured = useCmsMenu(location);
+  if (!configured.length) return defaults;
+  return configured.map((item) => ({ href: item.url, label: item.label_ar, newTab: item.open_in_new_tab }));
+}
+
+export function StudioPage({ children, pathname, surface }: {
+  children: ReactNode;
+  pathname: string;
+  surface: ReturnType<typeof studioSurface>;
+}) {
+  const links = useStudioMenu("footer_primary", footerLinks);
+  const socials = useCmsSettings()?.socials;
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="yrh" dir="rtl" lang="ar">
-      <style dangerouslySetInnerHTML={{ __html: SITE_CSS }} />
-      <Header active={active} />
-      <main id="main-content" tabIndex={-1}>{children}</main>
-      <footer className="contact g" id="contact">
+      <a className="studio-skip" href="#main-content" inert={menuOpen}>انتقل إلى المحتوى</a>
+      <Header pathname={pathname} open={menuOpen} setOpen={setMenuOpen} showBackToTop={surface !== "custom"} />
+      <main
+        id="main-content"
+        tabIndex={-1}
+        inert={menuOpen}
+        className={surface === "custom" ? undefined : `studio-content ${surface}`}
+      >
+        {children}
+      </main>
+      <footer className="contact g" id="contact" inert={menuOpen}>
         <div className="lbl rv">
           <h2>مشروع جديد؟</h2>
           <span>واتساب أو البريد الإلكتروني</span>
@@ -29,7 +66,7 @@ export function StudioPage({ children, active }: { children: ReactNode; active?:
           <div>
             <b>مشاريع جديدة</b>
             <a className="ul" href={`mailto:${EMAIL}`}>{EMAIL}</a>
-            <a className="ul" href={WA} dir="ltr" target="_blank" rel="noopener noreferrer">{contact.phone_display}</a>
+            <a className="ul" href={`tel:${contact.phone_e164}`} dir="ltr">{contact.phone_display}</a>
           </div>
           <div>
             <b>الاستوديو</b>
@@ -40,15 +77,15 @@ export function StudioPage({ children, active }: { children: ReactNode; active?:
             <a className="ul" href={contact.instagram_url} target="_blank" rel="noopener noreferrer">إنستجرام</a>
             <a className="ul" href={contact.tiktok_url} target="_blank" rel="noopener noreferrer">تيك توك</a>
             <a className="ul" href={contact.youtube_url} target="_blank" rel="noopener noreferrer">يوتيوب</a>
-            <a className="ul" href={contact.linkedin_url} target="_blank" rel="noopener noreferrer">لينكدإن</a>
+            <a className="ul" href={socials?.linkedin || contact.linkedin_url} target="_blank" rel="noopener noreferrer">لينكدإن</a>
+            {socials?.behance && <a className="ul" href={socials.behance} target="_blank" rel="noopener noreferrer">Behance</a>}
           </div>
           <div>
             <b>الموقع</b>
-            <a className="ul" href="/projects">الأعمال</a>
-            <Link className="ul" to="/packages">الباقات</Link>
-            <Link className="ul" to="/tools">الأدوات</Link>
+            {links.map((item) => <MenuAnchor key={item.href} item={item} className="ul" />)}
           </div>
         </div>
+        {surface !== "custom" && <NewsletterForm />}
         <div className="fbot">
           <span className="fmk">
             <YRMark className="fm" />
@@ -57,26 +94,54 @@ export function StudioPage({ children, active }: { children: ReactNode; active?:
           <span>جميع الحقوق محفوظة</span>
         </div>
       </footer>
-      <a className="wa" href={WA} target="_blank" rel="noopener noreferrer" aria-label="تواصل على واتساب">
+      <a className="wa" href={WA} target="_blank" rel="noopener noreferrer" aria-label="تواصل على واتساب" inert={menuOpen}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.8-1.1-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z" />
         </svg>
       </a>
-      <Reveal />
+      <Reveal pathname={pathname} />
     </div>
   );
 }
 
-function Header({ active }: { active?: "work" }) {
+function MenuAnchor({ item, className, current, onClick }: {
+  item: MenuLink;
+  className?: string;
+  current?: "page" | "location";
+  onClick?: () => void;
+}) {
+  return (
+    <a
+      className={className}
+      href={item.href}
+      target={item.newTab ? "_blank" : undefined}
+      rel={item.newTab ? "noopener noreferrer" : undefined}
+      aria-current={current}
+      onClick={onClick}
+    >
+      {item.label}
+    </a>
+  );
+}
+
+function Header({ pathname, open, setOpen, showBackToTop }: {
+  pathname: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  showBackToTop: boolean;
+}) {
   const [solid, setSolid] = useState(false);
   const [hide, setHide] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [farFromTop, setFarFromTop] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const links = useStudioMenu("header", headerLinks);
   useEffect(() => {
     let last = window.scrollY;
     const on = () => {
       const y = window.scrollY;
       setSolid(y > 40);
       setHide(y > last && y > 300);
+      setFarFromTop(y > 400);
       last = y;
     };
     on();
@@ -84,47 +149,60 @@ function Header({ active }: { active?: "work" }) {
     return () => window.removeEventListener("scroll", on);
   }, []);
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    const esc = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", esc);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", esc);
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const closeMenu = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      menuButton.current?.focus();
     };
-  }, [open]);
+    const desktop = window.matchMedia("(min-width: 1001px)");
+    const onResize = () => { if (desktop.matches) setOpen(false); };
+    window.addEventListener("keydown", closeMenu);
+    desktop.addEventListener("change", onResize);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", closeMenu);
+      desktop.removeEventListener("change", onResize);
+    };
+  }, [open, setOpen]);
   const close = () => setOpen(false);
+  const location = pathname.replace(/\/$/, "") || "/";
+  function current(href: string) {
+    if (href === location) return "page";
+    if (href.startsWith("/") && href !== "/" && location.startsWith(`${href}/`)) return "location";
+    return undefined;
+  }
   return (
     <>
       <header className={`g hd${solid ? " solid" : ""}${hide && !open ? " hide" : ""}`}>
-        <Link className="logo" to="/" aria-label="يوسف رحاب، مصمم هويات بصرية">
+        <Link className="logo" to="/" aria-label="يوسف رحاب، مصمم هويات بصرية" onClick={close}>
           <YRLockup className="lk" />
         </Link>
         <nav aria-label="الرئيسية">
-          <a className="ul nl" href="/projects">الأعمال</a>
-          <a className="ul nl" href="/#studio">الاستوديو</a>
-          <Link className="ul nl" to="/insights">المقالات</Link>
-          <Link className="ul nl" to="/contact">تواصل</Link>
-          <button className="menu" type="button" aria-expanded={open} aria-controls="mnav" onClick={() => setOpen(!open)}>
+          {links.map((item) => <MenuAnchor key={item.href} item={item} className="ul nl" current={current(item.href)} />)}
+          <button ref={menuButton} className="menu" type="button" aria-expanded={open} aria-controls="mnav" onClick={() => setOpen(!open)}>
             {open ? "إغلاق" : "القائمة"}
           </button>
         </nav>
       </header>
-      <div className="mnav" id="mnav" hidden={!open}>
-        <a href="/projects" onClick={close}>الأعمال</a>
-        <a href="/#studio" onClick={close}>الاستوديو</a>
-        <Link to="/insights" onClick={close}>المقالات</Link>
-        <Link to="/contact" onClick={close}>تواصل</Link>
+      <nav className="mnav" id="mnav" aria-label="قائمة الموقع" hidden={!open}>
+        {links.map((item) => <MenuAnchor key={item.href} item={item} current={current(item.href)} onClick={close} />)}
         <div className="mfoot">
           <a href={WA} dir="ltr" target="_blank" rel="noopener noreferrer">{contact.phone_display}</a>
           <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
         </div>
-      </div>
+      </nav>
+      {showBackToTop && farFromTop && !open && (
+        <button className="studio-top" type="button" aria-label="العودة للأعلى" onClick={() => window.scrollTo({ top: 0, behavior: "instant" })}>↑</button>
+      )}
     </>
   );
 }
 
 /* Fade sections in as they scroll into view. Content stays visible without script. */
-function Reveal() {
+function Reveal({ pathname }: { pathname: string }) {
   useEffect(() => {
     const root = document.querySelector(".yrh");
     if (!root || !("IntersectionObserver" in window)) return;
@@ -135,76 +213,6 @@ function Reveal() {
     );
     root.querySelectorAll(".rv").forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [pathname]);
   return null;
 }
-
-const SITE_CSS = `
-@font-face{font-family:"YR Display";font-weight:400 500;font-display:swap;src:url("/fonts/thmanyah-serif-display-medium.woff2") format("woff2")}
-@font-face{font-family:"YR Display";font-weight:600 900;font-display:swap;src:url("/fonts/thmanyah-serif-display-bold.woff2") format("woff2")}
-html:has(.yrh),body:has(.yrh){background:#F3EFE7}
-.yrh{--bg:#F3EFE7;--bg-2:#EAE3D7;--ink:#3B1A1E;--ink-2:#5A3B3D;--muted:#7A625F;--red:#FF4848;--acc:#E63B3B;--acc-text:#C8292B;--acc-ink:#3B1A1E;--line:rgba(59,26,30,.15);
-  --display:"YR Display","Markazi Text","Amiri",serif;--sans:"Almarai",system-ui,sans-serif;--gut:clamp(16px,3.4vw,48px);
-  background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;overflow-x:clip;min-height:100vh;color-scheme:light}
-.yrh *{box-sizing:border-box}
-.yrh a:not(.project-case *){color:inherit;text-decoration:none}
-.yrh img{display:block;max-width:100%}
-.yrh button:not(.project-case *){font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-.yrh :is(h1,h2,h3,p,blockquote,figure):not(.project-case *){margin:0}
-.yrh .g{padding-inline:var(--gut)}
-.yrh :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px}
-.yrh .lbl{font-size:15px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.yrh .lbl h2{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--ink);line-height:1.6}
-.yrh .lbl a{display:inline-block;padding-block:10px}
-.yrh .lbl a:hover{color:var(--acc-text)}
-.yrh .ul{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .35s}
-.yrh .ul:hover{background-size:100% 1px}
-.yrh .hd{position:fixed;top:0;inset-inline:0;z-index:45;display:flex;justify-content:space-between;align-items:center;height:72px;transition:background .4s,transform .4s}
-.yrh .hd.solid{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.yrh .hd.hide{transform:translateY(-100%)}
-.yrh .logo{display:flex;align-items:center;color:var(--ink)}
-.yrh .logo .lk{height:46px;width:auto;display:block}
-.yrh .logo .yr-mark{transition:fill .3s}
-.yrh .logo:hover .yr-mark{fill:var(--red)}
-.yrh .hd nav{display:flex;gap:28px;font-size:15px;align-items:center}
-.yrh .hd nav .nl{color:var(--ink-2)}
-.yrh .hd nav .nl:hover{color:var(--ink)}
-.yrh .menu{display:none;font-weight:700;min-height:44px;padding:0 6px}
-.yrh .mnav{position:fixed;inset:0;z-index:35;background:var(--bg);padding:110px var(--gut) 40px;display:flex;flex-direction:column;gap:6px}
-.yrh .mnav[hidden]{display:none}
-.yrh .mnav>a{font-family:var(--display);font-weight:700;font-size:44px;line-height:1.35;border-bottom:1px solid var(--line);padding-bottom:6px}
-.yrh .mfoot{margin-top:auto;display:flex;flex-direction:column;gap:6px;color:var(--ink-2)}
-.yrh .pill{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 28px;border-radius:999px;border:1px solid var(--line);font-weight:700;font-size:15px;transition:all .3s;white-space:nowrap}
-.yrh .pill:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.yrh .contact{padding-top:clamp(120px,13vw,200px)}
-.yrh .big{display:block;font-family:var(--display);font-weight:700;font-size:clamp(64px,13vw,220px);line-height:1;letter-spacing:-.03em;padding-bottom:.12em;transition:color .3s}
-.yrh .big:hover{color:var(--acc)}
-.yrh .big i{font-style:normal;display:inline-block;transition:transform .4s}
-.yrh .big:hover i{transform:translate(-10px,-10px)}
-.yrh .fcols{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:36px 0;border-top:1px solid var(--line);margin-top:clamp(28px,3vw,44px);font-size:15px}
-.yrh .fcols b{display:block;font-size:14px;color:var(--muted);font-weight:400;margin-bottom:8px}
-.yrh .fcols a{display:block;width:fit-content;padding-block:7px}
-.yrh .fbot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:20px 0 32px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
-.yrh .fmk{display:inline-flex;align-items:center;gap:10px}
-.yrh .fmk .fm{width:26px;height:auto;color:var(--ink)}
-.yrh .fmk b{color:var(--red)}
-.yrh .wa{position:fixed;right:18px;bottom:18px;z-index:55;width:56px;height:56px;border-radius:50%;background:var(--red);color:var(--acc-ink);display:grid;place-items:center;box-shadow:0 10px 26px rgba(59,26,30,.28);transition:transform .25s}
-.yrh .wa:hover{transform:scale(1.08)}
-.yrh .wa svg{width:28px;height:28px}
-.yrh.js .rv{opacity:0;transform:translateY(28px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
-.yrh.js .rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){
-  .yrh.js .rv{opacity:1;transform:none;transition:none}
-}
-@media (max-width:1000px){
-  .yrh .hd nav .nl{display:none}
-  .yrh .menu{display:block}
-  .yrh .fcols{grid-template-columns:1fr 1fr}
-}
-@media (max-width:640px){
-  .yrh{font-size:16px}
-  .yrh .logo .lk{height:38px}
-  .yrh .wa{width:52px;height:52px}
-}
-.yrh .hd nav .nl[aria-current="page"]{color:var(--ink);background-size:100% 1px}
-`;

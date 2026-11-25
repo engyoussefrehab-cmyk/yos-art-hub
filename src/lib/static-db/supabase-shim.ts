@@ -160,7 +160,11 @@ const auth = {
   signInWithPassword: async () => ({ data: null, error: { message: "Disabled on static site" } }),
 };
 
-export function createClient(..._args: any[]): any {
+export function createClient<_Schema = unknown>(
+  _url: string,
+  _key: string,
+  _options?: { auth?: object; global?: { fetch?: typeof fetch } },
+): any {
   return {
     from: (table: string) => new Query(table),
     rpc: async () => ({ data: null, error: null }),

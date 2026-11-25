@@ -40,11 +40,12 @@ export const getCategoriesFn = createServerFn({ method: "GET" }).handler(async (
   return (data ?? []) as InsightCategoryRow[];
 });
 
-export const getPublishedArticlesFn = createServerFn({ method: "GET" }).handler(async () => {
+export const getPublishedArticlesFn = createServerFn({ method: "GET" }).handler(async (): Promise<InsightArticle[]> => {
   const supabase = await getPublicClient();
   const { data, error } = await supabase
     .from("insight_articles")
     .select(ARTICLE_FIELDS)
+    .eq("status", "published")
     .order("published_at", { ascending: false })
     .limit(200);
   if (error) throw error;

@@ -5,7 +5,8 @@ import { sanitizeHtml } from "@/lib/insights-types";
 import type { PortfolioDTO, CategoryDTO } from "@/lib/portfolio.functions";
 
 import { pair } from "@/i18n/dictionary";
-import { Chip, Heading, PageHero, Pill, Stat, container, focusRing } from "@/components/studio";
+import { Chip, Heading, Pill, StudioSectionHero, container, focusRing } from "@/components/studio";
+import { AR } from "@/components/studio-site";
 export function CategoryView({
   category,
   projects,
@@ -23,29 +24,22 @@ export function CategoryView({
   const ctaLabel = lang === "ar" ? category.cta_label_ar : category.cta_label_en;
   const projectsHref = "/projects";
   const featuredIds = new Set(category.featured_project_ids ?? []);
-  const featured = projects.filter((p) => featuredIds.has((p as any).id));
-  const rest = projects.filter((p) => !featuredIds.has((p as any).id));
-  const ordered = [...featured, ...rest];
+  const ordered = [...projects].sort((a, b) => Number(featuredIds.has(b.id)) - Number(featuredIds.has(a.id)));
 
   return (
     <>
-      <PageHero
-        kicker={t("cat_kicker")}
-        title={label}
-        lede={intro || desc || undefined}
-        crumbs={[{ label: t("crumb_projects"), to: projectsHref }, { label }]}
-        image={category.hero_image_url || undefined}
-        aside={<Stat value={`${projects.length}`} label={t("projects_items")} />}
-      >
-        <Pill to="/contact" variant="light">
-          {t("cta_start_project")}
-        </Pill>
-      </PageHero>
+      <StudioSectionHero title={label} intro={intro || desc} label={<a href={projectsHref}>{t("crumb_projects")} ←</a>}>
+        <span className="text-sm text-muted-foreground">{AR(projects.length)} {t("projects_items")}</span>
+        <a href="/contact" className="rounded-full border border-border px-4 py-2 text-sm font-bold text-foreground hover:border-accent">{t("cta_start_project")}</a>
+      </StudioSectionHero>
 
-      <section className={`${container} pb-28 pt-16 md:pb-40 md:pt-24`}>
+      <section className={`${container} pb-12 pt-8 md:pb-20 md:pt-12`}>
+        {category.hero_image_url && (
+          <img src={category.hero_image_url} alt="" className="mb-8 max-h-[40svh] w-full rounded-xl object-cover md:mb-12" />
+        )}
         {content && (
           <article
-            className="prose prose-invert mb-16 max-w-3xl prose-headings:font-display"
+            className="prose mb-12 max-w-3xl prose-headings:font-display"
             dangerouslySetInnerHTML={{ __html: content }}
           />
         )}
@@ -55,13 +49,13 @@ export function CategoryView({
         {category.faq && category.faq.length > 0 && (
           <div className="mt-28 md:mt-40">
             <Heading kicker="أسئلة" title={pair("ui_categoryview_1")[0]} />
-            <div className="mt-10 border-t border-white/10">
+            <div className="mt-10 border-t border-border">
               {category.faq.map((f, i) => {
                 const q = f.q_ar;
                 const a = f.a_ar;
                 if (!q && !a) return null;
                 return (
-                  <details key={i} className="group border-b border-white/10 py-6">
+                  <details key={i} className="group border-b border-border py-6">
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-bold md:text-xl">
                       {q}
                       <span
@@ -101,7 +95,7 @@ function ProjectsList({
   const { lang } = useLang();
   if (projects.length === 0) {
     return (
-      <div className="rounded-[1.75rem] border border-dashed border-white/15 p-10 text-center text-muted-foreground">
+      <div className="rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground">
         {lang === "ar" ? pair("ui_categoryview_2")[0] : pair("ui_categoryview_2")[1]}
       </div>
     );
@@ -114,11 +108,11 @@ function ProjectsList({
         const href = `/projects/${categorySlug}/${p.slug}`;
         return (
           <Link key={p.slug} to={href} className={`group flex flex-col ${focusRing}`}>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-white/5 sm:rounded-[1.75rem]">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-cream">
               {p.cover && (
                 <img
                   src={p.cover}
-                  alt={name}
+                  alt=""
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />

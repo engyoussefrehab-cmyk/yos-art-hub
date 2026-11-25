@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { StudioPage, AR } from "@/components/studio-site";
+import { AR } from "@/components/studio-site";
 import clientLogos from "@/data/snapshot/client_logos.json";
+import services from "@/data/snapshot/services.json";
 import { testimonials as staticTestimonials, testimonialStats } from "@/lib/testimonials";
 import { fetchLiveReviews, type LiveReview } from "@/lib/reviews";
 
@@ -17,11 +18,9 @@ const WORKS = [
   { img: "/portfolio/muwajada/01.webp", name: "مواجدة", desc: "مركز استشارات نفسية", meta: "هوية بصرية، ٢٠٢٥", to: "/projects/branding/muwajada" },
 ];
 
-const POSTS = [
-  { title: "ملفات تسليم الشعار: ماذا يستلم العميل، وفيمَ تُستخدم كل صيغة", to: "/insights/resources/logo-delivery-files-guide" },
-  { title: "ردود جاهزة للعميل: أكثر من ١٠٠ موقف ورد للمصمم", to: "/insights/resources/client-replies-guide" },
-  { title: "نظام ترتيب المجلدات للمصممين: أي ملف تجده في ١٠ ثوانٍ", to: "/insights/resources/folder-organization-system" },
-];
+const publishedServices = services.filter((service) => service.status === "published")
+  .sort((a, b) => a.sort_order - b.sort_order);
+const monthFormat = new Intl.DateTimeFormat("ar-EG", { month: "long", year: "numeric", timeZone: "UTC" });
 
 /* Client logos come from the dashboard (العملاء). Width/height ratio of each trimmed logo
    file keeps their sizes balanced; a new logo falls back to 2.8. */
@@ -71,10 +70,10 @@ function usePrefersReducedMotion() {
   return reduce;
 }
 
-export function StudioHome() {
+export function StudioHome({ posts }: { posts: { title: string; to: string; publishedAt: string | null }[] }) {
   const reduce = usePrefersReducedMotion();
   return (
-    <StudioPage>
+    <>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
         <section className="hero g">
           <h1 className="rv">
@@ -100,7 +99,21 @@ export function StudioHome() {
                 <span key={c}>{c}</span>
               ))}
             </div>
-            <Link className="ul" to="/packages">الخدمات والباقات ←</Link>
+            <a className="ul" href="#services">الخدمات ←</a>
+          </div>
+        </section>
+        <section id="services" className="studio-services g">
+          <div className="lbl">
+            <h2>الخدمات</h2>
+            <Link className="ul" to="/contact">ناقش مشروعك ←</Link>
+          </div>
+          <div className="studio-services-grid">
+            {publishedServices.map((service) => (
+              <article key={service.slug}>
+                <h3>{service.title_ar}</h3>
+                <p>{service.description_ar}</p>
+              </article>
+            ))}
           </div>
         </section>
         <Clients />
@@ -110,15 +123,15 @@ export function StudioHome() {
             <h2>أحدث المقالات</h2>
             <Link className="ul" to="/insights">كل المقالات</Link>
           </div>
-          {POSTS.map((p) => (
+          {posts.map((p) => (
             <a className="post rv" href={p.to} key={p.to}>
-              <time>أكتوبر ٢٠٢٦</time>
+              <time dateTime={p.publishedAt ?? undefined}>{p.publishedAt ? monthFormat.format(new Date(p.publishedAt)) : ""}</time>
               <h3>{p.title}</h3>
               <span className="ar" aria-hidden="true">←</span>
             </a>
           ))}
         </section>
-    </StudioPage>
+    </>
   );
 }
 
@@ -446,6 +459,11 @@ const CSS = `
 .yrh .vnav button{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--bg);font-size:18px;transition:all .25s}
 .yrh .vnav button:hover{background:var(--ink);color:var(--bg)}
 
+.yrh .studio-services{padding-top:clamp(60px,9vw,120px);scroll-margin-top:72px}
+.yrh .studio-services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:0 clamp(20px,5vw,80px)}
+.yrh .studio-services-grid article{padding:24px 0;border-bottom:1px solid var(--line)}
+.yrh .studio-services-grid h3{font:700 clamp(26px,3vw,40px)/1.3 var(--display)}
+.yrh .studio-services-grid p{margin-top:10px;color:var(--ink-2)}
 .yrh .latest{padding-top:clamp(100px,11vw,170px)}
 .yrh .post{display:grid;grid-template-columns:140px 1fr auto;gap:24px;align-items:baseline;padding:24px 0;border-bottom:1px solid var(--line);transition:padding .3s}
 .yrh .post:hover{padding-inline-start:12px}

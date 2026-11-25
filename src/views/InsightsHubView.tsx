@@ -71,7 +71,7 @@ function ArticleCard({ article }: { article: InsightArticle }) {
   const excerpt = lang === "ar" ? article.excerpt_ar : article.excerpt_en || article.excerpt_ar;
   return (
     <Link
-      to={`${base}/${article.category.slug}/${article.slug}`}
+      to="/insights/$category/$slug" params={{ category: article.category.slug, slug: article.slug }}
       className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] transition-colors hover:border-white/25"
     >
       <Cover article={article} className="aspect-[16/10]" />
@@ -277,7 +277,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                       {matchedCategories.map((c) => (
                         <Link
                           key={c.slug}
-                          to={`${base}/${c.slug}`}
+                          to="/insights/$category" params={{ category: c.slug }}
                           onClick={() => setSuggestOpen(false)}
                           className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent hover:bg-accent hover:text-accent-foreground transition-colors"
                         >
@@ -292,7 +292,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                     {suggestions.map(({ a }) => (
                       <li key={a.id}>
                         <Link
-                          to={`${base}/${a.category.slug}/${a.slug}`}
+                          to="/insights/$category/$slug" params={{ category: a.category.slug, slug: a.slug }}
                           onClick={() => setSuggestOpen(false)}
                           className="flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-accent/10"
                           role="option"
@@ -352,7 +352,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
             {lang === "ar" ? pair("ui_insightshubview_11")[0] : pair("ui_insightshubview_11")[1]}
           </span>
           <Link
-            to={`${base}/${featured.category.slug}/${featured.slug}`}
+            to="/insights/$category/$slug" params={{ category: featured.category.slug, slug: featured.slug }}
             className="group mt-5 grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] transition-colors hover:border-white/25 md:grid-cols-2"
           >
             <Cover article={featured} className="aspect-[16/10] md:aspect-auto md:min-h-[380px]" />

@@ -2,44 +2,32 @@ import { useId, useRef, useState, type FormEvent } from "react";
 import { WEB3FORMS_ACCESS_KEY } from "@/lib/site";
 import { z } from "zod";
 import { useLang } from "@/i18n/use-lang";
-import type { DictKey } from "@/i18n/dictionary";
-
 import { pair } from "@/i18n/dictionary";
 import contact from "@/content/contact.json";
-import { Heading, PageHero, Pill, Stat, container } from "@/components/studio";
+import { Heading, Pill, StudioSectionHero, container } from "@/components/studio";
+
+const inputClass = "mt-2 w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40";
+const fieldLabel = "block text-xs font-semibold text-muted-foreground";
+
 export function ContactView() {
   const { t } = useLang();
-  const v = (k: DictKey) => pair(k)[0];
   return (
     <>
-      <PageHero
-        kicker={t("contact_kicker")}
+      <StudioSectionHero
+        label={t("contact_kicker")}
         title={
           <>
             {t("contact_title_a")} <span className="text-accent">{t("contact_title_b")}</span>
           </>
         }
-        lede={t("contact_lede")}
-        aside={
-          <dl className="grid grid-cols-3 gap-2 lg:w-[360px]">
-            <Stat value={v("ui_contactview_1")} label={t("stat_years_short")} />
-            <Stat value={v("ui_contactview_2")} label={t("stat_brand_short")} />
-            <Stat value={v("ui_contactview_3")} label={t("stat_sector_short")} />
-          </dl>
-        }
+        intro={t("contact_lede")}
       >
         <Pill to="/brief" variant="red">
           املأ نموذج المشروع
         </Pill>
-        <Pill href="/go/wa" variant="light" newTab>
-          واتساب
-        </Pill>
-        <Pill href={`mailto:${contact.email}`} variant="ghost">
-          {contact.email}
-        </Pill>
-      </PageHero>
+      </StudioSectionHero>
 
-      <section className={`${container} pb-28 pt-16 md:pb-40 md:pt-24`}>
+      <section className={`${container} py-10 md:py-16`}>
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-4">
             <Heading kicker="طرق التواصل" title="اختر الأسهل لك" />
@@ -187,8 +175,6 @@ function ContactForm() {
     }
   };
 
-  const inputClass =
-    "mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40";
 
   return (
     <form
@@ -196,13 +182,13 @@ function ContactForm() {
       noValidate
       dir={lang === "ar" ? "rtl" : "ltr"}
       aria-labelledby="contact-form-title"
-      className="rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-6 md:p-10"
+      className="rounded-xl border border-border bg-cream p-6 md:p-10"
     >
       <div className="mb-6">
-        <h2 id="contact-form-title" className="font-display text-2xl font-bold text-white">
+        <h2 id="contact-form-title" className="font-display text-2xl font-bold text-foreground">
           {t("form_title")}
         </h2>
-        <p className="mt-1 text-sm text-white/60">{t("form_sub")}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{t("form_sub")}</p>
       </div>
       <input
         type="text"
@@ -237,7 +223,7 @@ function ContactForm() {
         <div>
           <label
             htmlFor={ptypeId}
-            className="block text-xs font-semibold uppercase tracking-widest text-white/60"
+            className={fieldLabel}
           >
             {t("f_project_type")}
           </label>
@@ -245,7 +231,7 @@ function ContactForm() {
             id={ptypeId}
             name="project_type"
             defaultValue=""
-            className={`${inputClass} [color-scheme:dark]`}
+            className={inputClass}
           >
             <option value="">{t("f_project_type_placeholder")}</option>
             <option value={t("ptype_identity")}>{t("ptype_identity")}</option>
@@ -258,7 +244,7 @@ function ContactForm() {
         <div>
           <label
             htmlFor={budgetId}
-            className="block text-xs font-semibold uppercase tracking-widest text-white/60"
+            className={fieldLabel}
           >
             {t("f_budget")}
           </label>
@@ -266,7 +252,7 @@ function ContactForm() {
             id={budgetId}
             name="budget"
             defaultValue=""
-            className={`${inputClass} [color-scheme:dark]`}
+            className={inputClass}
           >
             <option value="">{t("f_budget_placeholder")}</option>
             <option value={t("budget_under_1k")}>{t("budget_under_1k")}</option>
@@ -280,7 +266,7 @@ function ContactForm() {
       <div className="mt-4">
         <label
           htmlFor={messageId}
-          className="block text-xs font-semibold uppercase tracking-widest text-white/60"
+          className={fieldLabel}
         >
           {t("f_message")}
         </label>
@@ -295,23 +281,23 @@ function ContactForm() {
           placeholder={t("f_message_placeholder")}
         />
         {errors.message && (
-          <p id={`${messageId}-err`} className="mt-1 text-xs text-red-400">
+          <p id={`${messageId}-err`} className="mt-1 text-xs text-accent">
             {errors.message}
           </p>
         )}
       </div>
-      <details className="group mt-6 rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5 open:pb-6">
+      <details className="group mt-6 rounded-xl border border-border bg-background p-5 open:pb-6">
         <summary className="flex cursor-pointer list-none items-start gap-2 focus:outline-none">
           <span aria-hidden="true" className="text-lg leading-none">
             📞
           </span>
           <div className="flex-1">
-            <h3 className="font-display text-base font-bold text-white">{t("f_call_title")}</h3>
-            <p className="mt-1 text-xs text-white/60">{t("f_call_sub")}</p>
+            <h3 className="font-display text-base font-bold text-foreground">{t("f_call_title")}</h3>
+            <p className="mt-1 text-xs text-muted-foreground">{t("f_call_sub")}</p>
           </div>
           <span
             aria-hidden
-            className="mt-1 text-xs text-white/50 transition-transform group-open:rotate-180"
+            className="mt-1 text-xs text-muted-foreground transition-transform group-open:rotate-180"
           >
             ▾
           </span>
@@ -320,7 +306,7 @@ function ContactForm() {
           <div>
             <label
               htmlFor={callDateId}
-              className="block text-xs font-semibold uppercase tracking-widest text-white/60"
+              className={fieldLabel}
             >
               {t("f_call_date")}
             </label>
@@ -330,14 +316,14 @@ function ContactForm() {
               type="date"
               min={new Date().toISOString().slice(0, 10)}
               dir="ltr"
-              className={`${inputClass} [color-scheme:dark]`}
+              className={inputClass}
             />
-            {errors.call_date && <p className="mt-1 text-xs text-red-400">{errors.call_date}</p>}
+            {errors.call_date && <p className="mt-1 text-xs text-accent">{errors.call_date}</p>}
           </div>
           <div>
             <label
               htmlFor={callTimeId}
-              className="block text-xs font-semibold uppercase tracking-widest text-white/60"
+              className={fieldLabel}
             >
               {t("f_call_time")}
             </label>
@@ -346,14 +332,14 @@ function ContactForm() {
               name="call_time"
               type="time"
               dir="ltr"
-              className={`${inputClass} [color-scheme:dark]`}
+              className={inputClass}
             />
           </div>
         </div>
         <div className="mt-4">
           <label
             htmlFor={callTzId}
-            className="block text-xs font-semibold uppercase tracking-widest text-white/60"
+            className={fieldLabel}
           >
             {t("f_call_tz")}
           </label>
@@ -380,9 +366,9 @@ function ContactForm() {
             : t("f_send")}
         </button>
         {sent && <span className="text-xs text-accent">{t("f_sent")}</span>}
-        {spamNotice && <span className="text-xs text-red-400">{t("f_spam")}</span>}
+        {spamNotice && <span className="text-xs text-accent">{t("f_spam")}</span>}
         {sendError && (
-          <span className="text-xs text-red-400" role="alert">
+          <span className="text-xs text-accent" role="alert">
             {sendError}
           </span>
         )}
@@ -413,7 +399,7 @@ function Field({
     <div>
       <label
         htmlFor={id}
-        className="block text-xs font-semibold uppercase tracking-widest text-white/60"
+        className={fieldLabel}
       >
         {label}
       </label>
@@ -426,10 +412,10 @@ function Field({
         autoComplete={autoComplete}
         aria-invalid={error ? true : undefined}
         aria-describedby={errId}
-        className="mt-2 w-full rounded-xl border border-white/10 bg-ink/40 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/40"
+        className={inputClass}
       />
       {error && (
-        <p id={errId} className="mt-1 text-xs text-red-400">
+        <p id={errId} className="mt-1 text-xs text-accent">
           {error}
         </p>
       )}
@@ -453,7 +439,7 @@ function ContactCard({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center justify-between rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] p-5 transition-colors hover:bg-accent hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ink"
+      className="group flex items-center justify-between rounded-xl border border-border bg-cream p-5 transition-colors hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <div>
         <div className="text-xs uppercase tracking-widest opacity-60">{label}</div>

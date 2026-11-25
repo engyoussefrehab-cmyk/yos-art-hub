@@ -2,7 +2,6 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { shareImage } from "@/lib/site";
 import { listPortfolio, getPortfolioBySlug, type PortfolioDTO } from "@/lib/portfolio.functions";
 import { ProjectDetailView } from "@/views/ProjectDetailView";
-import { STUDIO_FONTS, STUDIO_FONT_PRELOAD } from "@/lib/studio-pages";
 
 export const Route = createFileRoute("/projects/$category/$slug")({
   loader: async ({ params }) => {
@@ -36,8 +35,6 @@ export const Route = createFileRoute("/projects/$category/$slug")({
         { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [
-        STUDIO_FONTS,
-        ...STUDIO_FONT_PRELOAD,
         { rel: "canonical", href: path },
       ],
     };

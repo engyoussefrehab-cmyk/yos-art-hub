@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { StudioPage } from "@/components/studio-site";
 import { ProjectFlipbook } from "@/components/project-blocks/ProjectFlipbook";
 import caseStyles from "./project-case.css?inline";
 import { useLang } from "@/i18n/use-lang";
@@ -82,7 +81,7 @@ export function ProjectDetailView({
     });
 
   return (
-    <StudioPage active="work">
+    <>
       <style dangerouslySetInnerHTML={{ __html: caseStyles }} />
       <article className="project-case">
         <nav aria-label="مسار الصفحة" className="case-crumbs">
@@ -117,6 +116,6 @@ export function ProjectDetailView({
         )}
         <ProjectBlocksRenderer blocks={blocks} lang={lang} context={context} />
       </article>
-    </StudioPage>
+    </>
   );
 }
