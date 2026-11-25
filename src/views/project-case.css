@@ -1,0 +1,181 @@
+.project-case {
+  --foreground: var(--ink);
+  --muted-foreground: var(--muted);
+  --background: var(--bg);
+  --cream: var(--bg-2);
+  --border: var(--line);
+  --primary: var(--ink);
+  --primary-foreground: var(--bg);
+  --accent: var(--acc-text);
+  --accent-foreground: var(--bg);
+  padding-top: clamp(106px, 12vw, 168px);
+  overflow-wrap: anywhere;
+}
+
+.yrh .project-case :is(h1, h2, h3, .font-display) {
+  font-family: var(--display);
+}
+
+.project-case .bg-ink { --accent: var(--red); }
+
+.case-crumbs,
+.case-book,
+.case-overview,
+.project-case .case-hero {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+
+.case-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.case-crumbs a:hover {
+  color: var(--acc-text);
+}
+
+.project-case .case-hero {
+  padding-block: clamp(20px, 4vw, 52px) clamp(32px, 5vw, 72px);
+}
+
+.project-case .case-hero-kicker {
+  color: var(--acc-text);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.case-hero-info {
+  display: grid;
+  align-items: end;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 28%);
+  gap: clamp(20px, 4vw, 64px);
+}
+
+.yrh .project-case .case-hero-title {
+  margin: 14px 0 17px;
+  color: var(--ink);
+  font-size: clamp(2.65rem, 6.2vw, 6.5rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.project-case .case-hero-subtitle,
+.case-overview p {
+  max-width: 45rem;
+  color: var(--ink-2);
+}
+
+.project-case .case-hero-subtitle { font-size: clamp(1rem, 1.55vw, 1.3rem); }
+
+.case-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 12px 40px;
+  padding-block: clamp(32px, 7vw, 100px);
+}
+
+.case-overview h2 { font-size: clamp(1.8rem, 3.2vw, 3rem); font-weight: 700; }
+
+.project-case .case-hero-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  border-block: 1px solid var(--line);
+  padding-block: 10px;
+}
+
+.project-case .case-hero-meta dt { color: var(--muted); font-size: 0.78rem; }
+.project-case .case-hero-meta dd { color: var(--ink); font-weight: 700; }
+
+@media (min-width: 761px) {
+  .case-hero-meta { grid-column: 2; }
+}
+
+@media (max-width: 760px) {
+  .case-hero-info, .case-overview { grid-template-columns: 1fr; }
+}
+
+.case-book-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-block: 12px;
+  border-block: 1px solid var(--line);
+}
+
+.yrh .project-case .case-book-bar h2 {
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.case-book-controls {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 2vw, 16px);
+}
+
+.project-case .case-book-controls button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 180ms, color 180ms;
+}
+
+.case-book-controls button:hover:not(:disabled) { background: var(--ink); color: var(--bg); }
+.case-book-controls button:disabled { opacity: 0.38; cursor: default; }
+.case-book-count { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+
+.case-book-stage {
+  display: grid;
+  place-items: center;
+  min-height: clamp(240px, 48vw, 590px);
+  margin-block: 14px 0;
+  padding: clamp(12px, 3vw, 44px);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-2);
+  overflow: hidden;
+  perspective: 1700px;
+  touch-action: pan-y pinch-zoom;
+}
+
+.case-book-stage img {
+  display: block;
+  max-width: 100%;
+  max-height: min(74svh, 800px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0 12px 28px rgb(59 26 30 / 20%);
+  user-select: none;
+}
+
+.case-book-forward { --page-angle: 76deg; transform-origin: left center; }
+.case-book-back { --page-angle: -76deg; transform-origin: right center; }
+[dir="rtl"] .case-book-forward { --page-angle: -76deg; transform-origin: right center; }
+[dir="rtl"] .case-book-back { --page-angle: 76deg; transform-origin: left center; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .case-book-stage :is(.case-book-forward, .case-book-back) {
+    animation: case-page-turn 420ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  }
+}
+
+@keyframes case-page-turn {
+  from { transform: rotateY(var(--page-angle)); filter: brightness(0.72); }
+  to { transform: rotateY(0); filter: brightness(1); }
+}

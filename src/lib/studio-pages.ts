@@ -1,8 +1,10 @@
 // Pages already moved to the studio design (ivory, own header and footer).
 // The rest of the site keeps the old dark layout until it is redone.
 const STUDIO_PATHS = new Set(["/", "/projects", "/projects/"]);
+const PROJECT_DETAIL_PATH = /^\/projects\/[^/]+\/[^/]+\/?$/;
 
-export const isStudioPath = (pathname: string) => STUDIO_PATHS.has(pathname);
+export const isStudioPath = (pathname: string) =>
+  STUDIO_PATHS.has(pathname) || PROJECT_DETAIL_PATH.test(pathname);
 
 export const STUDIO_FONTS = {
   rel: "stylesheet",

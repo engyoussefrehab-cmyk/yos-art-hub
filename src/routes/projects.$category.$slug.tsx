@@ -1,14 +1,15 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { shareImage } from "@/lib/site";
-import { listPortfolio, getPortfolioBySlug } from "@/lib/portfolio.functions";
+import { listPortfolio, getPortfolioBySlug, type PortfolioDTO } from "@/lib/portfolio.functions";
 import { ProjectDetailView } from "@/views/ProjectDetailView";
+import { STUDIO_FONTS, STUDIO_FONT_PRELOAD } from "@/lib/studio-pages";
 
 export const Route = createFileRoute("/projects/$category/$slug")({
   loader: async ({ params }) => {
     const project = await getPortfolioBySlug({ data: { slug: params.slug } });
     if (!project) throw notFound();
     if (project.category_slug && project.category_slug !== params.category) throw notFound();
-    const all = await listPortfolio({ data: { category: params.category } });
+    const all: PortfolioDTO[] = await listPortfolio({ data: { category: params.category } });
     const idx = all.findIndex((p) => p.slug === project.slug);
     const next = idx >= 0 ? all[(idx + 1) % all.length] : null;
     return { project, next };
@@ -34,7 +35,11 @@ export const Route = createFileRoute("/projects/$category/$slug")({
         ...(ogImage ? [{ name: "twitter:image", content: ogImage }] : []),
         { name: "twitter:card", content: "summary_large_image" },
       ],
-      links: [{ rel: "canonical", href: path }],
+      links: [
+        STUDIO_FONTS,
+        ...STUDIO_FONT_PRELOAD,
+        { rel: "canonical", href: path },
+      ],
     };
   },
   component: ProjectDetail,

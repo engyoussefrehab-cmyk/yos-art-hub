@@ -147,10 +147,10 @@ html:has(.yrh),body:has(.yrh){background:#F3EFE7}
   --display:"YR Display","Markazi Text","Amiri",serif;--sans:"Almarai",system-ui,sans-serif;--gut:clamp(16px,3.4vw,48px);
   background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.8;-webkit-font-smoothing:antialiased;overflow-x:clip;min-height:100vh;color-scheme:light}
 .yrh *{box-sizing:border-box}
-.yrh a{color:inherit;text-decoration:none}
+.yrh a:not(.project-case *){color:inherit;text-decoration:none}
 .yrh img{display:block;max-width:100%}
-.yrh button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-.yrh h1,.yrh h2,.yrh h3,.yrh p,.yrh blockquote,.yrh figure{margin:0}
+.yrh button:not(.project-case *){font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.yrh :is(h1,h2,h3,p,blockquote,figure):not(.project-case *){margin:0}
 .yrh .g{padding-inline:var(--gut)}
 .yrh :focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px}
 .yrh .lbl{font-size:15px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
