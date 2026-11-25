@@ -5,20 +5,21 @@ import { SECTORS, OTHER_SECTOR, sectorOf } from "@/lib/sectors";
 import { StudioPage, AR } from "@/components/studio-site";
 
 /* /projects in the studio design: a title, one filter bar (service tabs + business
-   sector), then a single grid with "show more". Filters live in the URL
+   sector), then the work split into one section per service (6 each, with "view all").
+   Choosing a service shows that service alone, in one grid with "show more". Filters live in the URL
    (?cat=…&sector=…) and apply after hydration so the static HTML matches. */
 
 type Filters = { sector: string; cat: string; country: string; year: string; tag: string; sort: "newest" | "oldest" | "featured" | "az" };
 const EMPTY: Filters = { sector: "", cat: "", country: "", year: "", tag: "", sort: "newest" };
 const routeApi = getRouteApi("/projects/");
 
-const SERVICES: { key: string; label: string }[] = [
-  { key: "branding", label: "الهويات البصرية" },
-  { key: "profiles", label: "الملفات التعريفية" },
-  { key: "social", label: "منشورات التواصل" },
-  { key: "presentations", label: "العروض التقديمية" },
-  { key: "packaging", label: "التغليف" },
-  { key: "logos", label: "الشعارات" },
+const SERVICES: { key: string; label: string; desc: string }[] = [
+  { key: "branding", label: "الهويات البصرية", desc: "شعار وألوان وخطوط ودليل استخدام كامل للعلامة." },
+  { key: "profiles", label: "الملفات التعريفية", desc: "ملفات تعرض الشركة وخدماتها وأعمالها باحتراف." },
+  { key: "social", label: "منشورات التواصل", desc: "حملات وتصاميم منشورات لمنصات التواصل." },
+  { key: "presentations", label: "العروض التقديمية", desc: "عروض للمستثمرين والعملاء والفعاليات." },
+  { key: "packaging", label: "التغليف", desc: "تصميم عبوات وملصقات المنتجات." },
+  { key: "logos", label: "الشعارات", desc: "شعارات بنسخها المختلفة." },
 ];
 const SERVICE_SHORT: Record<string, string> = {
   branding: "هوية بصرية",
@@ -45,6 +46,7 @@ const byFeatured = (a: PortfolioDTO, b: PortfolioDTO) =>
   (b.published_at ?? "").localeCompare(a.published_at ?? "");
 
 const PAGE = 12;
+const PREVIEW = 6;
 
 export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
   const urlSearch = routeApi.useSearch() as Filters;
@@ -85,7 +87,6 @@ export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
         .sort(byFeatured),
     [projects, search.cat, search.sector],
   );
-  const filtering = !!(search.cat || search.sector);
   const title = [search.cat ? serviceLabel(search.cat) : "كل الأعمال", search.sector && `في مجال ${sectorLabel(search.sector)}`]
     .filter(Boolean)
     .join(" ");
@@ -132,51 +133,81 @@ export function ProjectsStudio({ projects }: { projects: PortfolioDTO[] }) {
           </label>
         </div>
 
-        <div className="rhead">
-          <h2>{title}</h2>
-          <span aria-live="polite">{countLabel(results.length)}</span>
-          {filtering && (
+        {(search.cat || search.sector) && (
+          <div className="rhead">
+            <h2>{title}</h2>
+            <span aria-live="polite">{countLabel(results.length)}</span>
             <button type="button" className="clear" onClick={() => setFilters({ cat: "", sector: "" })}>
               إلغاء التصفية ✕
             </button>
-          )}
-        </div>
-
-        {results.length ? (
-          <div className="pgrid">
-            {visible.map((p, i) => (
-              <a className="pc" href={projectHref(p)} key={p.slug}>
-                <div className="im">
-                  {p.cover && <img src={p.cover} alt={p.name_ar} loading={i < 6 ? "eager" : "lazy"} decoding="async" />}
-                </div>
-                <div className="pcap">
-                  <h3>{p.name_ar}</h3>
-                  {p.short_ar && <p>{p.short_ar}</p>}
-                  <small>
-                    {SERVICE_SHORT[p.category_slug ?? ""] ?? ""}
-                    {sectorOf(p.industry) !== "other" && ` · ${sectorLabel(sectorOf(p.industry))}`}
-                    {p.year ? ` · ${AR(p.year)}` : ""}
-                  </small>
-                </div>
-              </a>
-            ))}
           </div>
-        ) : (
+        )}
+
+        {!results.length ? (
           <div className="empty">
             لا توجد أعمال بهذه التصفية حاليًا.
             <button type="button" className="pill" onClick={() => setFilters({ cat: "", sector: "" })}>اعرض كل الأعمال</button>
           </div>
-        )}
-
-        {results.length > shown && (
-          <div className="morew">
-            <button type="button" className="pill" onClick={() => setShown(shown + PAGE)}>
-              عرض المزيد <span>({AR(results.length - shown)} متبقٍ)</span>
-            </button>
-          </div>
+        ) : search.cat ? (
+          <>
+            <div className="pgrid">
+              {visible.map((p, i) => <Card key={p.slug} p={p} eager={i < 6} />)}
+            </div>
+            {results.length > shown && (
+              <div className="morew">
+                <button type="button" className="pill" onClick={() => setShown(shown + PAGE)}>
+                  عرض المزيد <span>({AR(results.length - shown)} متبقٍ)</span>
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          SERVICES.map((s) => {
+            const items = results.filter((p) => p.category_slug === s.key);
+            if (!items.length) return null;
+            return (
+              <section className="grp" key={s.key} aria-labelledby={`g-${s.key}`}>
+                <div className="ghead">
+                  <div>
+                    <span className="gnum">{countLabel(items.length)}</span>
+                    <h2 id={`g-${s.key}`}>{s.label}</h2>
+                    <p>{s.desc}</p>
+                  </div>
+                  {items.length > PREVIEW && (
+                    <button type="button" className="pill" onClick={() => { setFilters({ cat: s.key }); document.getElementById("browse")?.scrollIntoView({ block: "start" }); }}>
+                      عرض الكل ({AR(items.length)}) ←
+                    </button>
+                  )}
+                </div>
+                <div className="pgrid">
+                  {items.slice(0, PREVIEW).map((p, i) => <Card key={p.slug} p={p} eager={i < 3} />)}
+                </div>
+              </section>
+            );
+          })
         )}
       </section>
     </StudioPage>
+  );
+}
+
+function Card({ p, eager }: { p: PortfolioDTO; eager: boolean }) {
+  const sector = sectorOf(p.industry);
+  return (
+    <a className="pc" href={projectHref(p)}>
+      <div className="im">
+        {p.cover && <img src={p.cover} alt={p.name_ar} loading={eager ? "eager" : "lazy"} decoding="async" />}
+      </div>
+      <div className="pcap">
+        <h3>{p.name_ar}</h3>
+        {p.short_ar && <p>{p.short_ar}</p>}
+        <small>
+          {SERVICE_SHORT[p.category_slug ?? ""] ?? ""}
+          {sector !== "other" && ` · ${sectorLabel(sector)}`}
+          {p.year ? ` · ${AR(p.year)}` : ""}
+        </small>
+      </div>
+    </a>
   );
 }
 
@@ -218,6 +249,13 @@ const CSS = `
 .yrh .pill{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 28px;border-radius:999px;border:1px solid var(--line);font-weight:700;font-size:15px;transition:all .3s;white-space:nowrap}
 .yrh .pill:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .yrh .pill span{font-weight:400;opacity:.75}
+.yrh .browse{scroll-margin-top:80px}
+.yrh .grp{padding-top:clamp(56px,6vw,96px)}
+.yrh .grp+.grp{margin-top:clamp(40px,5vw,72px);border-top:1px solid var(--line)}
+.yrh .ghead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.yrh .gnum{font-size:14px;color:var(--muted)}
+.yrh .ghead h2{font-family:var(--display);font-weight:700;font-size:clamp(32px,3.6vw,56px);line-height:1.15;margin-top:4px}
+.yrh .ghead p{color:var(--ink-2);margin-top:8px;max-width:48ch}
 .yrh .morew{display:flex;justify-content:center;margin-top:clamp(48px,6vw,80px)}
 .yrh .empty{margin-top:32px;padding:56px 24px;border:1px dashed var(--line);display:flex;flex-direction:column;align-items:center;gap:20px;color:var(--ink-2);text-align:center}
 
@@ -232,6 +270,8 @@ const CSS = `
 }
 @media (max-width:640px){
   .yrh .pgrid{grid-template-columns:1fr}
+  .yrh .grp .pc:nth-child(n+5){display:none}
+  .yrh .ghead .pill{width:100%;justify-content:center}
   .yrh .phead-foot{grid-template-columns:1fr}
   .yrh .clear{margin-inline-start:0}
 }
