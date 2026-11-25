@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { StudioHome } from "@/views/StudioHome";
-import { STUDIO_FONTS } from "@/lib/studio-pages";
+import { STUDIO_FONTS, STUDIO_FONT_PRELOAD } from "@/lib/studio-pages";
 
 import seo from "@/content/seo.json";
 export const Route = createFileRoute("/")({
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:image", content: seo.home.ar.og_image },
     ],
     links: [
-      STUDIO_FONTS,
+      STUDIO_FONTS, ...STUDIO_FONT_PRELOAD,
       { rel: "canonical", href: "/" },
       { rel: "alternate", hrefLang: "ar", href: "/" },
       { rel: "alternate", hrefLang: "ar-SA", href: "/" },

@@ -137,9 +137,8 @@ function Reveal() {
 }
 
 const SITE_CSS = `
-@font-face{font-family:"YR Display";font-weight:400;font-display:swap;src:local("Thmanyah Serif Display Regular"),local("ThmanyahSerifDisplay-Regular"),local("thmanyahserifdisplay-Regular")}
-@font-face{font-family:"YR Display";font-weight:500;font-display:swap;src:local("Thmanyah Serif Display Medium"),local("ThmanyahSerifDisplay-Medium"),local("thmanyahserifdisplay-Medium")}
-@font-face{font-family:"YR Display";font-weight:700;font-display:swap;src:local("Thmanyah Serif Display Bold"),local("ThmanyahSerifDisplay-Bold"),local("thmanyahserifdisplay-Bold")}
+@font-face{font-family:"YR Display";font-weight:400 500;font-display:swap;src:url("/fonts/thmanyah-serif-display-medium.woff2") format("woff2")}
+@font-face{font-family:"YR Display";font-weight:600 900;font-display:swap;src:url("/fonts/thmanyah-serif-display-bold.woff2") format("woff2")}
 html:has(.yrh),body:has(.yrh){background:#F3EFE7}
 .yrh{--bg:#F3EFE7;--bg-2:#EAE3D7;--ink:#3B1A1E;--ink-2:#5A3B3D;--muted:#7A625F;--red:#FF4848;--acc:#E63B3B;--acc-text:#C8292B;--acc-ink:#3B1A1E;--line:rgba(59,26,30,.15);
   --display:"YR Display","Markazi Text","Amiri",serif;--sans:"Almarai",system-ui,sans-serif;--gut:clamp(16px,3.4vw,48px);
