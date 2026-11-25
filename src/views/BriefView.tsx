@@ -7,10 +7,11 @@
  * - On submit: saves a lead in YR Studio OS (Supabase RPC submit_inquiry —
  *   validation, rate limit, honeypot) and emails a copy via Web3Forms.
  */
-import { useEffect, useId, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { OS_SUPABASE_ANON_KEY, OS_SUPABASE_URL, WEB3FORMS_ACCESS_KEY } from "@/lib/site";
 import { SECTORS } from "@/lib/sectors";
-import { Pill, container, focusRing } from "@/components/studio";
+import { Pill, StudioSectionHero, container, focusRing } from "@/components/studio";
+import { AR } from "@/components/studio-site";
 import contact from "@/content/contact.json";
 
 /* ═════════════════════════════════════════ data model */
@@ -62,6 +63,8 @@ const EMPTY: Data = {
 };
 
 const DRAFT_KEY = "yr-brief-draft-v1";
+
+const asciiDigits = (value: string) => value.replace(/[٠-٩۰-۹]/g, (digit) => String(digit.charCodeAt(0) & 15));
 
 const COUNTRIES: [string, string][] = [
   ["السعودية", "+966"], ["الإمارات", "+971"], ["مصر", "+20"], ["الكويت", "+965"], ["قطر", "+974"],
@@ -124,16 +127,16 @@ type Errors = Partial<Record<keyof Data, string>>;
 /* ═════════════════════════════════════════ form controls */
 
 const inputBase =
-  "w-full rounded-2xl border bg-white/[0.03] px-4 py-3.5 text-[15px] text-white placeholder:text-white/30 transition-colors focus:bg-white/[0.05] focus:outline-none";
+  "w-full rounded-lg border bg-background px-4 py-3.5 text-base text-foreground placeholder:text-muted-foreground transition-colors focus:bg-card focus:outline-none";
 const inputCls = (err?: string) =>
-  `${inputBase} ${err ? "border-accent/70 focus:border-accent" : "border-white/10 hover:border-white/20 focus:border-white/50"}`;
+  `${inputBase} ${err ? "border-accent/70 focus:border-accent" : "border-border hover:border-accent/70 focus:border-accent"}`;
 
 function Label({ htmlFor, id, children, required, optional }: { htmlFor?: string; id?: string; children: ReactNode; required?: boolean; optional?: boolean }) {
   return (
-    <label htmlFor={htmlFor} id={id} className="mb-2.5 flex items-baseline gap-2 text-[15px] font-semibold text-white">
+    <label htmlFor={htmlFor} id={id} className="mb-2.5 flex items-baseline gap-2 text-[15px] font-semibold text-foreground">
       {children}
       {required && <span className="text-accent" aria-hidden>*</span>}
-      {optional && <span className="text-xs font-normal text-white/40">اختياري</span>}
+      {optional && <span className="text-xs font-normal text-muted-foreground">اختياري</span>}
     </label>
   );
 }
@@ -147,7 +150,7 @@ function Help({ id, hint, error }: { id: string; hint?: string; error?: string }
     );
   if (hint)
     return (
-      <p id={id} className="mt-2 text-xs leading-relaxed text-white/45">
+      <p id={id} className="mt-2 text-xs leading-relaxed text-muted-foreground">
         {hint}
       </p>
     );
@@ -175,7 +178,8 @@ function TextField({
         maxLength={max}
         autoComplete={autoComplete}
         aria-invalid={!!error}
-        aria-describedby={`${id}-h`}
+        aria-required={required || undefined}
+        aria-describedby={hint || error ? `${id}-h` : undefined}
         onChange={(e) => onChange(e.target.value)}
         className={inputCls(error)}
       />
@@ -207,13 +211,13 @@ function AreaField({
       />
       <div className="mt-2 flex items-start justify-between gap-4">
         {hint ? (
-          <p id={`${id}-h`} className="text-xs leading-relaxed text-white/45">
+          <p id={`${id}-h`} className="text-xs leading-relaxed text-muted-foreground">
             {hint}
           </p>
         ) : (
           <span id={`${id}-h`} />
         )}
-        <span className="shrink-0 text-xs tabular-nums text-white/30" dir="ltr">
+        <span className="shrink-0 text-xs tabular-nums text-muted-foreground" dir="ltr">
           {value.length}/{max}
         </span>
       </div>
@@ -237,17 +241,18 @@ function SelectField({
           id={id}
           value={value}
           aria-invalid={!!error}
+          aria-describedby={error ? `${id}-h` : undefined}
           onChange={(e) => onChange(e.target.value)}
           className={`${inputCls(error)} appearance-none pe-10`}
         >
           <option value="">{placeholder}</option>
           {options.map((o) => (
-            <option key={o} value={o} className="bg-[#111]">
+            <option key={o} value={o} className="bg-card">
               {o}
             </option>
           ))}
         </select>
-        <span aria-hidden className="pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 text-white/40">
+        <span aria-hidden className="pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 text-muted-foreground">
           ▾
         </span>
       </div>
@@ -272,11 +277,11 @@ function Options({
   };
   const grid = { 2: "sm:grid-cols-2", 3: "sm:grid-cols-3", 4: "sm:grid-cols-2 lg:grid-cols-4" }[cols];
   return (
-    <div role="group" aria-labelledby={id} aria-describedby={`${id}-h`}>
+    <div role="group" aria-labelledby={id} aria-invalid={!!error} aria-describedby={hint || error ? `${id}-h` : undefined}>
       <Label id={id} required={required} optional={optional}>
         {label}
       </Label>
-      {hint && !error && <p className="-mt-1 mb-3 text-xs text-white/45">{hint}</p>}
+      {hint && !error && <p id={`${id}-h`} className="-mt-1 mb-3 text-xs text-muted-foreground">{hint}</p>}
       <div className={`grid grid-cols-1 gap-2.5 ${grid}`}>
         {items.map(([title, desc]) => {
           const active = on(title);
@@ -284,24 +289,25 @@ function Options({
             <button
               key={title}
               type="button"
-              role={multi ? "checkbox" : "radio"}
-              aria-checked={active}
+              role={multi ? "checkbox" : undefined}
+              aria-checked={multi ? active : undefined}
+              aria-pressed={multi ? undefined : active}
               onClick={() => toggle(title)}
-              className={`flex items-start gap-3 rounded-2xl border p-4 text-start transition-colors ${focusRing} ${
-                active ? "border-accent bg-accent/[0.08]" : "border-white/10 bg-white/[0.02] hover:border-white/25"
+              className={`flex items-start gap-3 rounded-lg border p-4 text-start transition-colors ${focusRing} ${
+                active ? "border-accent bg-accent/[0.08]" : "border-border bg-background hover:border-accent/70"
               }`}
             >
               <span
                 aria-hidden
                 className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border text-[11px] ${
                   multi ? "rounded-md" : "rounded-full"
-                } ${active ? "border-accent bg-accent text-black" : "border-white/30"}`}
+                } ${active ? "border-accent bg-accent text-accent-foreground" : "border-border"}`}
               >
                 {active ? "✓" : ""}
               </span>
               <span className="min-w-0">
-                <span className="block text-[15px] font-semibold text-white">{title}</span>
-                {desc && <span className="mt-0.5 block text-xs leading-relaxed text-white/50">{desc}</span>}
+                <span className="block text-[15px] font-semibold text-foreground">{title}</span>
+                {desc && <span className="mt-0.5 block text-xs leading-relaxed text-muted-foreground">{desc}</span>}
               </span>
             </button>
           );
@@ -324,7 +330,7 @@ function Chips({
       <Label id={id} optional={optional}>
         {label}
       </Label>
-      {hint && <p className="-mt-1 mb-3 text-xs text-white/45">{hint}</p>}
+      {hint && <p className="-mt-1 mb-3 text-xs text-muted-foreground">{hint}</p>}
       <div className="flex flex-wrap gap-2">
         {items.map((o) => {
           const active = value.includes(o);
@@ -335,8 +341,8 @@ function Chips({
               role="checkbox"
               aria-checked={active}
               onClick={() => onChange(active ? value.filter((x) => x !== o) : [...value, o])}
-              className={`rounded-full border px-4 py-2 text-sm transition-colors ${focusRing} ${
-                active ? "border-accent bg-accent font-semibold text-black" : "border-white/15 text-white/75 hover:border-white/40"
+              className={`min-h-11 rounded-full border px-4 py-2 text-sm transition-colors ${focusRing} ${
+                active ? "border-accent bg-accent font-semibold text-accent-foreground" : "border-border text-muted-foreground hover:border-accent"
               }`}
             >
               {o}
@@ -351,8 +357,8 @@ function Chips({
 function Divider({ children }: { children: ReactNode }) {
   return (
     <div className="flex items-center gap-4 pt-2">
-      <span className="shrink-0 text-xs font-semibold text-white/40">{children}</span>
-      <span className="h-px flex-1 bg-white/10" />
+      <span className="shrink-0 text-xs font-semibold text-muted-foreground">{children}</span>
+      <span className="h-px flex-1 bg-cream" />
     </div>
   );
 }
@@ -368,6 +374,11 @@ export function BriefView() {
   const [sendError, setSendError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [draftReady, setDraftReady] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const focusHeading = useRef(false);
+  const focusError = useRef(false);
 
   // Restore a saved draft (this browser only).
   useEffect(() => {
@@ -375,23 +386,46 @@ export function BriefView() {
       const raw = localStorage.getItem(DRAFT_KEY);
       if (raw) {
         const saved = JSON.parse(raw) as { d: Data; step: number; maxStep: number };
-        setD({ ...EMPTY, ...saved.d, hp: "", consent: false });
-        setStep(Math.min(saved.step ?? 0, STEPS.length - 1));
-        setMaxStep(Math.min(saved.maxStep ?? 0, STEPS.length - 1));
-        setRestored(true);
+        const draft = { ...EMPTY, ...saved.d, hp: "", consent: false };
+        const current = Math.max(0, Math.min(saved.step ?? 0, STEPS.length - 1));
+        const furthest = Math.max(current, Math.min(saved.maxStep ?? 0, STEPS.length - 1));
+        if (furthest > 0 || JSON.stringify(draft) !== JSON.stringify(EMPTY)) {
+          setD(draft);
+          setStep(current);
+          setMaxStep(furthest);
+          setRestored(true);
+        }
       }
     } catch {
       /* ignore */
     }
+    setDraftReady(true);
   }, []);
   useEffect(() => {
-    if (done) return;
+    if (!draftReady || done) return;
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify({ d: { ...d, hp: "" }, step, maxStep }));
+      const draft = { ...d, hp: "", consent: false };
+      if (step === 0 && maxStep === 0 && JSON.stringify(draft) === JSON.stringify(EMPTY)) {
+        localStorage.removeItem(DRAFT_KEY);
+      } else {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify({ d: draft, step, maxStep }));
+      }
     } catch {
       /* ignore */
     }
-  }, [d, step, maxStep, done]);
+  }, [d, step, maxStep, done, draftReady]);
+
+  useEffect(() => {
+    if (focusError.current) {
+      focusError.current = false;
+      focusHeading.current = false;
+      formRef.current?.querySelector<HTMLElement>('input[aria-invalid="true"], select[aria-invalid="true"], button[aria-invalid="true"], [role="group"][aria-invalid="true"] button')?.focus();
+    } else if (focusHeading.current) {
+      focusHeading.current = false;
+      headingRef.current?.focus({ preventScroll: true });
+      headingRef.current?.scrollIntoView({ behavior: "instant", block: "start" });
+    }
+  }, [step, errors]);
 
   const set = <K extends keyof Data>(k: K, v: Data[K]) => {
     setD((s) => ({ ...s, [k]: v }));
@@ -402,9 +436,10 @@ export function BriefView() {
     const e: Errors = {};
     if (i === 0) {
       if (d.name.trim().length < 2) e.name = "اكتب اسمك.";
-      const phoneDigits = d.phone.replace(/\D/g, "");
+      const phone = asciiDigits(d.phone.trim());
+      const phoneDigits = phone.replace(/\D/g, "");
       if (!phoneDigits && !d.email.trim()) e.phone = "أضف رقم واتساب أو بريدا إلكترونيا على الأقل.";
-      if (phoneDigits && phoneDigits.length < 7) e.phone = "تأكد من رقم الهاتف.";
+      if (phone && phoneDigits.length < 7) e.phone = "تأكد من رقم الهاتف.";
       if (d.email.trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email.trim())) e.email = "تأكد من البريد الإلكتروني.";
     }
     if (i === 1 && !d.sector) e.sector = "اختر مجال نشاطك.";
@@ -414,20 +449,21 @@ export function BriefView() {
   };
 
   const go = (i: number) => {
+    if (i !== step) focusHeading.current = true;
     setStep(i);
     setSendError(null);
-    if (typeof window !== "undefined") document.getElementById("brief-top")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   const next = () => {
     const e = validate(step);
+    focusError.current = Object.keys(e).length > 0;
     setErrors(e);
-    if (Object.keys(e).length) return;
+    if (focusError.current) return;
     const n = Math.min(step + 1, STEPS.length - 1);
     setMaxStep((m) => Math.max(m, n));
     go(n);
   };
 
-  const fullPhone = d.phone.trim() ? `${d.dial} ${d.phone.trim()}`.trim() : "";
+  const fullPhone = d.phone.trim() ? `${d.dial} ${asciiDigits(d.phone.trim())}`.trim() : "";
 
   /** Answers grouped by step, for the review screen, the lead and the email. */
   const sections = useMemo(() => {
@@ -469,9 +505,11 @@ export function BriefView() {
       .join("\n\n");
 
   const submit = async () => {
+    if (sending) return;
     for (let i = 0; i < STEPS.length; i++) {
       const e = validate(i);
       if (Object.keys(e).length) {
+        focusError.current = true;
         setErrors(e);
         go(i);
         return;
@@ -548,7 +586,7 @@ export function BriefView() {
     }
     setD(EMPTY);
     setErrors({});
-    setStep(0);
+    go(0);
     setMaxStep(0);
     setRestored(false);
   };
@@ -559,20 +597,20 @@ export function BriefView() {
   if (done)
     return (
       <section className={`${container} pb-28 pt-10 md:pb-40 md:pt-16`}>
-        <div className="mx-auto max-w-3xl rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-8 text-center md:p-14">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent text-2xl font-bold text-black">✓</div>
+        <div className="mx-auto max-w-3xl rounded-xl border border-border bg-card p-8 text-center md:p-14">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent text-2xl font-bold text-accent-foreground">✓</div>
           <h1 className="mt-6 font-display text-3xl font-bold md:text-[2.5rem]">شكرا {d.name.split(" ")[0]}، وصلني طلبك.</h1>
-          <p className="mx-auto mt-4 max-w-xl leading-[1.9] text-white/70">سأراجع تفاصيل مشروعك بعناية وأعود إليك قريبا.</p>
+          <p className="mx-auto mt-4 max-w-xl leading-[1.9] text-muted-foreground">سأراجع تفاصيل مشروعك بعناية وأعود إليك قريبا.</p>
           <ol className="mt-10 grid gap-3 text-start sm:grid-cols-3">
             {[
               ["خلال ٢٤ ساعة", "أراجع طلبك وأتواصل معك."],
               ["مكالمة قصيرة", "نناقش التفاصيل ونجيب عن أسئلتك."],
               ["عرض السعر", "يصلك عرض واضح بالمدة والتكلفة."],
             ].map(([t, x], i) => (
-              <li key={t} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+              <li key={t} className="rounded-2xl border border-border bg-background p-5">
                 <span className="font-display text-sm font-bold text-accent">{String(i + 1).padStart(2, "0")}</span>
                 <div className="mt-2 font-semibold">{t}</div>
-                <div className="mt-1 text-sm text-white/55">{x}</div>
+                <div className="mt-1 text-sm text-muted-foreground">{x}</div>
               </li>
             ))}
           </ol>
@@ -580,9 +618,7 @@ export function BriefView() {
             <Pill href={contact.whatsapp_url} newTab variant="light">
               تواصل على واتساب
             </Pill>
-            <Pill to="/projects" variant="ghost">
-              تصفح الأعمال
-            </Pill>
+            <a href="/projects" className="inline-flex min-h-11 items-center rounded-full border border-border px-4 text-sm font-bold text-foreground hover:border-accent">تصفح الأعمال ←</a>
           </div>
         </div>
       </section>
@@ -591,44 +627,34 @@ export function BriefView() {
   /* ───────────────────────── form */
   const E = errors;
   return (
-    <section id="brief-top" className={`${container} scroll-mt-24 pb-32 pt-8 md:pb-40 md:pt-14`}>
-      {/* Header */}
-      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 text-sm text-white/60">
-            <span className="text-accent">✦</span>
-            نموذج المشروع
-          </span>
-          <h1 className="mt-3 font-display text-3xl font-bold leading-[1.2] md:text-[2.75rem]">أخبرني عن مشروعك</h1>
-          <p className="mt-3 leading-[1.9] text-white/60">إجاباتك تساعدني على فهم مشروعك وتقديم عرض سعر دقيق ومناسب.</p>
-        </div>
-        <ul className="flex flex-wrap gap-2 text-xs text-white/70">
-          {["حوالي ٥ دقائق", "رد خلال ٢٤ ساعة", "بياناتك لا تشارك مع أحد"].map((x) => (
-            <li key={x} className="rounded-full border border-white/10 px-3 py-1.5">
-              {x}
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="brief-page">
+      <StudioSectionHero
+        label="نموذج المشروع"
+        title="أخبرني عن مشروعك"
+        intro="إجاباتك تساعدني على فهم مشروعك وتقديم عرض سعر دقيق ومناسب. النموذج يستغرق حوالي ٥ دقائق، وتقدر تكمله لاحقًا من نفس المتصفح."
+      >
+        <a href={contact.whatsapp_url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center text-sm font-bold text-accent hover:underline">تفضّل واتساب؟ راسلني ←</a>
+      </StudioSectionHero>
+      <section className={`${container} pb-16 pt-8 md:pb-24 md:pt-12`}>
 
       {restored && (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3 text-sm">
-          <span className="text-white/70">أكملنا من حيث توقفت آخر مرة.</span>
-          <button type="button" onClick={reset} className={`text-white/50 underline-offset-4 hover:text-white hover:underline ${focusRing}`}>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-background px-5 py-3 text-sm">
+          <span className="text-muted-foreground">أكملنا من حيث توقفت آخر مرة.</span>
+          <button type="button" onClick={reset} className={`text-muted-foreground underline-offset-4 hover:text-foreground hover:underline ${focusRing}`}>
             ابدأ من جديد
           </button>
         </div>
       )}
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:gap-12">
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
         {/* Step rail (desktop) */}
         <aside className="hidden lg:col-span-4 lg:block">
-          <div className="sticky top-28 rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] p-6">
+          <div className="sticky top-28 rounded-xl border border-border bg-card p-6">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-white/60">التقدم</span>
+              <span className="text-muted-foreground">التقدم</span>
               <span className="font-semibold tabular-nums">{pct}٪</span>
             </div>
-            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
+            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-cream">
               <div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${pct}%` }} />
             </div>
             <ol className="mt-6 space-y-1">
@@ -643,32 +669,32 @@ export function BriefView() {
                       onClick={() => canGo && go(i)}
                       aria-current={state === "current" ? "step" : undefined}
                       className={`flex w-full items-center gap-4 rounded-2xl px-3 py-3 text-start transition-colors ${focusRing} ${
-                        state === "current" ? "bg-white/[0.05]" : canGo ? "hover:bg-white/[0.03]" : ""
+                        state === "current" ? "bg-cream" : canGo ? "hover:bg-background" : ""
                       }`}
                     >
                       <span
                         className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold ${
                           state === "done"
-                            ? "border-white bg-white text-black"
+                            ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--bg)]"
                             : state === "current"
-                              ? "border-accent bg-accent text-black"
-                              : "border-white/15 text-white/40"
+                              ? "border-accent bg-accent text-accent-foreground"
+                              : "border-border text-muted-foreground"
                         }`}
                       >
-                        {state === "done" ? "✓" : i + 1}
+                        {state === "done" ? "✓" : AR(i + 1)}
                       </span>
                       <span>
-                        <span className={`block text-sm font-semibold ${state === "todo" ? "text-white/45" : "text-white"}`}>{s.title}</span>
-                        <span className="block text-xs text-white/40">{s.desc}</span>
+                        <span className={`block text-sm font-semibold ${state === "todo" ? "text-muted-foreground" : "text-foreground"}`}>{s.title}</span>
+                        <span className="block text-xs text-muted-foreground">{s.desc}</span>
                       </span>
                     </button>
                   </li>
                 );
               })}
             </ol>
-            <div className="mt-6 border-t border-white/10 pt-5 text-xs leading-relaxed text-white/45">
+            <div className="mt-6 border-t border-border pt-5 text-xs leading-relaxed text-muted-foreground">
               تحفظ إجاباتك تلقائيا على هذا الجهاز، فيمكنك الإكمال لاحقا.
-              <a href={contact.whatsapp_url} target="_blank" rel="noopener noreferrer" className="mt-2 block text-white/70 hover:text-white">
+              <a href={contact.whatsapp_url} target="_blank" rel="noopener noreferrer" className="mt-2 block text-muted-foreground hover:text-foreground">
                 تفضل الحديث مباشرة؟ راسلني على واتساب ↖
               </a>
             </div>
@@ -678,40 +704,30 @@ export function BriefView() {
         {/* Form */}
         <div className="lg:col-span-8">
           {/* Mobile progress */}
-          <div className="mb-5 lg:hidden">
-            <div className="flex items-center justify-between text-sm">
-              <span className="font-semibold">
-                {step + 1}. {STEPS[step].title}
-              </span>
-              <span className="text-white/50 tabular-nums">
-                {step + 1} / {STEPS.length}
-              </span>
-            </div>
-            <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
-            </div>
-          </div>
+          <progress className="brief-progress mb-4 block h-1.5 w-full overflow-hidden rounded-full lg:hidden" value={step + 1} max={STEPS.length} aria-label={`التقدم: الخطوة ${AR(step + 1)} من ${AR(STEPS.length)}`} />
 
           <form
+            ref={formRef}
+            aria-labelledby="brief-step-title"
             onSubmit={(e) => {
               e.preventDefault();
               if (step < STEPS.length - 1) next();
               else void submit();
             }}
             noValidate
-            className="rounded-[2rem] border border-white/10 bg-[#0b0b0b]"
+            className="rounded-xl border border-border bg-card"
           >
             <input type="text" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" value={d.hp} onChange={(e) => set("hp", e.target.value)} />
 
-            <div className="border-b border-white/10 px-6 py-7 md:px-10 md:py-8">
+            <div className="border-b border-border px-4 py-5 sm:px-6 md:px-10 md:py-8">
               <div className="text-xs font-semibold text-accent">
-                الخطوة {step + 1} من {STEPS.length}
+                الخطوة {AR(step + 1)} من {AR(STEPS.length)}
               </div>
-              <h2 className="mt-2 font-display text-2xl font-bold md:text-[1.75rem]">{STEPS[step].title}</h2>
-              <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/55">{INTROS[step]}</p>
+              <h2 id="brief-step-title" ref={headingRef} tabIndex={-1} className="mt-2 scroll-mt-24 font-display text-3xl font-bold">{STEPS[step].title}</h2>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">{INTROS[step]}</p>
             </div>
 
-            <div className="space-y-8 px-6 py-8 md:px-10 md:py-10">
+            <div className="space-y-7 px-4 py-6 sm:px-6 md:px-10 md:py-10">
               {step === 0 && (
                 <>
                   <div className="grid gap-6 md:grid-cols-2">
@@ -733,11 +749,11 @@ export function BriefView() {
                           className={`${inputCls().replace("w-full ", "")} w-[5.5rem] shrink-0 appearance-none px-2 text-center`}
                         >
                           {[...new Set(COUNTRIES.map(([, c]) => c).filter(Boolean))].map((c) => (
-                            <option key={c} value={c} className="bg-[#111]">
+                            <option key={c} value={c} className="bg-card">
                               {c}
                             </option>
                           ))}
-                          <option value="" className="bg-[#111]">
+                          <option value="" className="bg-card">
                             أخرى
                           </option>
                         </select>
@@ -860,27 +876,27 @@ export function BriefView() {
                   {sections.map((rows, i) => {
                     const filled = rows.filter(([, v]) => v && v.trim());
                     return (
-                      <div key={i} className="rounded-2xl border border-white/10">
-                        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-3.5">
+                      <div key={i} className="rounded-2xl border border-border">
+                        <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-3.5">
                           <span className="font-semibold">
-                            <span className="text-white/40">{i + 1}. </span>
+                            <span className="text-muted-foreground">{i + 1}. </span>
                             {STEPS[i].title}
                           </span>
-                          <button type="button" onClick={() => go(i)} className={`rounded-full border border-white/15 px-3 py-1 text-xs hover:border-white/50 ${focusRing}`}>
+                          <button type="button" onClick={() => go(i)} className={`rounded-full border border-border px-3 py-1 text-xs hover:border-accent ${focusRing}`}>
                             تعديل
                           </button>
                         </div>
                         {filled.length ? (
-                          <dl className="divide-y divide-white/5">
+                          <dl className="divide-y divide-border">
                             {filled.map(([k, v]) => (
                               <div key={k} className="grid gap-1 px-5 py-3 text-sm sm:grid-cols-[11rem_1fr] sm:gap-4">
-                                <dt className="text-white/45">{k}</dt>
-                                <dd className="whitespace-pre-wrap break-words text-white/90">{v}</dd>
+                                <dt className="text-muted-foreground">{k}</dt>
+                                <dd className="whitespace-pre-wrap break-words text-foreground">{v}</dd>
                               </div>
                             ))}
                           </dl>
                         ) : (
-                          <p className="px-5 py-4 text-sm text-white/40">لم تتم الإجابة.</p>
+                          <p className="px-5 py-4 text-sm text-muted-foreground">لم تتم الإجابة.</p>
                         )}
                       </div>
                     );
@@ -890,21 +906,22 @@ export function BriefView() {
                       type="button"
                       role="checkbox"
                       aria-checked={d.consent}
-                      aria-describedby="consent-h"
+                      aria-invalid={!!E.consent}
+                      aria-describedby={E.consent ? "consent-h" : undefined}
                       onClick={() => set("consent", !d.consent)}
-                      className={`flex w-full items-start gap-3 rounded-2xl border p-4 text-start ${focusRing} ${
-                        E.consent ? "border-accent/70" : d.consent ? "border-white/25" : "border-white/10"
+                      className={`flex w-full items-start gap-3 rounded-lg border p-4 text-start ${focusRing} ${
+                        E.consent ? "border-accent/70" : d.consent ? "border-border" : "border-border"
                       }`}
                     >
                       <span
                         aria-hidden
                         className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border text-[11px] ${
-                          d.consent ? "border-accent bg-accent text-black" : "border-white/30"
+                          d.consent ? "border-accent bg-accent text-accent-foreground" : "border-border"
                         }`}
                       >
                         {d.consent ? "✓" : ""}
                       </span>
-                      <span className="text-sm leading-relaxed text-white/80">
+                      <span className="text-sm leading-relaxed text-foreground">
                         أوافق على أن يتواصل معي يوسف رحاب بخصوص هذا الطلب. لن تستخدم بياناتي لأي غرض آخر.
                       </span>
                     </button>
@@ -921,21 +938,21 @@ export function BriefView() {
             </div>
 
             {/* Footer navigation (sticky on phones) */}
-            <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 rounded-b-[2rem] border-t border-white/10 bg-[#0b0b0b]/95 px-6 py-4 backdrop-blur md:static md:px-10 md:py-6">
+            <div className="brief-actions sticky bottom-0 z-30 flex items-center justify-between gap-2 rounded-b-xl border-t border-border bg-card px-3 pt-2 sm:px-6 md:static md:px-10 md:py-5">
               {step > 0 ? (
-                <button type="button" onClick={() => go(step - 1)} className={`rounded-full px-4 py-2.5 text-sm text-white/60 hover:text-white ${focusRing}`}>
+                <button type="button" onClick={() => go(step - 1)} className={`min-h-11 rounded-full px-3 py-2 text-sm text-muted-foreground hover:text-foreground ${focusRing}`}>
                   → السابق
                 </button>
               ) : (
-                <span className="text-xs text-white/35">الحقول المعلمة بـ * مطلوبة</span>
+                <span className="text-xs text-muted-foreground">الحقول المعلمة بـ * مطلوبة</span>
               )}
               <button
                 type="submit"
                 disabled={sending}
-                className={`group inline-flex items-center gap-3 rounded-full bg-accent py-1.5 pe-1.5 ps-6 text-sm font-bold text-accent-foreground transition hover:brightness-110 disabled:opacity-60 ${focusRing}`}
+                className={`group inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-accent py-1.5 pe-1.5 ps-4 text-sm font-bold text-accent-foreground transition hover:brightness-110 disabled:opacity-60 ${focusRing}`}
               >
                 {step < STEPS.length - 2 ? "التالي" : step === STEPS.length - 2 ? "راجع إجاباتك" : sending ? "جار الإرسال…" : "أرسل الطلب"}
-                <span aria-hidden className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-black text-white transition-transform group-hover:-rotate-45">
+                <span aria-hidden className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-current text-accent-foreground transition-transform group-hover:-rotate-45">
                   ↖
                 </span>
               </button>
@@ -943,6 +960,7 @@ export function BriefView() {
           </form>
         </div>
       </div>
-    </section>
+      </section>
+    </div>
   );
 }

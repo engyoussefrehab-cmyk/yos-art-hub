@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
 import { formatDate, sanitizeHtml, type InsightArticle } from "@/lib/insights-types";
 
 import { pair } from "@/i18n/dictionary";
-import { ColourField } from "@/components/studio";
+import { container } from "@/components/studio";
+import { AR } from "@/components/studio-site";
+import { InsightCard } from "@/components/InsightCard";
 interface Props {
   article: InsightArticle;
   allArticles: InsightArticle[];
@@ -27,20 +29,22 @@ function processContent(html: string): { html: string; toc: { id: string; text: 
   const seen = new Set<string>();
   const processed = html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (_m, attrs, inner) => {
     const text = inner.replace(/<[^>]+>/g, "").trim();
-    let id = slugify(text);
+    const existing = attrs.match(/\sid\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+    const preferred = existing?.[1] || existing?.[2] || existing?.[3] || slugify(text);
+    let id = preferred;
     let n = 1;
-    while (seen.has(id)) id = `${slugify(text)}-${++n}`;
+    while (seen.has(id)) id = `${preferred}-${++n}`;
     seen.add(id);
     toc.push({ id, text });
-    if (/id\s*=/.test(attrs)) return `<h2${attrs}>${inner}</h2>`;
-    return `<h2 id="${id}"${attrs}>${inner}</h2>`;
+    if (existing && id === preferred) return `<h2${attrs}>${inner}</h2>`;
+    const safeId = id.replaceAll("&", "&amp;").replaceAll('"', "&quot;");
+    return `<h2 id="${safeId}"${existing ? attrs.replace(existing[0], "") : attrs}>${inner}</h2>`;
   });
   return { html: processed, toc };
 }
 
 export function InsightsArticleView({ article, allArticles }: Props) {
   const { lang } = useLang();
-  const base = "/insights";
   const category = article.category;
 
   const rawContent =
@@ -79,16 +83,25 @@ export function InsightsArticleView({ article, allArticles }: Props) {
   }, [allArticles, article.slug]);
 
   const [progress, setProgress] = useState(0);
+  const [copyStatus, setCopyStatus] = useState("");
+  const readingBody = useRef<HTMLDivElement>(null);
+  const mobileContents = useRef<HTMLDetailsElement>(null);
+  useEffect(() => setCopyStatus(""), [article.slug]);
   useEffect(() => {
     const onScroll = () => {
-      const h = document.documentElement;
-      const total = h.scrollHeight - h.clientHeight;
-      setProgress(total > 0 ? Math.min(100, Math.max(0, (h.scrollTop / total) * 100)) : 0);
+      const box = readingBody.current?.getBoundingClientRect();
+      if (!box) return;
+      const range = Math.max(box.height - window.innerHeight + 80, 1);
+      setProgress(Math.min(100, Math.max(0, ((80 - box.top) / range) * 100)));
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [article.slug]);
 
   const share = (network: "twitter" | "linkedin" | "copy") => {
     if (typeof window === "undefined") return;
@@ -107,7 +120,11 @@ export function InsightsArticleView({ article, allArticles }: Props) {
         "noopener,noreferrer",
       );
     } else {
-      navigator.clipboard?.writeText(url).catch(() => {});
+      if (!navigator.clipboard) return setCopyStatus("تعذّر نسخ الرابط");
+      navigator.clipboard.writeText(url).then(
+        () => setCopyStatus("تم نسخ الرابط"),
+        () => setCopyStatus("تعذّر نسخ الرابط"),
+      );
     }
   };
 
@@ -115,75 +132,61 @@ export function InsightsArticleView({ article, allArticles }: Props) {
   const excerpt = lang === "ar" ? article.excerpt_ar : article.excerpt_en || article.excerpt_ar;
   const catLabel = lang === "ar" ? category.label_ar : category.label_en;
 
-  const coverStyle = article.cover_url
-    ? {
-        backgroundImage: `url(${article.cover_url})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }
-    : { background: "linear-gradient(135deg, #0f0f2b 0%, #1a2540 60%, #d4a574 100%)" };
+  const cover = article.featured_image_url || article.cover_url;
 
   return (
-    <div className="bg-background">
-      <div className="fixed left-0 right-0 top-0 z-50 h-0.5 bg-transparent">
+    <div className="article-reading bg-background">
+      <div aria-hidden="true" className="fixed left-0 right-0 top-0 z-50 h-0.5 bg-transparent">
         <div
           className="h-full bg-accent transition-[width] duration-100"
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      <header className="px-3 pt-3 sm:px-6">
-        <div className="relative isolate mx-auto max-w-[1400px] overflow-hidden rounded-[2rem] border border-white/10 px-6 pb-10 pt-24 text-white md:px-16 md:pb-16 md:pt-32">
-          <div className="absolute inset-0 -z-10" style={coverStyle} aria-hidden />
-          <div
-            className="absolute inset-0 -z-10 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/80 to-[#0b0b0b]/40"
-            aria-hidden
-          />
-          <div className="max-w-4xl">
-            <nav className="flex items-center gap-2 text-xs text-white/70" aria-label="Breadcrumb">
-              <Link to={base} className="hover:text-white">
+      <header className={`${container} pb-7 pt-10 md:pb-10 md:pt-16`}>
+          <div className="max-w-5xl">
+            <nav className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground" aria-label="مسار الصفحة">
+              <Link to="/insights" className="py-1 hover:text-accent">
                 {lang === "ar" ? pair("nav_insights")[0] : pair("nav_insights")[1]}
               </Link>
               <span aria-hidden>/</span>
-              <Link to="/insights/$category" params={{ category: category.slug }} className="hover:text-white">
+              <Link to="/insights/$category" params={{ category: category.slug }} className="py-1 hover:text-accent">
                 {catLabel}
               </Link>
             </nav>
-            <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs text-white backdrop-blur">
-              <span className="text-accent">✦</span>
-              {catLabel}
-            </span>
-            <h1 className="mt-5 font-display text-[2rem] font-bold leading-[1.25] text-white sm:text-[2.75rem]">
+            <h1 className="mt-5 text-balance font-display text-[clamp(2.125rem,5.7vw,5rem)] font-bold leading-[1.17] text-foreground">
               {title}
             </h1>
             {excerpt && (
-              <p className="mt-5 max-w-3xl text-base leading-[1.9] text-white/80 md:text-lg">
+              <p className="mt-4 max-w-3xl text-base leading-loose text-muted-foreground md:text-lg">
                 {excerpt}
               </p>
             )}
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/70">
-              <span>{article.author_name}</span>
-              <span aria-hidden>·</span>
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground sm:text-sm">
+              {article.author_name && <span>{article.author_name}</span>}
               {article.published_at && (
                 <time dateTime={article.published_at}>
                   {formatDate(article.published_at, lang)}
                 </time>
               )}
-              <span aria-hidden>·</span>
-              <span>
-                {article.reading_minutes}{" "}
+              {article.reading_minutes > 0 && <span>
+                {lang === "ar" ? AR(article.reading_minutes) : article.reading_minutes}{" "}
                 {lang === "ar"
                   ? pair("ui_insightsarticleview_1")[0]
                   : pair("ui_insightsarticleview_1")[1]}
-              </span>
+              </span>}
             </div>
           </div>
-        </div>
       </header>
+      {cover && (
+        <div className={container}>
+          <img src={cover} alt="" fetchPriority="high" className="aspect-[16/9] max-h-[31rem] w-full rounded-xl bg-cream object-cover" />
+        </div>
+      )}
 
-      <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-12 px-6 py-16 md:px-10 md:py-24 lg:grid-cols-[1fr_260px]">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 px-6 py-8 md:px-10 md:py-14 lg:grid-cols-[minmax(0,1fr)_235px]">
         <article className="min-w-0">
-          <div className="mb-8 flex items-center gap-2 border-b border-border/60 pb-6">
+          <div className="mb-6 flex flex-wrap items-center gap-2 border-b border-border pb-4">
             <span className="text-xs text-muted-foreground">
               {lang === "ar"
                 ? pair("ui_insightsarticleview_2")[0]
@@ -221,10 +224,18 @@ export function InsightsArticleView({ article, allArticles }: Props) {
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
               </svg>
             </ShareBtn>
+            <span role="status" className="text-xs text-muted-foreground">{copyStatus}</span>
           </div>
 
+          {toc.length > 0 && (
+            <details ref={mobileContents} className="mb-7 rounded-xl border border-border bg-card px-4 lg:hidden">
+              <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold text-foreground">{pair("ui_insightsarticleview_10")[0]}</summary>
+              <ContentsLinks headings={toc} onSelect={() => { if (mobileContents.current) mobileContents.current.open = false; }} />
+            </details>
+          )}
           <div
-            className="prose-article insights-content"
+            ref={readingBody}
+            className="insights-content"
             dangerouslySetInnerHTML={{ __html: html }}
           />
 
@@ -233,7 +244,7 @@ export function InsightsArticleView({ article, allArticles }: Props) {
               {article.tags.map((t) => (
                 <span
                   key={t}
-                  className="rounded-full border border-white/15 px-3 py-1 text-xs text-muted-foreground"
+                  className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
                 >
                   #{t}
                 </span>
@@ -269,39 +280,38 @@ export function InsightsArticleView({ article, allArticles }: Props) {
             </section>
           )}
 
-          <section className="relative isolate mt-16 overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-8 text-white sm:p-12">
-            <ColourField variant="soft" />
+          <section className="mt-12 rounded-xl border border-border bg-cream p-6 text-foreground sm:p-10">
             <h2 className="font-display text-2xl font-bold sm:text-[2rem]">
               {lang === "ar"
                 ? pair("ui_insightsarticleview_5")[0]
                 : pair("ui_insightsarticleview_5")[1]}
             </h2>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/70">
+            <p className="mt-3 max-w-xl text-sm leading-loose text-muted-foreground">
               {lang === "ar"
                 ? pair("ui_insightsarticleview_6")[0]
                 : pair("ui_insightsarticleview_6")[1]}
             </p>
             <Link
               to={"/contact"}
-              className="group mt-6 inline-flex items-center gap-3 rounded-full bg-white py-1.5 pe-1.5 ps-5 text-sm font-bold text-black"
+              className="group mt-5 inline-flex min-h-11 items-center gap-3 rounded-full bg-accent px-4 py-2 text-sm font-bold text-accent-foreground"
             >
               {lang === "ar"
                 ? pair("ui_insightsarticleview_7")[0]
                 : pair("ui_insightsarticleview_7")[1]}
               <span
                 aria-hidden
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent transition-transform group-hover:-rotate-45"
+                className="inline-flex size-7 items-center justify-center rounded-full border border-current transition-transform group-hover:-rotate-45"
               >
                 ↖
               </span>
             </Link>
           </section>
 
-          <nav className="mt-12 grid gap-4 sm:grid-cols-2">
+          <nav className="mt-8 grid gap-3 sm:grid-cols-2" aria-label="المقالات المجاورة">
             {prev ? (
               <Link
                 to="/insights/$category/$slug" params={{ category: prev.category.slug, slug: prev.slug }}
-                className="group rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] p-5 transition-all hover:border-accent/50"
+                className="group rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent"
               >
                 <span className="text-xs uppercase tracking-widest text-muted-foreground">
                   {lang === "ar"
@@ -312,13 +322,11 @@ export function InsightsArticleView({ article, allArticles }: Props) {
                   {lang === "ar" ? prev.title_ar : prev.title_en || prev.title_ar}
                 </p>
               </Link>
-            ) : (
-              <span />
-            )}
+            ) : null}
             {next ? (
               <Link
                 to="/insights/$category/$slug" params={{ category: next.category.slug, slug: next.slug }}
-                className="group rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] p-5 transition-all hover:border-accent/50"
+                className="group rounded-xl border border-border bg-card p-4 transition-colors hover:border-accent"
               >
                 <span className="text-xs uppercase tracking-widest text-muted-foreground">
                   {lang === "ar"
@@ -329,9 +337,7 @@ export function InsightsArticleView({ article, allArticles }: Props) {
                   {lang === "ar" ? next.title_ar : next.title_en || next.title_ar}
                 </p>
               </Link>
-            ) : (
-              <span />
-            )}
+            ) : null}
           </nav>
         </article>
 
@@ -343,26 +349,15 @@ export function InsightsArticleView({ article, allArticles }: Props) {
                   ? pair("ui_insightsarticleview_10")[0]
                   : pair("ui_insightsarticleview_10")[1]}
               </span>
-              <ul className="mt-4 space-y-3 border-l border-border/70 ps-4 rtl:border-l-0 rtl:border-r rtl:ps-0 rtl:pe-4">
-                {toc.map((h) => (
-                  <li key={h.id}>
-                    <a
-                      href={`#${h.id}`}
-                      className="text-sm text-muted-foreground transition-colors hover:text-accent"
-                    >
-                      {h.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <ContentsLinks headings={toc} />
             </div>
           </aside>
         )}
       </div>
 
       {related.length > 0 && (
-        <section className="border-t border-white/10">
-          <div className="mx-auto max-w-[1400px] px-6 py-20 md:px-10 md:py-28">
+        <section className="border-t border-border">
+          <div className={`${container} py-10 md:py-16`}>
             <h2 className="font-display text-2xl font-semibold text-foreground">
               {lang === "ar"
                 ? pair("ui_insightsarticleview_11")[0]
@@ -370,13 +365,27 @@ export function InsightsArticleView({ article, allArticles }: Props) {
             </h2>
             <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((r) => (
-                <RelatedCard key={r.id} article={r} />
+                <InsightCard key={r.id} article={r} />
               ))}
             </div>
           </div>
         </section>
       )}
     </div>
+  );
+}
+
+function ContentsLinks({ headings, onSelect }: { headings: { id: string; text: string }[]; onSelect?: () => void }) {
+  return (
+    <ul className="border-s border-border ps-3 pb-2 lg:mt-3">
+      {headings.map(({ id, text }) => (
+        <li key={id}>
+          <a href={`#${encodeURIComponent(id)}`} onClick={onSelect} className="block py-2.5 text-sm leading-snug text-muted-foreground hover:text-accent">
+            {text}
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -394,37 +403,9 @@ function ShareBtn({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-accent hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       {children}
     </button>
-  );
-}
-
-function RelatedCard({ article }: { article: InsightArticle }) {
-  const { lang } = useLang();
-  const base = "/insights";
-  const style = article.cover_url
-    ? {
-        backgroundImage: `url(${article.cover_url})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }
-    : { background: "linear-gradient(135deg,#1a1a2e,#0f3460)" };
-  return (
-    <Link
-      to="/insights/$category/$slug" params={{ category: article.category.slug, slug: article.slug }}
-      className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] transition-all hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
-    >
-      <div className="aspect-[16/9]" style={style} aria-hidden />
-      <div className="p-5">
-        <div className="text-[11px] font-medium uppercase tracking-wider text-accent">
-          {lang === "ar" ? article.category.label_ar : article.category.label_en}
-        </div>
-        <h3 className="mt-2 font-display text-base font-semibold text-foreground group-hover:text-accent">
-          {lang === "ar" ? article.title_ar : article.title_en || article.title_ar}
-        </h3>
-      </div>
-    </Link>
   );
 }

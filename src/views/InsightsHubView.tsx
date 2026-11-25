@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useLang } from "@/i18n/use-lang";
-import { formatDate, type InsightArticle, type InsightCategoryRow } from "@/lib/insights-types";
+import { type InsightArticle, type InsightCategoryRow } from "@/lib/insights-types";
 
 import { pair } from "@/i18n/dictionary";
-import { ColourField } from "@/components/studio";
+import { StudioSectionHero, container } from "@/components/studio";
+import { AR } from "@/components/studio-site";
+import { InsightCard } from "@/components/InsightCard";
 /** Score an article/category against a lowercase query. Higher = better. */
 function scoreMatch(text: string, q: string): number {
   if (!q) return 0;
@@ -27,83 +29,6 @@ function articleScore(a: InsightArticle, q: string): number {
   return title * 3 + kw + tags + excerpt + cat;
 }
 
-function coverStyle(a: InsightArticle) {
-  if (a.cover_url)
-    return {
-      backgroundImage: `url(${a.cover_url})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-    };
-  // Fallback gradient — derived from slug for visual variety
-  const hash = Array.from(a.slug).reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 0);
-  const hue = hash % 360;
-  return {
-    background: `linear-gradient(135deg, hsl(${hue} 45% 25%) 0%, hsl(${(hue + 40) % 360} 55% 40%) 100%)`,
-  };
-}
-
-function Cover({ article, className }: { article: InsightArticle; className?: string }) {
-  const { lang } = useLang();
-  return (
-    <div
-      className={`relative overflow-hidden ${className ?? ""}`}
-      style={coverStyle(article)}
-      role="img"
-      aria-label={article.title_ar || article.title_en}
-    >
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-      <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/80">
-          {lang === "ar" ? article.category.label_ar : article.category.label_en}
-        </span>
-        <h3 className="mt-2 font-display text-xl font-semibold leading-tight text-white sm:text-2xl line-clamp-3">
-          {lang === "ar" ? article.title_ar : article.title_en || article.title_ar}
-        </h3>
-      </div>
-    </div>
-  );
-}
-
-function ArticleCard({ article }: { article: InsightArticle }) {
-  const { lang } = useLang();
-  const base = "/insights";
-  const title = lang === "ar" ? article.title_ar : article.title_en || article.title_ar;
-  const excerpt = lang === "ar" ? article.excerpt_ar : article.excerpt_en || article.excerpt_ar;
-  return (
-    <Link
-      to="/insights/$category/$slug" params={{ category: article.category.slug, slug: article.slug }}
-      className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0b] transition-colors hover:border-white/25"
-    >
-      <Cover article={article} className="aspect-[16/10]" />
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-center gap-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-          <span className="text-accent">
-            {lang === "ar" ? article.category.label_ar : article.category.label_en}
-          </span>
-          <span aria-hidden>·</span>
-          <span>
-            {article.reading_minutes}{" "}
-            {lang === "ar"
-              ? pair("ui_insightscategoryview_4")[0]
-              : pair("ui_insightscategoryview_4")[1]}
-          </span>
-        </div>
-        <h3 className="mt-3 font-display text-lg font-bold leading-snug text-foreground transition-colors group-hover:text-accent">
-          {title}
-        </h3>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-3">{excerpt}</p>
-        <div className="mt-5 flex items-center justify-between text-xs text-muted-foreground/80">
-          <span>{formatDate(article.published_at, lang)}</span>
-          <span className="inline-flex items-center gap-1 font-medium text-foreground/80 transition-colors group-hover:text-accent">
-            {lang === "ar" ? pair("ui_insightshubview_1")[0] : pair("ui_insightshubview_1")[1]}
-            <span aria-hidden>{lang === "ar" ? "←" : "→"}</span>
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
 interface HubProps {
   categories: InsightCategoryRow[];
   articles: InsightArticle[];
@@ -111,7 +36,6 @@ interface HubProps {
 
 export function InsightsHubView({ categories, articles }: HubProps) {
   const { lang } = useLang();
-  const base = "/insights";
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<string>("all");
   const [suggestOpen, setSuggestOpen] = useState(false);
@@ -179,25 +103,14 @@ export function InsightsHubView({ categories, articles }: HubProps) {
     (suggestions.length > 0 || matchedCategories.length > 0);
 
   return (
-    <div className="bg-background">
-      <section className="px-3 pt-3 sm:px-6">
-        <div className="relative isolate mx-auto max-w-[1400px] rounded-[2rem] border border-white/10 bg-[#0b0b0b] px-6 pb-10 pt-24 md:px-16 md:pb-16 md:pt-32">
-          <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden rounded-[2rem]">
-            <ColourField />
-          </div>
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs text-white backdrop-blur">
-            <span className="text-accent">✦</span>
-            {lang === "ar" ? pair("ui_insightshubview_2")[0] : pair("ui_insightshubview_2")[1]}
-          </span>
-          <h1 className="mt-5 font-display text-[2.25rem] font-bold leading-[1.15] text-white sm:text-5xl lg:text-[3.75rem]">
-            {lang === "ar" ? pair("ui_insightshubview_3")[0] : pair("ui_insightshubview_3")[1]}
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-[1.9] text-white/75 md:text-lg">
-            {lang === "ar" ? pair("ui_insightshubview_4")[0] : pair("ui_insightshubview_4")[1]}
-          </p>
-
-          <div ref={searchWrapRef} className="relative mt-8 max-w-xl">
-            <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-5 py-2.5 backdrop-blur transition-colors focus-within:border-accent">
+    <>
+      <StudioSectionHero
+        title={lang === "ar" ? pair("ui_insightshubview_3")[0] : pair("ui_insightshubview_3")[1]}
+        intro={lang === "ar" ? pair("ui_insightshubview_4")[0] : pair("ui_insightshubview_4")[1]}
+      >
+        <div className="w-full max-w-2xl">
+          <div ref={searchWrapRef} className="relative">
+            <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 transition-colors focus-within:border-accent">
               <svg
                 viewBox="0 0 24 24"
                 className="h-4 w-4 text-muted-foreground"
@@ -222,12 +135,14 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                 placeholder={
                   lang === "ar" ? pair("ui_insightshubview_5")[0] : pair("ui_insightshubview_5")[1]
                 }
-                className="w-full bg-transparent py-1.5 text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+                className="min-h-11 w-full bg-transparent text-base text-foreground placeholder:text-muted-foreground/70 focus:outline-none [&::-webkit-search-cancel-button]:appearance-none"
                 aria-label={
                   lang === "ar" ? pair("ui_insightshubview_6")[0] : pair("ui_insightshubview_6")[1]
                 }
-                aria-expanded={showSuggestions}
-                aria-controls="insights-suggestions"
+                aria-controls={showSuggestions ? "insights-suggestions" : undefined}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape" || event.key === "Enter") setSuggestOpen(false);
+                }}
                 autoComplete="off"
               />
               {query && (
@@ -242,7 +157,7 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                       ? pair("ui_insightshubview_7")[0]
                       : pair("ui_insightshubview_7")[1]
                   }
-                  className="text-muted-foreground hover:text-accent"
+                  className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground hover:text-accent"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -263,8 +178,9 @@ export function InsightsHubView({ categories, articles }: HubProps) {
             {showSuggestions && (
               <div
                 id="insights-suggestions"
-                role="listbox"
-                className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#0b0b0b] shadow-2xl"
+                role="region"
+                aria-label="اقتراحات البحث"
+                className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-xl border border-border bg-card shadow-lg"
               >
                 {matchedCategories.length > 0 && (
                   <div className="border-b border-border/60 p-2">
@@ -288,14 +204,13 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                   </div>
                 )}
                 {suggestions.length > 0 ? (
-                  <ul className="max-h-96 overflow-y-auto p-2">
+                  <ul className="max-h-[min(45svh,20rem)] overflow-y-auto p-2">
                     {suggestions.map(({ a }) => (
                       <li key={a.id}>
                         <Link
                           to="/insights/$category/$slug" params={{ category: a.category.slug, slug: a.slug }}
                           onClick={() => setSuggestOpen(false)}
                           className="flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-accent/10"
-                          role="option"
                         >
                           <div
                             aria-hidden
@@ -343,54 +258,16 @@ export function InsightsHubView({ categories, articles }: HubProps) {
             ))}
           </div>
         </div>
-      </section>
+      </StudioSectionHero>
 
       {!query && active === "all" && featured && (
-        <section className="mx-auto max-w-[1400px] px-6 pt-20 md:px-10 md:pt-28">
-          <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="text-accent">✦</span>
-            {lang === "ar" ? pair("ui_insightshubview_11")[0] : pair("ui_insightshubview_11")[1]}
-          </span>
-          <Link
-            to="/insights/$category/$slug" params={{ category: featured.category.slug, slug: featured.slug }}
-            className="group mt-5 grid overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] transition-colors hover:border-white/25 md:grid-cols-2"
-          >
-            <Cover article={featured} className="aspect-[16/10] md:aspect-auto md:min-h-[380px]" />
-            <div className="flex flex-col justify-center gap-5 p-7 sm:p-12">
-              <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                <span className="rounded-full bg-accent/10 px-2.5 py-1 text-accent">
-                  {lang === "ar" ? featured.category.label_ar : featured.category.label_en}
-                </span>
-                <span>
-                  {featured.reading_minutes}{" "}
-                  {lang === "ar"
-                    ? pair("ui_insightsarticleview_1")[0]
-                    : pair("ui_insightsarticleview_1")[1]}
-                </span>
-                <span aria-hidden>·</span>
-                <span>{formatDate(featured.published_at, lang)}</span>
-              </div>
-              <h2 className="font-display text-2xl font-bold leading-snug text-foreground transition-colors group-hover:text-accent md:text-[2rem]">
-                {lang === "ar" ? featured.title_ar : featured.title_en || featured.title_ar}
-              </h2>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                {lang === "ar" ? featured.excerpt_ar : featured.excerpt_en || featured.excerpt_ar}
-              </p>
-              <span className="mt-2 inline-flex items-center gap-3 self-start rounded-full bg-white py-1.5 pe-1.5 ps-5 text-sm font-bold text-black">
-                {lang === "ar" ? pair("ui_insightshubview_1")[0] : pair("ui_insightshubview_1")[1]}
-                <span
-                  aria-hidden
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-accent transition-transform group-hover:-rotate-45"
-                >
-                  ↖
-                </span>
-              </span>
-            </div>
-          </Link>
+        <section className={`${container} pt-9 md:pt-14`} aria-label="مقال مميز">
+          <p className="mb-3 text-sm font-bold text-accent">{pair("ui_insightshubview_11")[0]}</p>
+          <InsightCard article={featured} featured />
         </section>
       )}
 
-      <section className="mx-auto max-w-[1400px] px-6 pb-28 pt-20 md:px-10 md:pb-40 md:pt-28">
+      <section className={`${container} py-10 md:py-16`}>
         <div className="mb-10 flex items-baseline justify-between">
           <h2 className="font-display text-2xl font-bold text-foreground md:text-[2.25rem]">
             {query || active !== "all"
@@ -401,8 +278,8 @@ export function InsightsHubView({ categories, articles }: HubProps) {
                 ? pair("ui_insightshubview_13")[0]
                 : pair("ui_insightshubview_13")[1]}
           </h2>
-          <span className="text-sm text-muted-foreground">
-            {filtered.length}{" "}
+          <span className="text-sm text-muted-foreground" aria-live="polite">
+            {lang === "ar" ? AR(filtered.length) : filtered.length}{" "}
             {lang === "ar" ? "مقال" : filtered.length === 1 ? "article" : "articles"}
           </span>
         </div>
@@ -421,12 +298,12 @@ export function InsightsHubView({ categories, articles }: HubProps) {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {filtered.map((a) => (
-              <ArticleCard key={a.id} article={a} />
+              <InsightCard key={a.id} article={a} />
             ))}
           </div>
         )}
       </section>
-    </div>
+    </>
   );
 }
 
@@ -443,10 +320,11 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-4 py-2 text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+      aria-pressed={active}
+      className={`min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
         active
-          ? "border-white bg-white text-black"
-          : "border-white/20 text-white/80 hover:border-white/60 hover:text-white"
+          ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--bg)]"
+          : "border-border text-muted-foreground hover:border-accent hover:text-accent"
       }`}
     >
       {children}

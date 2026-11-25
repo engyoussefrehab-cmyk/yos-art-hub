@@ -352,6 +352,7 @@ body:has(.yrh) {
 .yrh .studio-content.light {
   --background: var(--bg);
   --foreground: var(--ink);
+  --card: color-mix(in srgb, var(--bg) 72%, white);
   --muted-foreground: var(--muted);
   --border: var(--line);
   --accent: var(--acc-text);
@@ -360,6 +361,29 @@ body:has(.yrh) {
 }
 .yrh .studio-content .font-display {
   font-family: var(--display);
+}
+.brief-progress {
+  appearance: none;
+  background: var(--cream);
+}
+.brief-progress::-webkit-progress-bar {
+  background: var(--cream);
+}
+.brief-progress::-webkit-progress-value {
+  background: var(--accent);
+}
+.brief-progress::-moz-progress-bar {
+  background: var(--accent);
+}
+.brief-actions {
+  padding-bottom: max(0.6rem, env(safe-area-inset-bottom));
+}
+@media (max-width: 767px) {
+  .yrh:has(.brief-page) .wa,
+  .yrh:has(.article-reading) .wa,
+  .yrh:has(.brief-page) .studio-top {
+    display: none;
+  }
 }
 .yrh .studio-skip:not(:focus) {
   position: absolute;

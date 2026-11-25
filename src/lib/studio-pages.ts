@@ -3,7 +3,11 @@ const PROJECT_DETAIL_PATH = /^\/projects\/[^/]+\/[^/]+\/?$/;
 
 export function studioSurface(pathname: string): "custom" | "light" | "dark" {
   if (STUDIO_PATHS.has(pathname) || PROJECT_DETAIL_PATH.test(pathname)) return "custom";
-  if (/^\/projects\/[^/]+\/?$/.test(pathname) || /^\/(tools|contact)\/?$/.test(pathname)) return "light";
+  if (
+    /^\/projects\/[^/]+\/?$/.test(pathname) ||
+    /^\/(tools|contact|brief)\/?$/.test(pathname) ||
+    /^\/insights(?:\/|$)/.test(pathname)
+  ) return "light";
   return "dark";
 }
 

@@ -15,23 +15,37 @@ export const EMAIL = contact.cta_email;
 export const AR = (n: number) => String(n).replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[Number(d)]);
 
 type MenuLink = { href: string; label: string; newTab?: boolean };
+const toolsLink: MenuLink = { href: "/tools", label: "الأدوات" };
 const headerLinks: MenuLink[] = [
   { href: "/projects", label: "الأعمال" },
   { href: "/#studio", label: "الاستوديو" },
   { href: "/insights", label: "المقالات" },
-  { href: "/tools", label: "الأدوات" },
+  toolsLink,
   { href: "/contact", label: "تواصل" },
 ];
 const footerLinks: MenuLink[] = [
   { href: "/projects", label: "الأعمال" },
   { href: "/#services", label: "الخدمات" },
-  { href: "/tools", label: "الأدوات" },
+  toolsLink,
 ];
 
 function useStudioMenu(location: string, defaults: MenuLink[]) {
   const configured = useCmsMenu(location);
   if (!configured.length) return defaults;
-  return configured.map((item) => ({ href: item.url, label: item.label_ar, newTab: item.open_in_new_tab }));
+  const links: MenuLink[] = [];
+  const seen = new Set<string>();
+  for (const item of configured) {
+    const href = item.url.replace(/\/$/, "") || "/";
+    if (seen.has(href)) continue;
+    seen.add(href);
+    links.push(href === toolsLink.href ? toolsLink : {
+      href: item.url,
+      label: item.label_ar,
+      newTab: item.open_in_new_tab,
+    });
+  }
+  if (!seen.has(toolsLink.href)) links.push(toolsLink);
+  return links;
 }
 
 export function StudioPage({ children, pathname, surface }: {
