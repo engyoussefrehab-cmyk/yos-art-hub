@@ -25,7 +25,7 @@ const headerLinks: MenuLink[] = [
 ];
 const footerLinks: MenuLink[] = [
   { href: "/projects", label: "الأعمال" },
-  { href: "/#services", label: "الخدمات" },
+  { href: "/brief", label: "نموذج المشروع" },
   toolsLink,
 ];
 

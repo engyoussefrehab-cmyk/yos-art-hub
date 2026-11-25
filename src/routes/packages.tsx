@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-// Keep bookmarked package URLs pointing to the current services section.
-const DEST = "/#services";
+// Keep bookmarked package URLs pointing to the studio overview.
+const DEST = "/#studio";
 
 export const Route = createFileRoute("/packages")({
   head: () => ({
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/packages")({
     }, []);
     return (
       <p style={{ padding: 40, textAlign: "center" }}>
-        <a href={DEST}>الخدمات</a>
+        <a href={DEST}>الاستوديو</a>
       </p>
     );
   },

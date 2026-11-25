@@ -202,14 +202,13 @@ export const COLLECTIONS: Collection[] = [
   {
     id: "services",
     title: "الخدمات",
-    description: "قسم «ماذا أقدّم» في الصفحة الرئيسية.",
+    description: "بيانات الخدمات المحفوظة.",
     file: `${SNAP}/services.json`,
     kind: "list",
     sortKey: "sort_order",
     visibility: { key: "status", on: "published", off: "draft" },
     itemTitle: (x) => x.title_ar,
     itemSubtitle: (x) => x.description_ar || "",
-    siteHref: () => "/#services",
     sections: [
       {
         title: "الخدمة",
