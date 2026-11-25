@@ -37,6 +37,9 @@ export function StudioPage({ children, active }: { children: ReactNode; active?:
           </div>
           <div>
             <b>تابعنا</b>
+            <a className="ul" href={contact.instagram_url} target="_blank" rel="noopener noreferrer">إنستجرام</a>
+            <a className="ul" href={contact.tiktok_url} target="_blank" rel="noopener noreferrer">تيك توك</a>
+            <a className="ul" href={contact.youtube_url} target="_blank" rel="noopener noreferrer">يوتيوب</a>
             <a className="ul" href={contact.linkedin_url} target="_blank" rel="noopener noreferrer">لينكدإن</a>
           </div>
           <div>

@@ -458,7 +458,15 @@ export const COLLECTIONS: Collection[] = [
           { key: "whatsapp_url", label: "رابط واتساب", type: "url", hint: "بالشكل ده: https://wa.me/201030365405" },
         ],
       },
-      { title: "السوشيال", fields: [{ key: "linkedin_url", label: "لينكدإن", type: "url" }] },
+      {
+        title: "السوشيال",
+        fields: [
+          { key: "instagram_url", label: "إنستجرام", type: "url" },
+          { key: "tiktok_url", label: "تيك توك", type: "url" },
+          { key: "youtube_url", label: "يوتيوب", type: "url" },
+          { key: "linkedin_url", label: "لينكدإن", type: "url" },
+        ],
+      },
     ],
   },
   {
