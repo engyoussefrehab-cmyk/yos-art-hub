@@ -79,7 +79,7 @@ export function StudioPage({ children, pathname, surface }: {
         <div className="fcols">
           <div>
             <b>مشاريع جديدة</b>
-            <a className="ul" href={`mailto:${EMAIL}`}>{EMAIL}</a>
+            <a className="ul" href={`mailto:${contact.email}`}>{contact.email}</a>
             <a className="ul" href={`tel:${contact.phone_e164}`} dir="ltr">{contact.phone_display}</a>
           </div>
           <div>
