@@ -108,7 +108,6 @@ p { margin: 0; }
 .roles button:hover { border-color: var(--accent); }
 .roles i { width: 14px; height: 14px; border: 1px solid #3b1a1e40; border-radius: 50%; }
 .tip { font-size: 13px; }
-.legacy-link { display: inline-block; text-underline-offset: 4px; font-size: 13px; }
 
 @media (max-width: 650px) {
   .wrap { width: calc(100% - 24px); padding-top: 8px; }

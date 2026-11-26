@@ -24,6 +24,7 @@ import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as ToolsColorWheelRouteImport } from './routes/tools.color-wheel'
+import { Route as ToolsColorBalanceRouteImport } from './routes/tools.color-balance'
 import { Route as ToolsColorBriefRouteImport } from './routes/tools.color-brief'
 import { Route as GoSplatRouteImport } from './routes/go.$'
 import { Route as EnSplatRouteImport } from './routes/en.$'
@@ -107,6 +108,11 @@ const ToolsColorWheelRoute = ToolsColorWheelRouteImport.update({
   path: '/tools/color-wheel',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsColorBalanceRoute = ToolsColorBalanceRouteImport.update({
+  id: '/tools/color-balance',
+  path: '/tools/color-balance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ToolsColorBriefRoute = ToolsColorBriefRouteImport.update({
   id: '/tools/color-brief',
   path: '/tools/color-brief',
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
+  '/tools/color-balance': typeof ToolsColorBalanceRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
   '/tools/color-wheel': typeof ToolsColorWheelRoute
   '/en/': typeof EnIndexRoute
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
+  '/tools/color-balance': typeof ToolsColorBalanceRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
   '/tools/color-wheel': typeof ToolsColorWheelRoute
   '/en': typeof EnIndexRoute
@@ -205,6 +213,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/en/$': typeof EnSplatRoute
   '/go/$': typeof GoSplatRoute
+  '/tools/color-balance': typeof ToolsColorBalanceRoute
   '/tools/color-brief': typeof ToolsColorBriefRoute
   '/tools/color-wheel': typeof ToolsColorWheelRoute
   '/en/': typeof EnIndexRoute
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/en/$'
     | '/go/$'
+    | '/tools/color-balance'
     | '/tools/color-brief'
     | '/tools/color-wheel'
     | '/en/'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/en/$'
     | '/go/$'
+    | '/tools/color-balance'
     | '/tools/color-brief'
     | '/tools/color-wheel'
     | '/en'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/en/$'
     | '/go/$'
+    | '/tools/color-balance'
     | '/tools/color-brief'
     | '/tools/color-wheel'
     | '/en/'
@@ -304,6 +316,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   EnSplatRoute: typeof EnSplatRoute
   GoSplatRoute: typeof GoSplatRoute
+  ToolsColorBalanceRoute: typeof ToolsColorBalanceRoute
   ToolsColorBriefRoute: typeof ToolsColorBriefRoute
   ToolsColorWheelRoute: typeof ToolsColorWheelRoute
   EnIndexRoute: typeof EnIndexRoute
@@ -423,6 +436,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsColorWheelRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/color-balance': {
+      id: '/tools/color-balance'
+      path: '/tools/color-balance'
+      fullPath: '/tools/color-balance'
+      preLoaderRoute: typeof ToolsColorBalanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tools/color-brief': {
       id: '/tools/color-brief'
       path: '/tools/color-brief'
@@ -488,6 +508,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   EnSplatRoute: EnSplatRoute,
   GoSplatRoute: GoSplatRoute,
+  ToolsColorBalanceRoute: ToolsColorBalanceRoute,
   ToolsColorBriefRoute: ToolsColorBriefRoute,
   ToolsColorWheelRoute: ToolsColorWheelRoute,
   EnIndexRoute: EnIndexRoute,

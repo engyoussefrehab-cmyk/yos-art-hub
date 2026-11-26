@@ -5,7 +5,7 @@ import insightCategories from "@/data/snapshot/insight_categories.json";
 import portfolioProjects from "@/data/snapshot/portfolio_projects.json";
 import projectCategories from "@/data/snapshot/project_categories.json";
 
-const publicPages = ["/", "/projects", "/contact", "/brief", "/quote-request/", "/tools", "/tools/color-brief/", "/tools/color-wheel/", "/insights"];
+const publicPages = ["/", "/projects", "/contact", "/brief", "/quote-request/", "/tools", "/tools/color-brief/", "/tools/color-wheel/", "/tools/color-balance/", "/insights"];
 const visibleProjectCategories = new Set(projectCategories.filter(({ is_hidden }) => !is_hidden).map(({ slug }) => slug));
 const articleCategorySlugs = new Map(insightCategories.map(({ id, slug }) => [id, slug]));
 

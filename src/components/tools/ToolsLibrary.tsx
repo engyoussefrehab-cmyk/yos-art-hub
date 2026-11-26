@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowLeft, Palette, Target } from "lucide-react";
+import { ArrowLeft, Palette, Scale, Target } from "lucide-react";
 import { useLang } from "@/i18n/use-lang";
 import { StudioSectionHero, container } from "@/components/studio";
 
@@ -17,6 +17,13 @@ const tools = [
     description: "tools_wheel_desc",
     icon: Target,
     colors: ["#1F4E5A", "#C1CDD0", "#FF8253"],
+  },
+  {
+    path: "/tools/color-balance",
+    title: "tools_balance_title",
+    description: "tools_balance_desc",
+    icon: Scale,
+    colors: ["#1F4E5A", "#F2EDE4", "#FF8253"],
   },
 ] as const;
 

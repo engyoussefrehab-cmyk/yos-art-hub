@@ -63,6 +63,14 @@
     "ar": "تناغم الألوان",
     "en": "Color harmony"
   },
+  "tools_balance_title": {
+    "ar": "ميزان اللون",
+    "en": "Color Balance"
+  },
+  "tools_balance_desc": {
+    "ar": "اقترح لون إبراز لخلفيتك، وقارن نسب التباين وجرّب الألوان على بوستر.",
+    "en": "Find an accent color, check contrast ratios, and preview the palette on a poster."
+  },
   "tools_coming_soon": {
     "ar": "المزيد من الأدوات قريبا",
     "en": "More tools coming soon"
