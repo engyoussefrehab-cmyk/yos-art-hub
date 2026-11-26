@@ -72,6 +72,35 @@ p { margin: 0; }
 .swatch bdi { font: 600 14px ui-monospace, monospace; }
 .copy-status { min-height: 21px; color: var(--accent); padding-top: 3px; font-size: 13px; }
 .guide { padding: clamp(13px, 3vw, 22px); }
+.usage-example { margin: 15px 0 0; }
+.usage-example figcaption { margin-bottom: 6px; color: var(--muted); font-size: 13px; font-weight: 650; }
+.usage-preview {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px 22px;
+  min-height: 138px;
+  padding: clamp(15px, 4vw, 33px);
+  border: 1px solid #3b1a1e36;
+  border-radius: 11px;
+  background: var(--preview-background);
+}
+.usage-preview h4 { margin: 0; color: var(--preview-title); font: 700 clamp(29px, 6vw, 58px)/1.2 var(--headline); }
+.usage-preview h4 span { display: inline-block; border-radius: 5px; background: var(--preview-title-backdrop); }
+.usage-preview[data-title-backdrop] h4 span { padding-inline: 7px; }
+.usage-preview-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 15px;
+  border: 1px solid var(--preview-button-border);
+  border-radius: 99px;
+  background: var(--preview-button);
+  color: var(--preview-button-text);
+  font-weight: 700;
+  font-size: 14px;
+}
 .proportions { display: grid; grid-template-columns: 60fr 30fr 10fr; min-height: 38px; overflow: hidden; border-radius: 7px; border: 1px solid #3b1a1e30; margin-top: 13px; }
 .roles { display: flex; flex-wrap: wrap; gap: 5px 15px; padding-top: 7px; font-size: 13px; }
 .roles button { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: 1px solid var(--line); border-radius: 6px; min-height: 33px; padding: 3px 7px; }

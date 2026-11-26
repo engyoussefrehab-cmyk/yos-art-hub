@@ -7,6 +7,7 @@ const picker = get("picker");
 const ruleButtons = get("rules");
 const swatches = get("swatches");
 const usageRoles = get("roles");
+const usagePreview = get("usage-preview");
 let base = picker.value.toUpperCase();
 let active = rules[0];
 let palette = [];
@@ -48,12 +49,33 @@ function render() {
     return `<button class="swatch" type="button" data-hex="${hex}" aria-label="انسخ ${hex}" style="--swatch:${hex};--swatch-text:${ink}">${index ? "" : "<span>اللون الأساسي</span>"}<bdi>${hex}</bdi></button>`;
   }).join("");
   const usage = makeUsagePalette(palette, active);
+  renderUsagePreview(usage);
   const roles = ["اللون الأساسي", "لون مساعد", "لون إبراز"];
   get("proportions").innerHTML = usage.map(hex => `<span style="background:${hex}"></span>`).join("");
   usageRoles.innerHTML = usage.map((hex, index) => `
     <button type="button" data-hex="${hex}" aria-label="انسخ ${roles[index]} ${hex}">
       <i style="background:${hex}" aria-hidden="true"></i>${roles[index]} <bdi>${hex}</bdi>
     </button>`).join("");
+}
+
+function readableInk(color) {
+  return contrastRatio(color, "#FFFFFF") >= contrastRatio(color, "#000000") ? "#FFFFFF" : "#000000";
+}
+
+function renderUsagePreview([background, title, button]) {
+  const needsTitleBackdrop = contrastRatio(background, title) < 3;
+  const colors = {
+    background,
+    title,
+    "title-backdrop": needsTitleBackdrop ? readableInk(title) : "transparent",
+    button,
+    "button-text": readableInk(button),
+    "button-border": contrastRatio(background, button) < 3 ? readableInk(background) : button,
+  };
+  usagePreview.toggleAttribute("data-title-backdrop", needsTitleBackdrop);
+  for (const [role, color] of Object.entries(colors)) {
+    usagePreview.style.setProperty("--preview-" + role, color);
+  }
 }
 
 function setBase(hex, syncField = true) {
