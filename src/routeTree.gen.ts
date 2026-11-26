@@ -15,6 +15,7 @@ import { Route as ReviewRouteImport } from './routes/review'
 import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BriefRouteImport } from './routes/brief'
+import { Route as QuoteRequestRouteImport } from './routes/quote-request'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as R404RouteImport } from './routes/404'
 import { Route as IndexRouteImport } from './routes/index'
@@ -59,6 +60,11 @@ const ContactRoute = ContactRouteImport.update({
 const BriefRoute = BriefRouteImport.update({
   id: '/brief',
   path: '/brief',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuoteRequestRoute = QuoteRequestRouteImport.update({
+  id: '/quote-request',
+  path: '/quote-request',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/404': typeof R404Route
   '/admin': typeof AdminRoute
   '/brief': typeof BriefRoute
+  '/quote-request': typeof QuoteRequestRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/review': typeof ReviewRoute
@@ -165,6 +172,7 @@ export interface FileRoutesByTo {
   '/404': typeof R404Route
   '/admin': typeof AdminRoute
   '/brief': typeof BriefRoute
+  '/quote-request': typeof QuoteRequestRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/review': typeof ReviewRoute
@@ -189,6 +197,7 @@ export interface FileRoutesById {
   '/404': typeof R404Route
   '/admin': typeof AdminRoute
   '/brief': typeof BriefRoute
+  '/quote-request': typeof QuoteRequestRoute
   '/contact': typeof ContactRoute
   '/packages': typeof PackagesRoute
   '/review': typeof ReviewRoute
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
     | '/404'
     | '/admin'
     | '/brief'
+    | '/quote-request'
     | '/contact'
     | '/packages'
     | '/review'
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/404'
     | '/admin'
     | '/brief'
+    | '/quote-request'
     | '/contact'
     | '/packages'
     | '/review'
@@ -260,6 +271,7 @@ export interface FileRouteTypes {
     | '/404'
     | '/admin'
     | '/brief'
+    | '/quote-request'
     | '/contact'
     | '/packages'
     | '/review'
@@ -284,6 +296,7 @@ export interface RootRouteChildren {
   R404Route: typeof R404Route
   AdminRoute: typeof AdminRoute
   BriefRoute: typeof BriefRoute
+  QuoteRequestRoute: typeof QuoteRequestRoute
   ContactRoute: typeof ContactRoute
   PackagesRoute: typeof PackagesRoute
   ReviewRoute: typeof ReviewRoute
@@ -345,6 +358,13 @@ declare module '@tanstack/react-router' {
       path: '/brief'
       fullPath: '/brief'
       preLoaderRoute: typeof BriefRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quote-request': {
+      id: '/quote-request'
+      path: '/quote-request'
+      fullPath: '/quote-request'
+      preLoaderRoute: typeof QuoteRequestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -460,6 +480,7 @@ const rootRouteChildren: RootRouteChildren = {
   R404Route: R404Route,
   AdminRoute: AdminRoute,
   BriefRoute: BriefRoute,
+  QuoteRequestRoute: QuoteRequestRoute,
   ContactRoute: ContactRoute,
   PackagesRoute: PackagesRoute,
   ReviewRoute: ReviewRoute,

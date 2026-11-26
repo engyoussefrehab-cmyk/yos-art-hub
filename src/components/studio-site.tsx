@@ -16,11 +16,13 @@ export const AR = (n: number) => String(n).replace(/\d/g, (d) => "٠١٢٣٤٥٦
 
 type MenuLink = { href: string; label: string; newTab?: boolean };
 const toolsLink: MenuLink = { href: "/tools", label: "الأدوات" };
+const quoteLink: MenuLink = { href: "/quote-request", label: "طلب تسعير" };
 const headerLinks: MenuLink[] = [
   { href: "/projects", label: "الأعمال" },
   { href: "/#studio", label: "الاستوديو" },
   { href: "/insights", label: "المقالات" },
   toolsLink,
+  quoteLink,
   { href: "/contact", label: "تواصل" },
 ];
 const footerLinks: MenuLink[] = [
@@ -45,6 +47,10 @@ function useStudioMenu(location: string, defaults: MenuLink[]) {
     });
   }
   if (!seen.has(toolsLink.href)) links.push(toolsLink);
+  if (location === "header" && !seen.has(quoteLink.href)) {
+    const contactIndex = links.findIndex(item => item.href === "/contact");
+    links.splice(contactIndex === -1 ? links.length : contactIndex, 0, quoteLink);
+  }
   return links;
 }
 
