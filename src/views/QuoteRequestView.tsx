@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { WA } from "@/components/studio-site";
-import { categoryExamples, groups, packages } from "@/content/quote-services";
+import { categoryExamples, completeIdentityOption, groups, identityPackage, packages } from "@/content/quote-services";
 import "./quote-request.css";
 
 const number = new Intl.NumberFormat("ar-EG");
@@ -28,6 +28,7 @@ export function QuoteRequestView() {
     items: normalize(name).includes(query) ? items : items.filter(item => normalize(item).includes(query)),
   })).filter(group => group.items.length);
   const count = number.format(selected.size);
+  const identitySelectionCount = identityPackage.items.filter(item => selected.has(item)).length;
 
   function updateSelection(items: string[], checked: boolean) {
     setSelected(current => {
@@ -103,12 +104,20 @@ export function QuoteRequestView() {
                     </button>
                   </h3>
                   <div className="quote-items" id={panelId} hidden={!expanded}>
-                    {items.map(item => (
-                      <label key={item}>
-                        <input type="checkbox" checked={selected.has(item)} onChange={event => updateSelection([item], event.target.checked)} />
-                        {item}
-                      </label>
-                    ))}
+                    {items.map(item => {
+                      const isCompleteIdentity = item === completeIdentityOption;
+                      const checked = isCompleteIdentity ? identitySelectionCount === identityPackage.items.length : selected.has(item);
+                      return (
+                        <label key={item}>
+                          <input type="checkbox" checked={checked}
+                            ref={isCompleteIdentity ? input => {
+                              if (input) input.indeterminate = identitySelectionCount > 0 && !checked;
+                            } : undefined}
+                            onChange={event => updateSelection(isCompleteIdentity ? identityPackage.items : [item], event.target.checked)} />
+                          {item}
+                        </label>
+                      );
+                    })}
                   </div>
                 </section>
               );
