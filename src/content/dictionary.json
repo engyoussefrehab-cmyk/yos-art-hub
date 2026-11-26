@@ -56,12 +56,12 @@
     "en": "Color Wheel"
   },
   "tools_wheel_desc": {
-    "ar": "اختار لون الخلفية ومجال مشروعك، وخُد اللون اللي هيشد العين، وليه، وجرّبه على بوستر.",
-    "en": "Pick a background color and your field, and get the accent color that grabs attention — with the reason and a poster preview."
+    "ar": "اكتب كود لونك أو اختاره من العجلة، وجرّب ٨ قواعد عشان تبني لوحة ألوان متناسقة.",
+    "en": "Enter a HEX color or pick one from the wheel, then build a palette using eight color harmony rules."
   },
   "tools_wheel_tag": {
-    "ar": "اللون اللي يشد العين",
-    "en": "Accent color"
+    "ar": "تناغم الألوان",
+    "en": "Color harmony"
   },
   "tools_coming_soon": {
     "ar": "المزيد من الأدوات قريبا",

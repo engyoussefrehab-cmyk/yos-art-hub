@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="only light">
+  <title>عجلة الألوان وتناغمها | يوسف رحاب</title>
+  <link rel="stylesheet" href="./color-harmony.css">
+  <script type="module" src="./color-harmony-ui.mjs"></script>
+</head>
+<body>
+  <main class="wrap">
+    <header class="intro">
+      <h1>عجلة الألوان</h1>
+      <p>ادخل كود لونك أو اختاره من العجلة، وبعدها جرّب قاعدة تناغم وشوف تأثيرها على اللوحة.</p>
+    </header>
+    <div class="workbench">
+      <section class="wheel-panel" aria-label="اختيار اللون من العجلة">
+        <div id="wheel" class="wheel">
+          <svg id="markers" viewBox="0 0 100 100" aria-hidden="true"></svg>
+        </div>
+        <form id="base-form" class="base-form">
+          <input id="picker" class="picker" type="color" value="#D93D3D" aria-label="منتقي اللون الأساسي">
+          <div class="field">
+            <label for="base-hex">لونك الأساسي · HEX</label>
+            <input id="base-hex" dir="ltr" value="#D93D3D" maxlength="7" spellcheck="false" autocomplete="off" autocapitalize="off" aria-describedby="hex-error">
+          </div>
+        </form>
+        <p id="hex-error" class="error" role="status" hidden>اكتب كود HEX صحيح، زي #D93D3D أو #F80.</p>
+      </section>
+      <section class="controls" aria-labelledby="rules-label">
+        <h2 id="rules-label">قاعدة التناغم</h2>
+        <div id="rules" class="rules" role="group" aria-labelledby="rules-label"></div>
+        <div id="rule-description" class="rule-description" aria-live="polite">
+          <h3 id="rule-name"></h3>
+          <p id="rule-why"></p>
+        </div>
+      </section>
+    </div>
+
+    <section class="palette" aria-labelledby="palette-label">
+      <div class="section-heading">
+        <div><h2 id="palette-label">لوحة الألوان</h2><p>اضغط على اللون عشان تنسخ الكود.</p></div>
+        <button class="copy" id="copy-all" type="button">انسخ كل الأكواد</button>
+      </div>
+      <div id="swatches" class="swatches"></div>
+      <div class="copy-status" id="copy-status" role="status"></div>
+    </section>
+
+    <section class="guide" aria-labelledby="guide-label">
+      <div class="section-heading"><h2 id="guide-label">إزاي تستخدم الألوان مع بعض؟</h2></div>
+      <p id="rule-use"></p>
+      <div id="proportions" class="proportions" aria-hidden="true"></div>
+      <div id="roles" class="roles"></div>
+      <p class="tip">جرّب ٦٠٪ للون الأساسي و٣٠٪ للمساعد و١٠٪ للإبراز كنقطة بداية. قبل ما تحط نص على لون من اللوحة، اختبر التباين عشان يفضل مقروء.</p>
+      <a class="legacy-link" href="./color-wheel-app.html">أداة اقتراح لون إبراز واختبار التباين ↗</a>
+    </section>
+  </main>
+</body>
+</html>
