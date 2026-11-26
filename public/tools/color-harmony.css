@@ -74,10 +74,11 @@ p { margin: 0; }
 .guide { padding: clamp(13px, 3vw, 22px); }
 .proportions { display: grid; grid-template-columns: 60fr 30fr 10fr; min-height: 38px; overflow: hidden; border-radius: 7px; border: 1px solid #3b1a1e30; margin-top: 13px; }
 .roles { display: flex; flex-wrap: wrap; gap: 5px 15px; padding-top: 7px; font-size: 13px; }
-.roles span { display: inline-flex; align-items: center; gap: 5px; }
+.roles button { display: inline-flex; align-items: center; gap: 5px; background: transparent; border: 1px solid var(--line); border-radius: 6px; min-height: 33px; padding: 3px 7px; }
+.roles button:hover { border-color: var(--accent); }
 .roles i { width: 14px; height: 14px; border: 1px solid #3b1a1e40; border-radius: 50%; }
 .tip { font-size: 13px; }
-.legacy-link { display: inline-block; margin-top: 13px; text-underline-offset: 4px; font-size: 13px; }
+.legacy-link { display: inline-block; text-underline-offset: 4px; font-size: 13px; }
 
 @media (max-width: 650px) {
   .wrap { width: calc(100% - 24px); padding-top: 8px; }

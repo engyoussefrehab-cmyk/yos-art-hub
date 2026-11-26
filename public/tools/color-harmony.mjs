@@ -101,3 +101,19 @@ export function contrastRatio(first, second) {
   const b = luminance(second);
   return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
 }
+
+export function makeUsagePalette(palette, rule) {
+  const base = palette[0].hex;
+  // Keep the analogous example on one side of the base hue.
+  const companion = rule.id === "analogous" ? palette[2] : palette.length > 2 ? palette[1] : palette[0];
+  const [supportHue, supportSat] = hexToHsl(companion.hex);
+  const [accentHue, accentSat] = hexToHsl(palette.at(-1).hex);
+  const supportOptions = [.89, .18].map(lightness => hslToHex(supportHue, supportSat * .42, lightness));
+  const support = supportOptions.reduce((best, color) =>
+    contrastRatio(base, color) > contrastRatio(base, best) ? color : best);
+  const accentOptions = [.27, .36, .47, .61, .73].map(lightness =>
+    hslToHex(accentHue, Math.min(.55, accentSat * .82), lightness));
+  const separation = color => Math.min(contrastRatio(color, base), contrastRatio(color, support));
+  const accent = accentOptions.reduce((best, color) => separation(color) > separation(best) ? color : best);
+  return [base, support, accent];
+}

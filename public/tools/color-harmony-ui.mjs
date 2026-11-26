@@ -1,4 +1,4 @@
-import { contrastRatio, hslToHex, makePalette, normalizeHex, rules, screenHue, wrapHue } from "./color-harmony.mjs";
+import { contrastRatio, hslToHex, makePalette, makeUsagePalette, normalizeHex, rules, screenHue, wrapHue } from "./color-harmony.mjs";
 
 const get = id => document.getElementById(id);
 const wheel = get("wheel");
@@ -6,6 +6,7 @@ const hexField = get("base-hex");
 const picker = get("picker");
 const ruleButtons = get("rules");
 const swatches = get("swatches");
+const usageRoles = get("roles");
 let base = picker.value.toUpperCase();
 let active = rules[0];
 let palette = [];
@@ -26,6 +27,7 @@ function render() {
   get("rule-why").textContent = active.why;
   get("rule-use").textContent = active.use;
   get("copy-status").textContent = "";
+  get("usage-copy-status").textContent = "";
 
   const markers = palette.map(({ angle, radius, hex }) => {
     const radians = angle * Math.PI / 180;
@@ -45,14 +47,13 @@ function render() {
     const ink = contrastRatio(hex, "#FFFFFF") >= contrastRatio(hex, "#171015") ? "#FFFFFF" : "#171015";
     return `<button class="swatch" type="button" data-hex="${hex}" aria-label="انسخ ${hex}" style="--swatch:${hex};--swatch-text:${ink}">${index ? "" : "<span>اللون الأساسي</span>"}<bdi>${hex}</bdi></button>`;
   }).join("");
-  const partner = palette.at(-1).hex;
-  const roles = [
-    ["اللون الأساسي", base],
-    ["لون مساعد", palette.length > 2 ? palette[1].hex : hslToHex(screenHue(palette[0].angle), .12, .89)],
-    ["لون إبراز", partner],
-  ];
-  get("proportions").innerHTML = roles.map(([, hex]) => `<span style="background:${hex}"></span>`).join("");
-  get("roles").innerHTML = roles.map(([role, hex]) => `<span><i style="background:${hex}" aria-hidden="true"></i>${role} <bdi>${hex}</bdi></span>`).join("");
+  const usage = makeUsagePalette(palette, active);
+  const roles = ["اللون الأساسي", "لون مساعد", "لون إبراز"];
+  get("proportions").innerHTML = usage.map(hex => `<span style="background:${hex}"></span>`).join("");
+  usageRoles.innerHTML = usage.map((hex, index) => `
+    <button type="button" data-hex="${hex}" aria-label="انسخ ${roles[index]} ${hex}">
+      <i style="background:${hex}" aria-hidden="true"></i>${roles[index]} <bdi>${hex}</bdi>
+    </button>`).join("");
 }
 
 function setBase(hex, syncField = true) {
@@ -101,7 +102,7 @@ ruleButtons.addEventListener("click", event => {
   render();
 });
 
-async function copy(text) {
+async function copy(text, status = get("copy-status")) {
   try {
     await navigator.clipboard.writeText(text);
   } catch {
@@ -114,11 +115,11 @@ async function copy(text) {
     const success = document.execCommand("copy");
     field.remove();
     if (!success) {
-      get("copy-status").textContent = "النسخ ما اشتغلش. الأكواد ظاهرة على اللوحة.";
+      status.textContent = "النسخ ما اشتغلش. الأكواد ظاهرة على اللوحة.";
       return;
     }
   }
-  get("copy-status").textContent = "تم النسخ.";
+  status.textContent = "تم النسخ.";
 }
 
 swatches.addEventListener("click", event => {
@@ -126,4 +127,8 @@ swatches.addEventListener("click", event => {
   if (swatch) copy(swatch.dataset.hex);
 });
 get("copy-all").addEventListener("click", () => copy(palette.map(({ hex }) => hex).join(", ")));
+usageRoles.addEventListener("click", event => {
+  const button = event.target.closest("button[data-hex]");
+  if (button) copy(button.dataset.hex, get("usage-copy-status"));
+});
 render();
