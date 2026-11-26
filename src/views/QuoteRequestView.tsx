@@ -12,11 +12,33 @@ function normalize(value: string) {
     .replace(/[\u064B-\u065F]/g, "").replace(/بروشور/g, "برشور");
 }
 
+function PackageItems({ id, label, items, selected, hidden, onChange }: {
+  id?: string;
+  label: string;
+  items: string[];
+  selected: Set<string>;
+  hidden?: boolean;
+  onChange: (items: string[], checked: boolean) => void;
+}) {
+  return (
+    <fieldset id={id} className="quote-package-items" hidden={hidden}>
+      <legend>{label}</legend>
+      {items.map(item => (
+        <label key={item}>
+          <input type="checkbox" checked={selected.has(item)}
+            onChange={event => onChange([item], event.target.checked)} />
+          {item}
+        </label>
+      ))}
+    </fieldset>
+  );
+}
+
 export function QuoteRequestView() {
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [search, setSearch] = useState("");
   const [openCategory, setOpenCategory] = useState<string | null>(null);
-  const [showIdentityItems, setShowIdentityItems] = useState(false);
+  const [openPackages, setOpenPackages] = useState<Set<string>>(() => new Set());
   const [status, setStatus] = useState("");
   const [downloading, setDownloading] = useState(false);
   const query = normalize(search);
@@ -30,6 +52,15 @@ export function QuoteRequestView() {
   })).filter(group => group.items.length);
   const count = number.format(selected.size);
   const identitySelectionCount = identityPackage.items.filter(item => selected.has(item)).length;
+
+  function setPackageOpen(name: string, open: boolean) {
+    setOpenPackages(current => {
+      const updated = new Set(current);
+      if (open) updated.add(name);
+      else updated.delete(name);
+      return updated;
+    });
+  }
 
   function updateSelection(items: string[], checked: boolean) {
     setSelected(current => {
@@ -72,16 +103,22 @@ export function QuoteRequestView() {
           <details className="quote-bundles">
             <summary>شوف الباقات الجاهزة</summary>
             <div className="quote-packages">
-              {packages.map(pack => {
+              {packages.map((pack, index) => {
                 const active = pack.items.every(item => selected.has(item));
+                const open = openPackages.has(pack.name);
+                const panelId = `quote-package-${index}`;
                 return (
-                  <button key={pack.name} type="button" aria-pressed={active} onClick={() => {
-                    if (pack === identityPackage) setShowIdentityItems(true);
-                    updateSelection(pack.items, true);
-                  }}>
-                    <strong>{pack.name}</strong><small>{pack.detail}</small>
-                    <span>{active ? "البنود مختارة ✓" : "اختار بنود الباقة +"}</span>
-                  </button>
+                  <div className="quote-package" key={pack.name}>
+                    <button type="button" aria-pressed={active} aria-expanded={open} aria-controls={panelId} onClick={() => {
+                      setPackageOpen(pack.name, true);
+                      updateSelection(pack.items, true);
+                    }}>
+                      <strong>{pack.name}</strong><small>{pack.detail}</small>
+                      <span>{active ? "البنود مختارة ✓" : "اختار كل بنود الباقة +"}</span>
+                    </button>
+                    <PackageItems id={panelId} label={`بنود ${pack.name}`} items={pack.items}
+                      selected={selected} hidden={!open} onChange={updateSelection} />
+                  </div>
                 );
               })}
             </div>
@@ -96,7 +133,7 @@ export function QuoteRequestView() {
             {visibleGroups.map(({ name, index, items }) => {
               const expanded = Boolean(query) || openCategory === name;
               const panelId = `quote-category-${index}`;
-              const hasIdentityDetails = showIdentityItems && items.includes(completeIdentityOption);
+              const hasIdentityDetails = openPackages.has(identityPackage.name) && items.includes(completeIdentityOption);
               const categoryItems = hasIdentityDetails
                 ? items.filter(item => !identityPackage.items.includes(item))
                 : items;
@@ -124,22 +161,14 @@ export function QuoteRequestView() {
                               } : undefined}
                               onChange={event => {
                                 const include = event.target.checked;
-                                if (isCompleteIdentity) setShowIdentityItems(include);
+                                if (isCompleteIdentity) setPackageOpen(identityPackage.name, include);
                                 updateSelection(isCompleteIdentity ? identityPackage.items : [item], include);
                               }} />
                             {item}
                           </label>
                           {isCompleteIdentity && hasIdentityDetails && (
-                            <fieldset className="quote-identity-details">
-                              <legend>بنود الهوية</legend>
-                              {identityPackage.items.map(detail => (
-                                <label key={detail}>
-                                  <input type="checkbox" checked={selected.has(detail)}
-                                    onChange={event => updateSelection([detail], event.target.checked)} />
-                                  {detail}
-                                </label>
-                              ))}
-                            </fieldset>
+                            <PackageItems label="بنود الهوية" items={identityPackage.items}
+                              selected={selected} onChange={updateSelection} />
                           )}
                         </div>
                       );
@@ -155,7 +184,7 @@ export function QuoteRequestView() {
           <div className="quote-section-head">
             <h2 id="quote-summary-title">ملخّص اختياراتك</h2>
             {selected.size > 0 && <button className="quote-clear" type="button" onClick={() => {
-              setShowIdentityItems(false);
+              setOpenPackages(new Set());
               updateSelection([...selected], false);
             }}>امسح الكل</button>}
           </div>

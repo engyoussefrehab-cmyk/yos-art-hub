@@ -35,7 +35,8 @@
 .quote-bundles { margin-bottom: 13px; background: #f8f2eb; }
 .quote-bundles summary { padding: 10px 13px; cursor: pointer; font-size: 15px; font-weight: 700; }
 .quote-packages { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; padding: 0 9px 9px; }
-.quote-packages button { display: grid; gap: 4px; align-content: start; min-width: 0; text-align: start; background: #fcf8f2; border: 1px solid var(--line); border-radius: 8px; padding: 9px; cursor: pointer; }
+.quote-package { min-width: 0; align-self: start; }
+.quote-packages button { display: grid; gap: 4px; align-content: start; width: 100%; text-align: start; background: #fcf8f2; border: 1px solid var(--line); border-radius: 8px; padding: 9px; cursor: pointer; }
 .quote-packages strong { font-size: 19px; }
 .quote-packages small, .quote-category small, .quote-muted { color: var(--ink-2); font-size: 13px; }
 .quote-packages span { color: #8e2633; font-size: 13px; font-weight: 700; }
@@ -51,15 +52,16 @@
 .quote-chevron { color: #8e2633; font: 700 23px/1 Arial,sans-serif; }
 .quote-category button[aria-expanded="true"] .quote-chevron { transform: rotate(180deg); }
 .quote-items { border-top: 1px solid var(--line); }
-.quote-items label { display: flex; align-items: center; gap: 9px; min-height: 45px; padding: 7px 13px; cursor: pointer; font-size: 15px; }
+.quote-items label, .quote-package-items label { display: flex; align-items: center; gap: 9px; min-height: 45px; padding: 7px 13px; cursor: pointer; font-size: 15px; }
 .quote-item + .quote-item { border-top: 1px solid var(--line); }
-.quote-items label:has(:checked) { background: #ffe9df; }
+.quote-items label:has(:checked), .quote-package-items label:has(:checked) { background: #ffe9df; }
 .quote-item:last-child > label:only-child { border-radius: 0 0 11px 11px; }
-.quote-items input { width: 18px; height: 18px; flex: none; accent-color: #a62631; }
-.quote-identity-details { min-width: 0; margin: 6px 14px 12px; padding: 3px 8px 6px; border: 1px solid var(--line); border-radius: 8px; background: #f8f2eb; }
-.quote-identity-details legend { padding-inline: 5px; color: var(--ink-2); font-size: 13px; font-weight: 700; }
-.quote-identity-details label { min-height: 40px; border-radius: 6px; padding: 5px 8px; }
-.quote-identity-details label + label { margin-top: 3px; }
+.quote-items input, .quote-package-items input { width: 18px; height: 18px; flex: none; accent-color: #a62631; }
+.quote-package-items { min-width: 0; margin: 6px 14px 12px; padding: 3px 8px 6px; border: 1px solid var(--line); border-radius: 8px; background: #f8f2eb; }
+.quote-package > .quote-package-items { margin: 6px 0 0; padding-inline: 5px; }
+.quote-package-items legend { padding-inline: 5px; color: var(--ink-2); font-size: 13px; font-weight: 700; }
+.quote-package-items label { min-height: 40px; border-radius: 6px; padding: 5px 8px; }
+.quote-package-items label + label { margin-top: 3px; }
 .quote-summary { position: sticky; top: 84px; padding: 15px; box-shadow: 0 7px 22px #3b1a1e0a; }
 .quote-summary .quote-section-head h2 { font-size: 25px; }
 .quote-summary p { margin: 7px 0; }
