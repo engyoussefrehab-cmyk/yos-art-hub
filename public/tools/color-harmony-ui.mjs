@@ -1,4 +1,4 @@
-import { contrastRatio, hslToHex, makePalette, makeUsagePalette, normalizeHex, rules, screenHue, wrapHue } from "./color-harmony.mjs";
+import { contrastRatio, hslToHex, makePalette, makeUsagePalette, normalizeHex, rules, screenHue, wrapHue } from "./color-harmony.mjs?v=3";
 
 const get = id => document.getElementById(id);
 const wheel = get("wheel");
@@ -27,6 +27,7 @@ function render() {
   get("rule-name").textContent = active.name;
   get("rule-why").textContent = active.why;
   get("rule-use").textContent = active.use;
+  get("usage-rule").textContent = active.name;
   get("copy-status").textContent = "";
   get("usage-copy-status").textContent = "";
 
@@ -62,7 +63,7 @@ function readableInk(color) {
   return contrastRatio(color, "#FFFFFF") >= contrastRatio(color, "#000000") ? "#FFFFFF" : "#000000";
 }
 
-function renderUsagePreview([background, title, button]) {
+function renderUsagePreview([title, background, button]) {
   const needsTitleBackdrop = contrastRatio(background, title) < 3;
   const colors = {
     background,

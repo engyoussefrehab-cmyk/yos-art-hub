@@ -107,7 +107,8 @@ export function makeUsagePalette(palette, rule) {
   // Keep the analogous example on one side of the base hue.
   const companion = rule.id === "analogous" ? palette[2] : palette.length > 2 ? palette[1] : palette[0];
   const [supportHue, supportSat] = hexToHsl(companion.hex);
-  const [accentHue, accentSat] = hexToHsl(palette.at(-1).hex);
+  const accentSource = rule.id === "double-split" ? palette[3] : palette.at(-1);
+  const [accentHue, accentSat] = hexToHsl(accentSource.hex);
   const supportOptions = [.89, .18].map(lightness => hslToHex(supportHue, supportSat * .42, lightness));
   const support = supportOptions.reduce((best, color) =>
     contrastRatio(base, color) > contrastRatio(base, best) ? color : best);
