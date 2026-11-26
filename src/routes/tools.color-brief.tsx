@@ -5,7 +5,7 @@ export const Route = createFileRoute("/tools/color-brief")({
   head: () => ({
     meta: [
       { title: "أداة اختيار الألوان للهوية البصرية | يوسف رحاب" },
-      { name: "description", content: "جرب مجموعات ألوان مبدئية لهويتك البصرية وتأكد من تناسق الألوان ووضوحها." },
+      { name: "description", content: "ولّد خمس لوحات من بريف الهوية وقارنها على تصميمات وراجع تباين ألوانها في الوضع الفاتح والداكن." },
     ],
   }),
   component: ColorBriefEmbed,

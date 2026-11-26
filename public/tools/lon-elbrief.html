@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#ecedef">
-<title>مختبر الألوان</title>
+<title>أداة اختيار الألوان | يوسف رحاب</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -474,21 +474,38 @@ footer a{color:var(--ink);font-weight:600}
   .pal.expanded .pal-more span:last-child{transform:rotate(45deg)}
 }
 @media (prefers-reduced-motion:no-preference){.pal{animation:rise .3s ease both}@keyframes rise{from{transform:translateY(5px)}to{transform:none}}}
+@font-face{font-family:"YR Display";src:url("/fonts/thmanyah-serif-display-bold.woff2") format("woff2");font-weight:700;font-display:swap}
+:root{--bg:#f3efe7;--surface:#fffaf4;--surface-2:#f5eee5;--ink:#3b1a1e;--muted:#68504d;--line:#dcd0c4;--red:#b52e39;--display:"YR Display","IBM Plex Sans Arabic",system-ui,sans-serif}
+body{margin:0}
+.brandline h1{font-size:clamp(38px,6vw,73px);line-height:1.15}
+.brandline p{max-width:58ch}
+.teaser{border:1px solid var(--line);background:var(--surface);padding:clamp(13px,3vw,25px)}
+.sample-strip{display:flex;min-height:56px;overflow:hidden;border-radius:8px;direction:ltr}
+.sample-strip i{flex:1}
+.teaser-note{margin:0;font-size:12px;color:var(--muted)}
+.audience-options{padding:8px 0;border:0;border-top:1px solid var(--line)}
+.audience-options summary{padding:2px 0}
+.audience-options .field{margin-top:10px}
+.quick-gen{min-height:44px}
+.cell{background:var(--surface-2);color:var(--ink)}
+.cell b{display:block;padding:2px 4px;border-radius:3px}
+@media (max-width:650px){.wrap{gap:12px}.sample-strip{min-height:38px}.brief h2{font-size:23px}}
 </style>
 
 <div class="wrap" dir="rtl" lang="ar">
   <header class="top">
     <div class="brandline">
-      <h1>مختبر <span>الألوان</span></h1>
-      <p>اكتب البريف وخُد ٥ اتجاهات لونية: ٣ قريبة من الشائع و٢ مختلفة عنه. كل اتجاه معاه سبب مقترح وجملة تساعدك تعرضه على العميل.</p>
+      <h1>اختار <span>ألوان هويتك</span></h1>
+      <p>ابدأ بمجال المشروع، وقارن ٥ لوحات ألوان على تصميمات بسيطة. تقدر تضيف شخصية البراند أو لون مطلوب لو حابب تخصّص النتيجة.</p>
     </div>
     <details class="how"><summary>إزاي بتشتغل؟</summary>
       <ol>
-        <li>اقتراحات المجال ومعاني الألوان ومستوى السعر افتراضات إرشادية داخل الأداة، وليست إحصاءات سوق أو قواعد علمية ثابتة؛ المعنى يتغير حسب الثقافة والسياق.</li>
-        <li>بتقترح علاقات من عجلة HSL وتدرّجات OKLCH. عجلة HSL لا توزع الألوان بالتساوي حسب إدراك العين، فالعلاقات نقطة بداية بصرية لا ضمان للانسجام. توزيع المساحات المقترح قابل للتغيير حسب التطبيق.</li>
-        <li>بتحسب تباين النص وفق WCAG، وتعرض محاكاة تقريبية لنقص تمييز الأحمر والأخضر. محاكاة الشاشة لا تغني عن اختبار الاستخدام الفعلي.</li>
-        <li>بتكتبلك سبب كل اختيار، والجملة الجاهزة للعميل.</li>
+        <li>أمثلة المجال واتجاه شخصية البراند بتساعدك تبدأ الاختيار. بيانات البلد والجمهور بتظهر في ملخّص البريف، والتفضيل اللوني بيتراجع مع الجمهور وفي سياق التصميم.</li>
+        <li>بنبني علاقات لونية في HSL ونظبط الدرجات في OKLCH. قيم HEX تخص ألوان sRGB، ولون العميل بيتحفظ بكوده الأصلي في لوحته.</li>
+        <li>التباين بيتقاس لكل زوج من الألوان الصافية في معاينة اللايت أو الدارك، حسب حدود WCAG. المسافة في محاكاة تمييز الأحمر والأخضر مؤشر للمقارنة.</li>
+        <li>قيم CMYK تقريبية. للطباعة، راجع البروفايل والخامة وبروفة مطبوعة.</li>
       </ol>
+      <p class="hint"><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" target="_blank" rel="noopener">تباين النص</a> · <a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html" target="_blank" rel="noopener">العناصر غير النصية</a> · <a href="https://bottosson.github.io/posts/oklab/" target="_blank" rel="noopener">OKLab / OKLCH</a> · <a href="https://doi.org/10.1109/TVCG.2009.113" target="_blank" rel="noopener">محاكاة تمييز الألوان</a></p>
     </details>
   </header>
 
@@ -529,10 +546,12 @@ footer a{color:var(--ink);font-weight:600}
 
         <div class="step" data-step="2" role="group" aria-labelledby="stepT2" hidden>
           <h3 class="step-title" id="stepT2" tabindex="-1">الجمهور والسعر</h3>
+          <details class="audience-options"><summary>تفاصيل الجمهور في البريف (اختياري)</summary>
           <div class="field"><span class="lbl">سن الجمهور</span><div class="chips grid2" role="radiogroup" aria-label="سن الجمهور">
             <label><input type="radio" name="age" value="kids">أطفال (القرار للأهل)</label><label><input type="radio" name="age" value="youth"><bdi dir="ltr">15–25</bdi></label><label><input type="radio" name="age" value="adults"><bdi dir="ltr">25–45</bdi></label><label><input type="radio" name="age" value="mature"><bdi dir="ltr">45+</bdi></label></div></div>
           <div class="field"><span class="lbl">مين بيشتري؟</span><div class="chips" role="radiogroup" aria-label="مين بيشتري؟">
             <label><input type="radio" name="dec" value="all">الكل</label><label><input type="radio" name="dec" value="women">ستات</label><label><input type="radio" name="dec" value="men">رجالة</label><label><input type="radio" name="dec" value="b2b">شركات (B2B)</label></div></div>
+          </details>
           <div class="field"><span class="lbl">مستوى السعر</span><div class="chips seg" role="radiogroup" aria-label="مستوى السعر">
             <label><input type="radio" name="tier" value="economy">اقتصادي</label><label><input type="radio" name="tier" value="mid">متوسط</label><label><input type="radio" name="tier" value="premium">بريميوم</label><label><input type="radio" name="tier" value="luxury">فاخر</label></div></div>
           <div class="field"><span class="lbl">هيظهر أكتر فين؟</span><div class="chips" id="ch" role="radiogroup" aria-label="هيظهر أكتر فين؟"></div></div>
@@ -566,17 +585,15 @@ footer a{color:var(--ink);font-weight:600}
             <button type="button" id="prevStep">رجوع</button>
             <button type="button" class="primary" id="nextStep">التالي ←</button>
           </div>
-          <button type="button" class="quick-gen" id="quickGen" hidden>طلّع الألوان دلوقتي</button>
+          <button type="button" class="quick-gen" id="quickGen">طلّع ٥ لوحات دلوقتي</button>
         </div>
       </div>
     </form>
 
     <section class="teaser" id="teaser" aria-label="النتايج">
-      <div class="teaser-h"><h2>٥ اتجاهات لونية مستنيّاك</h2><p>٣ قريبة من الشائع · ٢ مختلفة عنه. بتظهر بعد ما تضغط «طلّع الألوان».</p></div>
-      <div class="teaser-cards" aria-hidden="true">
-        <div class="ghost"><i></i><i></i><i></i><i></i><i></i></div><div class="ghost"><i></i><i></i><i></i><i></i><i></i></div><div class="ghost"><i></i><i></i><i></i><i></i><i></i></div><div class="ghost break"><i></i><i></i><i></i><i></i><i></i></div><div class="ghost break"><i></i><i></i><i></i><i></i><i></i></div>
-      </div>
-      <div class="teaser-dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="teaser-h"><h2>لوحات هويتك</h2><p>بعد التوليد، افتح أي لوحة عشان تشوفها على تصميم وتراجع تباينها.</p></div>
+      <div class="sample-strip" aria-hidden="true"><i style="background:#263B39"></i><i style="background:#47796E"></i><i style="background:#E5C66F"></i><i style="background:#D98C4A"></i><i style="background:#D93D3D"></i></div>
+      <p class="teaser-note">مثال لشكل اللوحة</p>
     </section>
 
     <div class="results-shell" id="resultsShell" hidden>
@@ -644,7 +661,8 @@ footer a{color:var(--ink);font-weight:600}
 <div class="toast" id="toast" hidden></div>
 <div id="layer"></div>
 
-<script>
+<script type="module">
+import { displayRatio, textOn, sim, dE as deltaHex } from './color-balance-science.mjs?v=1';
 /* ================= color math ================= */
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const nh=h=>((h%360)+360)%360;
@@ -659,10 +677,6 @@ const toLin=c=>{c/=255;return c<=.04045?c/12.92:Math.pow((c+.055)/1.055,2.4)};
 const toGam=x=>x<=.0031308?12.92*x:1.055*Math.pow(x,1/2.4)-.055;
 const lum=([r,g,b])=>.2126*toLin(r)+.7152*toLin(g)+.0722*toLin(b);
 const contrast=(a,b)=>{const x=lum(a.rgb||a),y=lum(b.rgb||b);return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
-function labLin([R,G,B]){const X=(.4124*R+.3576*G+.1805*B)/.95047,Y=.2126*R+.7152*G+.0722*B,Z=(.0193*R+.1192*G+.9505*B)/1.08883,f=t=>t>.008856?Math.cbrt(t):7.787*t+16/116;const fx=f(X),fy=f(Y),fz=f(Z);return[116*fy-16,500*(fx-fy),200*(fy-fz)]}
-function deutan(rgb){const[R,G,B]=rgb.map(toLin);return[clamp(.367322*R+.860646*G-.227968*B,0,1),clamp(.280085*R+.672501*G+.047413*B,0,1),clamp(-.01182*R+.04294*G+.968881*B,0,1)]}
-const dE=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
-const dEc=(a,b)=>dE(labLin(a.rgb.map(toLin)),labLin(b.rgb.map(toLin)));
 function cmyk([r,g,b]){r/=255;g/=255;b/=255;const k=1-Math.max(r,g,b);if(k>=1)return[0,0,0,100];return[(1-r-k)/(1-k),(1-g-k)/(1-k),(1-b-k)/(1-k),k].map(v=>Math.round(v*100))}
 const WHITE={rgb:[255,255,255],hex:'#FFFFFF'};
 function rng(seed){let a=(seed*2654435761)>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -671,7 +685,6 @@ function shiftToward(h,t,amt){const d=((t-h+540)%360)-180;return h+Math.sign(d)*
 function rgbOklch(rgb){const[r,g,b]=rgb.map(toLin);let l=.4122214708*r+.5363325363*g+.0514459929*b,m=.2119034982*r+.6806995451*g+.1073969566*b,s=.0883024619*r+.2817188376*g+.6299787005*b;l=Math.cbrt(l);m=Math.cbrt(m);s=Math.cbrt(s);const L=.2104542553*l+.793617785*m-.0040720468*s,A=1.9779984951*l-2.428592205*m+.4505937099*s,B=.0259040371*l+.7827717662*m-.808675766*s;return{L,C:Math.hypot(A,B),H:(Math.atan2(B,A)*180/Math.PI+360)%360}}
 function oklchRaw(L,C,H){const a=C*Math.cos(H*Math.PI/180),b=C*Math.sin(H*Math.PI/180);let l=L+.3963377774*a+.2158037573*b,m=L-.1055613458*a-.0638541728*b,s=L-.0894841775*a-1.291485548*b;l=l**3;m=m**3;s=s**3;return[4.0767416621*l-3.3077115913*m+.2309699292*s,-1.2684380046*l+2.6097574011*m-.3413193965*s,-.0041960863*l-.7034186147*m+1.707614701*s]}
 function oklchMk(L,C,H){const inG=v=>v.every(x=>x>=-.0005&&x<=1.0005);let rgb=oklchRaw(L,C,H);if(!inG(rgb)){let lo=0,hi=C;for(let i=0;i<22;i++){const mid=(lo+hi)/2;if(inG(oklchRaw(L,mid,H)))lo=mid;else hi=mid}rgb=oklchRaw(L,lo,H)}const r=rgb.map(x=>Math.round(clamp(toGam(clamp(x,0,1)),0,1)*255));const q=rgbHsl(r);return{h:q.h,s:q.s,l:q.l,rgb:r,hex:hex(r)}}
-function shiftOklchL(c,delta){const{L,C,H}=rgbOklch(c.rgb);return oklchMk(clamp(L+delta,.02,.98),C,H)}
 const STEPS=[50,100,200,300,400,500,600,700,800,900],STEP_L=[.975,.94,.88,.80,.71,.62,.53,.45,.37,.28];
 function scaleOf(c){const{L,C,H}=rgbOklch(c.rgb);const bi=STEP_L.reduce((b,x,i)=>Math.abs(x-L)<Math.abs(STEP_L[b]-L)?i:b,0);
   return STEPS.map((st,i)=>({step:st,base:i===bi,c:i===bi?c:oklchMk(STEP_L[i],C*clamp(1.15-Math.abs(STEP_L[i]-.6)*1.5,.2,1),H)}))}
@@ -699,16 +712,6 @@ function baseName(h,s,l){
   if(h<158)return l>62?'نعناعي':'أخضر';if(h<186)return'تركواز';if(h<205)return'سماوي';if(h<242)return'أزرق';if(h<265)return'نيلي';
   if(h<292)return l>62?'ليلكي':'بنفسجي';if(h<322)return'فوشيا';return'وردي'}
 const defName=n=>n.split(' ').map(w=>/^(ال|جدًا)/.test(w)?w:'ال'+w).join(' ');
-const MEAN={'أسود':'الأسود بيدي قوة وفخامة وغموض','أوف':'الأوف وايت بيدي نضافة ومساحة','عاجي':'العاجي بيدي دفا ونعومة وإحساس راقي','رمادي':'الرمادي بيدي حياد ورصانة',
- 'رملي':'الرملي بيفكّر بالصحرا والدفا والأصالة','بني':'البني بيدي أصالة ودفا وثبات','دهبي':'الدهبي بيدي قيمة ومكانة','تيراكوتا':'التيراكوتا دافية وترابية وقريبة من الناس',
- 'عنابي':'العنابي بيدي عراقة ودفا ومكانة','كحلي':'الكحلي بيدي ثبات وثقة ورسمية','زيتوني':'الزيتوني بيدي إحساس طبيعي وحِرفي','بترولي':'البترولي بيدي هدوء وعمق وفخامة هادية',
- 'مرجاني':'المرجاني دافي وإنساني ومرحّب','أحمر':'الأحمر بيدي طاقة وحماس وإحساس بالاستعجال','برتقالي':'البرتقالي ودود وحيوي وقريب من الناس','أصفر':'الأصفر بيدي تفاؤل وبيلفت العين بسرعة',
- 'ليموني':'الليموني بيدي طاقة وإحساس جديد وشبابي','أخضر':'الأخضر بيدي نمو وطبيعة وصحة، وليه دلالة إيجابية في ثقافتنا','نعناعي':'النعناعي هادي ومنعش','تركواز':'التركواز بيدي نضافة وهدوء وحداثة',
- 'سماوي':'السماوي بيدي انتعاش وصفا','أزرق':'الأزرق بيدي ثقة وأمان واحترافية','نيلي':'النيلي بيدي عمق وتميّز','بنفسجي':'البنفسجي بيدي ابتكار وتميّز','ليلكي':'الليلكي بيدي هدوء ورفاهية',
- 'فوشيا':'الفوشيا بيدي جرأة وإبداع','وردي':'الوردي بيدي رقة واهتمام'};
-const fam=c=>nameOf(c).split(' ')[0];
-const meaningOf=c=>`ارتباط بصري محتمل: ${MEAN[fam(c)]||'اللون ده بيدي شخصية مميزة'}؛ وقد يختلف حسب الثقافة والسياق، فاختبره مع الجمهور.`;
-
 /* ================= knowledge base ================= */
 const IND={
  food:{label:'مطاعم وأكل',cta:'اطلب دلوقتي',norm:[
@@ -862,29 +865,23 @@ const IND={
   brk:[{h:28,s:90,l:54,why:'البرتقالي بيدي طاقة وقوة تنضيف، مختلف عن الأزرق المعتاد',risk:'ممكن ميتقريش نضافة',fix:'خلّي الأبيض مسيطر'},
   {h:275,s:55,l:52,why:'البنفسجي بيفكّر بالروايح والانتعاش الفخم',risk:'ممكن يتقري معطّر بس',fix:'كلام واضح على الفايدة'}]}
 };
-const GULF=['sa','ae','qa','kw','bh','om'];
 const CO={
- eg:{name:'مصر',sat:5,note:'السوق المصري الشعبي متعود على ألوان مشبعة وجريئة في اليفط والتغليف، والبريميوم بيميل للكحلي والأسود والدهبي.',acc:{h:176,s:62,l:38},accWhy:'الفيروزي لون الفيانس المصري القديم، وبيدي إحساس مصري أصيل من غير ما يبقى كليشيه'},
- sa:{name:'السعودية',sat:-4,note:'البراندات السعودية الجديدة ومشاريع الرؤية مالت للترابي والرملي والأخضر العميق، مع جرأة أكبر عند جمهور الشباب.',acc:{h:32,s:48,l:46},accWhy:'الدرجات الرملية والترابية بتفكّر بالصحرا والأصالة، وبقت من أكتر الدرجات حضورًا في الهوية السعودية الحديثة',caution:{h:147,r:18,minS:40,t:'الأخضر ده قريب من أخضر العلم، وليه رمزية وطنية ودينية. لو البراند تجاري، غيّر الدرجة شوية وماتحطّش أي كتابة أو شعار يقلّد العلم.'}},
- ae:{name:'الإمارات',sat:-3,note:'سوق متعدد الجنسيات ومتعود على الفخامة الهادية: الرملي والشامبين والدهبي والأسود، والتكنولوجيا بتاخد تركواز وأزرق.',acc:{h:40,s:50,l:50},accWhy:'الشامبين الدهبي بيكلّم ذوق الفخامة الهادية المنتشر في الإمارات'},
- qa:{name:'قطر',sat:0,note:'العنابي هو لون قطر الوطني، وحاضر جدًا في الهوية العامة والرياضية. لمسة منه بتدي إحساس قطري فوري.',acc:{h:343,s:73,l:31},accWhy:'العنابي القطري بيدي انتماء محلي مباشر',caution:{h:343,r:15,minS:45,t:'العنابي مرتبط بالهوية الوطنية والجهات الرسمية. لو البراند تجاري، خلّيه أكسنت مش أساسي.'}},
- kw:{name:'الكويت',sat:2,note:'الأزرق (البحر والخليج) حاضر بقوة، والسوق الكويتي بيحب البراندات الجريئة على السوشيال.',acc:{h:200,s:75,l:40},accWhy:'أزرق الخليج بيدي إحساس كويتي وبحري مألوف'},
- bh:{name:'البحرين',sat:0,note:'الأحمر والأبيض ألوان العلم، والسوق متأثر بالذوق الخليجي العام مع لمسة لؤلؤ وتراث بحري.',acc:{h:355,s:78,l:42},accWhy:'الأحمر البحريني بيدي انتماء محلي واضح'},
- om:{name:'عُمان',sat:-5,note:'السوق العماني بيميل للهادي والأصيل أكتر من الصارخ: تراث اللبان والفضة والأحمر العماني.',acc:{h:6,s:66,l:40},accWhy:'الأحمر العماني الأصيل بيدي دفا وانتماء'},
- jo:{name:'الأردن',sat:-3,note:'الألوان الترابية ووردي صخر البتراء بيدّوا إحساس أردني محلي من غير كليشيه.',acc:{h:10,s:45,l:48},accWhy:'وردي البتراء الصخري بيربط البراند بالمكان'},
- iq:{name:'العراق',sat:3,note:'السوق العراقي بيحب الألوان الدافية والجريئة، والفيروزي والأزرق الكاشاني من رموز العمارة العراقية.',acc:{h:190,s:65,l:38},accWhy:'الفيروزي الكاشاني بيربط البراند بالعمارة والتراث العراقي'},
- lb:{name:'لبنان',sat:0,note:'السوق اللبناني متأثر بالذوق الأوروبي والموضة، وبيحب الأناقة والجرأة في نفس الوقت.',acc:{h:140,s:55,l:32},accWhy:'أخضر الأرز بيدي إحساس لبناني مباشر'},
- ma:{name:'المغرب',sat:3,note:'أزرق ماجوريل والتيراكوتا والزعفران من أشهر الدلالات البصرية المغربية.',acc:{h:246,s:66,l:52},accWhy:'أزرق ماجوريل بيدي إحساس مغربي فني ومميز'},
- tn:{name:'تونس',sat:2,note:'الأزرق والأبيض (سيدي بوسعيد) والأحمر من أشهر الدلالات التونسية.',acc:{h:212,s:80,l:42},accWhy:'أزرق سيدي بوسعيد بيدي إحساس تونسي متوسطي'},
- dz:{name:'الجزائر',sat:2,note:'الأخضر والأبيض والأحمر ألوان العلم، والسوق بيحب الألوان الواضحة والمباشرة.',acc:{h:150,s:65,l:32},accWhy:'الأخضر الجزائري بيدي انتماء محلي'},
- ly:{name:'ليبيا',sat:0,note:'الأحمر والأسود والأخضر ألوان العلم، والسوق محافظ نسبيًا في اختيار الألوان.',acc:{h:145,s:60,l:30},accWhy:'الأخضر العميق بيدي إحساس محلي ومستقر'},
- global:{name:'عالمي',inName:'السوق العالمي',sat:0,note:'من غير دلالة محلية، فالأولوية لعُرف المجال وإنك تتميز عن المنافسين.',acc:null}
+  eg:{name:'مصر'},
+  sa:{name:'السعودية'},
+  ae:{name:'الإمارات'},
+  qa:{name:'قطر'},
+  kw:{name:'الكويت'},
+  bh:{name:'البحرين'},
+  om:{name:'عُمان'},
+  jo:{name:'الأردن'},
+  iq:{name:'العراق'},
+  lb:{name:'لبنان'},
+  ma:{name:'المغرب'},
+  tn:{name:'تونس'},
+  dz:{name:'الجزائر'},
+  ly:{name:'ليبيا'},
+  global:{name:'عالمي'}
 };
-const AGE={
- kids:{s:10,l:5,why:'جمهور أطفال: زوّدت التشبع والإضاءة شوية، لأن الأطفال بينجذبوا للألوان الصريحة، وخلّيت التباين عالي عشان الأهل كمان.'},
- youth:{s:6,l:0,why:'جمهور شباب: زوّدت الجرأة والتشبع عشان يبان على السوشيال وسط الزحمة.'},
- adults:{s:0,l:0,why:'جمهور 25–45: التشبع متوازن، مش باهت ومش صارخ.'},
- mature:{s:-6,l:-3,why:'جمهور فوق 45: هدّيت التشبع وزوّدت التباين عشان القراءة تبقى أسهل.'}};
 const TIER={
  economy:{s:8,l:3,name:'اقتصادي',why:'سعر اقتصادي: ألوان مشبعة وواضحة، عشان الإحساس يبقى قريب ومتاح.'},
  mid:{s:0,l:0,name:'متوسط',why:'سعر متوسط: توازن بين الوضوح والرُّقي.'},
@@ -908,7 +905,6 @@ const CH={
  digital:{n:'سوشيال وديجيتال',why:'نسختا لايت ودارك مقترحتان؛ راجع تباين كل نص وزر بعد تطبيق الألوان على الواجهة الفعلية.'},
  print:{n:'تغليف وطباعة',why:'للطباعة: قيم CMYK هنا تقريبية فقط؛ اطلب بروفة على الورق والخامة الفعلية.'},
  sign:{n:'يافطة ومحل',why:'لليافطة: راجع اللون بالحجم والمسافة والإضاءة والخامة الفعلية؛ نسبة التباين وحدها لا تتنبأ بوضوحها من بعيد.'}};
-const HSHORT={split:'درجات متقابلة جزئيًا على عجلة اللون؛ افحص التباين منفصلًا',comp:'لون مقابل على عجلة اللون؛ افحص تباين النص والعنصر منفصلًا',analog:'ألوان متجاورة على عجلة اللون',mono:'لون واحد بدرجات مختلفة',triad:'ثلاث درجات متباعدة على عجلة اللون',neutral:'نيوترال مع لون مميز'};
 const HARM={
  analog:['متجانس','ألوان متجاورة على عجلة HSL؛ ده وصف لعلاقة درجات اللون وليس قياسًا للتباين أو ضمانًا لانسجامها بصريًا'],
  comp:['متكامل','الأكسنت مقابل الأساسي على عجلة HSL؛ تقابل الدرجات لا يعني تلقائيًا تباينًا كافيًا للنص أو الزر'],
@@ -922,8 +918,8 @@ const vals=st=>(st.vals||[]).map(k=>VAL[k]).filter(Boolean);
 function tune(b,st,co){
   let{h,s,l}=b;const vs=vals(st),k=vs.length>2?.7:1;let vS=0,vL=0;vs.forEach(v=>{vS+=v.s*k;vL+=v.l*k});
   if(b.s<12)return{h,s:b.s,l:clamp(l+(st.friendly>0?2:0)+Math.min(vL,0)/2,5,70)};
-  s+=TIER[st.tier].s+AGE[st.age].s+co.sat+st.bold*7+st.modern*3+(st.dec==='b2b'?-6:0)+(st.friendly>0?3:0)+vS;
-  l+=TIER[st.tier].l+AGE[st.age].l+st.friendly*3+st.modern*2+vL;
+  s+=TIER[st.tier].s+st.bold*7+st.modern*3+(st.friendly>0?3:0)+vS;
+  l+=TIER[st.tier].l+st.friendly*3+st.modern*2+vL;
   if(st.cool!==0)h=shiftToward(h,st.cool<0?30:215,Math.abs(st.cool)*7);
   const vh=vs.flatMap(v=>v.hues);
   if(vh.length){const best=vh.reduce((a,x)=>hd(h,x)<hd(h,a)?x:a);if(hd(h,best)<40)h=shiftToward(h,best,6)}
@@ -938,7 +934,6 @@ function audDesc(st){
   const who=st.dec==='women'?(st.age==='youth'?'بنات':'ستات'):st.dec==='men'?(st.age==='youth'?'شباب':'رجالة'):(st.age==='youth'?'شباب':'ناس');
   return who+' '+r;
 }
-const coIn=co=>co.inName||co.name;
 function personality(st){
   const p=[];
   if(st.bold>0)p.push('جريء: تشبع أعلى وتباين أقوى');if(st.bold<0)p.push('هادي: تشبع أقل');
@@ -961,45 +956,62 @@ function compCheck(p,cmps){
   if(p.s<12&&cmps.some(c=>c.s<=15))return{p,rot,note:'فيه منافس بيعتمد على الأسود/الرمادي برضه، فالأكسنت هنا هو اللي هيفرّقك. خلّيه ثابت في كل حاجة.'};
   return{p,rot,note:null};
 }
-const darkInkOf=V=>V.bg.l<V.text.l?V.bg:V.text;
-function onFor(c,V){const dk=darkInkOf(V);return contrast(c,WHITE)>=contrast(c,dk)?WHITE.hex:dk.hex}
+function onFor(c){return textOn(c.hex)}
+function fitColor(c,bg,target){
+  if(contrast(c,bg)>=target)return c;
+  const {L,C,H}=rgbOklch(c.rgb);
+  for(let step=1;step<=50;step++)for(const direction of [-1,1]){
+    const lightness=L+direction*step*.02;
+    if(lightness<.01||lightness>.99)continue;
+    const candidate=oklchMk(lightness,C,H);
+    if(contrast(candidate,bg)>=target)return candidate;
+  }
+  return c;
+}
 function variantOf(P,mode){
   const base=P.darkLead?'dark':'light';
   if(mode===base)return{bg:P.bg,text:P.text,primary:P.primary,secondary:P.secondary,accent:P.accent};
-  const h=P.primary.h,chrom=P.primary.s>=12;let g;
+  const h=P.primary.h,chrom=P.primary.s>=12;
   if(mode==='dark'){
-    const bg=mk(h,chrom?Math.min(P.primary.s,14):4,9),text=mk(h,chrom?10:4,93);
-    let pr=P.primary;g=0;while(contrast(pr,bg)<3&&g++<45)pr=shiftOklchL(pr,.02);
-    let ac=P.accent;g=0;while(contrast(ac,bg)<4.5&&g++<45)ac=shiftOklchL(ac,.02);
-    return{bg,text,primary:pr,secondary:mk(P.secondary.h,Math.min(P.secondary.s,35),20),accent:ac};
+    const bg=mk(h,chrom?Math.min(P.primary.s,14):4,9);
+    return {bg,text:fitColor(mk(h,chrom?10:4,93),bg,7),primary:P.fixedPrimary?P.primary:fitColor(P.primary,bg,3),
+      secondary:mk(P.secondary.h,Math.min(P.secondary.s,35),20),accent:fitColor(P.accent,bg,3)};
   }
-  const bg=mk(h,chrom?16:4,97),text=mk(h,chrom?22:6,12);
-  let pr=P.primary;g=0;while(contrast(pr,bg)<3&&g++<45)pr=shiftOklchL(pr,-.02);
-  let ac=P.accent;g=0;while(contrast(ac,bg)<3&&g++<45)ac=shiftOklchL(ac,-.02);
-  return{bg,text,primary:pr,secondary:mk(P.secondary.h,P.secondary.s*.6,86),accent:ac};
+  const bg=mk(h,chrom?16:4,97);
+  return {bg,text:fitColor(mk(h,chrom?22:6,12),bg,7),primary:P.fixedPrimary?P.primary:fitColor(P.primary,bg,3),
+    secondary:mk(P.secondary.h,P.secondary.s*.6,86),accent:fitColor(P.accent,bg,3)};
+}
+function paletteChecks(V,ch){
+  const {bg,text,primary,accent}=V;
+  const tx=contrast(text,bg),pr=contrast(primary,bg),ac=contrast(accent,bg);
+  const primaryInk=fromHex(onFor(primary)),buttonInk=fromHex(onFor(accent));
+  const onPrimary=contrast(primary,primaryInk),onButton=contrast(accent,buttonInk);
+  const simulationDistances=['prot','deut'].map(mode=>deltaHex(sim(primary.hex,mode),sim(accent.hex,mode)));
+  const measures=[
+    ['النص العادي على الخلفية',tx,4.5],
+    [`نص على الأساسي ${primaryInk.hex}`,onPrimary,4.5],
+    ['الأساسي مقابل الخلفية',pr,3],
+    ['الإبراز مقابل الخلفية',ac,3],
+    [`نص الزر ${buttonInk.hex} على الإبراز`,onButton,4.5],
+  ];
+  const checks=measures.map(([label,ratio,target])=>({ok:ratio>=target,t:
+    `${label} · ${displayRatio(ratio)} · ${ratio>=target?'يحقق':'أقل من'} ${target}:1`}));
+  checks.push({note:true,t:`فرق OKLab في محاكاتَي تمييز الأحمر والأخضر: ${simulationDistances.map(distance=>distance.toFixed(3)).join(' / ')}. ده فرق تقريبي بين الأساسي والإبراز، من غير حد نجاح معياري.`});
+  if(ch==='print'||ch==='all')checks.push({note:true,t:'قيم CMYK تقريبية. راجع بروفة بخامة الطباعة وبروفايل ICC الفعلي.'});
+  if(ch==='sign'||ch==='all')checks.push({note:true,t:'راجع اليافطة بالحجم ومسافة المشاهدة والإضاءة الفعلية.'});
+  return checks;
 }
 function finalize(P,st){
-  let{bg,text}=P;const dark=P.darkLead;
-  while(contrast(text,bg)<7&&rgbOklch(text.rgb).L>.02&&rgbOklch(text.rgb).L<.98)text=shiftOklchL(text,dark?.02:-.02);
+  const {bg}=P;
+  const dark=P.darkLead;
+  const text=fitColor(P.text,bg,7);
+  const pr=P.fixedPrimary?P.primary:fitColor(P.primary,bg,3);
+  const a=fitColor(P.accent,bg,3);
+  if(pr.hex!==P.primary.hex)P.reasons.push({k:'التباين',t:'عدّلنا إضاءة اللون الأساسي لتحسين تباينه مع الخلفية.'});
   P.text=text;
-  const darkInk=dark?bg:text;
-  let pr=P.primary,cw=contrast(pr,WHITE),cd=contrast(pr,darkInk),pbg=contrast(pr,bg);
-  if(Math.max(cw,cd)<4.5||pbg<3){const start=rgbOklch(pr.rgb).L;let found=null;for(let step=1;step<=48&&!found;step++)for(const dir of[-1,1]){const L=start+dir*step*.02;if(L<=.02||L>=.98)continue;const candidate=oklchMk(L,rgbOklch(pr.rgb).C,rgbOklch(pr.rgb).H),fg=Math.max(contrast(candidate,WHITE),contrast(candidate,darkInk));if(contrast(candidate,bg)>=3&&fg>=4.5){found=candidate;break}}if(found){pr=found;P.adjusted=true}cw=contrast(pr,WHITE);cd=contrast(pr,darkInk);pbg=contrast(pr,bg)}
-  P.primary=pr;P.onPrimaryName=cw>=cd?'أبيض':'غامق';P.cPrimary=Math.max(cw,cd);
-  let a=P.accent,guard=0;
-  while(contrast(a,bg)<3&&guard++<45)a=shiftOklchL(a,dark?.02:-.02);
+  P.primary=pr;
   P.accent=a;
-  const tx=contrast(text,bg),ac=contrast(a,bg),buttonInk=fromHex(onFor(a,{bg,text})),buttonTextRatio=contrast(a,buttonInk),cb=dE(labLin(deutan(pr.rgb)),labLin(deutan(a.rgb)));
-  P.checks=[
-    {ok:tx>=4.5,t:`النص العادي على الخلفية ${tx.toFixed(1)}:1 ${tx>=7?'AAA':tx>=4.5?'AA':'أقل من AA (4.5:1)'}`},
-    {ok:P.cPrimary>=4.5,t:`كتابة ${P.onPrimaryName} على الأساسي ${P.cPrimary.toFixed(1)}:1 ${P.cPrimary>=7?'AAA':P.cPrimary>=4.5?'AA':P.cPrimary>=3?'للنص الكبير فقط (3:1)':'أقل من 3:1'}`},
-    {ok:pbg>=3,t:`الأساسي مقابل الخلفية ${pbg.toFixed(1)}:1 ${pbg>=3?'يجتاز 3:1 كعنصر غير نصي':'أقل من 3:1 كعنصر غير نصي'}`},
-    {ok:ac>=3,t:`لون الأكسنت مقابل الخلفية ${ac.toFixed(1)}:1 ${ac>=3?'يجتاز 3:1 للعناصر غير النصية':'أقل من 3:1 للعناصر غير النصية'}`},
-    {ok:buttonTextRatio>=4.5,t:`نص الزر المقترح ${buttonInk.hex} على الأكسنت ${buttonTextRatio.toFixed(1)}:1 ${buttonTextRatio>=4.5?'يجتاز AA للنص العادي':buttonTextRatio>=3?'مناسب للنص الكبير فقط':'أقل من حد النص الكبير'}`},
-    {note:true,t:`محاكاة تقريبية لنقص تمييز الأحمر والأخضر (ΔE ${cb.toFixed(1)}): لا تمنح اجتيازًا؛ أضف نصًا أو رمزًا بجانب اللون واختبر الواجهة فعليًا.`}];
-  if(st.ch==='print'||st.ch==='all')P.checks.push({note:true,t:'قيم CMYK تقريبية من RGB وليست فحصًا لنطاق طابعة بعينها. النتيجة تعتمد على بروفايل ICC والورق والحبر؛ اطلب بروفة.'});
-  if(st.ch==='sign'||st.ch==='all'){const r=contrast(pr,bg);P.checks.push(r>=3?{ok:true,t:`تباين الأساسي مع الخلفية ${r.toFixed(1)}:1 (3:1 مرجع للعناصر غير النصية؛ لا يضمن وضوح اليافطة من مسافة)`}:{ok:false,t:`تباين الأساسي ${r.toFixed(1)}:1؛ جرّب إطارًا أو درجة أعلى تباينًا، ثم راجعها بالحجم ومسافة المشاهدة الفعلية`})}
-  if(P.adjusted)P.reasons.push({k:'التباين',t:'عدّلت درجة الأساسي لأقرب موضع ممكن يجتاز تباين النص 4.5:1 والعنصر 3:1؛ راجع النسب المعروضة.'});
+  P.cPrimary=contrast(pr,fromHex(onFor(pr)));
   if(CH[st.ch].why&&P.kind!=='c')P.reasons.push({k:'القناة',t:CH[st.ch].why});
   P.colors=[{role:'الخلفية',key:'bg',pct:48,c:bg},{role:'الأساسي',key:'primary',pct:22,c:pr},{role:'التانوي',key:'secondary',pct:8,c:P.secondary},{role:'الأكسنت',key:'accent',pct:10,c:a},{role:'النصوص',key:'text',pct:12,c:text}];
   P.baseMode=dark?'dark':'light';
@@ -1029,7 +1041,7 @@ function harmonize(p,harm,st,spec,co,R){
   if(harm==='analog'){sec=mk(H+30*sg,p.s*.8,p.l<45?p.l+22:p.l-16);acc=mk(H+62*sg,accS,52)}
   else if(harm==='comp'){sec=mk(H+20*sg,p.s*.45,Math.min(p.l+32,86));acc=mk(H+180,accS,52)}
   else if(harm==='split'){sec=mk(H+30*sg,p.s*.6,Math.min(p.l+28,84));acc=mk(H+180+30*sg,accS,52)}
-  else if(harm==='mono'){sec=mk(H,Math.max(p.s-20,8),Math.min(p.l+36,88));acc=(st.tier==='premium'||st.tier==='luxury')&&hd(H,42)>25?mk(42,55,50):mk(H+180,accS,50)}
+  else if(harm==='mono'){sec=mk(H,Math.max(p.s-20,8),Math.min(p.l+36,88));acc=mk(H,Math.min(90,p.s+15),p.l>46?30:55)}
   else{sec=mk(H+120,p.s*.85,clamp(p.l+5,40,65));acc=mk(H+240,accS,55)}
   return{sec,acc,harm};
 }
@@ -1039,38 +1051,27 @@ function build(spec,st,ind,co,R,cmps){
   let p=spec.raw?{h:b.h,s:b.s,l:b.l}:tune(b,st,co);
   if(spec.darkLead&&p.s>=12)p={...p,l:Math.max(p.l,34),s:Math.max(p.s,32)};
   const cc=spec.raw?{p,rot:false,note:null}:compCheck(p,cmps);p=cc.p;
-  const primary=mk(p.h,p.s,p.l);
-  let why=b.why,pN=defName(nameOf(primary));
-  if(cc.rot)why=meaningOf(primary)+'، وفي نفس الوقت بعيد عن المنافسين';
-  else if(!spec.raw){const bf=fam(mk(b.h,b.s,b.l)),tf=fam(primary);
-    if(bf!==tf)pN+=' (درجة '+(st.tier==='premium'||st.tier==='luxury'?'أهدى وأعمق':'مظبوطة على جمهورك')+' من '+defName(bf)+')'}
+  const primary=spec.raw?fromHex(b.hex):mk(p.h,p.s,p.l);
+  const pN=defName(nameOf(primary));
+  const why=spec.raw?'ده اللون اللي حدده العميل بالـHEX':'درجة من اتجاه بصري مقترح للبريف';
   let{sec,acc,harm}=harmonize(p,spec.harmony,st,spec,co,R);
-  let accentLocal=false;
-  if(spec.accent){acc=mk(spec.accent.h,spec.accent.s,spec.accent.l);accentLocal=true}
-  if(hd(acc.h,p.h)<20&&Math.abs(acc.l-primary.l)<15&&p.s>=12)acc=mk(acc.h+45,acc.s,acc.l);
+  if(harm!=='mono'&&hd(acc.h,p.h)<20&&Math.abs(acc.l-primary.l)<15&&p.s>=12)acc=mk(acc.h+45,acc.s,acc.l);
   const dark=!!spec.darkLead,H=p.h,warm=(H<70||H>330);
   const bg=dark?mk(H,Math.min(p.s,14),8):mk(H,p.s<12?4:(warm?24:14),97);
   const text=dark?mk(H,10,93):mk(H,p.s<12?6:22,12);
   const reasons=[{k:'الأساسي',t:`${pN.replace(/^ال/,'')}: ${why}.`},{k:'التناغم',t:`${HARM[harm][0]}: ${HARM[harm][1]}.`}];
-  if(accentLocal)reasons.push({k:'لمسة محلية',t:`الأكسنت ${nameOf(acc)}: ${spec.accentWhy}.`});
-  if(harm==='mono'&&(st.tier==='premium'||st.tier==='luxury')&&!accentLocal)reasons.push({k:'الأكسنت',t:'الدهبي كأكسنت عشان يرفع الإحساس بمستوى السعر من غير ما يزاحم الأساسي.'});
-  if(spec.showMarket)reasons.push({k:'السوق',t:co.note});
-  if(spec.showMarket&&GULF.includes(st.co)&&(st.tier==='premium'||st.tier==='luxury'))reasons.push({k:'الخليج',t:'في الخليج، الأسود والأبيض والدهبي بيرتبطوا بالمكانة والفخامة، فالمساحات النيوترال هنا شغالة لصالحك.'});
   if(spec.kind!=='c'){
-    const vs=vals(st);if(vs.length)reasons.push({k:'القيم',t:vs.map(v=>v.why).join('، و')+'.'});
-    reasons.push({k:'الجمهور',t:AGE[st.age].why},{k:'السعر',t:TIER[st.tier].why});
-    const pers=personality(st);if(pers)reasons.push({k:'الشخصية',t:pers});
+    const vs=vals(st);
+    if(vs.length)reasons.push({k:'القيم المختارة',t:vs.map(v=>v.n).join('، ')});
+    const pers=personality(st);
+    if(pers)reasons.push({k:'الاتجاه البصري',t:pers});
   }
   if(cc.note)reasons.push({k:'المنافس',t:cc.note});
-  if(co.caution&&p.s>=co.caution.minS&&hd(H,co.caution.h)<co.caution.r)reasons.push({k:'خد بالك',t:co.caution.t});
-  if(dark)reasons.push({k:'الخلفية',t:'الخلفية غامقة والنور جاي من اللون، وده أسلوب منتشر في الفخامة لأنه بيحسّس بالعمق والغموض.'});
-  let formula;
-  if(spec.kind==='m')formula=`بما إن جمهورنا ${audDesc(st)} في ${coIn(co)}، اخترت ${pN} عشان ${why}.`;
-  else if(spec.kind==='b')formula=`بما إن أغلب المنافسين في ${ind.label} بيستخدموا ${normNames(ind)}، اخترت ${pN} عشان ${why}.`;
-  else formula=`بما إن جمهورنا ${audDesc(st)} في ${coIn(co)}، خلّينا ${pN} أساسي عشان ${meaningOf(primary)}، وحطّينا جنبه ${defName(nameOf(acc))} عشان ${HSHORT[harm]}.`;
-  return finalize({kind:spec.kind,title:spec.title,sub:spec.sub,harmonyName:HARM[harm][0],primary,secondary:sec,accent:acc,bg,text,darkLead:dark,reasons,formula,risk:b.risk,fix:b.fix},st);
+  const formula=spec.kind==='c'
+    ? `بنينا اللوحة حوالين ${primary.hex} اللي اختاره العميل. نقارنها على التطبيقات المطلوبة قبل الاعتماد.`
+    : `نبدأ بـ${pN} كلون أساسي ونجرّب ${nameOf(acc)} للإبراز. نراجع التباين ونقارن الاتجاه بتطبيقات المجال.`;
+  return finalize({kind:spec.kind,title:spec.title,sub:spec.sub,harmonyName:HARM[harm][0],primary,secondary:sec,accent:acc,bg,text,darkLead:dark,fixedPrimary:Boolean(spec.raw),reasons,formula,risk:b.risk,fix:b.fix},st);
 }
-function normNames(ind){const u=[];ind.norm.forEach(n=>{const x=defName(nameOf(mk(n.h,n.s,n.l)).split(' ')[0]);if(!u.includes(x))u.push(x)});return u.join(' و')}
 function buildMinimal(st,ind,co,R,cmps){
   const darkNorm=ind.norm.some(n=>n.s<12);
   let accH=nh(ind.brk[(st.seed+1)%2].h+(st.seed>0?(R()-.5)*20:0));
@@ -1078,21 +1079,20 @@ function buildMinimal(st,ind,co,R,cmps){
   let P;
   if(!darkNorm){
     const h=ind.norm[0].h,accent=mk(accH,94,54);
-    P={kind:'b',title:'أبيض وأسود + لون صادم',sub:'التميّز بالهدوء مش بالزحمة',harmonyName:HARM.neutral[0],
+    P={kind:'b',title:'محايد مع لون إبراز',sub:'مساحات هادية مع لمسة لون',harmonyName:HARM.neutral[0],
       bg:mk(h,5,97),text:mk(h,10,8),primary:mk(h,8,11),secondary:mk(h,5,86),accent,
-      formula:`بما إن أغلب المنافسين في ${ind.label} بيتنافسوا بالألوان، اخترت أبيض وأسود ولمسة ${nameOf(accent)} عشان اللي هيلفت إن مفيش زحمة ألوان، واللون الواحد يبقى توقيعك.`,
+      formula:`نجرب مساحة محايدة ولمسة ${nameOf(accent)} عشان نحدد بوضوح إيه اللي عايزين نبرزه في التطبيق.`,
       risk:st.tier==='economy'?'ممكن يتقري غالي أو بارد على جمهور سعره اقتصادي':'ممكن يتقري بارد لو اللون الصادم اختفى',
       fix:'خلّي اللون الصادم ثابت في كل مكان (الزرار، الشنطة، الستيكر، اليونيفورم) عشان يبقى هو البراند'};
   }else{
     const p=tune({h:accH,s:55,l:70},st,co),primary=mk(p.h,Math.max(p.s,40),clamp(p.l+6,62,76));
-    P={kind:'b',title:'فاتح وناعم في مجال غامق',sub:'المجال كله غامق، فالفاتح هو اللي هيبان',harmonyName:'باستيل + أكسنت متكامل',
+    P={kind:'b',title:'درجات فاتحة مع لون إبراز',sub:'مقارنة مع الأمثلة الغامقة في الأداة',harmonyName:'باستيل + أكسنت متكامل',
       bg:mk(accH,40,96),text:mk(accH,30,13),primary,secondary:mk(accH+40,40,86),accent:mk(accH+180,62,42),
-      formula:`بما إن أغلب المنافسين في ${ind.label} بيستخدموا الأسود والدهبي والألوان الغامقة، اخترت ${defName(nameOf(primary))} الناعم عشان هيبان على الرف والسوشيال وسط العلب الغامقة.`,
+      formula:`نجرب ${defName(nameOf(primary))} على تصميم فاتح ونقارنه بأمثلة المجال في التطبيق المطلوب.`,
       risk:'ممكن يقلل إحساس الفخامة لو التنفيذ خفيف',fix:'خامات تقيلة، تايبوجرافي رفيع، ومساحات فاضية كتير'};
   }
-  P.reasons=[{k:'الفكرة',t:darkNorm?'لما المجال كله غامق، الدرجات الفاتحة الناعمة بتعمل عكس المتوقع وبتتفتكر.':'تأثير العزل (Von Restorff): الحاجة المختلفة وسط المتشابه هي اللي بتتفتكر. هنا المختلف هو قلة الألوان نفسها.'},
-    {k:'التوزيع',t:'النيوترال واخد أغلب المساحة، والأكسنت لمسة صغيرة بس في كل حاجة.'},
-    {k:'السعر',t:TIER[st.tier].why}];
+  P.reasons=[{k:'الفكرة',t:darkNorm?'درجات فاتحة للتجربة جنب الأمثلة الغامقة داخل الأداة.':'اعتمدنا على المساحات المحايدة عشان نقدر نقارن تأثير لون إبراز واحد.'},
+    {k:'التوزيع',t:'جرّب اللون المحايد في المساحة الأكبر، ولون الإبراز في التفاصيل.'}];
   const chc=cmps.filter(c=>c.s>15);
   if(chc.length)P.reasons.push({k:'المنافس',t:`الأكسنت بعيد عن ${chc.length>1?'ألوان المنافسين':'لون المنافس'} بـ ${Math.round(Math.min(...chc.map(c=>hd(P.accent.h,c.h))))}° على الأقل على العجلة.`});
   return finalize(P,st);
@@ -1105,40 +1105,36 @@ function analyzeClient(st,ind,co,cmps){
   if(chrom){
     const nm=ind.norm.filter(n=>n.s>=12),mn=nm.length?Math.min(...nm.map(n=>hd(c.h,n.h))):999,mb=Math.min(...ind.brk.map(n=>hd(c.h,n.h)));
     if(mn<25)items.push({lvl:'ok',k:'المجال',t:`قريب من اتجاهات إرشادية مسجلة داخل الأداة لمجال ${ind.label}؛ مش إحصاء سوق ولا دليلًا على فهم الجمهور أو تفضيله.`});
-    else if(mb<25){const br=ind.brk.reduce((a,x)=>hd(c.h,x.h)<hd(c.h,a.h)?x:a);items.push({lvl:'warn',k:'المجال',t:`من الألوان اللي بتكسر القاعدة في ${ind.label}. ينفع، بس ${br.risk}.`,fix:br.fix})}
-    else items.push({lvl:'warn',k:'المجال',t:`مش من ألوان ${ind.label} المعتادة. ممكن يبقى تميّز لو العرض مقنع، أو لخبطة لو الجمهور مستني حاجة تانية.`});
+    else if(mb<25)items.push({lvl:'warn',k:'المجال',t:`قريب من الاتجاهات البديلة المقترحة داخل الأداة لمجال ${ind.label}.`});
+    else items.push({lvl:'warn',k:'المجال',t:`بعيد عن الأمثلة المسجلة داخل الأداة لمجال ${ind.label}. قارنه بأمثلة فعلية من مشاريع شبيهة.`});
   }else items.push({lvl:ind.norm.some(n=>n.s<12)?'ok':'warn',k:'المجال',t:ind.norm.some(n=>n.s<12)?'اللون محايد؛ قارنه بأمثلة فعلية من منافسيك وسياق الاستخدام.':'لون محايد؛ اختبر وضوحه وتميّزه مع الجمهور بدل افتراض أنه آمن أو سهل التذكر.'});
   const hit=chrom?cmps.find(x=>x.s>15&&hd(c.h,x.h)<25):null;
   if(hit){items.push({lvl:'warn',k:'المنافس',t:`درجة اللون قريبة على عجلة HSL من لون المنافس ${hit.hex}؛ هذه مقارنة تقريبية لا تتنبأ وحدها بالتباس الجمهور.`});const d=((c.h-hit.h+540)%360)-180;t.h=nh(hit.h+(d>=0?1:-1)*30);fixes.push('comp')}
   else if(cmps.length&&chrom)items.push({lvl:'ok',k:'المنافس',t:'لا توجد درجة قريبة على عجلة HSL ضمن العتبة المستخدمة؛ راجع التشابه في الشعار والتطبيق الفعلي أيضًا.'});
-  if(co.caution&&chrom&&c.s>=co.caution.minS&&hd(c.h,co.caution.h)<co.caution.r)items.push({lvl:'warn',k:'البلد',t:co.caution.t});
   const rng={economy:[50,100],mid:[30,90],premium:[0,65],luxury:[0,45]}[st.tier];
   if(chrom&&(c.s<rng[0]||c.s>rng[1])){const hi=c.s>rng[1];items.push({lvl:'warn',k:'التشبع',t:hi?`تشبّعه أعلى من النطاق الإرشادي الداخلي لهذه الأداة. لا يحدد التشبع وحده إحساس السعر؛ راجع الخامة والصور والخط.`:`تشبّعه أقل من النطاق الإرشادي الداخلي لهذه الأداة. قيّم وضوحه على الشاشة والخامة الفعلية.`});t.s=clamp(c.s,rng[0]+4,rng[1]-4);if(hi&&(st.tier==='premium'||st.tier==='luxury'))t.l=Math.min(t.l,48);fixes.push(hi?'tierHi':'tierLo')}
   else if(chrom)items.push({lvl:'ok',k:'التشبع',t:'يقع ضمن النطاق الإرشادي الداخلي لهذه الأداة؛ هذا لا يثبت ملاءمته لمستوى السعر.'});
-  const best=Math.max(contrast(c,WHITE),contrast(c,{rgb:[12,12,12]}));
-  if(best<4.5){items.push({lvl:'warn',k:'القراءة',t:`أفضل تباين بين الأبيض والغامق ${best.toFixed(1)}:1، أقل من 4.5:1 للنص العادي. جرّب درجة أفتح أو أغمق ثم أعد القياس.`});fixes.push('read')}
-  else items.push({lvl:'ok',k:'القراءة',t:`الكتابة ${contrast(c,WHITE)>=contrast(c,{rgb:[12,12,12]})?'الأبيض':'الغامقة'} عليه مقروءة (${best.toFixed(1)}:1).`});
+  const ink=fromHex(onFor(c)), best=contrast(c,ink);
+  items.push({lvl:'ok',k:'تباين النص',t:'لون النص المقترح '+ink.hex+' يحقق '+displayRatio(best)+' على لون العميل.'});
   if(st.ch==='print'||st.ch==='all')items.push({lvl:'warn',k:'الطباعة',t:'قيمة CMYK تقريبية ولا تحدد نطاق مطبعة بعينها؛ اطلب بروفة على الخامة وبروفايل الطابعة.'});
   const vh=vals(st).filter(v=>v.hues.length);
-  if(chrom&&vh.length){const near=vh.filter(v=>v.hues.some(h=>hd(c.h,h)<35));items.push(near.length?{lvl:'ok',k:'القيم',t:`بيعبّر عن ${near.map(v=>'«'+v.n+'»').join(' و')}.`}:{lvl:'warn',k:'القيم',t:`مش قريب من القيم اللي اخترتها (${vh.map(v=>v.n).join('، ')})، فهتحتاج الأكسنت والخط يكمّلوا الرسالة.`})}
-  let improved=mk(t.h,t.s,t.l);
-  if(fixes.includes('read')){let g=0;while(Math.max(contrast(improved,WHITE),contrast(improved,{rgb:[12,12,12]}))<4.5&&g++<40){const direction=contrast(improved,WHITE)>=contrast(improved,{rgb:[12,12,12]})?-.025:.025;improved=shiftOklchL(improved,direction)}}
-  const changed=dEc(c,improved)>4;
-  const bad=items.filter(i=>i.lvl==='bad').length,warn=items.filter(i=>i.lvl==='warn').length;
-  const verdict=bad?{lvl:'bad',t:'محتاج نقاش مع العميل'}:warn>=2?{lvl:'warn',t:'يمشي بتعديل'}:{lvl:'ok',t:'يمشي'};
+  if(chrom&&vh.length)items.push({lvl:'ok',k:'الاتجاه',t:'قارن اللون مع أمثلة بصرية للقيم المختارة قبل اعتماده.'});
+  const improved=fixes.length?mk(t.h,t.s,t.l):c;
+  const changed=deltaHex(c.hex,improved.hex)>.03;
+  const needsReview=items.some(item=>item.lvl==='warn');
+  const verdict=needsReview?{lvl:'warn',t:'فيه ملاحظات للمراجعة'}:{lvl:'ok',t:'جاهز للتجربة في التصميم'};
   const cN=defName(nameOf(c)),iN=defName(nameOf(improved));
   let say;
   if(fixes.includes('comp'))say=`درجة اللون قريبة على عجلة HSL من لون منافس؛ ده لا يثبت إن الجمهور هيلخبط بينكم. ممكن نجرب تحريكها إلى ${iN.replace(/^ال/,'ل')} ونقارن شكل الهويتين جنب بعض.`;
   else if(fixes.includes('tierHi'))say=`تشبّع ${cN} أعلى من النطاق الإرشادي لهذه الأداة. نقدر نقارن نسخة أهدأ، لكن إحساس السعر يعتمد كمان على الخط والخامات والصور.`;
   else if(fixes.includes('tierLo'))say=`تشبّع ${cN} أقل من النطاق الإرشادي لهذه الأداة. نقدر نقارن نسخة أوضح على الشاشة والخامة، ثم نختبرها مع الجمهور.`;
-  else if(fixes.includes('read'))say=`أفضل تباين لهذا اللون أقل من 4.5:1 للنص العادي؛ هنقارن درجة بديلة ونقيس النص والزر بعد تطبيقه على الواجهة.`;
-  else if(verdict.lvl!=='ok'){const f=items.find(i=>i.fix);say=`${cN} مش المعتاد في ${ind.label}، وده ممكن يبقى ميزة. بس عشان ينجح محتاجين ${f?f.fix:'نثبّته في كل نقطة تواصل ونوازنه بنيوترال كتير'}.`}
-  else say=`${cN} اللي اخترته ماشي مع جمهورنا (${audDesc(st)})، و${meaningOf(c)}، فهنبني الهوية حواليه.`;
+  else if(verdict.lvl!=='ok')say=`نحتفظ بـ${cN} اللي اخترته، ونراجع الملاحظات على معاينة التصميم قبل ما نعتمد اللوحة.`;
+  else say='هنبدأ باللون اللي العميل حدده ونشوفه على التطبيقات المطلوبة قبل اعتماد اللوحة.';
   return{c,improved,changed,items,verdict,say};
 }
 function buildClient(st,ind,co,R,cmps,an){
-  const b={...(an.changed?an.improved:an.c),why:meaningOf(an.changed?an.improved:an.c)};
-  return build({kind:'c',title:'باليتة حوالين لون العميل',sub:an.changed?'بالدرجة المقترحة بعد التظبيط':'بلون العميل زي ما هو',base:b,alt:ind.norm[0],harmony:st.bold>=1?'comp':'split',raw:true},st,ind,co,R,[]);
+  const b=an.c;
+  return build({kind:'c',title:'باليتة حوالين لون العميل',sub:'بالـHEX الأصلي للعميل',base:b,alt:ind.norm[0],harmony:st.bold>=1?'comp':'split',raw:true},st,ind,co,R,[]);
 }
 
 function generate(st){
@@ -1146,10 +1142,10 @@ function generate(st){
   const cmps=(st.comps||[]).slice(0,st.compN||0).map(fromHex);
   const h1=st.bold>=1?'comp':st.bold<=-1?'analog':'split';
   const P=[
-    bestPalette((cs,r)=>build({kind:'m',title:'قلب السوق',sub:'أقرب حاجة لعُرف '+ind.label,base:norms[o],alt:norms[(o+1)%n],harmony:h1,showMarket:true},cs,ind,co,r,cmps),st,0),
-    bestPalette((cs,r)=>build({kind:'m',title:co.acc?'السوق + لمسة من '+co.name:'السوق بنبرة تانية',sub:co.acc?'نفس العرف، بدلالة محلية':'نفس العرف، بلون تاني من المجال',base:norms[(o+1)%n],alt:norms[(o+2)%n],harmony:'split',accent:co.acc,accentWhy:co.accWhy},cs,ind,co,r,cmps),st,1),
+    bestPalette((cs,r)=>build({kind:'m',title:'اتجاه من المجال',sub:'مبني على أمثلة الأداة لمجال '+ind.label,base:norms[o],alt:norms[(o+1)%n],harmony:h1},cs,ind,co,r,cmps),st,0),
+    bestPalette((cs,r)=>build({kind:'m',title:'اتجاه تاني من المجال',sub:'درجة تانية من أمثلة المجال',base:norms[(o+1)%n],alt:norms[(o+2)%n],harmony:'split'},cs,ind,co,r,cmps),st,1),
     bestPalette((cs,r)=>build({kind:'m',title:cs.tier==='luxury'?'أحادي على خلفية غامقة':'أحادي ومركّز',sub:'لون واحد بدرجاته، سهل يتطبق',base:norms[(o+2)%n],alt:norms[o],harmony:'mono',darkLead:cs.tier==='luxury'},cs,ind,co,r,cmps),st,2),
-    bestPalette((cs,r)=>build({kind:'b',title:'عكس عُرف المجال',sub:'لون محدش في المجال بيستخدمه',base:ind.brk[cs.seed%2],alt:norms[o],harmony:cs.seed%2?'analog':'comp'},cs,ind,co,r,cmps),st,3),
+    bestPalette((cs,r)=>build({kind:'b',title:'اتجاه مختلف',sub:'بعيد عن أمثلة المجال داخل الأداة',base:ind.brk[cs.seed%2],alt:norms[o],harmony:cs.seed%2?'analog':'comp'},cs,ind,co,r,cmps),st,3),
     bestPalette((cs,r)=>buildMinimal(cs,ind,co,r,cmps),st,4)];
   let an=null;
   if(st.clientOn){an=analyzeClient(st,ind,co,cmps);P.push(buildClient(st,ind,co,R,cmps,an))}
@@ -1188,7 +1184,7 @@ const PRESETS=[
  {g:6,n:'تمور · السعودية',s:{brand:'نخلة',co:'sa',ind:'heritage',age:'adults',dec:'all',tier:'premium',vals:['heritage','nature'],ch:'print',compN:1,comps:['#6D4C41','#E53935','#2E7D32']}},
  {g:6,n:'منتجات أورجانيك · تونس',s:{brand:'زيتونة',co:'tn',ind:'agri',age:'adults',dec:'all',tier:'premium',vals:['nature','heritage'],ch:'print',cool:-1,compN:1,comps:['#689F38','#E53935','#1E73BE']}}];
 const BASE={brand:'',co:'sa',ind:'health',age:'adults',dec:'all',tier:'mid',ch:'all',vals:[],bold:0,modern:0,cool:0,friendly:0,compN:0,comps:['#1E73BE','#E53935','#2E7D32'],clientOn:false,client:'#7B4BB7',seed:0};
-let st={...BASE,...PRESETS[4].s};
+let st={...BASE};
 let PALS=[],AN=null,LOCKS={},UI={};
 const KEY='lonbrief-v2',FKEY='lonbrief-favs';
 
@@ -1235,14 +1231,14 @@ function mockHTML(P,i){
     <div class="bcard" style="background:${bg};color:${tx}"><div style="display:flex;gap:8px;align-items:center"><span class="mk" style="background:${pr};color:${onP}">${L}</span><span class="nmx">${B}</span></div>
       <div style="display:flex;flex-direction:column;gap:5px"><span class="ln" style="background:${ac}"></span><span class="tiny" dir="ltr" style="text-align:right">+000 000 0000 · hello@brand.com</span></div></div></div>`;
   else if(u.mock==='phone')h=`<div class="phone" style="background:${bg}">
-    <div class="ph-top" style="background:${pr};color:${onP}"><span class="mk" style="background:${bg};color:${pr}">${L}</span>${B}</div>
+    <div class="ph-top" style="background:${pr};color:${onP}"><span class="mk" style="background:${bg};color:${onFor(V.bg)}">${L}</span>${B}</div>
     <div class="ph-body"><div class="ph-img" style="background:${sc}"></div><div class="ph-h" style="color:${tx}">${esc(ind.cta)}</div>
       <div class="ph-ln" style="background:${tx};opacity:.16;width:92%"></div><div class="ph-ln" style="background:${tx};opacity:.16;width:68%"></div>
       <div class="ph-chips"><span style="background:${sc};color:${onS}">جديد</span><span style="color:${tx};border:1px solid ${tx}40">الأكثر طلبًا</span></div>
       <div class="ph-btn" style="background:${ac};color:${onA}">${esc(ind.cta)}</div></div></div>`;
   else if(u.mock==='social')h=`<div class="post" style="background:${pr};color:${onP}">
     <span class="post-shape" style="background:${sc};opacity:.55"></span>
-    <div class="post-top" style="position:relative;z-index:1"><span class="mk" style="background:${bg};color:${pr}">${L}</span>${B}</div>
+    <div class="post-top" style="position:relative;z-index:1"><span class="mk" style="background:${bg};color:${onFor(V.bg)}">${L}</span>${B}</div>
     <span class="sticker" style="background:${ac};color:${onA}">جديد</span>
     <div class="post-h">${esc(ind.cta)}</div><div class="post-sub">${esc(ind.label)} · ${esc(CO[st.co].name)}</div></div>`;
   else if(u.mock==='sign')h=`<div class="sign" style="background:${bg}">
@@ -1265,19 +1261,23 @@ function mockBlock(P,i){
 
 /* ---------- designer details ---------- */
 function grade(r){return r>=7?'AAA':r>=4.5?'AA':r>=3?'كبير / غير نصي':'✗'}
-function contrastTable(P){
-  const cols=[{n:'أبيض',c:WHITE},{n:'أسود',c:{rgb:[12,12,12],hex:'#0C0C0C'}},...P.colors.map(c=>({n:c.role,c:c.c}))];
-  return`<div class="tbl"><table><thead><tr><th>الخلفية ↓ / الكتابة ←</th>${cols.map(c=>`<th>${c.n}</th>`).join('')}</tr></thead><tbody>
-    ${P.colors.map(r=>`<tr><td class="rh">${r.role}</td>${cols.map(c=>{if(c.c.hex===r.c.hex)return'<td>—</td>';const x=contrast(r.c,c.c);
-      return`<td><span class="cell" style="background:${r.c.hex};color:${c.c.hex}"><b>أب</b><span>${x.toFixed(1)}</span><span class="grade">${grade(x)}</span></span></td>`}).join('')}</tr>`).join('')}
+function contrastTable(P,mode){
+  const palette=P.colors.map(({key,role})=>({key,role,c:P.variants[mode][key]}));
+  const cols=[{role:'أبيض',c:WHITE},{role:'أسود',c:fromHex('#000000')},...palette];
+  return`<div class="tbl"><table><thead><tr><th scope="col">الخلفية ↓ / الكتابة ←</th>${cols.map(c=>`<th scope="col">${c.role}</th>`).join('')}</tr></thead><tbody>
+    ${palette.map(r=>`<tr><th scope="row" class="rh">${r.role}</th>${cols.map(c=>{if(c.key===r.key)return'<td>—</td>';const x=contrast(r.c,c.c);
+      return`<td><span class="cell"><b style="background:${r.c.hex};color:${c.c.hex}">أب</b><bdi>${displayRatio(x)}</bdi><span class="grade">${grade(x)}</span></span></td>`}).join('')}</tr>`).join('')}
   </tbody></table></div>`;
+}
+function checkRows(P,i){
+  return paletteChecks(P.variants[UI[i].mode],st.ch).map(c=>`<span class="ck ${c.note?'note':c.ok?'ok':'bad'}"><i aria-hidden="true">${c.note?'i':c.ok?'✓':'!'}</i>${esc(c.t)}</span>`).join('');
 }
 function scaleRow(sc){return`<div class="scale">${sc.map(s=>`<button type="button" class="tint" data-hex="${s.c.hex}" aria-label="انسخ ${s.step} ${s.c.hex}"><span class="t" style="background:${s.c.hex};color:${contrast(s.c,WHITE)>contrast(s.c,{rgb:[12,12,12]})?'#fff':'#0C0C0C'}">${s.base?'●':s.step}</span><small>${s.c.hex}</small></button>`).join('')}</div>`}
 function details(P,i){
   return`<details class="det" data-det="${i}"><summary>تفاصيل للمصمم: درجات، تباين، تدرّج، تصدير</summary><div class="det-in">
    <div><h4>درجات الأساسي (50–900)</h4>${scaleRow(P.scales.primary)}</div>
    <div><h4>درجات الأكسنت</h4>${scaleRow(P.scales.accent)}</div>
-   <div><h4>مين ينفع يتكتب على مين</h4>${contrastTable(P)}<p class="hint" style="margin-top:6px">WCAG AA للنص العادي يحتاج 4.5:1، وAAA يحتاج 7:1. نسبة 3:1 تكفي للنص الكبير فقط (24px عادي أو 18.66px عريض تقريبًا) وللعناصر غير النصية مقابل الألوان المجاورة؛ لا تعني أن النص العادي مقروء.</p></div>
+   <div><h4>مين ينفع يتكتب على مين</h4><div id="contrast-${i}">${contrastTable(P,UI[i].mode)}</div><p class="hint" style="margin-top:6px">WCAG AA للنص العادي يحتاج 4.5:1، وAAA يحتاج 7:1. نسبة 3:1 تخص النص الكبير والعناصر غير النصية الضرورية أمام الألوان الملاصقة.</p></div>
    <div><h4>تدرّج مقترح</h4><div class="grad" style="background:linear-gradient(135deg,${P.primary.hex},${P.accent.hex})"></div>
      <div class="exports" style="margin-top:8px"><button type="button" class="small" data-exp="grad" data-i="${i}">انسخ التدرّج CSS</button></div></div>
    <div><h4>تصدير</h4><div class="exports">
@@ -1295,7 +1295,7 @@ function swatch(c){const cm=cmyk(c.c.rgb);
    <span class="role">${c.role}</span><span class="blk" style="background:${c.c.hex}"><em style="color:${contrast(c.c,WHITE)>contrast(c.c,{rgb:[12,12,12]})?'#fff':'#0C0C0C'}">${c.pct}٪</em></span>
    <span class="nm">${nameOf(c.c)}</span><span class="hex">${c.c.hex}</span>
    <span class="meta">RGB ${c.c.rgb.join(' ')}<br>CMYK تقريبي ${cm.join(' ')}</span></button>`}
-function tagOf(P){return P.kind==='m'?'<span class="tag m">قريب من الشائع</span>':P.kind==='b'?'<span class="tag b">مختلف عن الشائع</span>':'<span class="tag c">لون العميل</span>'}
+function tagOf(P){return P.kind==='m'?'<span class="tag m">من أمثلة المجال</span>':P.kind==='b'?'<span class="tag b">اتجاه مختلف</span>':'<span class="tag c">لون العميل</span>'}
 function card(P,i){
   const locked=!!LOCKS[i];
   const set=i<3?'common':'different',active=i===0||i===3;
@@ -1308,7 +1308,7 @@ function card(P,i){
    <button type="button" class="small pal-download" data-svg="${i}" aria-label="تحميل لوحة الألوان SVG لـ Illustrator">تحميل SVG لـ Illustrator</button>
    <button type="button" class="pal-more" data-card-more="${i}" aria-expanded="false" aria-controls="cardMore-${i}"><span>عرض السبب والمعاينة وفحوص التباين</span><span aria-hidden="true">＋</span></button>
    <div class="pal-extra" id="cardMore-${i}">
-   <div class="color-metrics"><h4>بيانات الألوان للمصمم</h4><div class="color-metrics-list">${P.colors.map(c=>`<div class="color-metrics-row"><b>${esc(c.role)} · ${c.c.hex}</b><span>RGB ${c.c.rgb.join(' ')} · CMYK ${cmyk(c.c.rgb).join(' ')}</span></div>`).join('')}</div></div>
+   <div class="color-metrics"><h4>بيانات الألوان للمصمم</h4><div class="color-metrics-list">${P.colors.map(c=>`<div class="color-metrics-row"><b>${esc(c.role)} · ${c.c.hex}</b><span>RGB ${c.c.rgb.join(' ')} · CMYK تقريبي ${cmyk(c.c.rgb).join(' ')}</span></div>`).join('')}</div></div>
    <div class="body">
      <div class="col">
        <div class="formula"><span class="k">قولها للعميل بدل «أنا حاسس»</span><q>${esc(P.formula)}</q>
@@ -1317,7 +1317,7 @@ function card(P,i){
        ${P.kind==='b'?`<div class="risk"><div class="r"><b>المخاطرة</b>${esc(P.risk)}</div><div class="f"><b>إزاي تنجّحه</b>${esc(P.fix)}</div></div>`:''}
      </div>
      <div class="col">${mockBlock(P,i)}
-       <div class="checks">${P.checks.map(c=>`<span class="ck ${c.note?'note':c.ok?'ok':'bad'}"><i>${c.note?'i':c.ok?'✓':'!'}</i>${esc(c.t)}</span>`).join('')}</div></div>
+       <div class="checks" id="checks-${i}">${checkRows(P,i)}</div></div>
    </div>
    ${details(P,i)}
    <div class="actions">
@@ -1359,10 +1359,10 @@ function render(){
    <div class="summary"><span class="chip">${esc(brandName())}</span><span class="chip">${esc(ind.label)}</span><span class="chip">${esc(co.name)}</span><span class="chip">${esc(audDesc(st))}</span><span class="chip">${TIER[st.tier].name}</span>
      ${st.vals.length?`<span class="chip">${st.vals.map(k=>VAL[k].n).join(' · ')}</span>`:''}${comps.length?`<span class="chip">المنافسين ${comps.map(c=>`<span class="dot" style="background:${c}"></span>`).join('')}</span>`:''}${st.seed?`<span class="chip">تنويعة ${st.seed+1}</span>`:''}</div>
    ${mobNav()}
-   <div class="group-h" data-group="common"><h2>٣ اقتراحات قريبة من الشائع</h2><p>من بين تنويعات لكل اتجاه، رتّبناها لتحسين تباين النص والأزرار ووضوح الألوان. اختبر الأنسب مع جمهورك.</p></div>
+   <div class="group-h" data-group="common"><h2>٣ اتجاهات من أمثلة المجال</h2><p>تقدر تفتح أي لوحة وتشوف الألوان على تصميم وفحوص التباين.</p></div>
    ${paletteNav('common',3)}
    ${PALS.slice(0,3).map((p,i)=>card(p,i)).join('')}
-   <div class="group-h break" data-group="different"><h2>٢ اقتراح مختلف عن الشائع</h2><p>ترتيب التباين يساعد على القراءة، لكنه لا يثبت أن الاتجاه مناسب لجمهورك؛ اختبره قبل اعتماد الهوية.</p></div>
+   <div class="group-h break" data-group="different"><h2>اتجاهين مختلفين</h2><p>جرّبهم جنب اتجاهات المجال قبل اعتماد اللوحة.</p></div>
    ${paletteNav('different',2)}
    ${PALS.slice(3,5).map((p,i)=>card(p,i+3)).join('')}
    ${clientBlock()}`;
@@ -1585,7 +1585,7 @@ if(window.ResizeObserver)new ResizeObserver(scheduleFloat).observe(document.body
 /* ---------- step-by-step brief ---------- */
 const STEP_NAMES=['السوق والمجال','الجمهور والسعر','شخصية البراند','المنافسين ولون العميل'];
 const AR_N=['٠','١','٢','٣','٤'];
-let STEP=1,GENERATED=false,PRESET_USED=false;
+let STEP=1,GENERATED=false;
 function showStep(n,focus){
   STEP=Math.max(1,Math.min(4,n));
   document.querySelectorAll('#brief .step').forEach(f=>f.hidden=+f.dataset.step!==STEP);
@@ -1596,8 +1596,8 @@ function showStep(n,focus){
   prev.disabled=STEP===1;
   const last=STEP===4;
   if(GENERATED){next.textContent=last?'اقفل البريف':'التالي ←';next.classList.remove('final');quick.hidden=true;hint.textContent='التعديلات بتتطبّق على الألوان على طول.'}
-  else{next.textContent=last?'طلّع الألوان':'التالي ←';next.classList.toggle('final',last);quick.hidden=last||(STEP<2&&!PRESET_USED);
-    hint.textContent=STEP<2&&!PRESET_USED?'تقدر تطلّع الألوان بعد الخطوة ٢، أو تكمّل للآخر عشان نتيجة أدق.':last?'الخطوة دي اختيارية: ضيف ألوان المنافسين أو لون العميل لو عندك.':'كمّل للآخر عشان نتيجة أدق، أو طلّع الألوان دلوقتي.'}
+  else{next.textContent=last?'طلّع الألوان':'التالي ←';next.classList.toggle('final',last);quick.hidden=last;
+    hint.textContent=last?'ضيف ألوان المنافسين أو لون العميل لو عندك.':'تقدر تولّد من الاختيارات الحالية أو تكمّل البريف.'}
   scheduleFloat();
   if(focus){const t=document.querySelector(`#brief .step[data-step="${STEP}"] .step-title`);if(t)t.focus({preventScroll:true});$('#brief').scrollIntoView({block:'nearest',behavior:'smooth'})}
 }
@@ -1638,7 +1638,7 @@ document.addEventListener('click',async e=>{
     return;
   }
   if(t.matches('[data-backdrop]')||t.closest('[data-close]')){closeLayer();return}
-  const pre=t.closest('[data-preset]');if(pre){const i=+pre.dataset.preset;st={...BASE,...PRESETS[i].s};LOCKS={};UI={};MOB={filter:'all',idx:0};toForm();save();PRESET_USED=true;
+  const pre=t.closest('[data-preset]');if(pre){const i=+pre.dataset.preset;st={...BASE,...PRESETS[i].s};LOCKS={};UI={};MOB={filter:'all',idx:0};toForm();save();
     $('#presetChosen').textContent=PRESETS[i].n;document.querySelectorAll('#presetMenu [data-preset]').forEach(b=>b.setAttribute('aria-current',String(b===pre)));
     closePresets();if(GENERATED)render();showStep(STEP);toast('اتملا البريف من المثال. راجع الخطوات أو طلّع الألوان');return}
   if(t.closest('#shuffle')){st.seed++;save();render();toast(Object.keys(LOCKS).length?'تنويعة جديدة، والمثبّت فضل زي ما هو':'تنويعة جديدة');return}
@@ -1667,6 +1667,8 @@ document.addEventListener('keydown',e=>{
   if(PRES!==null&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))present((PRES+(e.key==='ArrowLeft'?1:-1)+PALS.length)%PALS.length);
 });
 function rerenderMock(i){const P=PALS[i],el=$('#stage-'+i);if(!el)return;el.innerHTML=mockHTML(P,i);
+  $('#checks-'+i).innerHTML=checkRows(P,i);
+  $('#contrast-'+i).innerHTML=contrastTable(P,UI[i].mode);
   const tabs=el.previousElementSibling;tabs.querySelectorAll('[data-mock]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mock===UI[i].mock));
   const m=tabs.querySelector('[data-mode]');m.setAttribute('aria-pressed',UI[i].mode==='dark');m.textContent=UI[i].mode==='dark'?'دارك':'لايت'}
 
