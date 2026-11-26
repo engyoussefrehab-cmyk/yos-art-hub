@@ -16,6 +16,7 @@ export function QuoteRequestView() {
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [search, setSearch] = useState("");
   const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const [showIdentityItems, setShowIdentityItems] = useState(false);
   const [status, setStatus] = useState("");
   const [downloading, setDownloading] = useState(false);
   const query = normalize(search);
@@ -74,7 +75,10 @@ export function QuoteRequestView() {
               {packages.map(pack => {
                 const active = pack.items.every(item => selected.has(item));
                 return (
-                  <button key={pack.name} type="button" aria-pressed={active} onClick={() => updateSelection(pack.items, true)}>
+                  <button key={pack.name} type="button" aria-pressed={active} onClick={() => {
+                    if (pack === identityPackage) setShowIdentityItems(true);
+                    updateSelection(pack.items, true);
+                  }}>
                     <strong>{pack.name}</strong><small>{pack.detail}</small>
                     <span>{active ? "البنود مختارة ✓" : "اختار بنود الباقة +"}</span>
                   </button>
@@ -92,6 +96,10 @@ export function QuoteRequestView() {
             {visibleGroups.map(({ name, index, items }) => {
               const expanded = Boolean(query) || openCategory === name;
               const panelId = `quote-category-${index}`;
+              const hasIdentityDetails = showIdentityItems && items.includes(completeIdentityOption);
+              const categoryItems = hasIdentityDetails
+                ? items.filter(item => !identityPackage.items.includes(item))
+                : items;
               return (
                 <section className="quote-category" key={name}>
                   <h3>
@@ -104,18 +112,36 @@ export function QuoteRequestView() {
                     </button>
                   </h3>
                   <div className="quote-items" id={panelId} hidden={!expanded}>
-                    {items.map(item => {
+                    {categoryItems.map(item => {
                       const isCompleteIdentity = item === completeIdentityOption;
                       const checked = isCompleteIdentity ? identitySelectionCount === identityPackage.items.length : selected.has(item);
                       return (
-                        <label key={item}>
-                          <input type="checkbox" checked={checked}
-                            ref={isCompleteIdentity ? input => {
-                              if (input) input.indeterminate = identitySelectionCount > 0 && !checked;
-                            } : undefined}
-                            onChange={event => updateSelection(isCompleteIdentity ? identityPackage.items : [item], event.target.checked)} />
-                          {item}
-                        </label>
+                        <div className="quote-item" key={item}>
+                          <label>
+                            <input type="checkbox" checked={checked}
+                              ref={isCompleteIdentity ? input => {
+                                if (input) input.indeterminate = identitySelectionCount > 0 && !checked;
+                              } : undefined}
+                              onChange={event => {
+                                const include = event.target.checked;
+                                if (isCompleteIdentity) setShowIdentityItems(include);
+                                updateSelection(isCompleteIdentity ? identityPackage.items : [item], include);
+                              }} />
+                            {item}
+                          </label>
+                          {isCompleteIdentity && hasIdentityDetails && (
+                            <fieldset className="quote-identity-details">
+                              <legend>بنود الهوية</legend>
+                              {identityPackage.items.map(detail => (
+                                <label key={detail}>
+                                  <input type="checkbox" checked={selected.has(detail)}
+                                    onChange={event => updateSelection([detail], event.target.checked)} />
+                                  {detail}
+                                </label>
+                              ))}
+                            </fieldset>
+                          )}
+                        </div>
                       );
                     })}
                   </div>
@@ -128,7 +154,10 @@ export function QuoteRequestView() {
         <aside className="quote-summary" id="quote-summary" aria-labelledby="quote-summary-title">
           <div className="quote-section-head">
             <h2 id="quote-summary-title">ملخّص اختياراتك</h2>
-            {selected.size > 0 && <button className="quote-clear" type="button" onClick={() => updateSelection([...selected], false)}>امسح الكل</button>}
+            {selected.size > 0 && <button className="quote-clear" type="button" onClick={() => {
+              setShowIdentityItems(false);
+              updateSelection([...selected], false);
+            }}>امسح الكل</button>}
           </div>
           <p className="quote-muted" aria-live="polite">{selected.size ? `${count} من الخدمات مختارة` : "علّم على الخدمات اللي محتاجها."}</p>
           {selected.size > 0 && <ul>{selection.flatMap(([, items]) => items.map(item => <li key={item}>{item}</li>))}</ul>}

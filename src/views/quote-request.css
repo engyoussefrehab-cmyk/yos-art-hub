@@ -52,10 +52,14 @@
 .quote-category button[aria-expanded="true"] .quote-chevron { transform: rotate(180deg); }
 .quote-items { border-top: 1px solid var(--line); }
 .quote-items label { display: flex; align-items: center; gap: 9px; min-height: 45px; padding: 7px 13px; cursor: pointer; font-size: 15px; }
-.quote-items label + label { border-top: 1px solid var(--line); }
+.quote-item + .quote-item { border-top: 1px solid var(--line); }
 .quote-items label:has(:checked) { background: #ffe9df; }
-.quote-items label:last-child { border-radius: 0 0 11px 11px; }
+.quote-item:last-child > label:only-child { border-radius: 0 0 11px 11px; }
 .quote-items input { width: 18px; height: 18px; flex: none; accent-color: #a62631; }
+.quote-identity-details { min-width: 0; margin: 6px 14px 12px; padding: 3px 8px 6px; border: 1px solid var(--line); border-radius: 8px; background: #f8f2eb; }
+.quote-identity-details legend { padding-inline: 5px; color: var(--ink-2); font-size: 13px; font-weight: 700; }
+.quote-identity-details label { min-height: 40px; border-radius: 6px; padding: 5px 8px; }
+.quote-identity-details label + label { margin-top: 3px; }
 .quote-summary { position: sticky; top: 84px; padding: 15px; box-shadow: 0 7px 22px #3b1a1e0a; }
 .quote-summary .quote-section-head h2 { font-size: 25px; }
 .quote-summary p { margin: 7px 0; }
