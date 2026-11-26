@@ -67,7 +67,10 @@ function usePrefersReducedMotion() {
   return reduce;
 }
 
-export function StudioHome({ posts }: { posts: { title: string; to: string; publishedAt: string | null }[] }) {
+export function StudioHome({ posts, projectCount }: {
+  posts: { title: string; to: string; publishedAt: string | null }[];
+  projectCount: number;
+}) {
   const reduce = usePrefersReducedMotion();
   return (
     <>
@@ -83,7 +86,7 @@ export function StudioHome({ posts }: { posts: { title: string; to: string; publ
             <a className="ul" href="#work">مختارات من الأعمال ↓</a>
           </div>
         </section>
-        <WorkSlider reduce={reduce} />
+        <WorkSlider reduce={reduce} projectCount={projectCount} />
         <section className="studio g" id="studio">
           <div className="lbl rv">
             <h2>الاستوديو</h2>
@@ -118,7 +121,7 @@ export function StudioHome({ posts }: { posts: { title: string; to: string; publ
   );
 }
 
-function WorkSlider({ reduce }: { reduce: boolean }) {
+function WorkSlider({ reduce, projectCount }: { reduce: boolean; projectCount: number }) {
   const track = useRef<HTMLDivElement>(null);
   const [idx, setIdx] = useState(1);
   const [atStart, setAtStart] = useState(true);
@@ -221,7 +224,7 @@ function WorkSlider({ reduce }: { reduce: boolean }) {
       </div>
       <div className="wfoot rv">
         <div className="wbar" aria-hidden="true"><i style={{ width: `${(idx / WORKS.length) * 100}%` }} /></div>
-        <a className="pill" href="/projects">كل الأعمال (+١٠٠) ←</a>
+        <a className="pill" href="/projects">كل الأعمال ({AR(projectCount)}) ←</a>
       </div>
     </section>
   );

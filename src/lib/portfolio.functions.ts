@@ -88,6 +88,15 @@ function mapRow(r: any): PortfolioDTO {
 }
 
 
+export const countPublishedPortfolio = createServerFn({ method: "GET" }).handler(async (): Promise<number> => {
+  const { count, error } = await publicClient()
+    .from("portfolio_projects")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "published");
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+});
+
 export const listPortfolio = createServerFn({ method: "GET" })
   .inputValidator((d: { category?: string }) => d)
   .handler(async ({ data }) => {

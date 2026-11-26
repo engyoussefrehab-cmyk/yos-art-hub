@@ -1,16 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { StudioHome } from "@/views/StudioHome";
 import { getPublishedArticlesFn } from "@/lib/insights.functions";
+import { countPublishedPortfolio } from "@/lib/portfolio.functions";
 
 import seo from "@/content/seo.json";
 export const Route = createFileRoute("/")({
-  loader: async () => ({
-    posts: (await getPublishedArticlesFn()).slice(0, 3).map((article) => ({
-      title: article.title_ar || article.title_en,
-      to: `/insights/${article.category.slug}/${article.slug}`,
-      publishedAt: article.published_at,
-    })),
-  }),
+  loader: async () => {
+    const [articles, projectCount] = await Promise.all([getPublishedArticlesFn(), countPublishedPortfolio()]);
+    return {
+      projectCount,
+      posts: articles.slice(0, 3).map((article) => ({
+        title: article.title_ar || article.title_en,
+        to: `/insights/${article.category.slug}/${article.slug}`,
+        publishedAt: article.published_at,
+      })),
+    };
+  },
   head: () => ({
     meta: [
       { title: seo.home.ar.title },
@@ -38,6 +43,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeRoute() {
-  const { posts } = Route.useLoaderData();
-  return <StudioHome posts={posts} />;
+  const { posts, projectCount } = Route.useLoaderData();
+  return <StudioHome posts={posts} projectCount={projectCount} />;
 }
